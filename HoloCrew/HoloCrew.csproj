@@ -9,16 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Infraestructure\API\" />
-    <Folder Include="Infraestructure\Cache\" />
     <Folder Include="Infraestructure\Database\" />
-    <Folder Include="Infraestructure\Logging\" />
-    <Folder Include="Models\" />
-    <Folder Include="Converters\" />
-    <Folder Include="Repositories\Interfaces\" />
-    <Folder Include="Services\Interfaces\" />
-    <Folder Include="Views\" />
-    <Folder Include="ViewModels\Base\" />
+    <Folder Include="Behaviors\" />
+    <Folder Include="Resources\Icons\" />
+    <Folder Include="Resources\Images\" />
+    <Folder Include="Resources\Fonts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.11" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
   </ItemGroup>
 
 </Project>

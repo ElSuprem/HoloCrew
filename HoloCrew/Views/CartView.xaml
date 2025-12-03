@@ -1,0 +1,437 @@
+﻿<UserControl x:Class="HoloCrew.Views.CartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1200"
+             Background="White">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="350" />
+        </Grid.ColumnDefinitions>
+
+        <!-- LISTA DE PRODUCTOS -->
+        <ScrollViewer Grid.Column="0" 
+                      VerticalScrollBarVisibility="Auto"
+                      Margin="40,40,20,40">
+            <StackPanel>
+                <TextBlock Text="Tu Carrito" 
+                           FontSize="32" 
+                           FontWeight="Bold"
+                           Foreground="#1976D2"
+                           Margin="0,0,0,30" />
+
+                <Border Visibility="{Binding IsCartEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Background="#F8F9FA"
+                        Padding="40"
+                        Margin="0,0,0,20">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="🛒" 
+                                   FontSize="64"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,20" />
+                        <TextBlock Text="Tu carrito está vacío" 
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   Foreground="#555"
+                                   Margin="0,0,0,10" />
+                        <Button Content="Ver productos" 
+                                Command="{Binding BrowseProductsCommand}"
+                                Padding="20,12"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Background="#1976D2"
+                                Foreground="White"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                HorizontalAlignment="Center">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#115293" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl ItemsSource="{Binding CartItems}"
+                              Visibility="{Binding IsCartEmpty, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Inverse}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="White"
+                                    BorderBrush="#E0E0E0"
+                                    BorderThickness="1"
+                                    Margin="0,0,0,20"
+                                    Padding="20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Imagen -->
+                                    <Border Grid.Column="0" 
+                                            Background="#F5F5F5"
+                                            Width="100"
+                                            Height="100"
+                                            Margin="0,0,20,0">
+                                        <TextBlock Text="📷" 
+                                                   FontSize="32"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="#CCC" />
+                                    </Border>
+
+                                    <!-- Detalles -->
+                                    <StackPanel Grid.Column="1" 
+                                                Margin="0,0,20,0">
+                                        <TextBlock Text="{Binding ProductName}" 
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,5" />
+                                        <TextBlock Text="{Binding VariantDescription}" 
+                                                   FontSize="14"
+                                                   Foreground="#666"
+                                                   Margin="0,0,0,10" />
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="-" 
+                                                    Width="30"
+                                                    Height="30"
+                                                    Command="{Binding DataContext.DecreaseQuantityCommand, 
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="White"
+                                                    BorderBrush="#E0E0E0"
+                                                    BorderThickness="1"
+                                                    FontSize="14"
+                                                    FontWeight="Bold"
+                                                    Foreground="#555" />
+                                            <TextBlock Text="{Binding Quantity}" 
+                                                       Width="40"
+                                                       Height="30"
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       TextAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Margin="5,0,5,0" />
+                                            <Button Content="+" 
+                                                    Width="30"
+                                                    Height="30"
+                                                    Command="{Binding DataContext.IncreaseQuantityCommand, 
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="White"
+                                                    BorderBrush="#E0E0E0"
+                                                    BorderThickness="1"
+                                                    FontSize="14"
+                                                    FontWeight="Bold"
+                                                    Foreground="#555" />
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!-- Precio -->
+                                    <StackPanel Grid.Column="2" 
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding TotalPrice, StringFormat='€{0:N2}'}"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"
+                                                   Foreground="#1976D2" />
+                                        <TextBlock Text="{Binding UnitPrice, StringFormat='€{0:N2} c/u'}"
+                                                   FontSize="12"
+                                                   Foreground="#666"
+                                                   Margin="0,5,0,0" />
+                                    </StackPanel>
+
+                                    <!-- Acciones -->
+                                    <StackPanel Grid.Column="3" 
+                                                VerticalAlignment="Center">
+                                        <Button Content="Eliminar" 
+                                                Command="{Binding DataContext.RemoveItemCommand, 
+                                                          RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Padding="15,8"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Background="Transparent"
+                                                Foreground="#F44336"
+                                                BorderBrush="#F44336"
+                                                BorderThickness="1"
+                                                Cursor="Hand"
+                                                Margin="0,0,0,10">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center" />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#FFEBEE" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+
+                                        <Button Content="Guardar" 
+                                                Command="{Binding DataContext.SaveForLaterCommand, 
+                                                          RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Padding="15,8"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Background="Transparent"
+                                                Foreground="#1976D2"
+                                                BorderBrush="#1976D2"
+                                                BorderThickness="1"
+                                                Cursor="Hand">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center" />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#E3F2FD" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- RESUMEN DE COMPRA -->
+        <Border Grid.Column="1" 
+                Background="#F8F9FA"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1,0,0,0"
+                Padding="30">
+            <StackPanel>
+                <TextBlock Text="Resumen del pedido" 
+                           FontSize="20" 
+                           FontWeight="Bold"
+                           Margin="0,0,0,30" />
+
+                <!-- Desglose de precios -->
+                <StackPanel Margin="0,0,0,20">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Subtotal" 
+                                   FontSize="14"
+                                   Foreground="#666"
+                                   Width="200" />
+                        <TextBlock Text="{Binding Subtotal, StringFormat='€{0:N2}'}"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Right" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Envío" 
+                                   FontSize="14"
+                                   Foreground="#666"
+                                   Width="200" />
+                        <TextBlock Text="{Binding ShippingCost, StringFormat='€{0:N2}'}"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Right" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10"
+                                Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <TextBlock Text="Descuento" 
+                                   FontSize="14"
+                                   Foreground="#4CAF50"
+                                   Width="200" />
+                        <TextBlock Text="{Binding DiscountAmount, StringFormat='-€{0:N2}'}"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4CAF50"
+                                   HorizontalAlignment="Right" />
+                    </StackPanel>
+
+                    <Border Height="1" 
+                            Background="#E0E0E0"
+                            Margin="0,10,0,10" />
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Total" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Width="200" />
+                        <TextBlock Text="{Binding Total, StringFormat='€{0:N2}'}"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="#1976D2"
+                                   HorizontalAlignment="Right" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Cupón de descuento -->
+                <Border Background="White"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        Padding="15"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="¿Tienes un cupón?" 
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,10" />
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Text="{Binding CouponCode}"
+                                     Grid.Column="0"
+                                     Padding="10,8"
+                                     FontSize="14"
+                                     BorderBrush="#E0E0E0"
+                                     BorderThickness="1"
+                                     Margin="0,0,10,0" />
+
+                            <Button Content="Aplicar" 
+                                    Grid.Column="1"
+                                    Command="{Binding ApplyCouponCommand}"
+                                    Padding="15,8"
+                                    FontSize="14"
+                                    FontWeight="SemiBold"
+                                    Background="#1976D2"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#115293" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Botón de checkout -->
+                <Button Content="Proceder al pago" 
+                        Command="{Binding CheckoutCommand}"
+                        Padding="20,15"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Background="#1976D2"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Margin="0,0,0,20"
+                        IsEnabled="{Binding CanCheckout}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#115293" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="#BBDEFB" />
+                                    <Setter Property="Foreground" Value="#90A4AE" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- Información de envío -->
+                <Border Background="White"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="📦 Envío estimado" 
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8" />
+                        <TextBlock Text="2-4 días laborables" 
+                                   FontSize="13"
+                                   Foreground="#666"
+                                   Margin="0,0,0,5" />
+                        <TextBlock Text="Devolución gratuita en 30 días" 
+                                   FontSize="13"
+                                   Foreground="#666" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"
+              Background="#80FFFFFF"
+              Grid.ColumnSpan="2">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="⏳" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,10" />
+                <TextBlock Text="Actualizando carrito..." FontSize="16" Foreground="#666" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
