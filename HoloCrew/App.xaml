@@ -1,16 +1,44 @@
 ﻿<Application x:Class="HoloCrew.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:HoloCrew.Converters"
+             xmlns:vm="clr-namespace:HoloCrew.ViewModels"
+             xmlns:views="clr-namespace:HoloCrew.Views"
              DispatcherUnhandledException="Application_DispatcherUnhandledException">
 
     <Application.Resources>
         <ResourceDictionary>
 
             <!-- ========== CONVERTERS ========== -->
-            <!-- Usar el converter incorporado de WPF -->
-            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 
-            <!-- NOTA: Los demás converters personalizados los registraremos cuando los necesitemos -->
+            <!-- Converter incorporado de WPF (como respaldo) -->
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+            <!-- ========== DATA TEMPLATES (AÑADE ESTO) ========== -->
+            <!-- Esto es lo que permite que MainWindow muestre las vistas automáticamente -->
+            <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+                <views:HomeView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ProductCatalogViewModel}">
+                <views:ProductCatalogView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:CartViewModel}">
+                <views:CartView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:WishlistViewModel}">
+                <views:WishlistView />
+            </DataTemplate>
+
+            <!-- Añade solo los que necesites ahora -->
+            <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+                <views:LoginView />
+            </DataTemplate>
 
             <!-- ========== ESTILOS ========== -->
             <ResourceDictionary.MergedDictionaries>

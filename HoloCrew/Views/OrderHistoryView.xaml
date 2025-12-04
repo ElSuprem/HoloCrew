@@ -3,9 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:HoloCrew.Converters"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1200"
              Background="White">
+
+    <!-- ✅ REGISTRA TU CONVERTER PERSONALIZADO -->
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="40">
@@ -34,7 +37,6 @@
                               FontSize="14"
                               BorderBrush="#E0E0E0"
                               BorderThickness="1"
-                              CornerRadius="6"
                               Margin="0,0,20,0" />
 
                     <TextBlock Text="Desde:" 
@@ -47,7 +49,6 @@
                                 FontSize="14"
                                 BorderBrush="#E0E0E0"
                                 BorderThickness="1"
-                                CornerRadius="6"
                                 Margin="0,0,20,0" />
 
                     <TextBlock Text="Hasta:" 
@@ -60,7 +61,6 @@
                                 FontSize="14"
                                 BorderBrush="#E0E0E0"
                                 BorderThickness="1"
-                                CornerRadius="6"
                                 Margin="0,0,20,0" />
 
                     <Button Content="Aplicar" 
@@ -71,7 +71,6 @@
                             Background="#1976D2"
                             Foreground="White"
                             BorderThickness="0"
-                            CornerRadius="6"
                             Cursor="Hand">
                         <Button.Style>
                             <Style TargetType="Button">
@@ -79,7 +78,7 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Button">
                                             <Border Background="{TemplateBinding Background}"
-                                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                                    CornerRadius="6"
                                                     Padding="{TemplateBinding Padding}">
                                                 <ContentPresenter HorizontalAlignment="Center"
                                                                   VerticalAlignment="Center" />
@@ -145,7 +144,8 @@
                                                Foreground="#666"
                                                Margin="0,0,0,5" />
 
-                                    <TextBlock Text="{Binding ItemCount, StringFormat='{0} productos'}" 
+                                    <!-- CORREGIDO: Línea 149 - Error de StringFormat -->
+                                    <TextBlock Text="{Binding ItemCount, StringFormat={}{0} productos}" 
                                                FontSize="14"
                                                Foreground="#666" />
                                 </StackPanel>
@@ -174,7 +174,6 @@
                                             Foreground="#1976D2"
                                             BorderBrush="#1976D2"
                                             BorderThickness="1"
-                                            CornerRadius="6"
                                             Cursor="Hand"
                                             Margin="0,0,0,10">
                                         <Button.Style>
@@ -185,7 +184,7 @@
                                                             <Border Background="{TemplateBinding Background}"
                                                                     BorderBrush="{TemplateBinding BorderBrush}"
                                                                     BorderThickness="{TemplateBinding BorderThickness}"
-                                                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                                                    CornerRadius="6"
                                                                     Padding="{TemplateBinding Padding}">
                                                                 <ContentPresenter HorizontalAlignment="Center"
                                                                                   VerticalAlignment="Center" />
@@ -213,7 +212,6 @@
                                             Foreground="#4CAF50"
                                             BorderBrush="#4CAF50"
                                             BorderThickness="1"
-                                            CornerRadius="6"
                                             Cursor="Hand">
                                         <Button.Style>
                                             <Style TargetType="Button">
@@ -223,7 +221,7 @@
                                                             <Border Background="{TemplateBinding Background}"
                                                                     BorderBrush="{TemplateBinding BorderBrush}"
                                                                     BorderThickness="{TemplateBinding BorderThickness}"
-                                                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                                                    CornerRadius="6"
                                                                     Padding="{TemplateBinding Padding}">
                                                                 <ContentPresenter HorizontalAlignment="Center"
                                                                                   VerticalAlignment="Center" />
@@ -247,7 +245,8 @@
             </ItemsControl>
 
             <!-- Sin pedidos -->
-            <Border Visibility="{Binding HasNoOrders, Converter={StaticResource BoolToVisibilityConverter}}"
+            <!-- ✅ AHORA SÍ FUNCIONARÁ porque el converter está registrado -->
+            <Border Visibility="{Binding HasNoOrders, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Background="#FFF3E0"
                     CornerRadius="12"
                     Padding="40"
@@ -275,7 +274,6 @@
                             Background="#1976D2"
                             Foreground="White"
                             BorderThickness="0"
-                            CornerRadius="8"
                             Cursor="Hand"
                             HorizontalAlignment="Center">
                         <Button.Style>
@@ -284,7 +282,7 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Button">
                                             <Border Background="{TemplateBinding Background}"
-                                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                                    CornerRadius="6"
                                                     Padding="{TemplateBinding Padding}">
                                                 <ContentPresenter HorizontalAlignment="Center"
                                                                   VerticalAlignment="Center" />
@@ -304,8 +302,7 @@
             </Border>
 
             <!-- Loading -->
-            <Grid Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                  Height="200"
+            <Grid Height="200"
                   VerticalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" 
                             VerticalAlignment="Center">

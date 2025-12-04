@@ -223,7 +223,7 @@
                     </StackPanel>
 
                     <!-- Mensaje de error -->
-                    <Border Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"
+                    <Border Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}"
                             Background="#FFEBEE"
                             Padding="15"
                             Margin="0,30,0,0">

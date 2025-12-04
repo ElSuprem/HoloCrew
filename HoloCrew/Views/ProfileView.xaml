@@ -259,7 +259,7 @@
                     <ContentControl Content="{Binding SelectedSection}">
                         <ContentControl.Resources>
                             <!-- Personal Info Template -->
-                            <DataTemplate>
+                            <DataTemplate x:Key="PersonalInfoTemplate">
                                 <StackPanel>
                                     <TextBlock Text="Información Personal" 
                                                FontSize="24" 

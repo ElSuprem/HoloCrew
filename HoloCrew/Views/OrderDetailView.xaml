@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:HoloCrew.Converters"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1200"
              Background="White">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
+    </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="40">
@@ -26,7 +32,6 @@
                         Foreground="#1976D2"
                         BorderBrush="#1976D2"
                         BorderThickness="1"
-                        CornerRadius="6"
                         Cursor="Hand"
                         HorizontalAlignment="Right">
                     <Button.Style>
@@ -37,7 +42,7 @@
                                         <Border Background="{TemplateBinding Background}"
                                                 BorderBrush="{TemplateBinding BorderBrush}"
                                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                                CornerRadius="{TemplateBinding CornerRadius}"
+                                                CornerRadius="6"
                                                 Padding="{TemplateBinding Padding}">
                                             <ContentPresenter HorizontalAlignment="Center"
                                                               VerticalAlignment="Center" />
@@ -89,7 +94,7 @@
                                                FontSize="14"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,5" />
-                                    <TextBlock Text="{Binding OrderDate, StringFormat='{0:dd/MM/yyyy HH:mm}'}" 
+                                    <TextBlock Text="{Binding OrderDate, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" 
                                                FontSize="14"
                                                Foreground="#666"
                                                Margin="0,0,0,15" />
@@ -183,6 +188,7 @@
                                                        FontSize="14"
                                                        Foreground="#666"
                                                        Margin="0,0,0,5" />
+                                            <!-- CORREGIDO: Línea 185 -->
                                             <TextBlock Text="{Binding Quantity, StringFormat='Cantidad: {0}'}" 
                                                        FontSize="14"
                                                        Foreground="#666" />
@@ -191,6 +197,7 @@
                                         <!-- Precio -->
                                         <StackPanel Grid.Column="2" 
                                                     VerticalAlignment="Center">
+                                            <!-- CORREGIDO: Línea 193 -->
                                             <TextBlock Text="{Binding TotalPrice, StringFormat='€{0:N2}'}"
                                                        FontSize="16"
                                                        FontWeight="SemiBold"
@@ -250,7 +257,7 @@
                                                            FontSize="13"
                                                            Foreground="#666"
                                                            Margin="0,5,0,0" />
-                                                <TextBlock Text="{Binding Timestamp, StringFormat='{0:dd/MM/yyyy HH:mm}'}" 
+                                                <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" 
                                                            FontSize="12"
                                                            Foreground="#999"
                                                            Margin="0,5,0,0" />
@@ -356,7 +363,6 @@
                                         Foreground="#1976D2"
                                         BorderBrush="#1976D2"
                                         BorderThickness="1"
-                                        CornerRadius="6"
                                         Cursor="Hand"
                                         Margin="0,0,10,0">
                                     <Button.Style>
@@ -367,7 +373,7 @@
                                                         <Border Background="{TemplateBinding Background}"
                                                                 BorderBrush="{TemplateBinding BorderBrush}"
                                                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                                                CornerRadius="{TemplateBinding CornerRadius}"
+                                                                CornerRadius="6"
                                                                 Padding="{TemplateBinding Padding}">
                                                             <ContentPresenter HorizontalAlignment="Center"
                                                                               VerticalAlignment="Center" />
@@ -392,7 +398,6 @@
                                         Background="#1976D2"
                                         Foreground="White"
                                         BorderThickness="0"
-                                        CornerRadius="6"
                                         Cursor="Hand">
                                     <Button.Style>
                                         <Style TargetType="Button">
@@ -400,7 +405,7 @@
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="Button">
                                                         <Border Background="{TemplateBinding Background}"
-                                                                CornerRadius="{TemplateBinding CornerRadius}"
+                                                                CornerRadius="6"
                                                                 Padding="{TemplateBinding Padding}">
                                                             <ContentPresenter HorizontalAlignment="Center"
                                                                               VerticalAlignment="Center" />

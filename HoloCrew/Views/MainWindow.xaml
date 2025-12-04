@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:HoloCrew.ViewModels"
-        xmlns:views="clr-namespace:HoloCrew.Views"
         mc:Ignorable="d"
         Title="HoloCrew - Tu Tienda Online"
         Height="768" 
@@ -14,51 +12,6 @@
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Background="#F5F5F5">
-
-    <!-- DataContext se establece por DI en App.xaml.cs -->
-
-    <!-- DataTemplates para mapeo automático ViewModel -> View -->
-    <Window.Resources>
-        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
-            <views:HomeView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:ProductCatalogViewModel}">
-            <views:ProductCatalogView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:ProductDetailViewModel}">
-            <views:ProductDetailView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:CartViewModel}">
-            <views:CartView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:CheckoutViewModel}">
-            <views:CheckoutView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
-            <views:LoginView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:RegisterViewModel}">
-            <views:RegisterView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:ProfileViewModel}">
-            <views:ProfileView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:OrderHistoryViewModel}">
-            <views:OrderHistoryView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:OrderDetailViewModel}">
-            <views:OrderDetailView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:WishlistViewModel}">
-            <views:WishlistView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-            <views:SettingsView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:NotificationsViewModel}">
-            <views:NotificationsView />
-        </DataTemplate>
-    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -120,61 +73,9 @@
                             Style="{StaticResource MenuButtonStyle}"
                             Margin="0,0,10,0" />
 
-                    <Button Content="Ofertas" 
-                            Style="{StaticResource MenuButtonStyle}"
-                            Margin="0,0,10,0" />
-
                 </StackPanel>
 
-                <!-- Búsqueda -->
-                <Border Grid.Column="2"
-                        Background="White"
-                        CornerRadius="20"
-                        Padding="15,8"
-                        Margin="20,0"
-                        Width="300">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBox Grid.Column="0"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 VerticalAlignment="Center"
-                                 FontSize="14">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox">
-                                    <Setter Property="Foreground" Value="#333" />
-                                    <Style.Triggers>
-                                        <Trigger Property="Text" Value="">
-                                            <Setter Property="Background">
-                                                <Setter.Value>
-                                                    <VisualBrush Stretch="None" AlignmentX="Left">
-                                                        <VisualBrush.Visual>
-                                                            <TextBlock Text="Buscar productos..." 
-                                                                       Foreground="#999" 
-                                                                       FontSize="14" />
-                                                        </VisualBrush.Visual>
-                                                    </VisualBrush>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-
-                        <TextBlock Grid.Column="1" 
-                                   Text="🔍" 
-                                   FontSize="16"
-                                   Foreground="#666"
-                                   VerticalAlignment="Center" />
-                    </Grid>
-                </Border>
-
-                <!-- Acciones (Carrito, Wishlist, Usuario) -->
+                <!-- Acciones -->
                 <StackPanel Grid.Column="3" 
                             Orientation="Horizontal" 
                             VerticalAlignment="Center">
@@ -206,7 +107,7 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
                                     Margin="0,-8,-8,0"
-                                    Visibility="{Binding CartItemCount, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    Visibility="{Binding CartItemCount, Converter={StaticResource CountToVisibilityConverter}}">
                                 <TextBlock Text="{Binding CartItemCount}" 
                                            Foreground="White" 
                                            FontSize="10"

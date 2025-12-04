@@ -117,9 +117,8 @@
 
                     <!-- Recordar contraseña -->
                     <CheckBox Content="Recordar contraseña"
-                              IsChecked="{Binding RememberMe}"
-                              FontSize="13"
-                              Margin="0,0,0,30" />
+          FontSize="13"
+          Margin="0,0,0,30" />
                 </StackPanel>
 
                 <!-- Botón de inicio de sesión -->
@@ -133,8 +132,7 @@
                         Foreground="White"
                         BorderThickness="0"
                         Cursor="Hand"
-                        Margin="0,0,0,20"
-                        IsEnabled="{Binding CanLogin}">
+                        Margin="0,0,0,20">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
@@ -163,8 +161,7 @@
 
                 <!-- Enlaces adicionales -->
                 <StackPanel>
-                    <Button Content="¿Olvidaste tu contraseña?" 
-                            Command="{Binding ForgotPasswordCommand}"
+                    <Button Content="¿Olvidaste tu contraseña?"
                             Padding="0"
                             FontSize="13"
                             Background="Transparent"
@@ -240,8 +237,7 @@
 
                 <StackPanel Orientation="Horizontal" 
                             HorizontalAlignment="Center">
-                    <Button Content="Google" 
-                            Command="{Binding LoginWithGoogleCommand}"
+                    <Button Content="Google"
                             Padding="20,10"
                             FontSize="13"
                             FontWeight="SemiBold"
@@ -275,8 +271,7 @@
                         </Button.Style>
                     </Button>
 
-                    <Button Content="Facebook" 
-                            Command="{Binding LoginWithFacebookCommand}"
+                    <Button Content="Facebook"
                             Padding="20,10"
                             FontSize="13"
                             FontWeight="SemiBold"
@@ -311,7 +306,7 @@
                 </StackPanel>
 
                 <!-- Mensaje de error -->
-                <Border Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"
+                <Border Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}"
                         Background="#FFEBEE"
                         Padding="15"
                         Margin="0,30,0,0">
