@@ -10,15 +10,20 @@
         <ResourceDictionary>
 
             <!-- ========== CONVERTERS ========== -->
-            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+            <converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollectionToVisibilityConverter" />
+            <converters:PriceFormatConverter x:Key="PriceFormatConverter" />
+            <converters:DateFormatConverter x:Key="DateFormatConverter" />
+            <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
+            <converters:SelectedButtonTextConverter x:Key="SelectedButtonTextConverter" />
 
-            <!-- Converter incorporado de WPF (como respaldo) -->
+            <!-- Converter incorporado de WPF -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
-            <!-- ========== DATA TEMPLATES (AÑADE ESTO) ========== -->
-            <!-- Esto es lo que permite que MainWindow muestre las vistas automáticamente -->
+            <!-- ========== DATA TEMPLATES ========== -->
             <DataTemplate DataType="{x:Type vm:HomeViewModel}">
                 <views:HomeView />
             </DataTemplate>
@@ -27,17 +32,48 @@
                 <views:ProductCatalogView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vm:ProductDetailViewModel}">
+                <views:ProductDetailView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type vm:CartViewModel}">
                 <views:CartView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:CheckoutViewModel}">
+                <views:CheckoutView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+                <views:LoginView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:RegisterViewModel}">
+                <views:RegisterView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ProfileViewModel}">
+                <views:ProfileView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:OrderHistoryViewModel}">
+                <views:OrderHistoryView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:OrderDetailViewModel}">
+                <views:OrderDetailView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vm:WishlistViewModel}">
                 <views:WishlistView />
             </DataTemplate>
 
-            <!-- Añade solo los que necesites ahora -->
-            <DataTemplate DataType="{x:Type vm:LoginViewModel}">
-                <views:LoginView />
+            <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+                <views:SettingsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:NotificationsViewModel}">
+                <views:NotificationsView />
             </DataTemplate>
 
             <!-- ========== ESTILOS ========== -->
@@ -53,4 +89,5 @@
 
         </ResourceDictionary>
     </Application.Resources>
+
 </Application>

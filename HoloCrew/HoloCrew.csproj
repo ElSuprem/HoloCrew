@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Infraestructure\Database\" />
     <Folder Include="Behaviors\" />
     <Folder Include="Resources\Icons\" />
     <Folder Include="Resources\Images\" />
