@@ -4,399 +4,373 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="800" d:DesignWidth="1200"
-             Background="White">
+             d:DesignHeight="900" d:DesignWidth="1400"
+             Background="{StaticResource BackgroundPrimary}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="40">
-            <TextBlock Text="Configuración" 
-                       FontSize="32" 
-                       FontWeight="Bold"
-                       Foreground="#1976D2"
-                       Margin="0,0,0,30" />
+    <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                  HorizontalScrollBarVisibility="Disabled">
+        <Border Padding="60,40,60,80">
+            <StackPanel MaxWidth="900">
+                <!-- Header -->
+                <TextBlock Text="SETTINGS" 
+                           Style="{StaticResource HeadingLarge}"
+                           Margin="0,0,0,40" />
 
-            <!-- Configuración de cuenta -->
-            <Border Background="White"
-                    BorderBrush="#E0E0E0"
-                    BorderThickness="1"
-                    Padding="30"
-                    Margin="0,0,0,30">
-                <StackPanel>
-                    <TextBlock Text="Cuenta" 
-                               FontSize="20" 
-                               FontWeight="Bold"
-                               Margin="0,0,0,20" />
+                <!-- ============================================
+                     ACCOUNT SETTINGS
+                     ============================================ -->
+                <TextBlock Text="ACCOUNT" 
+                           Style="{StaticResource HeadingMedium}"
+                           Margin="0,0,0,20" />
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="40"
+                        Margin="0,0,0,40">
+                    <StackPanel>
+                        <!-- Language & Currency -->
+                        <Grid Margin="0,0,0,25">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- Idioma -->
-                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                            <TextBlock Text="Idioma" 
-                                       FontWeight="SemiBold" 
-                                       Margin="0,0,0,8" />
-                            <ComboBox ItemsSource="{Binding Languages}"
-                                      SelectedItem="{Binding SelectedLanguage}"
-                                      Padding="12,10"
-                                      FontSize="14"
-                                      BorderBrush="#E0E0E0"
-                                      BorderThickness="1" />
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="LANGUAGE" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,10"/>
+                                <ComboBox ItemsSource="{Binding Languages}"
+                                          SelectedItem="{Binding SelectedLanguage}"
+                                          Height="50"
+                                          Padding="15,0"
+                                          FontSize="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="CURRENCY" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,10"/>
+                                <ComboBox ItemsSource="{Binding Currencies}"
+                                          SelectedItem="{Binding SelectedCurrency}"
+                                          Height="50"
+                                          Padding="15,0"
+                                          FontSize="14"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Timezone -->
+                        <StackPanel Margin="0,0,0,25">
+                            <TextBlock Text="TIMEZONE" 
+                                       Style="{StaticResource BodyMedium}"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
+                            <ComboBox ItemsSource="{Binding TimeZones}"
+                                      SelectedItem="{Binding SelectedTimeZone}"
+                                      Height="50"
+                                      Padding="15,0"
+                                      FontSize="14"/>
                         </StackPanel>
 
-                        <!-- Moneda -->
-                        <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                            <TextBlock Text="Moneda" 
-                                       FontWeight="SemiBold" 
-                                       Margin="0,0,0,8" />
-                            <ComboBox ItemsSource="{Binding Currencies}"
-                                      SelectedItem="{Binding SelectedCurrency}"
-                                      Padding="12,10"
+                        <!-- Save Button -->
+                        <Button Content="SAVE PREFERENCES" 
+                                Style="{StaticResource PrimaryButton}"
+                                Command="{Binding SavePreferencesCommand}"
+                                Width="200"
+                                HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- ============================================
+                     DISPLAY SETTINGS
+                     ============================================ -->
+                <TextBlock Text="DISPLAY" 
+                           Style="{StaticResource HeadingMedium}"
+                           Margin="0,0,0,20" />
+
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="40"
+                        Margin="0,0,0,40">
+                    <StackPanel>
+                        <!-- Theme -->
+                        <Grid Margin="0,0,0,25">
+                            <TextBlock Text="THEME" 
+                                       Style="{StaticResource BodyMedium}"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+
+                            <StackPanel Orientation="Horizontal" 
+                                        HorizontalAlignment="Right">
+                                <RadioButton Content="Light"
+                                             GroupName="Theme"
+                                             IsChecked="{Binding IsLightThemeSelected}"
+                                             Style="{StaticResource BodyMedium}"
+                                             Margin="0,0,20,0"
+                                             VerticalAlignment="Center"/>
+
+                                <RadioButton Content="Dark"
+                                             GroupName="Theme"
+                                             IsChecked="{Binding IsDarkThemeSelected}"
+                                             Style="{StaticResource BodyMedium}"
+                                             VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Font Size -->
+                        <Grid>
+                            <TextBlock Text="FONT SIZE" 
+                                       Style="{StaticResource BodyMedium}"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox ItemsSource="{Binding FontSizes}"
+                                      SelectedItem="{Binding SelectedFontSize}"
+                                      Width="200"
+                                      Height="50"
+                                      Padding="15,0"
                                       FontSize="14"
-                                      BorderBrush="#E0E0E0"
-                                      BorderThickness="1" />
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- Zona horaria -->
-                    <TextBlock Text="Zona horaria" 
-                               FontWeight="SemiBold" 
-                               Margin="0,20,0,8" />
-                    <ComboBox ItemsSource="{Binding TimeZones}"
-                              SelectedItem="{Binding SelectedTimeZone}"
-                              Padding="12,10"
-                              FontSize="14"
-                              BorderBrush="#E0E0E0"
-                              BorderThickness="1"
-                              Margin="0,0,0,30" />
-
-                    <Button Content="Guardar preferencias" 
-                            Command="{Binding SavePreferencesCommand}"
-                            Padding="20,12"
-                            FontSize="14"
-                            FontWeight="SemiBold"
-                            Background="#1976D2"
-                            Foreground="White"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            HorizontalAlignment="Right">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}"
-                                        Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center" />
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#115293" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
-            </Border>
-
-            <!-- Configuración de visualización -->
-            <Border Background="White"
-                    BorderBrush="#E0E0E0"
-                    BorderThickness="1"
-                    Padding="30"
-                    Margin="0,0,0,30">
-                <StackPanel>
-                    <TextBlock Text="Visualización" 
-                               FontSize="20" 
-                               FontWeight="Bold"
-                               Margin="0,0,0,20" />
-
-                    <!-- Tema -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                        <TextBlock Text="Tema" 
-                                   FontWeight="SemiBold" 
-                                   VerticalAlignment="Center"
-                                   Width="150" />
-
-                        <RadioButton Content="Claro"
-                                     GroupName="Theme"
-                                     IsChecked="{Binding IsLightThemeSelected}"
-                                     FontSize="14"
-                                     Margin="0,0,20,0"
-                                     VerticalAlignment="Center" />
-
-                        <RadioButton Content="Oscuro"
-                                     GroupName="Theme"
-                                     IsChecked="{Binding IsDarkThemeSelected}"
-                                     FontSize="14"
-                                     VerticalAlignment="Center" />
+                                      HorizontalAlignment="Right"/>
+                        </Grid>
                     </StackPanel>
+                </Border>
 
-                    <!-- Tamaño de fuente -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                        <TextBlock Text="Tamaño de texto" 
-                                   FontWeight="SemiBold" 
-                                   VerticalAlignment="Center"
-                                   Width="150" />
+                <!-- ============================================
+                     NOTIFICATIONS SETTINGS
+                     ============================================ -->
+                <TextBlock Text="NOTIFICATIONS" 
+                           Style="{StaticResource HeadingMedium}"
+                           Margin="0,0,0,20" />
 
-                        <ComboBox ItemsSource="{Binding FontSizes}"
-                                  SelectedItem="{Binding SelectedFontSize}"
-                                  Width="200"
-                                  Padding="12,8"
-                                  FontSize="14"
-                                  BorderBrush="#E0E0E0"
-                                  BorderThickness="1" />
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="40"
+                        Margin="0,0,0,40">
+                    <StackPanel>
+                        <!-- Email Notifications -->
+                        <Grid Margin="0,0,0,20">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Email Notifications" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Receive updates about orders and promotions" 
+                                           Style="{StaticResource BodySmall}"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+
+                            <CheckBox IsChecked="{Binding EmailNotificationsEnabled}"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Push Notifications -->
+                        <Grid Margin="0,0,0,20">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Push Notifications" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Get notified about order status changes" 
+                                           Style="{StaticResource BodySmall}"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+
+                            <CheckBox IsChecked="{Binding PushNotificationsEnabled}"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- SMS Notifications -->
+                        <Grid>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="SMS Notifications" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Receive delivery updates via SMS" 
+                                           Style="{StaticResource BodySmall}"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+
+                            <CheckBox IsChecked="{Binding SmsNotificationsEnabled}"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
                     </StackPanel>
+                </Border>
 
-                    <!-- Animaciones -->
-                    <CheckBox Content="Habilitar animaciones"
-                              IsChecked="{Binding EnableAnimations}"
-                              FontSize="14"
-                              FontWeight="SemiBold"
-                              Margin="0,0,0,30" />
+                <!-- ============================================
+                     PRIVACY SETTINGS
+                     ============================================ -->
+                <TextBlock Text="PRIVACY" 
+                           Style="{StaticResource HeadingMedium}"
+                           Margin="0,0,0,20" />
 
-                    <Button Content="Aplicar cambios" 
-                            Command="{Binding ApplyDisplaySettingsCommand}"
-                            Padding="20,12"
-                            FontSize="14"
-                            FontWeight="SemiBold"
-                            Background="#1976D2"
-                            Foreground="White"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            HorizontalAlignment="Right">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}"
-                                        Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center" />
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#115293" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
-            </Border>
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="40"
+                        Margin="0,0,0,40">
+                    <StackPanel>
+                        <!-- Share Usage Data -->
+                        <Grid Margin="0,0,0,20">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Share Usage Data" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Help improve the app by sharing anonymous usage data" 
+                                           Style="{StaticResource BodySmall}"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
 
-            <!-- Configuración de privacidad -->
-            <Border Background="White"
-                    BorderBrush="#E0E0E0"
-                    BorderThickness="1"
-                    Padding="30"
-                    Margin="0,0,0,30">
-                <StackPanel>
-                    <TextBlock Text="Privacidad" 
-                               FontSize="20" 
-                               FontWeight="Bold"
-                               Margin="0,0,0,20" />
+                            <CheckBox IsChecked="{Binding ShareUsageData}"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
 
-                    <CheckBox Content="Compartir datos de uso anónimos para mejorar la aplicación"
-                              IsChecked="{Binding ShareUsageData}"
-                              FontSize="14"
-                              Margin="0,0,0,15" />
+                        <!-- Save Search History -->
+                        <Grid Margin="0,0,0,20">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Save Search History" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Keep track of your searches for easier shopping" 
+                                           Style="{StaticResource BodySmall}"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
 
-                    <CheckBox Content="Guardar historial de búsqueda"
-                              IsChecked="{Binding SaveSearchHistory}"
-                              FontSize="14"
-                              Margin="0,0,0,15" />
+                            <CheckBox IsChecked="{Binding SaveSearchHistory}"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
 
-                    <CheckBox Content="Mostrar perfil público"
-                              IsChecked="{Binding ShowPublicProfile}"
-                              FontSize="14"
-                              Margin="0,0,0,30" />
+                        <!-- Public Profile -->
+                        <Grid Margin="0,0,0,30">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Public Profile" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Make your profile visible to other users" 
+                                           Style="{StaticResource BodySmall}"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
 
-                    <Button Content="Descargar mis datos" 
-                            Command="{Binding DownloadDataCommand}"
-                            Padding="15,10"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Background="Transparent"
-                            Foreground="#1976D2"
-                            BorderBrush="#1976D2"
-                            BorderThickness="1"
-                            Cursor="Hand"
-                            HorizontalAlignment="Left">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                        Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center" />
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#E3F2FD" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
-            </Border>
+                            <CheckBox IsChecked="{Binding ShowPublicProfile}"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
 
-            <!-- Configuración avanzada -->
-            <Border Background="White"
-                    BorderBrush="#E0E0E0"
-                    BorderThickness="1"
-                    Padding="30">
-                <StackPanel>
-                    <TextBlock Text="Avanzado" 
-                               FontSize="20" 
-                               FontWeight="Bold"
-                               Margin="0,0,0,20" />
-
-                    <!-- Limpiar caché -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                        <TextBlock Text="Caché de la aplicación" 
-                                   FontWeight="SemiBold" 
-                                   VerticalAlignment="Center"
-                                   Width="200" />
-
-                        <TextBlock Text="{Binding CacheSize}" 
-                                   FontSize="14"
-                                   Foreground="#666"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,20,0" />
-
-                        <Button Content="Limpiar caché" 
-                                Command="{Binding ClearCacheCommand}"
-                                Padding="15,8"
-                                FontSize="13"
-                                FontWeight="SemiBold"
-                                Background="Transparent"
-                                Foreground="#1976D2"
-                                BorderBrush="#1976D2"
-                                BorderThickness="1"
-                                Cursor="Hand">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center" />
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#E3F2FD" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                        <!-- Download Data Button -->
+                        <Button Content="DOWNLOAD MY DATA" 
+                                Style="{StaticResource OutlineButton}"
+                                Command="{Binding DownloadDataCommand}"
+                                Width="220"
+                                HorizontalAlignment="Left"/>
                     </StackPanel>
+                </Border>
 
-                    <!-- Exportar datos -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                        <TextBlock Text="Exportar datos" 
-                                   FontWeight="SemiBold" 
-                                   VerticalAlignment="Center"
-                                   Width="200" />
+                <!-- ============================================
+                     ADVANCED SETTINGS
+                     ============================================ -->
+                <TextBlock Text="ADVANCED" 
+                           Style="{StaticResource HeadingMedium}"
+                           Margin="0,0,0,20" />
 
-                        <Button Content="Exportar a JSON" 
-                                Command="{Binding ExportDataCommand}"
-                                Padding="15,8"
-                                FontSize="13"
-                                FontWeight="SemiBold"
-                                Background="Transparent"
-                                Foreground="#1976D2"
-                                BorderBrush="#1976D2"
-                                BorderThickness="1"
-                                Cursor="Hand"
-                                Margin="0,0,10,0">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center" />
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#E3F2FD" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="40">
+                    <StackPanel>
+                        <!-- Clear Cache -->
+                        <Grid Margin="0,0,0,30">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Application Cache" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Style="{StaticResource BodySmall}"
+                                           Foreground="{StaticResource TextSecondary}">
+                                    <Run Text="Current size:"/>
+                                    <Run Text="{Binding CacheSize}"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <Button Content="CLEAR CACHE" 
+                                    Style="{StaticResource OutlineButton}"
+                                    FontSize="13"
+                                    Padding="20,12"
+                                    Command="{Binding ClearCacheCommand}"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Divider -->
+                        <Border Height="1" 
+                                Background="{StaticResource BorderDefault}"
+                                Margin="0,0,0,30"/>
+
+                        <!-- Delete Account -->
+                        <Grid>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Delete Account" 
+                                           Style="{StaticResource BodyMedium}"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource ErrorColorBrush}"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Permanently delete your account and all associated data" 
+                                           Style="{StaticResource BodySmall}"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+
+                            <Button Content="DELETE ACCOUNT" 
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource ErrorColorBrush}"
+                                    BorderThickness="2"
+                                    Foreground="{StaticResource ErrorColorBrush}"
+                                    FontSize="13"
+                                    FontWeight="Bold"
+                                    Padding="20,12"
+                                    Cursor="Hand"
+                                    Command="{Binding DeleteAccountCommand}"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource ErrorColorBrush}"/>
+                                                <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
                     </StackPanel>
-
-                    <!-- Versión de la app -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Versión" 
-                                   FontWeight="SemiBold" 
-                                   VerticalAlignment="Center"
-                                   Width="200" />
-
-                        <TextBlock Text="{Binding AppVersion}" 
-                                   FontSize="14"
-                                   Foreground="#666"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-
-            <!-- Mensaje de éxito -->
-            <Border Visibility="{Binding ShowSuccessMessage, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Background="#E8F5E9"
-                    BorderBrush="#C8E6C9"
-                    BorderThickness="1"
-                    Padding="15"
-                    Margin="0,30,0,0">
-                <TextBlock Text="{Binding SuccessMessage}" 
-                           FontSize="14"
-                           Foreground="#2E7D32"
-                           TextWrapping="Wrap" />
-            </Border>
-
-            <!-- Loading -->
-            <Grid Visibility="{Binding IsSaving, Converter={StaticResource BoolToVisibilityConverter}}"
-                  Height="200"
-                  VerticalAlignment="Center"
-                  Margin="0,30,0,0">
-                <StackPanel HorizontalAlignment="Center" 
-                            VerticalAlignment="Center">
-                    <TextBlock Text="⏳" 
-                               FontSize="48" 
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,10" />
-                    <TextBlock Text="Guardando configuración..." 
-                               FontSize="16" 
-                               Foreground="#666" />
-                </StackPanel>
-            </Grid>
-
-        </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
     </ScrollViewer>
 </UserControl>
