@@ -10,9 +10,9 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
+    <Folder Include="Resources\Fonts\" />
     <Folder Include="Resources\Icons\" />
     <Folder Include="Resources\Images\" />
-    <Folder Include="Resources\Fonts\" />
   </ItemGroup>
 
   <ItemGroup>

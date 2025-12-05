@@ -1,4 +1,10 @@
-﻿<Application x:Class="HoloCrew.App"
+﻿<!-- ========================================
+     HOLOCREW - APP.XAML
+     Configuración correcta con orden optimizado
+     Compatible con diseñador VS 2022
+     ======================================== -->
+
+<Application x:Class="HoloCrew.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:HoloCrew.Converters"
@@ -76,11 +82,21 @@
                 <views:NotificationsView />
             </DataTemplate>
 
-            <!-- ========== ESTILOS ========== -->
+            <!-- ========== ESTILOS - ORDEN CRÍTICO ========== -->
             <ResourceDictionary.MergedDictionaries>
+                <!-- 1. COLORES - Solo definiciones Color -->
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Buttons.xaml" />
+
+                <!-- 2. BRUSHES - Valores HEX directos (NUEVO - evita referencias circulares) -->
+                <ResourceDictionary Source="Resources/Styles/Brushes.xaml" />
+
+                <!-- 3. ESTILOS DE TEXTO - Usa brushes ya cargados -->
                 <ResourceDictionary Source="Resources/Styles/TextBlocks.xaml" />
+
+                <!-- 4. ESTILOS DE BOTONES - Usa brushes ya cargados -->
+                <ResourceDictionary Source="Resources/Styles/Buttons.xaml" />
+
+                <!-- 5. RESTO DE ESTILOS ORIGINALES -->
                 <ResourceDictionary Source="Resources/Styles/TextBoxes.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Cards.xaml" />
                 <ResourceDictionary Source="Resources/Styles/ScrollViewers.xaml" />

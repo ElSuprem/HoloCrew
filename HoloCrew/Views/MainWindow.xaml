@@ -3,151 +3,292 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:HoloCrew.Converters"
         mc:Ignorable="d"
-        Title="HoloCrew - Tu Tienda Online"
-        Height="768" 
-        Width="1366"
-        MinHeight="600"
-        MinWidth="1000"
+        Title="HoloCrew - Premium Streetwear" 
+        Height="900" Width="1400"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized"
-        Background="#F5F5F5">
+        Background="{StaticResource BackgroundPrimary}">
+
+    <Window.Resources>
+        <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <!-- Header -->
-            <RowDefinition Height="*" />
+            <RowDefinition Height="40"/>
+            <!-- Top Banner -->
+            <RowDefinition Height="80"/>
+            <!-- Main Header -->
+            <RowDefinition Height="*"/>
             <!-- Content -->
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
             <!-- Footer -->
         </Grid.RowDefinitions>
 
-        <!-- ============ HEADER / NAVIGATION BAR ============ -->
+        <!-- ===================================
+             TOP BANNER BAR
+             =================================== -->
         <Border Grid.Row="0" 
-                Background="#1976D2" 
-                Height="70"
-                BorderThickness="0,0,0,1"
-                BorderBrush="#115293">
-            <Grid Margin="20,0">
+                Background="{StaticResource BlackPrimaryBrush}">
+            <TextBlock Text="FREE SHIPPING OVER 50€  |  14 DAYS RETURN POLICY  |  WORLDWIDE SHIPPING"
+                       Foreground="{StaticResource WhitePrimaryBrush}"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+        </Border>
+
+        <!-- ===================================
+             MAIN HEADER
+             =================================== -->
+        <Border Grid.Row="1" 
+                Background="{StaticResource WhitePrimaryBrush}"
+                BorderBrush="{StaticResource BorderDefault}"
+                BorderThickness="0,0,0,1">
+            <Grid Margin="60,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto"/>
                     <!-- Logo -->
-                    <ColumnDefinition Width="*" />
-                    <!-- Menú -->
-                    <ColumnDefinition Width="Auto" />
-                    <!-- Búsqueda -->
-                    <ColumnDefinition Width="Auto" />
-                    <!-- Acciones -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Menu -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Search -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Actions -->
                 </Grid.ColumnDefinitions>
 
-                <!-- Logo y Nombre -->
-                <StackPanel Grid.Column="0" 
-                            Orientation="Horizontal" 
-                            VerticalAlignment="Center">
-                    <TextBlock Text="🛒" 
-                               FontSize="32" 
-                               Margin="0,0,10,0"
-                               VerticalAlignment="Center" />
-                    <TextBlock Text="HoloCrew" 
-                               FontSize="28" 
-                               FontWeight="Bold" 
-                               Foreground="White" 
-                               VerticalAlignment="Center" />
-                </StackPanel>
+                <!-- LOGO -->
+                <TextBlock Grid.Column="0"
+                           Text="HOLOCREW" 
+                           FontSize="24" 
+                           FontWeight="Black" 
+                           Foreground="{StaticResource BlackPrimaryBrush}" 
+                           VerticalAlignment="Center"
+                           Cursor="Hand">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Command="{Binding NavigateToHomeCommand}" MouseAction="LeftClick" />
+                    </TextBlock.InputBindings>
+                </TextBlock>
 
-                <!-- Menú de Navegación -->
+                <!-- MENU NAVIGATION -->
                 <StackPanel Grid.Column="1" 
                             Orientation="Horizontal" 
-                            HorizontalAlignment="Left"
-                            Margin="40,0,0,0"
+                            HorizontalAlignment="Center"
                             VerticalAlignment="Center">
-
-                    <Button Content="Inicio" 
-                            Command="{Binding NavigateToHomeCommand}"
-                            Style="{StaticResource MenuButtonStyle}"
-                            Margin="0,0,10,0" />
-
-                    <Button Content="Catálogo" 
-                            Command="{Binding NavigateToCatalogCommand}"
-                            Style="{StaticResource MenuButtonStyle}"
-                            Margin="0,0,10,0" />
-
+                    <Button Content="SHOP" 
+                            Style="{StaticResource MenuButton}"
+                            Command="{Binding NavigateToCatalogCommand}"/>
+                    <TextBlock Text="|" 
+                               Foreground="{StaticResource Gray300Brush}" 
+                               FontSize="14" 
+                               VerticalAlignment="Center"/>
+                    <Button Content="FLASH SALE" 
+                            Style="{StaticResource MenuButton}"/>
+                    <TextBlock Text="|" 
+                               Foreground="{StaticResource Gray300Brush}" 
+                               FontSize="14" 
+                               VerticalAlignment="Center"/>
+                    <Button Content="BLACK WEEK" 
+                            Style="{StaticResource MenuButton}"/>
+                    <TextBlock Text="|" 
+                               Foreground="{StaticResource Gray300Brush}" 
+                               FontSize="14" 
+                               VerticalAlignment="Center"/>
+                    <Button Content="MEMBERS CLUB" 
+                            Style="{StaticResource MenuButton}"/>
                 </StackPanel>
 
-                <!-- Acciones -->
+                <!-- SEARCH BAR -->
+                <Border Grid.Column="2" 
+                        Background="{StaticResource Gray100Brush}"
+                        Width="280" 
+                        Height="40"
+                        Margin="0,0,30,0">
+                    <Grid>
+                        <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 VerticalAlignment="Center"
+                                 Padding="12,0,40,0"
+                                 FontSize="14"/>
+                        <TextBlock Text="Search products..."
+                                   Foreground="{StaticResource Gray400Brush}"
+                                   FontSize="14"
+                                   VerticalAlignment="Center"
+                                   Margin="12,0,0,0"
+                                   IsHitTestVisible="False">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SearchQuery}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SearchQuery}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Text="🔍" 
+                                   FontSize="16"
+                                   VerticalAlignment="Center" 
+                                   HorizontalAlignment="Right"
+                                   Margin="0,0,12,0"
+                                   IsHitTestVisible="False"/>
+                    </Grid>
+                </Border>
+
+                <!-- ACTION ICONS -->
                 <StackPanel Grid.Column="3" 
                             Orientation="Horizontal" 
                             VerticalAlignment="Center">
 
                     <!-- Wishlist -->
-                    <Button Command="{Binding NavigateToWishlistCommand}"
-                            Style="{StaticResource IconButtonStyle}"
-                            Margin="0,0,15,0">
-                        <Grid>
-                            <TextBlock Text="♥" 
-                                       FontSize="24" 
-                                       Foreground="White" />
-                        </Grid>
-                    </Button>
+                    <Button Content="♥" 
+                            Style="{StaticResource IconButton}"
+                            FontSize="20"
+                            Command="{Binding NavigateToWishlistCommand}"/>
 
-                    <!-- Carrito -->
-                    <Button Command="{Binding NavigateToCartCommand}"
-                            Style="{StaticResource IconButtonStyle}"
-                            Margin="0,0,15,0">
-                        <Grid>
-                            <TextBlock Text="🛒" 
-                                       FontSize="24" 
-                                       Foreground="White" />
+                    <!-- Cart with badge -->
+                    <Grid>
+                        <Button Content="🛒" 
+                                Style="{StaticResource IconButton}"
+                                FontSize="20"
+                                Command="{Binding NavigateToCartCommand}"/>
+                        <Border Background="{StaticResource RedAccentBrush}" 
+                                Width="20" 
+                                Height="20"
+                                CornerRadius="10"
+                                VerticalAlignment="Top" 
+                                HorizontalAlignment="Right"
+                                Margin="0,-5,-5,0"
+                                Visibility="{Binding CartItemCount, Converter={StaticResource CountToVisibilityConverter}}">
+                            <TextBlock Text="{Binding CartItemCount}" 
+                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       FontSize="10" 
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
 
-                            <!-- Badge con contador -->
-                            <Border Background="#FF6F00"
-                                    CornerRadius="10"
-                                    Padding="5,2"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    Margin="0,-8,-8,0"
-                                    Visibility="{Binding CartItemCount, Converter={StaticResource CountToVisibilityConverter}}">
-                                <TextBlock Text="{Binding CartItemCount}" 
-                                           Foreground="White" 
-                                           FontSize="10"
-                                           FontWeight="Bold" />
-                            </Border>
-                        </Grid>
-                    </Button>
-
-                    <!-- Usuario -->
-                    <Button Command="{Binding NavigateToProfileCommand}"
-                            Style="{StaticResource IconButtonStyle}">
-                        <TextBlock Text="👤" 
-                                   FontSize="24" 
-                                   Foreground="White" />
-                    </Button>
-
+                    <!-- Profile -->
+                    <Button Content="👤" 
+                            Style="{StaticResource IconButton}"
+                            FontSize="20"
+                            Command="{Binding NavigateToProfileCommand}"/>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- ============ CONTENT AREA (Vistas dinámicas) ============ -->
-        <ContentControl Grid.Row="1" 
-                        Content="{Binding CurrentView}" 
-                        HorizontalContentAlignment="Stretch"
-                        VerticalContentAlignment="Stretch" />
+        <!-- ===================================
+             CONTENT AREA
+             =================================== -->
+        <ContentControl Grid.Row="2" 
+                        Content="{Binding CurrentView}"/>
 
-        <!-- ============ FOOTER ============ -->
-        <Border Grid.Row="2" 
-                Background="#263238" 
-                Padding="20,15"
-                BorderThickness="0,1,0,0"
-                BorderBrush="#1C2428">
+        <!-- ===================================
+             FOOTER
+             =================================== -->
+        <Border Grid.Row="3" 
+                Background="{StaticResource BlackPrimaryBrush}"
+                Padding="60,40">
             <Grid>
-                <TextBlock Text="© 2024 HoloCrew - Todos los derechos reservados" 
-                           Foreground="#B0BEC5" 
-                           FontSize="12"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center" />
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- COLUMNA 1: LOGO Y DESCRIPCIÓN -->
+                <StackPanel Grid.Column="0" Margin="0,0,30,0">
+                    <TextBlock Text="HOLOCREW" 
+                               FontSize="18" 
+                               FontWeight="Black" 
+                               Foreground="{StaticResource WhitePrimaryBrush}" 
+                               Margin="0,0,0,12" />
+                    <TextBlock Text="Premium streetwear for those who dare to stand out. Quality meets style in every piece."
+                               Foreground="{StaticResource Gray400Brush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               LineHeight="20"/>
+                </StackPanel>
+
+                <!-- COLUMNA 2: ENLACES RÁPIDOS -->
+                <StackPanel Grid.Column="1" Margin="0,0,30,0">
+                    <TextBlock Text="ENLACES RÁPIDOS" 
+                               Style="{StaticResource SubtitleMedium}"
+                               Foreground="{StaticResource WhitePrimaryBrush}"
+                               Margin="0,0,0,15"/>
+                    <Button Content="Nuevos Productos" Style="{StaticResource TextButton}" 
+                            Foreground="{StaticResource Gray400Brush}" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                    <Button Content="Ofertas Especiales" Style="{StaticResource TextButton}" 
+                            Foreground="{StaticResource Gray400Brush}" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                    <Button Content="Tops" Style="{StaticResource TextButton}" 
+                            Foreground="{StaticResource Gray400Brush}" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                    <Button Content="Bottoms" Style="{StaticResource TextButton}" 
+                            Foreground="{StaticResource Gray400Brush}" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                    <Button Content="Accesorios" Style="{StaticResource TextButton}" 
+                            Foreground="{StaticResource Gray400Brush}" HorizontalAlignment="Left"/>
+                </StackPanel>
+
+                <!-- COLUMNA 3: CONTACTO -->
+                <StackPanel Grid.Column="2" Margin="0,0,30,0">
+                    <TextBlock Text="CONTACTO" 
+                               Style="{StaticResource SubtitleMedium}"
+                               Foreground="{StaticResource WhitePrimaryBrush}"
+                               Margin="0,0,0,15"/>
+                    <TextBlock Foreground="{StaticResource Gray400Brush}" FontSize="13" Margin="0,0,0,8">
+                        <Run Text="📍"/>
+                        <Run Text="Calle Principal 123, Madrid"/>
+                    </TextBlock>
+                    <TextBlock Foreground="{StaticResource Gray400Brush}" FontSize="13" Margin="0,0,0,8">
+                        <Run Text="📞"/>
+                        <Run Text="+34 900 123 456"/>
+                    </TextBlock>
+                    <TextBlock Foreground="{StaticResource Gray400Brush}" FontSize="13">
+                        <Run Text="✉️"/>
+                        <Run Text="info@holocrew.com"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- COLUMNA 4: NEWSLETTER -->
+                <StackPanel Grid.Column="3">
+                    <TextBlock Text="NEWSLETTER" 
+                               Style="{StaticResource SubtitleMedium}"
+                               Foreground="{StaticResource WhitePrimaryBrush}"
+                               Margin="0,0,0,15"/>
+                    <TextBlock Text="Suscríbete para recibir ofertas exclusivas"
+                               Foreground="{StaticResource Gray400Brush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,12"/>
+                    <Border Background="{StaticResource WhitePrimaryBrush}" Height="45">
+                        <Grid>
+                            <TextBox BorderThickness="0"
+                                     VerticalAlignment="Center"
+                                     Padding="15,0,100,0"
+                                     FontSize="14"/>
+                            <TextBlock Text="Tu email..."
+                                       Foreground="{StaticResource Gray400Brush}"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"
+                                       Margin="15,0,0,0"
+                                       IsHitTestVisible="False"/>
+                            <Button Content="SUBSCRIBE" 
+                                    Style="{StaticResource AccentButton}"
+                                    FontSize="11"
+                                    Padding="20,12"
+                                    HorizontalAlignment="Right"
+                                    Margin="5"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
             </Grid>
         </Border>
-
     </Grid>
 </Window>

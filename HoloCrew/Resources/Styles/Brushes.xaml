@@ -1,0 +1,107 @@
+<!-- ========================================
+     HOLOCREW - BRUSHES CON VALORES DIRECTOS
+     Sin referencias StaticResource (evita cuelgues del diseñador)
+     Compatible con diseñador VS 2022
+     ======================================== -->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ========== NEGROS ========== -->
+    <SolidColorBrush x:Key="BlackPrimaryBrush" Color="#0A0A0A"/>
+    <SolidColorBrush x:Key="BlackSecondaryBrush" Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="BlackTertiaryBrush" Color="#2A2A2A"/>
+
+    <!-- ========== BLANCOS ========== -->
+    <SolidColorBrush x:Key="WhitePrimaryBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="WhiteSecondaryBrush" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="WhiteTertiaryBrush" Color="#E8E8E8"/>
+
+    <!-- ========== ROJOS (ACENTO) ========== -->
+    <SolidColorBrush x:Key="RedAccentBrush" Color="#FF0000"/>
+    <SolidColorBrush x:Key="RedAccentDarkBrush" Color="#CC0000"/>
+    <SolidColorBrush x:Key="RedAccentLightBrush" Color="#FF3333"/>
+
+    <!-- ========== ESCALA DE GRISES ========== -->
+    <SolidColorBrush x:Key="Gray100Brush" Color="#F7F7F7"/>
+    <SolidColorBrush x:Key="Gray200Brush" Color="#E8E8E8"/>
+    <SolidColorBrush x:Key="Gray300Brush" Color="#D1D1D1"/>
+    <SolidColorBrush x:Key="Gray400Brush" Color="#B0B0B0"/>
+    <SolidColorBrush x:Key="Gray500Brush" Color="#8A8A8A"/>
+    <SolidColorBrush x:Key="Gray600Brush" Color="#6B6B6B"/>
+    <SolidColorBrush x:Key="Gray700Brush" Color="#4A4A4A"/>
+    <SolidColorBrush x:Key="Gray800Brush" Color="#2E2E2E"/>
+    <SolidColorBrush x:Key="Gray900Brush" Color="#1F1F1F"/>
+
+    <!-- ========== COLORES SEMÁNTICOS ========== -->
+    <SolidColorBrush x:Key="SuccessColorBrush" Color="#10B981"/>
+    <SolidColorBrush x:Key="WarningColorBrush" Color="#F59E0B"/>
+    <SolidColorBrush x:Key="ErrorColorBrush" Color="#EF4444"/>
+    <SolidColorBrush x:Key="InfoColorBrush" Color="#3B82F6"/>
+
+    <!-- ========== OVERLAYS ========== -->
+    <SolidColorBrush x:Key="OverlayDarkBrush" Color="#80000000"/>
+    <SolidColorBrush x:Key="OverlayLightBrush" Color="#40FFFFFF"/>
+
+    <!-- ========== HOVER ========== -->
+    <SolidColorBrush x:Key="HoverLight" Color="#F0F0F0"/>
+    <SolidColorBrush x:Key="HoverDark" Color="#20FFFFFF"/>
+
+    <!-- ========== ALIASES COMUNES (valores directos para compatibilidad) ========== -->
+    <SolidColorBrush x:Key="BackgroundPrimary" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="BackgroundSecondary" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="BackgroundDark" Color="#0A0A0A"/>
+
+    <SolidColorBrush x:Key="TextPrimary" Color="#0A0A0A"/>
+    <SolidColorBrush x:Key="TextSecondary" Color="#6B6B6B"/>
+    <SolidColorBrush x:Key="TextOnDark" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TextMuted" Color="#B0B0B0"/>
+
+    <SolidColorBrush x:Key="BorderDefault" Color="#E8E8E8"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#E8E8E8"/>
+    <SolidColorBrush x:Key="AccentPrimary" Color="#FF0000"/>
+    <SolidColorBrush x:Key="AccentSecondary" Color="#0A0A0A"/>
+
+    <!-- ========== ALIASES DE COMPATIBILIDAD CON VISTAS ANTIGUAS ========== -->
+    <!-- Estos permiten que TextBoxes.xaml, Cards.xaml, etc. sigan funcionando -->
+
+    <!-- Primarios (ahora negro en vez de azul) -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#0A0A0A"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="#2A2A2A"/>
+
+    <!-- Acento (ahora rojo en vez de naranja) -->
+    <SolidColorBrush x:Key="AccentBrush" Color="#FF0000"/>
+    <SolidColorBrush x:Key="AccentLightBrush" Color="#FF3333"/>
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="#CC0000"/>
+
+    <!-- Superficies -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="DividerBrush" Color="#E8E8E8"/>
+
+    <!-- Texto (compatibilidad) -->
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#0A0A0A"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6B6B6B"/>
+    <SolidColorBrush x:Key="TextDisabledBrush" Color="#B0B0B0"/>
+    <SolidColorBrush x:Key="TextOnPrimaryBrush" Color="#FFFFFF"/>
+
+    <!-- Estados (mantener colores originales para compatibilidad) -->
+    <SolidColorBrush x:Key="SuccessBrush" Color="#10B981"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#F59E0B"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#EF4444"/>
+    <SolidColorBrush x:Key="InfoBrush" Color="#3B82F6"/>
+
+    <!-- Bordes (compatibilidad) -->
+    <SolidColorBrush x:Key="BorderFocusBrush" Color="#0A0A0A"/>
+    <SolidColorBrush x:Key="BorderErrorBrush" Color="#EF4444"/>
+
+    <!-- Hover/Pressed -->
+    <SolidColorBrush x:Key="HoverBrush" Color="#F0F0F0"/>
+    <SolidColorBrush x:Key="PressedBrush" Color="#E8E8E8"/>
+
+    <!-- Rating -->
+    <SolidColorBrush x:Key="StarBrush" Color="#F59E0B"/>
+
+</ResourceDictionary>
