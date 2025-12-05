@@ -4,386 +4,349 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="800" d:DesignWidth="1200"
-             Background="White">
+             d:DesignHeight="800" d:DesignWidth="1400"
+             Background="{StaticResource BackgroundPrimary}">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="280" />
             <!-- Sidebar Filtros -->
             <ColumnDefinition Width="*" />
             <!-- Grid Productos -->
         </Grid.ColumnDefinitions>
 
-        <!-- SIDEBAR: Filtros -->
+        <!-- ============================================
+             SIDEBAR: FILTROS
+             ============================================ -->
         <Border Grid.Column="0" 
-                Background="White"
-                BorderBrush="#E0E0E0"
-                BorderThickness="0,0,1,0"
-                Padding="20">
+                Background="{StaticResource BlackPrimaryBrush}"
+                BorderBrush="{StaticResource Gray800Brush}"
+                BorderThickness="0,0,1,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-                    <TextBlock Text="Filtros" 
-                               FontSize="20" 
-                               FontWeight="Bold" 
-                               Margin="0,0,0,30" 
-                               Foreground="#1976D2" />
+                <Border Padding="30,40">
+                    <StackPanel>
+                        <!-- Título -->
+                        <TextBlock Text="FILTERS" 
+                                   Style="{StaticResource HeadingMedium}"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
+                                   Margin="0,0,0,40" />
 
-                    <!-- Búsqueda -->
-                    <TextBlock Text="Buscar" 
-                               FontWeight="SemiBold" 
-                               Margin="0,0,0,8" 
-                               Foreground="#555" />
-                    <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                             Padding="12,10"
-                             FontSize="14"
-                             BorderBrush="#E0E0E0"
-                             BorderThickness="1"
-                             Margin="0,0,0,25">
-                        <TextBox.Style>
-                            <Style TargetType="TextBox">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="TextBox">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                    CornerRadius="6">
-                                                <ScrollViewer x:Name="PART_ContentHost"
-                                                              Margin="{TemplateBinding Padding}" />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsFocused" Value="True">
-                                        <Setter Property="BorderBrush" Value="#1976D2" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBox.Style>
-                    </TextBox>
+                        <!-- Búsqueda -->
+                        <TextBlock Text="SEARCH" 
+                                   Style="{StaticResource SubtitleMedium}"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
+                                   Margin="0,0,0,12" />
+                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                                Height="45"
+                                Margin="0,0,0,30">
+                            <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Padding="15,0"
+                                     VerticalAlignment="Center"
+                                     FontSize="14"/>
+                        </Border>
 
-                    <!-- Rango de Precio -->
-                    <TextBlock Text="Precio" 
-                               FontWeight="SemiBold" 
-                               Margin="0,0,0,8" 
-                               Foreground="#555" />
-                    <StackPanel Orientation="Horizontal" 
-                                Margin="0,0,0,20"
-                                HorizontalAlignment="Center">
-                        <TextBox Text="{Binding MinPrice}" 
-                                 Width="80" 
-                                 Padding="8,6"
-                                 FontSize="14"
-                                 TextAlignment="Center"
-                                 BorderBrush="#E0E0E0"
-                                 BorderThickness="1" />
-                        <TextBlock Text="-" 
-                                   VerticalAlignment="Center" 
-                                   Margin="10,0,10,0" 
-                                   FontSize="14"
-                                   Foreground="#777" />
-                        <TextBox Text="{Binding MaxPrice}" 
-                                 Width="80" 
-                                 Padding="8,6"
-                                 FontSize="14"
-                                 TextAlignment="Center"
-                                 BorderBrush="#E0E0E0"
-                                 BorderThickness="1" />
+                        <!-- Rango de Precio -->
+                        <TextBlock Text="PRICE RANGE" 
+                                   Style="{StaticResource SubtitleMedium}"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
+                                   Margin="0,0,0,12" />
+                        <Grid Margin="0,0,0,30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" 
+                                    Background="{StaticResource WhitePrimaryBrush}"
+                                    Height="45">
+                                <TextBox Text="{Binding MinPrice}" 
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         TextAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         FontSize="14"/>
+                            </Border>
+
+                            <TextBlock Grid.Column="1"
+                                       Text="-" 
+                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="10,0"
+                                       FontSize="16"
+                                       FontWeight="Bold"/>
+
+                            <Border Grid.Column="2"
+                                    Background="{StaticResource WhitePrimaryBrush}"
+                                    Height="45">
+                                <TextBox Text="{Binding MaxPrice}" 
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         TextAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         FontSize="14"/>
+                            </Border>
+                        </Grid>
+
+                        <!-- Categorías -->
+                        <TextBlock Text="CATEGORY" 
+                                   Style="{StaticResource SubtitleMedium}"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
+                                   Margin="0,0,0,15" />
+                        <StackPanel Margin="0,0,0,30">
+                            <Button Content="ALL PRODUCTS" 
+                                    Style="{StaticResource TextButton}"
+                                    Foreground="{StaticResource WhitePrimaryBrush}"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,0,0,10"/>
+                            <Button Content="TOPS" 
+                                    Style="{StaticResource TextButton}"
+                                    Foreground="{StaticResource Gray400Brush}"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,0,0,10"/>
+                            <Button Content="BOTTOMS" 
+                                    Style="{StaticResource TextButton}"
+                                    Foreground="{StaticResource Gray400Brush}"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,0,0,10"/>
+                            <Button Content="ACCESSORIES" 
+                                    Style="{StaticResource TextButton}"
+                                    Foreground="{StaticResource Gray400Brush}"
+                                    HorizontalAlignment="Left"/>
+                        </StackPanel>
+
+                        <!-- Botones de acción -->
+                        <Button Content="APPLY FILTERS" 
+                                Style="{StaticResource AccentButton}"
+                                Command="{Binding ApplyFiltersCommand}"
+                                Margin="0,0,0,15"
+                                HorizontalAlignment="Stretch"/>
+
+                        <Button Content="CLEAR FILTERS" 
+                                Style="{StaticResource OutlineButton}"
+                                Foreground="{StaticResource WhitePrimaryBrush}"
+                                BorderBrush="{StaticResource WhitePrimaryBrush}"
+                                Command="{Binding ClearFiltersCommand}"
+                                HorizontalAlignment="Stretch"/>
                     </StackPanel>
-
-                    <!-- Botones Filtros -->
-                    <Button Content="Aplicar Filtros" 
-                            Command="{Binding ApplyFiltersCommand}"
-                            Padding="20,12"
-                            FontSize="14"
-                            FontWeight="SemiBold"
-                            Background="#1976D2"
-                            Foreground="White"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            Margin="0,0,0,15">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    CornerRadius="6"
-                                                    Padding="{TemplateBinding Padding}">
-                                                <ContentPresenter HorizontalAlignment="Center"
-                                                                  VerticalAlignment="Center" />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#115293" />
-                                    </Trigger>
-                                    <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Background" Value="#BBDEFB" />
-                                        <Setter Property="Foreground" Value="#90A4AE" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-
-                    <Button Content="Limpiar Filtros" 
-                            Command="{Binding ClearFiltersCommand}"
-                            Padding="20,12"
-                            FontSize="14"
-                            FontWeight="SemiBold"
-                            Background="Transparent"
-                            Foreground="#1976D2"
-                            BorderBrush="#1976D2"
-                            BorderThickness="1"
-                            Cursor="Hand">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                    CornerRadius="6"
-                                                    Padding="{TemplateBinding Padding}">
-                                                <ContentPresenter HorizontalAlignment="Center"
-                                                                  VerticalAlignment="Center" />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#E3F2FD" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
+                </Border>
             </ScrollViewer>
         </Border>
 
-        <!-- GRID: Productos -->
+        <!-- ============================================
+             ÁREA PRINCIPAL: PRODUCTOS
+             ============================================ -->
         <ScrollViewer Grid.Column="1" 
                       VerticalScrollBarVisibility="Auto"
-                      PanningMode="VerticalOnly">
-            <StackPanel Margin="40">
-                <Grid Margin="0,0,0,30">
-                    <TextBlock Text="{Binding Title}" 
-                               FontSize="32" 
-                               FontWeight="Bold"
-                               Foreground="#1976D2"
-                               VerticalAlignment="Center" />
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <!-- Header con ordenamiento -->
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="0,0,0,1"
+                        Padding="40,30">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center">
-                        <TextBlock Text="Ordenar por:" 
-                                   FontSize="14" 
-                                   Margin="0,0,10,0"
-                                   VerticalAlignment="Center"
-                                   Foreground="#555" />
+                        <!-- Resultados -->
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource HeadingLarge}">
+                                <Run Text="{Binding TotalProducts, Mode=OneWay}"/>
+                                <Run Text="PRODUCTS"/>
+                            </TextBlock>
+                            <TextBlock Text="Discover our latest collection"
+                                       Style="{StaticResource BodyMedium}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       Margin="0,5,0,0"/>
+                        </StackPanel>
 
-                        <ComboBox ItemsSource="{Binding SortOptions}"
-                                  SelectedItem="{Binding SelectedSortOption}"
-                                  Width="180"
-                                  Padding="12,8"
-                                  FontSize="14"
-                                  BorderBrush="#E0E0E0"
-                                  BorderThickness="1">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding DisplayName}" 
-                                               FontSize="14"
-                                               Margin="4,2" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
-                </Grid>
+                        <!-- Ordenamiento -->
+                        <StackPanel Grid.Column="1" 
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="SORT BY:" 
+                                       Style="{StaticResource BodyMedium}"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,15,0"/>
+                            <ComboBox SelectedIndex="{Binding SelectedSortOption}"
+                                      Width="200"
+                                      Height="45"
+                                      FontSize="14"
+                                      Padding="15,0">
+                                <ComboBoxItem Content="Newest First"/>
+                                <ComboBoxItem Content="Price: Low to High"/>
+                                <ComboBoxItem Content="Price: High to Low"/>
+                                <ComboBoxItem Content="Most Popular"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-                <ItemsControl ItemsSource="{Binding FilteredProducts}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Background="White"
-                                    BorderBrush="#E0E0E0"
-                                    BorderThickness="1"
-                                    CornerRadius="12"
-                                    Width="260"
-                                    Margin="10"
-                                    Cursor="Hand">
-                                <Border.Effect>
-                                    <DropShadowEffect Color="#40000000" 
-                                                      BlurRadius="12" 
-                                                      ShadowDepth="3" 
-                                                      Opacity="0.15" />
-                                </Border.Effect>
-                                <Border.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick"
-                                                  Command="{Binding DataContext.ViewProductDetailCommand, 
-                                                            RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                  CommandParameter="{Binding}" />
-                                </Border.InputBindings>
+                <!-- Grid de Productos -->
+                <Border Padding="40,40,40,60">
+                    <ItemsControl ItemsSource="{Binding Products}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="3"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="Transparent"
+                                        Margin="0,0,30,30"
+                                        Cursor="Hand">
+                                    <Border.InputBindings>
+                                        <MouseBinding Command="{Binding DataContext.ViewProductDetailCommand, 
+                                                      RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                      CommandParameter="{Binding}" 
+                                                      MouseAction="LeftClick"/>
+                                    </Border.InputBindings>
 
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="200" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="400"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
 
-                                    <!-- Imagen del Producto -->
-                                    <Border Grid.Row="0" 
-                                            CornerRadius="12,12,0,0"
-                                            Background="#F5F5F5">
-                                        <Grid>
-                                            <TextBlock Text="📷" 
-                                                       FontSize="64"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="#CCC" />
+                                        <!-- Imagen del producto -->
+                                        <Border Grid.Row="0" 
+                                                Background="{StaticResource Gray100Brush}">
+                                            <Grid>
+                                                <Rectangle Fill="{StaticResource Gray200Brush}"/>
 
-                                            <Border Background="#F44336"
-                                                    Padding="8,4"
-                                                    CornerRadius="4"
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Top"
-                                                    Margin="10">
-                                                <!-- CORREGIDO: StringFormat con {} -->
-                                                <TextBlock Text="{Binding DiscountPercentage, StringFormat={}-{0}%}"
-                                                           Foreground="White"
-                                                           FontWeight="Bold"
-                                                           FontSize="12" />
-                                            </Border>
-                                        </Grid>
-                                    </Border>
+                                                <!-- Badge descuento -->
+                                                <Border Background="{StaticResource RedAccentBrush}"
+                                                        Width="60" 
+                                                        Height="30"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Top"
+                                                        Margin="15"
+                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <TextBlock Text="{Binding DiscountPercentage, StringFormat=-{0}%}"
+                                                               Style="{StaticResource BadgeText}"
+                                                               FontSize="13"
+                                                               VerticalAlignment="Center"
+                                                               HorizontalAlignment="Center"/>
+                                                </Border>
 
-                                    <!-- Información del Producto -->
-                                    <StackPanel Grid.Row="1" Margin="15">
-                                        <TextBlock Text="{Binding Name}"
-                                                   FontSize="16"
-                                                   FontWeight="SemiBold"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   Margin="0,0,0,8" />
+                                                <!-- Botón añadir al carrito -->
+                                                <Border Background="{StaticResource BlackPrimaryBrush}"
+                                                        Width="50" 
+                                                        Height="50"
+                                                        CornerRadius="25"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Bottom"
+                                                        Margin="15"
+                                                        Cursor="Hand">
+                                                    <Border.InputBindings>
+                                                        <MouseBinding Command="{Binding DataContext.AddToCartCommand, 
+                                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                      CommandParameter="{Binding}"
+                                                                      MouseAction="LeftClick"/>
+                                                    </Border.InputBindings>
+                                                    <TextBlock Text="+" 
+                                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                                               FontSize="24"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
 
-                                        <TextBlock Text="{Binding Description}"
-                                                   FontSize="12"
-                                                   Foreground="#757575"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   Margin="0,0,0,12" />
+                                        <!-- Información del producto -->
+                                        <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                                            <!-- Nombre -->
+                                            <TextBlock Text="{Binding Name}"
+                                                       Style="{StaticResource ProductTitle}"
+                                                       Margin="0,0,0,8"/>
 
-                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                                            <TextBlock Text="★" Foreground="#FFC107" FontSize="14" />
-                                            <!-- CORREGIDO: StringFormat con {} -->
-                                            <TextBlock Text="{Binding AverageRating, StringFormat={}{0:F1}}"
-                                                       FontSize="12"
-                                                       Margin="4,0,8,0" />
-                                            <!-- CORREGIDO: StringFormat con {} -->
-                                            <TextBlock Text="{Binding ReviewCount, StringFormat={}({0})}"
-                                                       FontSize="12"
-                                                       Foreground="#999" />
-                                        </StackPanel>
-
-                                        <Grid>
-                                            <StackPanel Orientation="Horizontal">
-                                                <!-- CORREGIDO: StringFormat con {} -->
-                                                <TextBlock Text="{Binding Price, StringFormat={}€{0:N2}}"
-                                                           FontSize="22"
-                                                           FontWeight="Bold"
-                                                           Foreground="#1976D2" />
-
-                                                <!-- CORREGIDO: StringFormat con {} -->
-                                                <TextBlock Text="{Binding OriginalPrice, StringFormat={}€{0:N2}}"
-                                                           FontSize="14"
-                                                           Foreground="#999"
-                                                           TextDecorations="Strikethrough"
-                                                           Margin="8,0,0,0"
-                                                           VerticalAlignment="Center" />
+                                            <!-- Rating -->
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                                <TextBlock Text="★" 
+                                                           Foreground="{StaticResource StarBrush}" 
+                                                           FontSize="14"/>
+                                                <TextBlock Text="{Binding AverageRating, StringFormat={}{0:F1}}"
+                                                           Style="{StaticResource Caption}"
+                                                           Margin="4,0,6,0"
+                                                           VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding ReviewCount, StringFormat={}({0})}"
+                                                           Style="{StaticResource Caption}"
+                                                           Foreground="{StaticResource TextMuted}"
+                                                           VerticalAlignment="Center"/>
                                             </StackPanel>
 
-                                            <Button Content="+" 
-                                                    HorizontalAlignment="Right"
-                                                    Width="36"
-                                                    Height="36"
-                                                    Background="#1976D2"
-                                                    Foreground="White"
-                                                    FontSize="20"
-                                                    FontWeight="Bold"
-                                                    BorderThickness="0"
-                                                    Cursor="Hand"
-                                                    Command="{Binding DataContext.AddToCartCommand, 
-                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}">
-                                                <Button.Style>
-                                                    <Style TargetType="Button">
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="Button">
-                                                                    <Border Background="{TemplateBinding Background}"
-                                                                            CornerRadius="18"
-                                                                            Width="{TemplateBinding Width}"
-                                                                            Height="{TemplateBinding Height}">
-                                                                        <ContentPresenter HorizontalAlignment="Center"
-                                                                                          VerticalAlignment="Center" />
-                                                                    </Border>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter Property="Background" Value="#115293" />
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                        </Grid>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                            <!-- Precio -->
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Price, StringFormat=€{0:N2}}"
+                                                           Style="{StaticResource PriceCard}"
+                                                           Foreground="{StaticResource TextPrimary}"/>
 
-                <!-- Loading -->
-                <Grid Height="200"
-                      VerticalAlignment="Center">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock Text="⏳" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,10" />
-                        <TextBlock Text="Cargando productos..." FontSize="16" Foreground="#666" />
-                    </StackPanel>
-                </Grid>
+                                                <TextBlock Text="{Binding OriginalPrice, StringFormat=€{0:N2}}"
+                                                           Style="{StaticResource PriceOriginal}"
+                                                           Margin="10,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
 
-                <!-- Sin resultados -->
-                <Border Background="#FFF3E0"
-                        CornerRadius="12"
-                        Padding="40"
-                        Margin="0,40,0,0">
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="🔍" 
-                                   FontSize="48"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,20" />
-                        <TextBlock Text="No se encontraron productos" 
-                                   FontSize="20"
-                                   FontWeight="SemiBold"
-                                   Foreground="#E65100"
-                                   Margin="0,0,0,10" />
-                        <TextBlock Text="Intenta cambiar los filtros de búsqueda" 
-                                   FontSize="14"
-                                   Foreground="#777"
-                                   TextAlignment="Center" />
+                <!-- Loading State -->
+                <Border Height="400"
+                        Background="{StaticResource BackgroundPrimary}"
+                        Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center">
+                        <TextBlock Text="⏳" 
+                                   FontSize="60" 
+                                   HorizontalAlignment="Center" 
+                                   Margin="0,0,0,20"/>
+                        <TextBlock Text="LOADING PRODUCTS..." 
+                                   Style="{StaticResource SubtitleLarge}"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"/>
                     </StackPanel>
+                </Border>
+
+                <!-- Empty State -->
+                <Border Padding="40,60"
+                        Background="{StaticResource BackgroundPrimary}"
+                        Visibility="{Binding Products, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
+                    <Border Background="{StaticResource Gray100Brush}"
+                            Padding="60,80"
+                            HorizontalAlignment="Center">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="🔍" 
+                                       FontSize="80"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,30"/>
+                            <TextBlock Text="NO PRODUCTS FOUND" 
+                                       Style="{StaticResource HeadingMedium}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,15"/>
+                            <TextBlock Text="Try adjusting your search or filter to find what you're looking for" 
+                                       Style="{StaticResource BodyLarge}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       TextAlignment="Center"
+                                       MaxWidth="400"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,0,30"/>
+                            <Button Content="CLEAR FILTERS" 
+                                    Style="{StaticResource PrimaryButton}"
+                                    Command="{Binding ClearFiltersCommand}"/>
+                        </StackPanel>
+                    </Border>
                 </Border>
             </StackPanel>
         </ScrollViewer>

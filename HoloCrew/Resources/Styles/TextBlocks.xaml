@@ -128,16 +128,16 @@
         <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}" />
     </Style>
 
-    <!-- ========== VARIANTES DE COLOR ========== -->
-    <Style x:Key="TextOnDark" TargetType="TextBlock">
+    <!-- ========== VARIANTES DE COLOR (ESTILOS) ========== -->
+    <Style x:Key="TextOnDarkStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource TextOnDark}" />
     </Style>
 
-    <Style x:Key="TextMuted" TargetType="TextBlock">
+    <Style x:Key="TextMutedStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
     </Style>
 
-    <Style x:Key="TextAccent" TargetType="TextBlock">
+    <Style x:Key="TextAccentStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource AccentPrimary}" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>

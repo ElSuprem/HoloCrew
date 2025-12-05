@@ -4,251 +4,275 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="700" d:DesignWidth="800"
-             Background="White">
+             d:DesignHeight="800" d:DesignWidth="1200"
+             Background="{StaticResource BackgroundPrimary}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <Grid MinHeight="800">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <!-- Panel Negro -->
                 <ColumnDefinition Width="*" />
+                <!-- Formulario -->
             </Grid.ColumnDefinitions>
 
-            <!-- IZQUIERDA: Ilustración -->
+            <!-- ============================================
+                 PANEL IZQUIERDO (NEGRO)
+                 ============================================ -->
             <Border Grid.Column="0" 
-                    Background="#E3F2FD">
+                    Background="{StaticResource BlackPrimaryBrush}">
                 <StackPanel HorizontalAlignment="Center" 
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Margin="60">
+                    <!-- Logo -->
+                    <TextBlock Text="HOLOCREW" 
+                               FontSize="48" 
+                               FontWeight="Black" 
+                               Foreground="{StaticResource WhitePrimaryBrush}" 
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,40"/>
+
+                    <!-- Emoji -->
                     <TextBlock Text="🎉" 
-                               FontSize="120"
+                               FontSize="100"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,30" />
-                    <TextBlock Text="Únete a HoloCrew" 
-                               FontSize="28"
-                               FontWeight="Bold"
-                               Foreground="#1976D2"
+                               Margin="0,0,0,40" />
+
+                    <!-- Mensaje -->
+                    <TextBlock Text="JOIN THE CREW" 
+                               Style="{StaticResource HeadingLarge}"
+                               Foreground="{StaticResource WhitePrimaryBrush}"
                                HorizontalAlignment="Center"
-                               TextAlignment="Center" />
-                    <TextBlock Text="Crea tu cuenta para comenzar" 
-                               FontSize="16"
-                               Foreground="#555"
+                               Margin="0,0,0,15" />
+                    <TextBlock Text="Create your account and start your streetwear journey" 
+                               Style="{StaticResource BodyLarge}"
+                               Foreground="{StaticResource Gray400Brush}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
-                               Margin="0,10,0,0" />
+                               TextWrapping="Wrap"
+                               MaxWidth="350"/>
                 </StackPanel>
             </Border>
 
-            <!-- DERECHA: Formulario -->
+            <!-- ============================================
+                 FORMULARIO DERECHO
+                 ============================================ -->
             <Border Grid.Column="1" 
-                    Padding="60">
-                <StackPanel>
-                    <TextBlock Text="Crear Cuenta" 
-                               FontSize="32" 
-                               FontWeight="Bold"
-                               Foreground="#1976D2"
-                               Margin="0,0,0,30" />
+                    Background="{StaticResource WhitePrimaryBrush}"
+                    Padding="80,60">
+                <StackPanel VerticalAlignment="Center"
+                            MaxWidth="450">
 
-                    <!-- Campos del formulario -->
-                    <StackPanel>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                    <!-- Título -->
+                    <TextBlock Text="CREATE ACCOUNT" 
+                               Style="{StaticResource HeadingLarge}"
+                               Margin="0,0,0,40" />
 
-                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                                <TextBlock Text="Nombre" 
-                                           FontWeight="SemiBold" 
-                                           Margin="0,0,0,8" />
-                                <TextBox Text="{Binding FirstName}"
-                                         Padding="15,12"
-                                         FontSize="14"
-                                         BorderBrush="#E0E0E0"
-                                         BorderThickness="1" />
-                            </StackPanel>
+                    <!-- First Name & Last Name -->
+                    <Grid Margin="0,0,0,25">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="15"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                <TextBlock Text="Apellidos" 
-                                           FontWeight="SemiBold" 
-                                           Margin="0,0,0,8" />
-                                <TextBox Text="{Binding LastName}"
-                                         Padding="15,12"
-                                         FontSize="14"
-                                         BorderBrush="#E0E0E0"
-                                         BorderThickness="1" />
-                            </StackPanel>
-                        </Grid>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="FIRST NAME" 
+                                       Style="{StaticResource BodyMedium}"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
+                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                    BorderThickness="2"
+                                    Height="50">
+                                <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Padding="15,0"
+                                         VerticalAlignment="Center"
+                                         FontSize="14"/>
+                            </Border>
+                        </StackPanel>
 
-                        <TextBlock Text="Email" 
-                                   FontWeight="SemiBold" 
-                                   Margin="0,20,0,8" />
-                        <TextBox Text="{Binding Email}"
-                                 Padding="15,12"
-                                 FontSize="14"
-                                 BorderBrush="#E0E0E0"
-                                 BorderThickness="1"
-                                 Margin="0,0,0,20" />
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="LAST NAME" 
+                                       Style="{StaticResource BodyMedium}"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
+                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                    BorderThickness="2"
+                                    Height="50">
+                                <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Padding="15,0"
+                                         VerticalAlignment="Center"
+                                         FontSize="14"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                    <!-- Email -->
+                    <TextBlock Text="EMAIL" 
+                               Style="{StaticResource BodyMedium}"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,10"/>
+                    <Border BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="2"
+                            Height="50"
+                            Margin="0,0,0,25">
+                        <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Padding="15,0"
+                                 VerticalAlignment="Center"
+                                 FontSize="14"/>
+                    </Border>
 
-                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                                <TextBlock Text="Contraseña" 
-                                           FontWeight="SemiBold" 
-                                           Margin="0,0,0,8" />
+                    <!-- Password & Confirm Password -->
+                    <Grid Margin="0,0,0,25">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="15"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="PASSWORD" 
+                                       Style="{StaticResource BodyMedium}"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
+                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                    BorderThickness="2"
+                                    Height="50">
                                 <PasswordBox x:Name="PasswordBox"
-                                             Padding="15,12"
-                                             FontSize="14"
-                                             BorderBrush="#E0E0E0"
-                                             BorderThickness="1" />
-                            </StackPanel>
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             Padding="15,0"
+                                             VerticalAlignment="Center"
+                                             FontSize="14"/>
+                            </Border>
+                        </StackPanel>
 
-                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                <TextBlock Text="Confirmar Contraseña" 
-                                           FontWeight="SemiBold" 
-                                           Margin="0,0,0,8" />
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="CONFIRM PASSWORD" 
+                                       Style="{StaticResource BodyMedium}"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
+                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                    BorderThickness="2"
+                                    Height="50">
                                 <PasswordBox x:Name="ConfirmPasswordBox"
-                                             Padding="15,12"
-                                             FontSize="14"
-                                             BorderBrush="#E0E0E0"
-                                             BorderThickness="1" />
-                            </StackPanel>
-                        </Grid>
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             Padding="15,0"
+                                             VerticalAlignment="Center"
+                                             FontSize="14"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
 
-                        <TextBlock Text="Fecha de Nacimiento" 
-                                   FontWeight="SemiBold" 
-                                   Margin="0,20,0,8" />
-                        <DatePicker SelectedDate="{Binding BirthDate}"
-                                    Padding="15,12"
-                                    FontSize="14"
-                                    BorderBrush="#E0E0E0"
-                                    BorderThickness="1"
-                                    Margin="0,0,0,20" />
+                    <!-- Terms & Conditions -->
+                    <CheckBox Margin="0,0,0,30">
+                        <TextBlock Style="{StaticResource BodySmall}"
+                                   TextWrapping="Wrap">
+                            <Run Text="I agree to the"/>
+                            <Hyperlink>
+                                <Run Text="Terms &amp; Conditions"/>
+                            </Hyperlink>
+                            <Run Text="and"/>
+                            <Hyperlink>
+                                <Run Text="Privacy Policy"/>
+                            </Hyperlink>
+                        </TextBlock>
+                    </CheckBox>
 
-                        <TextBlock Text="Teléfono" 
-                                   FontWeight="SemiBold" 
-                                   Margin="0,0,0,8" />
-                        <TextBox Text="{Binding PhoneNumber}"
-                                 Padding="15,12"
-                                 FontSize="14"
-                                 BorderBrush="#E0E0E0"
-                                 BorderThickness="1"
-                                 Margin="0,0,0,20" />
-
-                        <CheckBox Content="Acepto los términos y condiciones"
-                                  IsChecked="{Binding AcceptTerms}"
-                                  FontSize="13"
-                                  Margin="0,0,0,10" />
-
-                        <CheckBox Content="Deseo recibir ofertas y novedades por email"
-                                  IsChecked="{Binding SubscribeToNewsletter}"
-                                  FontSize="13"
-                                  Margin="0,0,0,30" />
-                    </StackPanel>
-
-                    <!-- Botón de registro -->
-                    <Button Content="Crear Cuenta" 
+                    <!-- Create Account Button -->
+                    <Button Content="CREATE ACCOUNT" 
+                            Style="{StaticResource PrimaryButton}"
+                            FontSize="15"
+                            Padding="0,18"
                             Command="{Binding RegisterCommand}"
-                            CommandParameter="{Binding ElementName=PasswordBox, Path=SecurePassword}"
-                            Padding="20,15"
-                            FontSize="16"
-                            FontWeight="SemiBold"
-                            Background="#1976D2"
-                            Foreground="White"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            Margin="0,0,0,20"
-                            IsEnabled="{Binding CanRegister}">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}"
-                                        Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center" />
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#115293" />
-                                    </Trigger>
-                                    <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Background" Value="#BBDEFB" />
-                                        <Setter Property="Foreground" Value="#90A4AE" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                            IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                            Margin="0,0,0,30"
+                            HorizontalAlignment="Stretch"/>
 
-                    <!-- Enlace a login -->
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="¿Ya tienes una cuenta?" 
-                                   FontSize="13"
-                                   Foreground="#666"
-                                   Margin="0,0,0,5" />
-
-                        <Button Content="Inicia sesión aquí" 
-                                Command="{Binding NavigateToLoginCommand}"
-                                Padding="0"
-                                FontSize="13"
-                                FontWeight="SemiBold"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Foreground="#1976D2"
+                    <!-- Login Link -->
+                    <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Center"
-                                Cursor="Hand">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <ContentPresenter />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Foreground" Value="#115293" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                                Margin="0,0,0,30">
+                        <TextBlock Text="Already have an account? " 
+                                   Style="{StaticResource BodyMedium}"
+                                   Foreground="{StaticResource TextSecondary}"/>
+                        <Button Content="Sign in here" 
+                                Style="{StaticResource TextButton}"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Padding="0"
+                                Command="{Binding NavigateToLoginCommand}"/>
                     </StackPanel>
 
-                    <!-- Mensaje de error -->
-                    <Border Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}"
-                            Background="#FFEBEE"
+                    <!-- Divider -->
+                    <Grid Margin="0,0,0,30">
+                        <Border Height="1" 
+                                Background="{StaticResource BorderDefault}"/>
+                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                                Padding="15,0"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="OR CONTINUE WITH" 
+                                       Style="{StaticResource Caption}"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- Social Login -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="15"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Content="GOOGLE"
+                                Style="{StaticResource OutlineButton}"
+                                FontSize="13"
+                                Padding="0,15"
+                                HorizontalAlignment="Stretch"/>
+
+                        <Button Grid.Column="2"
+                                Content="FACEBOOK"
+                                Style="{StaticResource OutlineButton}"
+                                FontSize="13"
+                                Padding="0,15"
+                                HorizontalAlignment="Stretch"/>
+                    </Grid>
+
+                    <!-- Error Message -->
+                    <Border Background="{StaticResource ErrorColorBrush}"
                             Padding="15"
-                            Margin="0,30,0,0">
+                            Margin="0,30,0,0"
+                            Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}">
                         <TextBlock Text="{Binding ErrorMessage}" 
-                                   FontSize="13"
-                                   Foreground="#C62828"
+                                   Style="{StaticResource BodySmall}"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
                                    TextWrapping="Wrap"
-                                   TextAlignment="Center" />
+                                   TextAlignment="Center"/>
                     </Border>
 
                     <!-- Loading -->
-                    <Grid Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                          Height="50"
-                          Margin="0,20,0,0">
-                        <StackPanel HorizontalAlignment="Center" 
-                                    VerticalAlignment="Center">
-                            <TextBlock Text="⏳" 
-                                       FontSize="24" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,5" />
-                            <TextBlock Text="Creando cuenta..." 
-                                       FontSize="12" 
-                                       Foreground="#666" />
-                        </StackPanel>
-                    </Grid>
+                    <StackPanel HorizontalAlignment="Center"
+                                Margin="0,30,0,0"
+                                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <TextBlock Text="⏳" 
+                                   FontSize="32" 
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,10"/>
+                        <TextBlock Text="CREATING ACCOUNT..." 
+                                   Style="{StaticResource BodyMedium}"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
                 </StackPanel>
             </Border>
         </Grid>

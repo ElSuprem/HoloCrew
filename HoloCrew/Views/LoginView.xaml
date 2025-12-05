@@ -4,334 +4,203 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="600" d:DesignWidth="800"
-             Background="White">
+             d:DesignHeight="700" d:DesignWidth="1200"
+             Background="{StaticResource BackgroundPrimary}">
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <!-- Imagen/Ilustración -->
+            <!-- Panel Negro -->
             <ColumnDefinition Width="*" />
             <!-- Formulario -->
         </Grid.ColumnDefinitions>
 
-        <!-- IZQUIERDA: Ilustración -->
+        <!-- ============================================
+             PANEL IZQUIERDO (NEGRO)
+             ============================================ -->
         <Border Grid.Column="0" 
-                Background="#E3F2FD">
+                Background="{StaticResource BlackPrimaryBrush}">
             <StackPanel HorizontalAlignment="Center" 
-                        VerticalAlignment="Center">
-                <TextBlock Text="🛍️" 
-                           FontSize="120"
+                        VerticalAlignment="Center"
+                        Margin="60">
+                <!-- Logo -->
+                <TextBlock Text="HOLOCREW" 
+                           FontSize="48" 
+                           FontWeight="Black" 
+                           Foreground="{StaticResource WhitePrimaryBrush}" 
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,30" />
-                <TextBlock Text="Bienvenido de nuevo" 
-                           FontSize="28"
-                           FontWeight="Bold"
-                           Foreground="#1976D2"
+                           Margin="0,0,0,40"/>
+
+                <!-- Emoji -->
+                <TextBlock Text="👋" 
+                           FontSize="100"
                            HorizontalAlignment="Center"
-                           TextAlignment="Center" />
-                <TextBlock Text="Inicia sesión para continuar" 
-                           FontSize="16"
-                           Foreground="#555"
+                           Margin="0,0,0,40" />
+
+                <!-- Mensaje -->
+                <TextBlock Text="WELCOME BACK" 
+                           Style="{StaticResource HeadingLarge}"
+                           Foreground="{StaticResource WhitePrimaryBrush}"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,15" />
+                <TextBlock Text="Sign in to continue your shopping experience" 
+                           Style="{StaticResource BodyLarge}"
+                           Foreground="{StaticResource Gray400Brush}"
                            HorizontalAlignment="Center"
                            TextAlignment="Center"
-                           Margin="0,10,0,0" />
+                           TextWrapping="Wrap"
+                           MaxWidth="350"/>
             </StackPanel>
         </Border>
 
-        <!-- DERECHA: Formulario -->
+        <!-- ============================================
+             FORMULARIO DERECHO
+             ============================================ -->
         <Border Grid.Column="1" 
-                Padding="60">
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock Text="Iniciar Sesión" 
-                           FontSize="32" 
-                           FontWeight="Bold"
-                           Foreground="#1976D2"
-                           Margin="0,0,0,40" />
+                Background="{StaticResource WhitePrimaryBrush}"
+                Padding="80,60">
+            <StackPanel VerticalAlignment="Center"
+                        MaxWidth="400">
 
-                <!-- Campos del formulario -->
-                <StackPanel>
-                    <TextBlock Text="Email" 
-                               FontWeight="SemiBold" 
-                               Margin="0,0,0,8" />
-                    <TextBox Text="{Binding Email}"
-                             Padding="15,12"
-                             FontSize="14"
-                             BorderBrush="#E0E0E0"
-                             BorderThickness="1"
-                             Margin="0,0,0,20">
-                        <TextBox.Style>
-                            <Style TargetType="TextBox">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="TextBox">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                                <ScrollViewer x:Name="PART_ContentHost"
-                                                              Margin="{TemplateBinding Padding}" />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsFocused" Value="True">
-                                        <Setter Property="BorderBrush" Value="#1976D2" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBox.Style>
-                    </TextBox>
+                <!-- Título -->
+                <TextBlock Text="SIGN IN" 
+                           Style="{StaticResource HeadingLarge}"
+                           Margin="0,0,0,50" />
 
-                    <TextBlock Text="Contraseña" 
-                               FontWeight="SemiBold" 
-                               Margin="0,0,0,8" />
+                <!-- Email -->
+                <TextBlock Text="EMAIL" 
+                           Style="{StaticResource BodyMedium}"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,10"/>
+                <Border BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="2"
+                        Height="55"
+                        Margin="0,0,0,25">
+                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="15,0"
+                             VerticalAlignment="Center"
+                             FontSize="15"/>
+                </Border>
+
+                <!-- Password -->
+                <TextBlock Text="PASSWORD" 
+                           Style="{StaticResource BodyMedium}"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,10"/>
+                <Border BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="2"
+                        Height="55"
+                        Margin="0,0,0,15">
                     <PasswordBox x:Name="PasswordBox"
-                                 Padding="15,12"
-                                 FontSize="14"
-                                 BorderBrush="#E0E0E0"
-                                 BorderThickness="1"
-                                 Margin="0,0,0,10">
-                        <PasswordBox.Style>
-                            <Style TargetType="PasswordBox">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="PasswordBox">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                                <ScrollViewer x:Name="PART_ContentHost"
-                                                              Margin="{TemplateBinding Padding}" />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsFocused" Value="True">
-                                        <Setter Property="BorderBrush" Value="#1976D2" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </PasswordBox.Style>
-                    </PasswordBox>
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Padding="15,0"
+                                 VerticalAlignment="Center"
+                                 FontSize="15"/>
+                </Border>
 
-                    <!-- Recordar contraseña -->
-                    <CheckBox Content="Recordar contraseña"
-          FontSize="13"
-          Margin="0,0,0,30" />
-                </StackPanel>
+                <!-- Remember Me & Forgot Password -->
+                <Grid Margin="0,0,0,35">
+                    <CheckBox Content="Remember me"
+                              Style="{StaticResource BodyMedium}"
+                              VerticalAlignment="Center"/>
+                    <Button Content="Forgot password?" 
+                            Style="{StaticResource TextButton}"
+                            FontSize="14"
+                            Foreground="{StaticResource TextSecondary}"
+                            HorizontalAlignment="Right"
+                            Command="{Binding ForgotPasswordCommand}"/>
+                </Grid>
 
-                <!-- Botón de inicio de sesión -->
-                <Button Content="Iniciar Sesión" 
+                <!-- Sign In Button -->
+                <Button Content="SIGN IN" 
+                        Style="{StaticResource PrimaryButton}"
+                        FontSize="15"
+                        Padding="0,18"
                         Command="{Binding LoginCommand}"
                         CommandParameter="{Binding ElementName=PasswordBox}"
-                        Padding="20,15"
-                        FontSize="16"
-                        FontWeight="SemiBold"
-                        Background="#1976D2"
-                        Foreground="White"
-                        BorderThickness="0"
-                        Cursor="Hand"
-                        Margin="0,0,0,20">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}"
-                                                Padding="{TemplateBinding Padding}">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#115293" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Background" Value="#BBDEFB" />
-                                    <Setter Property="Foreground" Value="#90A4AE" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                        IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                        Margin="0,0,0,30"
+                        HorizontalAlignment="Stretch"/>
 
-                <!-- Enlaces adicionales -->
-                <StackPanel>
-                    <Button Content="¿Olvidaste tu contraseña?"
-                            Padding="0"
-                            FontSize="13"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="#1976D2"
+                <!-- Register Link -->
+                <StackPanel Orientation="Horizontal" 
                             HorizontalAlignment="Center"
-                            Cursor="Hand"
-                            Margin="0,0,0,10">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <ContentPresenter />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Foreground" Value="#115293" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-
-                    <TextBlock Text="¿No tienes una cuenta?" 
-                               FontSize="13"
-                               Foreground="#666"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,5" />
-
-                    <Button Content="Regístrate aquí" 
-                            Command="{Binding NavigateToRegisterCommand}"
-                            Padding="0"
-                            FontSize="13"
+                            Margin="0,0,0,30">
+                    <TextBlock Text="Don't have an account? " 
+                               Style="{StaticResource BodyMedium}"
+                               Foreground="{StaticResource TextSecondary}"/>
+                    <Button Content="Register here" 
+                            Style="{StaticResource TextButton}"
+                            FontSize="14"
                             FontWeight="SemiBold"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="#1976D2"
-                            HorizontalAlignment="Center"
-                            Cursor="Hand">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <ContentPresenter />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Foreground" Value="#115293" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                            Padding="0"
+                            Command="{Binding NavigateToRegisterCommand}"/>
                 </StackPanel>
 
                 <!-- Divider -->
-                <Border Height="1" 
-                        Background="#E0E0E0"
-                        Margin="0,30,0,30" />
-
-                <!-- Inicio de sesión social -->
-                <TextBlock Text="O inicia sesión con" 
-                           FontSize="14"
-                           Foreground="#666"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,15" />
-
-                <StackPanel Orientation="Horizontal" 
+                <Grid Margin="0,0,0,30">
+                    <Border Height="1" 
+                            Background="{StaticResource BorderDefault}"/>
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
+                            Padding="15,0"
                             HorizontalAlignment="Center">
-                    <Button Content="Google"
-                            Padding="20,10"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Background="White"
-                            Foreground="#555"
-                            BorderBrush="#E0E0E0"
-                            BorderThickness="1"
-                            Cursor="Hand"
-                            Margin="0,0,10,0">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                    Padding="{TemplateBinding Padding}">
-                                                <ContentPresenter HorizontalAlignment="Center"
-                                                                  VerticalAlignment="Center" />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#F5F5F5" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                        <TextBlock Text="OR CONTINUE WITH" 
+                                   Style="{StaticResource Caption}"
+                                   Foreground="{StaticResource TextSecondary}"/>
+                    </Border>
+                </Grid>
 
-                    <Button Content="Facebook"
-                            Padding="20,10"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Background="White"
-                            Foreground="#555"
-                            BorderBrush="#E0E0E0"
-                            BorderThickness="1"
-                            Cursor="Hand">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                    Padding="{TemplateBinding Padding}">
-                                                <ContentPresenter HorizontalAlignment="Center"
-                                                                  VerticalAlignment="Center" />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#F5F5F5" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
+                <!-- Social Login -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- Mensaje de error -->
-                <Border Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}"
-                        Background="#FFEBEE"
+                    <Button Grid.Column="0"
+                            Content="GOOGLE"
+                            Style="{StaticResource OutlineButton}"
+                            FontSize="13"
+                            Padding="0,15"
+                            HorizontalAlignment="Stretch"/>
+
+                    <Button Grid.Column="2"
+                            Content="FACEBOOK"
+                            Style="{StaticResource OutlineButton}"
+                            FontSize="13"
+                            Padding="0,15"
+                            HorizontalAlignment="Stretch"/>
+                </Grid>
+
+                <!-- Error Message -->
+                <Border Background="{StaticResource ErrorColorBrush}"
                         Padding="15"
-                        Margin="0,30,0,0">
+                        Margin="0,30,0,0"
+                        Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}">
                     <TextBlock Text="{Binding ErrorMessage}" 
-                               FontSize="13"
-                               Foreground="#C62828"
+                               Style="{StaticResource BodySmall}"
+                               Foreground="{StaticResource WhitePrimaryBrush}"
                                TextWrapping="Wrap"
-                               TextAlignment="Center" />
+                               TextAlignment="Center"/>
                 </Border>
 
                 <!-- Loading -->
-                <Grid Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                      Height="50"
-                      Margin="0,20,0,0">
-                    <StackPanel HorizontalAlignment="Center" 
-                                VerticalAlignment="Center">
-                        <TextBlock Text="⏳" 
-                                   FontSize="24" 
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,5" />
-                        <TextBlock Text="Iniciando sesión..." 
-                                   FontSize="12" 
-                                   Foreground="#666" />
-                    </StackPanel>
-                </Grid>
+                <StackPanel HorizontalAlignment="Center"
+                            Margin="0,30,0,0"
+                            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="⏳" 
+                               FontSize="32" 
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10"/>
+                    <TextBlock Text="SIGNING IN..." 
+                               Style="{StaticResource BodyMedium}"
+                               Foreground="{StaticResource TextSecondary}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
             </StackPanel>
         </Border>
     </Grid>
