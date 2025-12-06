@@ -1,6 +1,4 @@
-﻿using HoloCrew.Repositories;
-using HoloCrew.Repositories.Interfaces;
-using HoloCrew.Services;
+﻿using HoloCrew.Services;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels;
 using HoloCrew.Views;
@@ -8,32 +6,30 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 
+// ⭐ IMPORTANTE: Agregar estos using para los repositorios
+using HoloCrew.Repositories; // Para UserRepository, ProductRepository, etc.
+using HoloCrew.Repositories.Interfaces; // Para IUserRepository, IProductRepository, etc.
+
 namespace HoloCrew
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        private ServiceProvider _serviceProvider;
+        private IServiceProvider _serviceProvider;
 
         public App()
         {
-            // Configurar Dependency Injection al iniciar la aplicación
+            // Configurar el contenedor de dependencias
             var services = new ServiceCollection();
             ConfigureServices(services);
             _serviceProvider = services.BuildServiceProvider();
         }
 
-        /// <summary>
-        /// Configura todos los servicios de la aplicación
-        /// </summary>
         private void ConfigureServices(IServiceCollection services)
         {
             // ========== REPOSITORIES ==========
-            // Singleton: Una sola instancia durante toda la vida de la app
-            services.AddSingleton<IProductRepository, ProductRepository>();
+            // ⭐ REGISTRAR TODOS LOS REPOSITORIOS QUE EXISTEN
             services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<IWishlistRepository, WishlistRepository>();
 
@@ -66,6 +62,11 @@ namespace HoloCrew
             services.AddTransient<WishlistViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<NotificationsViewModel>();
+
+            // NUEVOS ViewModels agregados
+            services.AddTransient<FlashSaleViewModel>();
+            services.AddTransient<BlackWeekViewModel>();
+            services.AddTransient<MembersClubViewModel>();
 
             // ========== VIEWS/WINDOWS ==========
             // Transient: Cada vez que se necesita una ventana, se crea una nueva
@@ -116,40 +117,28 @@ namespace HoloCrew
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Error al iniciar la aplicación:\n\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}",
+                    $"Error al iniciar la aplicación: {ex.Message}\n\n" +
+                    $"Detalles: {ex.InnerException?.Message}\n\n" +
+                    "Verifica que:\n" +
+                    "1. Todos los repositorios estén registrados en ConfigureServices()\n" +
+                    "2. Todos los servicios tengan sus dependencias registradas\n" +
+                    "3. Los using están correctamente añadidos",
                     "Error de Inicio",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
 
-                // Cerrar la aplicación si hay error crítico
-                Shutdown();
+                Application.Current.Shutdown();
             }
         }
 
-        /// <summary>
-        /// Se ejecuta cuando la aplicación se cierra
-        /// </summary>
-        protected override void OnExit(ExitEventArgs e)
-        {
-            // Limpiar recursos
-            _serviceProvider?.Dispose();
-            base.OnExit(e);
-        }
-
-        /// <summary>
-        /// Manejo global de excepciones no controladas
-        /// </summary>
-        private void Application_DispatcherUnhandledException(
-            object sender,
-            System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             MessageBox.Show(
-                $"Ha ocurrido un error inesperado:\n\n{e.Exception.Message}\n\nStack Trace:\n{e.Exception.StackTrace}",
+                $"Excepción no controlada: {e.Exception.Message}\n\n{e.Exception.StackTrace}",
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
 
-            // Marcar como manejada para evitar que la aplicación se cierre
             e.Handled = true;
         }
     }

@@ -1,0 +1,369 @@
+﻿<UserControl x:Class="HoloCrew.Views.MembersClubView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="1000" d:DesignWidth="1400"
+             Background="{StaticResource BackgroundPrimary}">
+
+    <StackPanel>
+
+        <!-- HERO BANNER -->
+        <Border Background="{StaticResource BlackPrimaryBrush}" Height="500">
+            <Grid>
+                <Border Background="{StaticResource RedAccentBrush}"
+                        Height="4"
+                        VerticalAlignment="Top"
+                        Margin="0,80,0,0"/>
+                <Border Background="{StaticResource RedAccentBrush}"
+                        Height="4"
+                        VerticalAlignment="Bottom"
+                        Margin="0,0,0,80"/>
+
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="👑" 
+                               FontSize="80" 
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,20"/>
+
+                    <TextBlock Text="MEMBERS CLUB" 
+                               FontSize="64" 
+                               FontWeight="Black" 
+                               Foreground="{StaticResource WhitePrimaryBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,15"/>
+
+                    <TextBlock Text="ÚNETE AL CLUB EXCLUSIVO DE HOLOCREW" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource Gray400Brush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,40"/>
+
+                    <Button Content="UNIRSE AHORA" 
+                            Style="{StaticResource AccentButton}"
+                            FontSize="16"
+                            Padding="50,18"
+                            Cursor="Hand"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- BENEFICIOS -->
+        <Border Padding="60,80,60,60">
+            <StackPanel>
+                <TextBlock Text="BENEFICIOS EXCLUSIVOS" 
+                           Style="{StaticResource HeadingLarge}"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,60"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Beneficio 1 -->
+                    <Border Grid.Column="0" Grid.Row="0"
+                            Background="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="1"
+                            Padding="40">
+                        <StackPanel>
+                            <TextBlock Text="🎁" 
+                                       FontSize="48" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,20"/>
+
+                            <TextBlock Text="DESCUENTOS ESPECIALES" 
+                                       FontSize="20" 
+                                       FontWeight="Black" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,15"/>
+
+                            <TextBlock Text="15% adicional en todos tus pedidos" 
+                                       Style="{StaticResource BodyMedium}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Beneficio 2 -->
+                    <Border Grid.Column="2" Grid.Row="0"
+                            Background="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="1"
+                            Padding="40">
+                        <StackPanel>
+                            <TextBlock Text="🚚" 
+                                       FontSize="48" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,20"/>
+
+                            <TextBlock Text="ENVÍO GRATIS" 
+                                       FontSize="20" 
+                                       FontWeight="Black" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,15"/>
+
+                            <TextBlock Text="Envío gratuito en todos tus pedidos" 
+                                       Style="{StaticResource BodyMedium}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Beneficio 3 -->
+                    <Border Grid.Column="0" Grid.Row="2"
+                            Background="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="1"
+                            Padding="40">
+                        <StackPanel>
+                            <TextBlock Text="⚡" 
+                                       FontSize="48" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,20"/>
+
+                            <TextBlock Text="ACCESO ANTICIPADO" 
+                                       FontSize="20" 
+                                       FontWeight="Black" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,15"/>
+
+                            <TextBlock Text="Sé el primero en ver nuevas colecciones" 
+                                       Style="{StaticResource BodyMedium}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Beneficio 4 -->
+                    <Border Grid.Column="2" Grid.Row="2"
+                            Background="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="1"
+                            Padding="40">
+                        <StackPanel>
+                            <TextBlock Text="🎉" 
+                                       FontSize="48" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,20"/>
+
+                            <TextBlock Text="EVENTOS EXCLUSIVOS" 
+                                       FontSize="20" 
+                                       FontWeight="Black" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,15"/>
+
+                            <TextBlock Text="Invitaciones a lanzamientos y eventos" 
+                                       Style="{StaticResource BodyMedium}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- PLANES -->
+        <Border Background="{StaticResource Gray100Brush}" Padding="60,80">
+            <StackPanel>
+                <TextBlock Text="ELIGE TU PLAN" 
+                           Style="{StaticResource HeadingLarge}"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,60"/>
+
+                <UniformGrid Columns="3">
+
+                    <!-- SILVER -->
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="1"
+                            Margin="0,0,15,0"
+                            Padding="40">
+                        <StackPanel>
+                            <TextBlock Text="SILVER" 
+                                       FontSize="24" 
+                                       FontWeight="Black" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,10"/>
+
+                            <TextBlock Text="9.99€" 
+                                       FontSize="48" 
+                                       FontWeight="Black" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,5"/>
+
+                            <TextBlock Text="por mes" 
+                                       Style="{StaticResource BodySmall}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,30"/>
+
+                            <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,0,0,20"/>
+
+                            <Border Margin="0,0,0,30">
+                                <StackPanel>
+                                    <TextBlock Text="✓ 10% de descuento" 
+                                               Style="{StaticResource BodyMedium}"
+                                               Margin="0,0,0,10"/>
+                                    <TextBlock Text="✓ Envío gratis +50€" 
+                                               Style="{StaticResource BodyMedium}"
+                                               Margin="0,0,0,10"/>
+                                    <TextBlock Text="✓ Devoluciones gratis" 
+                                               Style="{StaticResource BodyMedium}"
+                                               Margin="0,0,0,10"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Content="SELECCIONAR" 
+                                    Style="{StaticResource PrimaryButton}"
+                                    Cursor="Hand"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- GOLD -->
+                    <Border Background="{StaticResource RedAccentBrush}"
+                            Margin="0,0,15,0"
+                            Padding="40">
+                        <StackPanel>
+                            <Border Background="{StaticResource WhitePrimaryBrush}"
+                                    Padding="8,4"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,0,0,15">
+                                <TextBlock Text="MÁS POPULAR" 
+                                           FontSize="10" 
+                                           FontWeight="Black" 
+                                           Foreground="{StaticResource BlackPrimaryBrush}"/>
+                            </Border>
+
+                            <TextBlock Text="GOLD" 
+                                       FontSize="24" 
+                                       FontWeight="Black" 
+                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,10"/>
+
+                            <TextBlock Text="19.99€" 
+                                       FontSize="48" 
+                                       FontWeight="Black" 
+                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,5"/>
+
+                            <TextBlock Text="por mes" 
+                                       FontSize="12"
+                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,30"/>
+
+                            <Border Height="1" Background="{StaticResource WhitePrimaryBrush}" Opacity="0.3" Margin="0,0,0,20"/>
+
+                            <Border Margin="0,0,0,30">
+                                <StackPanel>
+                                    <TextBlock Text="✓ 15% de descuento" 
+                                               FontSize="14"
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               Margin="0,0,0,10"/>
+                                    <TextBlock Text="✓ Envío gratis siempre" 
+                                               FontSize="14"
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               Margin="0,0,0,10"/>
+                                    <TextBlock Text="✓ Acceso anticipado" 
+                                               FontSize="14"
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               Margin="0,0,0,10"/>
+                                    <TextBlock Text="✓ Eventos exclusivos" 
+                                               FontSize="14"
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               Margin="0,0,0,10"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Content="SELECCIONAR" 
+                                    Background="{StaticResource WhitePrimaryBrush}"
+                                    Foreground="{StaticResource BlackPrimaryBrush}"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Padding="0,15"
+                                    BorderThickness="0"
+                                    Cursor="Hand"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- PLATINUM -->
+                    <Border Background="{StaticResource BlackPrimaryBrush}"
+                            Padding="40">
+                        <StackPanel>
+                            <TextBlock Text="PLATINUM" 
+                                       FontSize="24" 
+                                       FontWeight="Black" 
+                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,10"/>
+
+                            <TextBlock Text="29.99€" 
+                                       FontSize="48" 
+                                       FontWeight="Black" 
+                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,5"/>
+
+                            <TextBlock Text="por mes" 
+                                       FontSize="12"
+                                       Foreground="{StaticResource Gray400Brush}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,30"/>
+
+                            <Border Height="1" Background="{StaticResource Gray700Brush}" Margin="0,0,0,20"/>
+
+                            <Border Margin="0,0,0,30">
+                                <StackPanel>
+                                    <TextBlock Text="✓ 20% de descuento" 
+                                               FontSize="14"
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               Margin="0,0,0,10"/>
+                                    <TextBlock Text="✓ Todo lo de GOLD" 
+                                               FontSize="14"
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               Margin="0,0,0,10"/>
+                                    <TextBlock Text="✓ Styling personal" 
+                                               FontSize="14"
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               Margin="0,0,0,10"/>
+                                    <TextBlock Text="✓ Regalos mensuales" 
+                                               FontSize="14"
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               Margin="0,0,0,10"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Content="SELECCIONAR" 
+                                    Background="{StaticResource RedAccentBrush}"
+                                    Foreground="{StaticResource WhitePrimaryBrush}"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Padding="0,15"
+                                    BorderThickness="0"
+                                    Cursor="Hand"/>
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+            </StackPanel>
+        </Border>
+
+    </StackPanel>
+
+</UserControl>

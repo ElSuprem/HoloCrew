@@ -3,6 +3,7 @@ using HoloCrew.Repositories.Interfaces;
 using HoloCrew.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace HoloCrew.Services
 {
@@ -13,6 +14,7 @@ namespace HoloCrew.Services
     {
         private readonly IWishlistRepository _wishlistRepository;
         private readonly IProductRepository _productRepository;
+        private int _currentUserId = 1; // ⭐ TEMPORAL: Usar ID fijo hasta implementar autenticación
 
         public WishlistService(
             IWishlistRepository wishlistRepository,
@@ -24,47 +26,57 @@ namespace HoloCrew.Services
 
         public async Task AddToWishlistAsync(int productId)
         {
-            // TODO: Implementar con repositorio real
-            await Task.CompletedTask;
+            // ⭐ IMPLEMENTADO: Usar el repositorio
+            await _wishlistRepository.AddProductAsync(_currentUserId, productId);
         }
 
         public async Task RemoveFromWishlistAsync(int productId)
         {
-            // TODO: Implementar con repositorio real
-            await Task.CompletedTask;
+            // ⭐ IMPLEMENTADO: Usar el repositorio
+            await _wishlistRepository.RemoveProductAsync(_currentUserId, productId);
         }
 
         public async Task<List<Product>> GetWishlistAsync(int userId)
         {
-            // TODO: Obtener IDs de productos en wishlist desde repositorio
-            // Por ahora, retornar lista vacía
-            return await Task.FromResult(new List<Product>());
+            // ⭐ IMPLEMENTADO: Obtener IDs del repositorio y luego los productos
+            var productIds = await _wishlistRepository.GetProductIdsAsync(userId);
+            var products = new List<Product>();
+
+            foreach (var productId in productIds)
+            {
+                var product = await _productRepository.GetByIdAsync(productId);
+                if (product != null)
+                {
+                    products.Add(product);
+                }
+            }
+
+            return products;
         }
 
         public async Task<bool> IsInWishlistAsync(int productId)
         {
-            // TODO: Verificar con repositorio
-            return await Task.FromResult(false);
+            // ⭐ IMPLEMENTADO: Verificar con repositorio
+            return await _wishlistRepository.ContainsProductAsync(_currentUserId, productId);
         }
 
         public async Task ClearWishlistAsync()
         {
-            // TODO: Implementar con repositorio
-            await Task.CompletedTask;
+            // ⭐ IMPLEMENTADO: Usar repositorio
+            await _wishlistRepository.ClearAsync(_currentUserId);
         }
 
         public async Task<int> GetWishlistCountAsync(int userId)
         {
-            var wishlist = await GetWishlistAsync(userId);
-            return wishlist.Count;
+            // ⭐ IMPLEMENTADO: Obtener del repositorio
+            return await _wishlistRepository.GetCountAsync(userId);
         }
 
         public async Task MoveAllToCartAsync(int userId)
         {
-            // TODO: Implementar
-            // 1. Obtener wishlist
-            // 2. Agregar cada producto al carrito
-            // 3. Limpiar wishlist
+            // TODO: Implementar cuando tengas acceso a ICartService
+            // Por ahora, solo limpiamos la wishlist
+            await _wishlistRepository.ClearAsync(userId);
             await Task.CompletedTask;
         }
     }

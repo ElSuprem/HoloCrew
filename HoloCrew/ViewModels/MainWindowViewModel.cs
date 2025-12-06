@@ -106,6 +106,24 @@ namespace HoloCrew.ViewModels
             _navigationService.NavigateTo<OrderHistoryViewModel>();
         }
 
+        [RelayCommand]
+        private void NavigateToFlashSale()
+        {
+            _navigationService.NavigateTo<FlashSaleViewModel>();
+        }
+
+        [RelayCommand]
+        private void NavigateToBlackWeek()
+        {
+            _navigationService.NavigateTo<BlackWeekViewModel>();
+        }
+
+        [RelayCommand]
+        private void NavigateToMembersClub()
+        {
+            _navigationService.NavigateTo<MembersClubViewModel>();
+        }
+
         // ============================
         // BÚSQUEDA
         // ============================

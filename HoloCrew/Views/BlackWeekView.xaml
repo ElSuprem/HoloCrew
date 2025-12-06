@@ -1,0 +1,215 @@
+﻿<UserControl x:Class="HoloCrew.Views.BlackWeekView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="1000" d:DesignWidth="1400"
+             Background="{StaticResource BlackPrimaryBrush}">
+
+    <StackPanel>
+
+        <!-- HERO BANNER -->
+        <Border Background="{StaticResource BlackPrimaryBrush}" 
+                Height="450"
+                BorderBrush="{StaticResource RedAccentBrush}"
+                BorderThickness="0,0,0,4">
+            <Grid>
+                <Rectangle Fill="{StaticResource RedAccentBrush}" Opacity="0.05"/>
+
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="BLACK WEEK" 
+                               FontSize="70" 
+                               FontWeight="Black" 
+                               Foreground="{StaticResource WhitePrimaryBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10"/>
+
+                    <Border Height="4" 
+                            Width="300" 
+                            Background="{StaticResource RedAccentBrush}"
+                            Margin="0,0,0,30"/>
+
+                    <TextBlock Text="HASTA 70% DE DESCUENTO" 
+                               FontSize="24" 
+                               FontWeight="Bold" 
+                               Foreground="{StaticResource WhitePrimaryBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,15"/>
+
+                    <TextBlock Text="EN TODA LA COLECCIÓN" 
+                               FontSize="16" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource Gray400Brush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,40"/>
+
+                    <Button Content="COMPRAR AHORA" 
+                            Style="{StaticResource AccentButton}"
+                            FontSize="16"
+                            Padding="50,18"
+                            Cursor="Hand"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- CATEGORÍAS EN OFERTA -->
+        <Border Background="{StaticResource BackgroundPrimary}" Padding="60,60">
+            <StackPanel>
+                <TextBlock Text="CATEGORÍAS DESTACADAS" 
+                           Style="{StaticResource HeadingLarge}"
+                           Margin="0,0,0,40"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- STREETWEAR -->
+                    <Border Grid.Column="0"
+                            Background="{StaticResource BlackPrimaryBrush}"
+                            Height="350"
+                            Cursor="Hand">
+                        <Grid>
+                            <Rectangle Fill="{StaticResource Gray800Brush}"/>
+
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="STREETWEAR" 
+                                           FontSize="32" 
+                                           FontWeight="Black" 
+                                           Foreground="{StaticResource WhitePrimaryBrush}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,10"/>
+
+                                <TextBlock Text="HASTA 60% OFF" 
+                                           FontSize="18" 
+                                           FontWeight="Bold" 
+                                           Foreground="{StaticResource RedAccentBrush}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,20"/>
+
+                                <Border BorderBrush="{StaticResource WhitePrimaryBrush}"
+                                        BorderThickness="2"
+                                        Padding="20,10">
+                                    <TextBlock Text="VER OFERTAS" 
+                                               FontSize="14" 
+                                               FontWeight="Bold" 
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- ACCESORIOS -->
+                    <Border Grid.Column="2"
+                            Background="{StaticResource BlackPrimaryBrush}"
+                            Height="350"
+                            Cursor="Hand">
+                        <Grid>
+                            <Rectangle Fill="{StaticResource Gray800Brush}"/>
+
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="ACCESORIOS" 
+                                           FontSize="32" 
+                                           FontWeight="Black" 
+                                           Foreground="{StaticResource WhitePrimaryBrush}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,10"/>
+
+                                <TextBlock Text="HASTA 50% OFF" 
+                                           FontSize="18" 
+                                           FontWeight="Bold" 
+                                           Foreground="{StaticResource RedAccentBrush}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,20"/>
+
+                                <Border BorderBrush="{StaticResource WhitePrimaryBrush}"
+                                        BorderThickness="2"
+                                        Padding="20,10">
+                                    <TextBlock Text="VER OFERTAS" 
+                                               FontSize="14" 
+                                               FontWeight="Bold" 
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- ZAPATILLAS -->
+                    <Border Grid.Column="4"
+                            Background="{StaticResource BlackPrimaryBrush}"
+                            Height="350"
+                            Cursor="Hand">
+                        <Grid>
+                            <Rectangle Fill="{StaticResource Gray800Brush}"/>
+
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="ZAPATILLAS" 
+                                           FontSize="32" 
+                                           FontWeight="Black" 
+                                           Foreground="{StaticResource WhitePrimaryBrush}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,10"/>
+
+                                <TextBlock Text="HASTA 70% OFF" 
+                                           FontSize="18" 
+                                           FontWeight="Bold" 
+                                           Foreground="{StaticResource RedAccentBrush}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,20"/>
+
+                                <Border BorderBrush="{StaticResource WhitePrimaryBrush}"
+                                        BorderThickness="2"
+                                        Padding="20,10">
+                                    <TextBlock Text="VER OFERTAS" 
+                                               FontSize="14" 
+                                               FontWeight="Bold" 
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Call to Action -->
+                <Border Background="{StaticResource RedAccentBrush}"
+                        Padding="60,40"
+                        Margin="0,60,0,0">
+                    <StackPanel>
+                        <TextBlock Text="¿NO ENCUENTRAS LO QUE BUSCAS?" 
+                                   FontSize="24" 
+                                   FontWeight="Black" 
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Explora toda nuestra colección con descuentos especiales" 
+                                   FontSize="16" 
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,30"/>
+
+                        <Button Content="VER TODOS LOS PRODUCTOS" 
+                                Background="{StaticResource WhitePrimaryBrush}"
+                                Foreground="{StaticResource BlackPrimaryBrush}"
+                                FontSize="14"
+                                FontWeight="Bold"
+                                Padding="40,15"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+    </StackPanel>
+
+</UserControl>

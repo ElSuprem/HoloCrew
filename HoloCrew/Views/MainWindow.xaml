@@ -78,21 +78,21 @@
                                VerticalAlignment="Center"/>
                     <Button Content="FLASH SALE" 
                             Style="{StaticResource MenuButton}"
-                            Command="{Binding NavigateToCatalogCommand}"/>
+                            Command="{Binding NavigateToFlashSaleCommand}"/>
                     <TextBlock Text="|" 
                                Foreground="{StaticResource Gray300Brush}" 
                                FontSize="14" 
                                VerticalAlignment="Center"/>
                     <Button Content="BLACK WEEK" 
                             Style="{StaticResource MenuButton}"
-                            Command="{Binding NavigateToCatalogCommand}"/>
+                            Command="{Binding NavigateToBlackWeekCommand}"/>
                     <TextBlock Text="|" 
                                Foreground="{StaticResource Gray300Brush}" 
                                FontSize="14" 
                                VerticalAlignment="Center"/>
                     <Button Content="MEMBERS CLUB" 
                             Style="{StaticResource MenuButton}"
-                            Command="{Binding NavigateToCatalogCommand}"/>
+                            Command="{Binding NavigateToMembersClubCommand}"/>
                 </StackPanel>
 
                 <!-- SEARCH BAR -->

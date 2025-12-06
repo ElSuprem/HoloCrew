@@ -1,4 +1,6 @@
 ﻿using HoloCrew.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HoloCrew.Repositories.Interfaces
 {
@@ -46,5 +48,10 @@ namespace HoloCrew.Repositories.Interfaces
         /// Actualiza la última fecha de login
         /// </summary>
         Task UpdateLastLoginAsync(int userId);
+
+        /// <summary>
+        /// Valida las credenciales de un usuario (email + password)
+        /// </summary>
+        Task<User> ValidateCredentialsAsync(string email, string password);
     }
 }

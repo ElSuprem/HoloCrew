@@ -1,5 +1,6 @@
 ﻿using HoloCrew.Models;
 using HoloCrew.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -97,9 +98,19 @@ namespace HoloCrew.Repositories
             var user = _users.FirstOrDefault(u => u.Id == userId);
             if (user != null)
             {
-                // TODO: Agregar propiedad LastLogin al modelo User si es necesario
+                user.LastLoginAt = DateTime.Now; // ⭐ Ahora funciona con la nueva propiedad
             }
             return Task.CompletedTask;
+        }
+
+        // ⭐ AGREGADO - Método necesario para AuthenticationService
+        public Task<User> ValidateCredentialsAsync(string email, string password)
+        {
+            var user = _users.FirstOrDefault(u =>
+                u.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
+                u.Password == password); // En producción debería comparar hash
+
+            return Task.FromResult(user);
         }
 
         private void InitializeMockData()
@@ -111,6 +122,7 @@ namespace HoloCrew.Repositories
                     Id = _nextId++,
                     FullName = "Juan Pérez",
                     Email = "juan@example.com",
+                    Password = "demo123", // ⭐ AGREGADO - Password para login
                     PhoneNumber = "+34 600 123 456",
                     DateOfBirth = new DateTime(1990, 5, 15),
                     CreatedAt = DateTime.Now.AddYears(-2),
@@ -157,6 +169,7 @@ namespace HoloCrew.Repositories
                     Id = _nextId++,
                     FullName = "María García",
                     Email = "maria@example.com",
+                    Password = "demo123", // ⭐ AGREGADO - Password para login
                     PhoneNumber = "+34 600 654 321",
                     DateOfBirth = new DateTime(1985, 8, 22),
                     CreatedAt = DateTime.Now.AddYears(-1),

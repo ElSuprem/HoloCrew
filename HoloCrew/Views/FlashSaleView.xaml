@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="HoloCrew.Views.FlashSaleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="1000" d:DesignWidth="1400"
+             Background="{StaticResource BackgroundPrimary}">
+
+    <StackPanel>
+
+        <!-- HERO BANNER -->
+        <Border Background="{StaticResource RedAccentBrush}" Height="400">
+            <Grid>
+                <Rectangle Fill="{StaticResource BlackPrimaryBrush}" Opacity="0.1"/>
+
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="⚡ FLASH SALE ⚡" 
+                               FontSize="60" 
+                               FontWeight="Black" 
+                               Foreground="{StaticResource WhitePrimaryBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,20"/>
+
+                    <TextBlock Text="OFERTAS RELÁMPAGO POR TIEMPO LIMITADO" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource WhitePrimaryBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,30"/>
+
+                    <!-- Countdown Timer -->
+                    <Border Background="{StaticResource BlackPrimaryBrush}" Padding="40,20">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Margin="0,0,30,0">
+                                <StackPanel>
+                                    <TextBlock Text="12" 
+                                               FontSize="48" 
+                                               FontWeight="Black" 
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Text="HORAS" 
+                                               FontSize="12" 
+                                               FontWeight="Bold" 
+                                               Foreground="{StaticResource Gray400Brush}"
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <TextBlock Text=":" 
+                                       FontSize="48" 
+                                       FontWeight="Black" 
+                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,30,0"/>
+
+                            <Border Margin="0,0,30,0">
+                                <StackPanel>
+                                    <TextBlock Text="34" 
+                                               FontSize="48" 
+                                               FontWeight="Black" 
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Text="MINUTOS" 
+                                               FontSize="12" 
+                                               FontWeight="Bold" 
+                                               Foreground="{StaticResource Gray400Brush}"
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <TextBlock Text=":" 
+                                       FontSize="48" 
+                                       FontWeight="Black" 
+                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,30,0"/>
+
+                            <Border>
+                                <StackPanel>
+                                    <TextBlock Text="56" 
+                                               FontSize="48" 
+                                               FontWeight="Black" 
+                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Text="SEGUNDOS" 
+                                               FontSize="12" 
+                                               FontWeight="Bold" 
+                                               Foreground="{StaticResource Gray400Brush}"
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- PRODUCTOS EN OFERTA -->
+        <Border Padding="60,60,60,80">
+            <StackPanel>
+                <TextBlock Text="OFERTAS ACTIVAS" 
+                           Style="{StaticResource HeadingLarge}"
+                           Margin="0,0,0,40"/>
+
+                <TextBlock Text="⚡ 4 PRODUCTOS EN OFERTA FLASH - HASTA 60% DE DESCUENTO" 
+                           FontSize="16" 
+                           FontWeight="Bold" 
+                           Foreground="{StaticResource RedAccentBrush}"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,40"/>
+
+                <TextBlock Text="Aprovecha estas ofertas exclusivas por tiempo limitado. ¡No te lo pierdas!" 
+                           Style="{StaticResource BodyLarge}"
+                           Foreground="{StaticResource TextSecondary}"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           Margin="0,0,0,60"/>
+
+                <Button Content="VER CATÁLOGO COMPLETO" 
+                        Style="{StaticResource AccentButton}"
+                        HorizontalAlignment="Center"
+                        Padding="40,15"
+                        Cursor="Hand"/>
+            </StackPanel>
+        </Border>
+
+    </StackPanel>
+
+</UserControl>

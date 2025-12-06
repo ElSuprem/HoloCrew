@@ -82,6 +82,18 @@
                 <views:NotificationsView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vm:FlashSaleViewModel}">
+                <views:FlashSaleView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:BlackWeekViewModel}">
+                <views:BlackWeekView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:MembersClubViewModel}">
+                <views:MembersClubView />
+            </DataTemplate>
+
             <!-- ========== ESTILOS - ORDEN CRÍTICO ========== -->
             <ResourceDictionary.MergedDictionaries>
                 <!-- 1. COLORES - Solo definiciones Color -->
