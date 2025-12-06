@@ -107,5 +107,11 @@ namespace HoloCrew.ViewModels
             if (category == null) return;
             _navigationService.NavigateTo<ProductCatalogViewModel>(category.Id);
         }
+
+        [RelayCommand]
+        private void NavigateToCatalog()
+        {
+            _navigationService.NavigateTo<ProductCatalogViewModel>();
+        }
     }
 }

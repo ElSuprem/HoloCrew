@@ -104,7 +104,7 @@
                 <!-- Remember Me & Forgot Password -->
                 <Grid Margin="0,0,0,35">
                     <CheckBox Content="Remember me"
-                              Style="{StaticResource BodyMedium}"
+                              FontSize="14"
                               VerticalAlignment="Center"/>
                     <Button Content="Forgot password?" 
                             Style="{StaticResource TextButton}"

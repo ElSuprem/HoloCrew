@@ -36,6 +36,9 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _isCartEmpty = true;
 
+        [ObservableProperty]
+        private bool _canCheckout = true;
+
         public CartViewModel(
             ICartService cartService,
             INavigationService navigationService)
@@ -62,6 +65,7 @@ namespace HoloCrew.ViewModels
                 var items = await _cartService.GetCartItemsAsync();
                 CartItems = new ObservableCollection<CartItem>(items);
                 IsCartEmpty = !CartItems.Any();
+                CanCheckout = !IsCartEmpty;
 
                 CalculateTotals();
             }
@@ -72,12 +76,13 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private async Task UpdateQuantityAsync(CartItem item)
+        private async Task DecreaseQuantityAsync(CartItem item)
         {
-            if (item == null) return;
+            if (item == null || item.Quantity <= 1) return;
 
             try
             {
+                item.Quantity--;
                 await _cartService.UpdateQuantityAsync(item.Id, item.Quantity);
                 CalculateTotals();
             }
@@ -88,7 +93,24 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private async Task RemoveItemAsync(CartItem item)
+        private async Task IncreaseQuantityAsync(CartItem item)
+        {
+            if (item == null) return;
+
+            try
+            {
+                item.Quantity++;
+                await _cartService.UpdateQuantityAsync(item.Id, item.Quantity);
+                CalculateTotals();
+            }
+            catch (Exception ex)
+            {
+                // TODO: Manejar error
+            }
+        }
+
+        [RelayCommand]
+        private async Task RemoveFromCartAsync(CartItem item)
         {
             if (item == null) return;
 
@@ -97,6 +119,7 @@ namespace HoloCrew.ViewModels
                 await _cartService.RemoveFromCartAsync(item.Id);
                 CartItems.Remove(item);
                 IsCartEmpty = !CartItems.Any();
+                CanCheckout = !IsCartEmpty;
                 CalculateTotals();
             }
             catch (Exception ex)
@@ -113,6 +136,7 @@ namespace HoloCrew.ViewModels
                 await _cartService.ClearCartAsync();
                 CartItems.Clear();
                 IsCartEmpty = true;
+                CanCheckout = false;
                 CalculateTotals();
             }
             catch (Exception ex)
@@ -146,14 +170,14 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private void ProceedToCheckout()
+        private void CheckoutCommand()
         {
             if (IsCartEmpty) return;
             _navigationService.NavigateTo<CheckoutViewModel>();
         }
 
         [RelayCommand]
-        private void ContinueShopping()
+        private void BrowseProducts()
         {
             _navigationService.NavigateTo<ProductCatalogViewModel>();
         }

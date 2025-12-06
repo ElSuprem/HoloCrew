@@ -23,6 +23,9 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private string _currentUserName;
 
+        [ObservableProperty]
+        private string _searchQuery;
+
         public MainWindowViewModel(
             INavigationService navigationService,
             ICartService cartService,
@@ -39,7 +42,14 @@ namespace HoloCrew.ViewModels
 
             // Actualizar estado de autenticación
             UpdateAuthenticationState();
+
+            // Actualizar contador del carrito
+            CartItemCount = _cartService.GetCartItemCount();
         }
+
+        // ============================
+        // COMANDOS DE NAVEGACIÓN
+        // ============================
 
         [RelayCommand]
         private void NavigateToHome()
@@ -60,6 +70,12 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
+        private void NavigateToWishlist()
+        {
+            _navigationService.NavigateTo<WishlistViewModel>();
+        }
+
+        [RelayCommand]
         private void NavigateToProfile()
         {
             if (IsUserLoggedIn)
@@ -73,10 +89,40 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private void NavigateToWishlist()
+        private void NavigateToSettings()
         {
-            _navigationService.NavigateTo<WishlistViewModel>();
+            _navigationService.NavigateTo<SettingsViewModel>();
         }
+
+        [RelayCommand]
+        private void NavigateToNotifications()
+        {
+            _navigationService.NavigateTo<NotificationsViewModel>();
+        }
+
+        [RelayCommand]
+        private void NavigateToOrders()
+        {
+            _navigationService.NavigateTo<OrderHistoryViewModel>();
+        }
+
+        // ============================
+        // BÚSQUEDA
+        // ============================
+
+        [RelayCommand]
+        private void Search()
+        {
+            if (!string.IsNullOrWhiteSpace(_searchQuery))
+            {
+                // Navegar al catálogo con query de búsqueda
+                _navigationService.NavigateTo<ProductCatalogViewModel>(_searchQuery);
+            }
+        }
+
+        // ============================
+        // AUTENTICACIÓN
+        // ============================
 
         [RelayCommand]
         private async Task LogoutAsync()
