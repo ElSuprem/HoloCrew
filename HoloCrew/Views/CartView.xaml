@@ -18,11 +18,7 @@
         <!-- ============================================
              LISTA DE PRODUCTOS EN EL CARRITO
              ============================================ -->
-        <ScrollViewer Grid.Column="0" 
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled"
-                      PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
-            <Border Padding="60,40,30,80">
+        <Border Grid.Column="0" Padding="60,40,30,80">
                 <StackPanel>
                     <!-- Título -->
                     <TextBlock Text="YOUR CART" 
@@ -175,8 +171,6 @@
                     </ItemsControl>
                 </StackPanel>
             </Border>
-        </ScrollViewer>
-
         <!-- ============================================
              RESUMEN DEL PEDIDO (SIDEBAR DERECHO)
              ============================================ -->
@@ -184,8 +178,7 @@
                 Background="{StaticResource Gray100Brush}"
                 BorderBrush="{StaticResource BorderDefault}"
                 BorderThickness="1,0,0,0">
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+            
                 <Border Padding="40,40,40,60">
                     <StackPanel>
                         <!-- Título -->
@@ -347,7 +340,6 @@
                         </Border>
                     </StackPanel>
                 </Border>
-            </ScrollViewer>
         </Border>
 
         <!-- Loading Overlay -->

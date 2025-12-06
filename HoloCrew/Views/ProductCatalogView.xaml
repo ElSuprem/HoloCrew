@@ -22,8 +22,7 @@
                 Background="{StaticResource BlackPrimaryBrush}"
                 BorderBrush="{StaticResource Gray800Brush}"
                 BorderThickness="0,0,1,0">
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+            
                 <Border Padding="30,40">
                     <StackPanel>
                         <!-- Título -->
@@ -133,17 +132,12 @@
                                 HorizontalAlignment="Stretch"/>
                     </StackPanel>
                 </Border>
-            </ScrollViewer>
         </Border>
 
         <!-- ============================================
              ÁREA PRINCIPAL: PRODUCTOS
              ============================================ -->
-        <ScrollViewer Grid.Column="1" 
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled"
-                      PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
-            <StackPanel>
+        <StackPanel Grid.Column="1">
                 <!-- Header con ordenamiento -->
                 <Border Background="{StaticResource WhitePrimaryBrush}"
                         BorderBrush="{StaticResource BorderDefault}"
@@ -351,6 +345,5 @@
                     </Border>
                 </Border>
             </StackPanel>
-        </ScrollViewer>
     </Grid>
 </UserControl>

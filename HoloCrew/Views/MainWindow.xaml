@@ -77,19 +77,22 @@
                                FontSize="14" 
                                VerticalAlignment="Center"/>
                     <Button Content="FLASH SALE" 
-                            Style="{StaticResource MenuButton}"/>
+                            Style="{StaticResource MenuButton}"
+                            Command="{Binding NavigateToCatalogCommand}"/>
                     <TextBlock Text="|" 
                                Foreground="{StaticResource Gray300Brush}" 
                                FontSize="14" 
                                VerticalAlignment="Center"/>
                     <Button Content="BLACK WEEK" 
-                            Style="{StaticResource MenuButton}"/>
+                            Style="{StaticResource MenuButton}"
+                            Command="{Binding NavigateToCatalogCommand}"/>
                     <TextBlock Text="|" 
                                Foreground="{StaticResource Gray300Brush}" 
                                FontSize="14" 
                                VerticalAlignment="Center"/>
                     <Button Content="MEMBERS CLUB" 
-                            Style="{StaticResource MenuButton}"/>
+                            Style="{StaticResource MenuButton}"
+                            Command="{Binding NavigateToCatalogCommand}"/>
                 </StackPanel>
 
                 <!-- SEARCH BAR -->
@@ -139,11 +142,19 @@
                             Orientation="Horizontal" 
                             VerticalAlignment="Center">
 
+                    <!-- Notifications -->
+                    <Button Content="🔔" 
+                            Style="{StaticResource IconButton}"
+                            FontSize="20"
+                            Command="{Binding NavigateToNotificationsCommand}"
+                            ToolTip="Notificaciones"/>
+
                     <!-- Wishlist -->
                     <Button Content="♥" 
                             Style="{StaticResource IconButton}"
                             FontSize="20"
-                            Command="{Binding NavigateToWishlistCommand}"/>
+                            Command="{Binding NavigateToWishlistCommand}"
+                            ToolTip="Lista de deseos"/>
 
                     <!-- Cart with badge -->
                     <Grid>
@@ -172,7 +183,15 @@
                     <Button Content="👤" 
                             Style="{StaticResource IconButton}"
                             FontSize="20"
-                            Command="{Binding NavigateToProfileCommand}"/>
+                            Command="{Binding NavigateToProfileCommand}"
+                            ToolTip="Perfil"/>
+
+                    <!-- Settings -->
+                    <Button Content="⚙️" 
+                            Style="{StaticResource IconButton}"
+                            FontSize="20"
+                            Command="{Binding NavigateToSettingsCommand}"
+                            ToolTip="Configuración"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -180,7 +199,8 @@
         <!-- ===================================
              CONTENT AREA + FOOTER
              =================================== -->
-        <ScrollViewer Grid.Row="2" 
+        <ScrollViewer x:Name="MainScrollViewer"
+                      Grid.Row="2" 
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
             <Grid>
