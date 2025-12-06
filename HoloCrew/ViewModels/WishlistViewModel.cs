@@ -26,6 +26,9 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private int _itemCount;
 
+        [ObservableProperty]
+        private bool _hasItems;
+
         public WishlistViewModel(
             IWishlistService wishlistService,
             ICartService cartService,
@@ -60,6 +63,7 @@ namespace HoloCrew.ViewModels
                     WishlistItems = new ObservableCollection<Product>(items);
                     ItemCount = WishlistItems.Count;
                     IsEmpty = ItemCount == 0;
+                    HasItems = !IsEmpty;
                 }
             }
             catch (Exception ex)
@@ -99,6 +103,7 @@ namespace HoloCrew.ViewModels
                 WishlistItems.Remove(product);
                 ItemCount = WishlistItems.Count;
                 IsEmpty = ItemCount == 0;
+                HasItems = !IsEmpty;
                 // TODO: Mostrar notificación
             }
             catch (Exception ex)
@@ -148,6 +153,7 @@ namespace HoloCrew.ViewModels
                 WishlistItems.Clear();
                 ItemCount = 0;
                 IsEmpty = true;
+                HasItems = false;
                 // TODO: Mostrar notificación
             }
             catch (Exception ex)
@@ -163,7 +169,7 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private void ContinueShopping()
+        private void BrowseProducts()
         {
             _navigationService.NavigateTo<ProductCatalogViewModel>();
         }

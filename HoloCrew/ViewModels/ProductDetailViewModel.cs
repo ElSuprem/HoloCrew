@@ -110,7 +110,7 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private async Task ToggleWishlistAsync()
+        private async Task AddToWishlistAsync()
         {
             if (Product == null) return;
 
@@ -119,13 +119,13 @@ namespace HoloCrew.ViewModels
                 if (IsInWishlist)
                 {
                     await _wishlistService.RemoveFromWishlistAsync(Product.Id);
+                    IsInWishlist = false;
                 }
                 else
                 {
                     await _wishlistService.AddToWishlistAsync(Product.Id);
+                    IsInWishlist = true;
                 }
-
-                IsInWishlist = !IsInWishlist;
             }
             catch (Exception ex)
             {

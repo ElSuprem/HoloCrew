@@ -7,20 +7,18 @@
              d:DesignHeight="800" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                  HorizontalScrollBarVisibility="Disabled">
-        <Border Padding="60,40,60,80">
-            <StackPanel MaxWidth="900">
-                <!-- Header -->
-                <Grid Margin="0,0,0,40">
-                    <TextBlock Text="NOTIFICATIONS" 
+    <Border Padding="60,40,60,80">
+        <StackPanel MaxWidth="900">
+            <!-- Header -->
+            <Grid Margin="0,0,0,40">
+                <TextBlock Text="NOTIFICATIONS" 
                                Style="{StaticResource HeadingLarge}"
                                VerticalAlignment="Center"/>
 
-                    <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center">
-                        <Button Content="MARK ALL READ" 
+                    <Button Content="MARK ALL READ" 
                                 Style="{StaticResource OutlineButton}"
                                 FontSize="13"
                                 Padding="20,12"
@@ -28,7 +26,7 @@
                                 Visibility="{Binding HasUnreadNotifications, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Margin="0,0,15,0"/>
 
-                        <Button Content="CLEAR ALL" 
+                    <Button Content="CLEAR ALL" 
                                 Background="Transparent"
                                 BorderBrush="{StaticResource ErrorColorBrush}"
                                 BorderThickness="2"
@@ -38,45 +36,45 @@
                                 Padding="20,12"
                                 Cursor="Hand"
                                 Command="{Binding ClearAllCommand}">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Background="{TemplateBinding Background}"
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
                                                         BorderBrush="{TemplateBinding BorderBrush}"
                                                         BorderThickness="{TemplateBinding BorderThickness}"
                                                         Padding="{TemplateBinding Padding}">
-                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                <ContentPresenter HorizontalAlignment="Center"
                                                                       VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource ErrorColorBrush}"/>
-                                            <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                    </StackPanel>
-                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource ErrorColorBrush}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
 
-                <!-- Filtros -->
-                <Border Background="{StaticResource Gray100Brush}"
+            <!-- Filtros -->
+            <Border Background="{StaticResource Gray100Brush}"
                         Padding="25,20"
                         Margin="0,0,0,30">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="FILTER:" 
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="FILTER:" 
                                    Style="{StaticResource BodyMedium}"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"
                                    Margin="0,0,20,0"/>
 
-                        <Button Content="ALL" 
+                    <Button Content="ALL" 
                                 Style="{StaticResource TextButton}"
                                 FontSize="13"
                                 FontWeight="SemiBold"
@@ -84,7 +82,7 @@
                                 Command="{Binding ShowAllCommand}"
                                 Margin="0,0,10,0"/>
 
-                        <Button Content="UNREAD" 
+                    <Button Content="UNREAD" 
                                 Style="{StaticResource TextButton}"
                                 FontSize="13"
                                 FontWeight="SemiBold"
@@ -92,7 +90,7 @@
                                 Command="{Binding ShowUnreadCommand}"
                                 Margin="0,0,10,0"/>
 
-                        <Button Content="ORDERS" 
+                    <Button Content="ORDERS" 
                                 Style="{StaticResource TextButton}"
                                 FontSize="13"
                                 FontWeight="SemiBold"
@@ -100,71 +98,71 @@
                                 Command="{Binding ShowOrdersCommand}"
                                 Margin="0,0,10,0"/>
 
-                        <Button Content="PROMOTIONS" 
+                    <Button Content="PROMOTIONS" 
                                 Style="{StaticResource TextButton}"
                                 FontSize="13"
                                 FontWeight="SemiBold"
                                 Padding="12,8"
                                 Command="{Binding ShowPromotionsCommand}"/>
-                    </StackPanel>
-                </Border>
+                </StackPanel>
+            </Border>
 
-                <!-- Notifications List -->
-                <ItemsControl ItemsSource="{Binding Notifications}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Background="{StaticResource WhitePrimaryBrush}"
+            <!-- Notifications List -->
+            <ItemsControl ItemsSource="{Binding Notifications}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{StaticResource WhitePrimaryBrush}"
                                     BorderBrush="{StaticResource BorderDefault}"
                                     BorderThickness="1"
                                     Padding="25"
                                     Margin="0,0,0,15"
                                     Cursor="Hand">
-                                <Border.InputBindings>
-                                    <MouseBinding Command="{Binding DataContext.OpenNotificationCommand, 
+                            <Border.InputBindings>
+                                <MouseBinding Command="{Binding DataContext.OpenNotificationCommand, 
                                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                   CommandParameter="{Binding}"
                                                   MouseAction="LeftClick"/>
-                                </Border.InputBindings>
+                            </Border.InputBindings>
 
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                                    <!-- Icon -->
-                                    <Border Grid.Column="0"
+                                <!-- Icon -->
+                                <Border Grid.Column="0"
                                             Background="{StaticResource Gray100Brush}"
                                             Width="40"
                                             Height="40"
                                             CornerRadius="20"
                                             Margin="0,0,15,0"
                                             VerticalAlignment="Top">
-                                        <TextBlock Text="{Binding Icon}"
+                                    <TextBlock Text="{Binding Icon}"
                                                    FontSize="20"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"/>
-                                    </Border>
+                                </Border>
 
-                                    <!-- Content -->
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Title}"
+                                <!-- Content -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}"
                                                    Style="{StaticResource SubtitleMedium}"
                                                    Margin="0,0,0,5"/>
-                                        <TextBlock Text="{Binding Message}"
+                                    <TextBlock Text="{Binding Message}"
                                                    Style="{StaticResource BodyMedium}"
                                                    Foreground="{StaticResource TextSecondary}"
                                                    TextWrapping="Wrap"
                                                    Margin="0,0,0,8"/>
-                                        <TextBlock Text="{Binding TimeAgo}"
+                                    <TextBlock Text="{Binding TimeAgo}"
                                                    Style="{StaticResource Caption}"
                                                    Foreground="{StaticResource Gray400Brush}"/>
-                                    </StackPanel>
+                                </StackPanel>
 
-                                    <!-- Unread Badge -->
-                                    <Border Grid.Column="2"
+                                <!-- Unread Badge -->
+                                <Border Grid.Column="2"
                                             Background="{StaticResource RedAccentBrush}"
                                             Width="10"
                                             Height="10"
@@ -173,8 +171,8 @@
                                             VerticalAlignment="Center"
                                             Visibility="{Binding IsUnread, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                                    <!-- Delete Button -->
-                                    <Button Grid.Column="3"
+                                <!-- Delete Button -->
+                                <Button Grid.Column="3"
                                             Content="✕"
                                             Style="{StaticResource TextButton}"
                                             FontSize="16"
@@ -185,153 +183,152 @@
                                             Command="{Binding DataContext.DeleteNotificationCommand, 
                                                       RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}"/>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-                <!-- Empty State -->
-                <Border Background="{StaticResource Gray100Brush}"
+            <!-- Empty State -->
+            <Border Background="{StaticResource Gray100Brush}"
                         Padding="60,80"
                         Visibility="{Binding HasNotifications, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="🔔" 
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="🔔" 
                                    FontSize="100"
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,30"/>
-                        <TextBlock Text="NO NOTIFICATIONS" 
+                    <TextBlock Text="NO NOTIFICATIONS" 
                                    Style="{StaticResource HeadingMedium}"
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,15"/>
-                        <TextBlock Text="You're all caught up! Notifications about orders, offers, and updates will appear here" 
+                    <TextBlock Text="You're all caught up! Notifications about orders, offers, and updates will appear here" 
                                    Style="{StaticResource BodyLarge}"
                                    Foreground="{StaticResource TextSecondary}"
                                    TextAlignment="Center"
                                    TextWrapping="Wrap"
                                    MaxWidth="400"/>
-                    </StackPanel>
-                </Border>
+                </StackPanel>
+            </Border>
 
-                <!-- Notification Preferences -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
+            <!-- Notification Preferences -->
+            <Border Background="{StaticResource WhitePrimaryBrush}"
                         BorderBrush="{StaticResource BorderDefault}"
                         BorderThickness="1"
                         Padding="40"
                         Margin="0,40,0,0">
-                    <StackPanel>
-                        <TextBlock Text="NOTIFICATION PREFERENCES" 
+                <StackPanel>
+                    <TextBlock Text="NOTIFICATION PREFERENCES" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,25"/>
 
-                        <!-- Email Notifications -->
-                        <Grid Margin="0,0,0,20">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Email Notifications" 
+                    <!-- Email Notifications -->
+                    <Grid Margin="0,0,0,20">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Email Notifications" 
                                            Style="{StaticResource BodyMedium}"
                                            FontWeight="SemiBold"
                                            Margin="0,0,0,5"/>
-                                <TextBlock Text="Receive notifications via email" 
+                            <TextBlock Text="Receive notifications via email" 
                                            Style="{StaticResource BodySmall}"
                                            Foreground="{StaticResource TextSecondary}"/>
-                            </StackPanel>
+                        </StackPanel>
 
-                            <CheckBox IsChecked="{Binding EmailNotifications}"
+                        <CheckBox IsChecked="{Binding EmailNotifications}"
                                       HorizontalAlignment="Right"
                                       VerticalAlignment="Center"/>
-                        </Grid>
+                    </Grid>
 
-                        <!-- Push Notifications -->
-                        <Grid Margin="0,0,0,20">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Push Notifications" 
+                    <!-- Push Notifications -->
+                    <Grid Margin="0,0,0,20">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Push Notifications" 
                                            Style="{StaticResource BodyMedium}"
                                            FontWeight="SemiBold"
                                            Margin="0,0,0,5"/>
-                                <TextBlock Text="Receive in-app push notifications" 
+                            <TextBlock Text="Receive in-app push notifications" 
                                            Style="{StaticResource BodySmall}"
                                            Foreground="{StaticResource TextSecondary}"/>
-                            </StackPanel>
+                        </StackPanel>
 
-                            <CheckBox IsChecked="{Binding PushNotifications}"
+                        <CheckBox IsChecked="{Binding PushNotifications}"
                                       HorizontalAlignment="Right"
                                       VerticalAlignment="Center"/>
-                        </Grid>
+                    </Grid>
 
-                        <!-- Order Updates -->
-                        <Grid Margin="0,0,0,20">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Order Updates" 
+                    <!-- Order Updates -->
+                    <Grid Margin="0,0,0,20">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Order Updates" 
                                            Style="{StaticResource BodyMedium}"
                                            FontWeight="SemiBold"
                                            Margin="0,0,0,5"/>
-                                <TextBlock Text="Get notified about order status changes" 
+                            <TextBlock Text="Get notified about order status changes" 
                                            Style="{StaticResource BodySmall}"
                                            Foreground="{StaticResource TextSecondary}"/>
-                            </StackPanel>
+                        </StackPanel>
 
-                            <CheckBox IsChecked="{Binding OrderUpdates}"
+                        <CheckBox IsChecked="{Binding OrderUpdates}"
                                       HorizontalAlignment="Right"
                                       VerticalAlignment="Center"/>
-                        </Grid>
+                    </Grid>
 
-                        <!-- Price Alerts -->
-                        <Grid Margin="0,0,0,20">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Price Alerts" 
+                    <!-- Price Alerts -->
+                    <Grid Margin="0,0,0,20">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Price Alerts" 
                                            Style="{StaticResource BodyMedium}"
                                            FontWeight="SemiBold"
                                            Margin="0,0,0,5"/>
-                                <TextBlock Text="Get alerts when prices drop on wishlist items" 
+                            <TextBlock Text="Get alerts when prices drop on wishlist items" 
                                            Style="{StaticResource BodySmall}"
                                            Foreground="{StaticResource TextSecondary}"/>
-                            </StackPanel>
+                        </StackPanel>
 
-                            <CheckBox IsChecked="{Binding PriceAlerts}"
+                        <CheckBox IsChecked="{Binding PriceAlerts}"
                                       HorizontalAlignment="Right"
                                       VerticalAlignment="Center"/>
-                        </Grid>
+                    </Grid>
 
-                        <!-- Promotions -->
-                        <Grid Margin="0,0,0,30">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Offers &amp; Promotions" 
+                    <!-- Promotions -->
+                    <Grid Margin="0,0,0,30">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Offers &amp; Promotions" 
                                            Style="{StaticResource BodyMedium}"
                                            FontWeight="SemiBold"
                                            Margin="0,0,0,5"/>
-                                <TextBlock Text="Receive exclusive deals and special offers" 
+                            <TextBlock Text="Receive exclusive deals and special offers" 
                                            Style="{StaticResource BodySmall}"
                                            Foreground="{StaticResource TextSecondary}"/>
-                            </StackPanel>
+                        </StackPanel>
 
-                            <CheckBox IsChecked="{Binding Promotions}"
+                        <CheckBox IsChecked="{Binding Promotions}"
                                       HorizontalAlignment="Right"
                                       VerticalAlignment="Center"/>
-                        </Grid>
+                    </Grid>
 
-                        <!-- Save Button -->
-                        <Button Content="SAVE PREFERENCES" 
+                    <!-- Save Button -->
+                    <Button Content="SAVE PREFERENCES" 
                                 Style="{StaticResource PrimaryButton}"
                                 Command="{Binding SaveNotificationSettingsCommand}"
                                 Width="220"
                                 HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </Border>
+                </StackPanel>
+            </Border>
 
-                <!-- Loading -->
-                <StackPanel HorizontalAlignment="Center"
+            <!-- Loading -->
+            <StackPanel HorizontalAlignment="Center"
                             Margin="0,60,0,0"
                             Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock Text="⏳" 
+                <TextBlock Text="⏳" 
                                FontSize="60" 
                                HorizontalAlignment="Center"
                                Margin="0,0,0,20"/>
-                    <TextBlock Text="LOADING NOTIFICATIONS..." 
+                <TextBlock Text="LOADING NOTIFICATIONS..." 
                                Style="{StaticResource SubtitleLarge}"
                                Foreground="{StaticResource TextSecondary}"
                                HorizontalAlignment="Center"/>
-                </StackPanel>
             </StackPanel>
-        </Border>
-    </ScrollViewer>
+        </StackPanel>
+    </Border>
 </UserControl>

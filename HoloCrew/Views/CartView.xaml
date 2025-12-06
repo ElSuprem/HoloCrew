@@ -20,7 +20,8 @@
              ============================================ -->
         <ScrollViewer Grid.Column="0" 
                       VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled">
+                      HorizontalScrollBarVisibility="Disabled"
+                      PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
             <Border Padding="60,40,30,80">
                 <StackPanel>
                     <!-- Título -->
@@ -183,7 +184,8 @@
                 Background="{StaticResource Gray100Brush}"
                 BorderBrush="{StaticResource BorderDefault}"
                 BorderThickness="1,0,0,0">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <Border Padding="40,40,40,60">
                     <StackPanel>
                         <!-- Título -->

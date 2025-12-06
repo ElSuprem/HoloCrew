@@ -29,6 +29,9 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _isLoading;
 
+        [ObservableProperty]
+        private bool _hasOrders;
+
         public List<OrderStatus> AvailableStatuses { get; } = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().ToList();
 
         public OrderHistoryViewModel(
@@ -64,6 +67,7 @@ namespace HoloCrew.ViewModels
                     var orders = await _orderService.GetUserOrdersAsync(currentUser.Id);
                     Orders = new ObservableCollection<Order>(orders.OrderByDescending(o => o.OrderDate));
                     FilteredOrders = new ObservableCollection<Order>(Orders);
+                    HasOrders = Orders.Any();
                 }
             }
             catch (Exception ex)
@@ -105,7 +109,7 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private void FilterByStatus()
+        private void ApplyFilters()
         {
             if (SelectedStatusFilter.HasValue)
             {
@@ -129,6 +133,12 @@ namespace HoloCrew.ViewModels
         private async Task RefreshAsync()
         {
             await LoadOrdersAsync();
+        }
+
+        [RelayCommand]
+        private void BrowseProducts()
+        {
+            _navigationService.NavigateTo<ProductCatalogViewModel>();
         }
     }
 }

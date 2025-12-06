@@ -22,7 +22,8 @@
                 Background="{StaticResource BlackPrimaryBrush}"
                 BorderBrush="{StaticResource Gray800Brush}"
                 BorderThickness="0,0,1,0">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <Border Padding="30,40">
                     <StackPanel>
                         <!-- Título -->
@@ -140,7 +141,8 @@
              ============================================ -->
         <ScrollViewer Grid.Column="1" 
                       VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled">
+                      HorizontalScrollBarVisibility="Disabled"
+                      PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
             <StackPanel>
                 <!-- Header con ordenamiento -->
                 <Border Background="{StaticResource WhitePrimaryBrush}"

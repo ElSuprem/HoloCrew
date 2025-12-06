@@ -7,208 +7,206 @@
              d:DesignHeight="1000" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                  HorizontalScrollBarVisibility="Disabled">
-        <Border Padding="60,40,60,80">
-            <StackPanel>
-                <!-- Header -->
-                <Grid Margin="0,0,0,40">
-                    <StackPanel VerticalAlignment="Center">
-                        <TextBlock Style="{StaticResource HeadingLarge}">
+    <Border Padding="60,40,60,80">
+        <StackPanel>
+            <!-- Header -->
+            <Grid Margin="0,0,0,40">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Style="{StaticResource HeadingLarge}">
                             <Run Text="ORDER #"/>
                             <Run Text="{Binding OrderNumber}"/>
-                        </TextBlock>
-                        <TextBlock Text="{Binding OrderDate, StringFormat='MMMM dd, yyyy at HH:mm'}"
+                    </TextBlock>
+                    <TextBlock Text="{Binding OrderDate, StringFormat='MMMM dd, yyyy at HH:mm'}"
                                    Style="{StaticResource BodyLarge}"
                                    Foreground="{StaticResource TextSecondary}"
                                    Margin="0,8,0,0"/>
-                    </StackPanel>
+                </StackPanel>
 
-                    <!-- Back Button -->
-                    <Button Content="← BACK TO ORDERS" 
+                <!-- Back Button -->
+                <Button Content="← BACK TO ORDERS" 
                             Style="{StaticResource OutlineButton}"
                             FontSize="13"
                             Padding="20,12"
                             Command="{Binding BackToHistoryCommand}"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"/>
-                </Grid>
+            </Grid>
 
-                <!-- Main Content -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <!-- Left: Order Items -->
-                        <ColumnDefinition Width="60" />
-                        <!-- Spacer -->
-                        <ColumnDefinition Width="400" />
-                        <!-- Right: Summary -->
-                    </Grid.ColumnDefinitions>
+            <!-- Main Content -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <!-- Left: Order Items -->
+                    <ColumnDefinition Width="60" />
+                    <!-- Spacer -->
+                    <ColumnDefinition Width="400" />
+                    <!-- Right: Summary -->
+                </Grid.ColumnDefinitions>
 
-                    <!-- ============================================
+                <!-- ============================================
                          LEFT SIDE: ORDER ITEMS
                          ============================================ -->
-                    <StackPanel Grid.Column="0">
-                        <!-- Order Items Header -->
-                        <TextBlock Text="ORDER ITEMS" 
+                <StackPanel Grid.Column="0">
+                    <!-- Order Items Header -->
+                    <TextBlock Text="ORDER ITEMS" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,25" />
 
-                        <!-- Items List -->
-                        <ItemsControl ItemsSource="{Binding OrderItems}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <!-- Items List -->
+                    <ItemsControl ItemsSource="{Binding OrderItems}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource WhitePrimaryBrush}"
                                             BorderBrush="{StaticResource BorderDefault}"
                                             BorderThickness="1"
                                             Padding="25"
                                             Margin="0,0,0,15">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="100"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                                            <!-- Product Image -->
-                                            <Border Grid.Column="0" 
+                                        <!-- Product Image -->
+                                        <Border Grid.Column="0" 
                                                     Background="{StaticResource Gray100Brush}"
                                                     Width="80"
                                                     Height="80"
                                                     Margin="0,0,20,0">
-                                                <Rectangle Fill="{StaticResource Gray200Brush}"/>
-                                            </Border>
+                                            <Rectangle Fill="{StaticResource Gray200Brush}"/>
+                                        </Border>
 
-                                            <!-- Product Info -->
-                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding ProductName}"
+                                        <!-- Product Info -->
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding ProductName}"
                                                            Style="{StaticResource SubtitleMedium}"
                                                            Margin="0,0,0,5"/>
-                                                <TextBlock Style="{StaticResource BodyMedium}"
+                                            <TextBlock Style="{StaticResource BodyMedium}"
                                                            Foreground="{StaticResource TextSecondary}">
                                                     <Run Text="Size:"/>
                                                     <Run Text="{Binding Size}"/>
                                                     <Run Text=" • Color:"/>
                                                     <Run Text="{Binding Color}"/>
-                                                </TextBlock>
-                                                <TextBlock Style="{StaticResource BodyMedium}"
+                                            </TextBlock>
+                                            <TextBlock Style="{StaticResource BodyMedium}"
                                                            Foreground="{StaticResource TextSecondary}"
                                                            Margin="0,5,0,0">
                                                     <Run Text="Qty:"/>
                                                     <Run Text="{Binding Quantity}"/>
                                                     <Run Text=" × "/>
                                                     <Run Text="{Binding UnitPrice, StringFormat=€{0:N2}}"/>
-                                                </TextBlock>
-                                            </StackPanel>
+                                            </TextBlock>
+                                        </StackPanel>
 
-                                            <!-- Item Total -->
-                                            <TextBlock Grid.Column="2"
+                                        <!-- Item Total -->
+                                        <TextBlock Grid.Column="2"
                                                        Text="{Binding TotalPrice, StringFormat=€{0:N2}}"
                                                        Style="{StaticResource SubtitleLarge}"
                                                        FontWeight="Bold"
                                                        VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                        <!-- Shipping & Payment Info -->
-                        <TextBlock Text="DELIVERY &amp; PAYMENT" 
+                    <!-- Shipping & Payment Info -->
+                    <TextBlock Text="DELIVERY &amp; PAYMENT" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,40,0,25" />
 
-                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                                 BorderBrush="{StaticResource BorderDefault}"
                                 BorderThickness="1"
                                 Padding="30">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                                <!-- Shipping Address -->
-                                <StackPanel Grid.Column="0">
-                                    <TextBlock Text="SHIPPING ADDRESS" 
+                            <!-- Shipping Address -->
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="SHIPPING ADDRESS" 
                                                Style="{StaticResource BodyMedium}"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,10"/>
-                                    <TextBlock Text="{Binding ShippingAddress}"
+                                <TextBlock Text="{Binding ShippingAddress}"
                                                Style="{StaticResource BodyMedium}"
                                                Foreground="{StaticResource TextSecondary}"
                                                TextWrapping="Wrap"
                                                LineHeight="22"/>
-                                </StackPanel>
+                            </StackPanel>
 
-                                <!-- Payment Method -->
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="PAYMENT METHOD" 
+                            <!-- Payment Method -->
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="PAYMENT METHOD" 
                                                Style="{StaticResource BodyMedium}"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,10"/>
-                                    <TextBlock Text="{Binding PaymentMethod}"
+                                <TextBlock Text="{Binding PaymentMethod}"
                                                Style="{StaticResource BodyMedium}"
                                                Foreground="{StaticResource TextSecondary}"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </StackPanel>
 
-                    <!-- ============================================
+                <!-- ============================================
                          RIGHT SIDE: ORDER SUMMARY & TRACKING
                          ============================================ -->
-                    <StackPanel Grid.Column="2">
+                <StackPanel Grid.Column="2">
 
-                        <!-- Order Status Card -->
-                        <Border Background="{StaticResource BlackPrimaryBrush}"
+                    <!-- Order Status Card -->
+                    <Border Background="{StaticResource BlackPrimaryBrush}"
                                 Padding="30,25"
                                 Margin="0,0,0,30">
-                            <StackPanel>
-                                <TextBlock Text="ORDER STATUS" 
+                        <StackPanel>
+                            <TextBlock Text="ORDER STATUS" 
                                            Style="{StaticResource SubtitleMedium}"
                                            Foreground="{StaticResource WhitePrimaryBrush}"
                                            Margin="0,0,0,15"/>
 
-                                <Border Background="{Binding StatusColor}"
+                            <Border Background="{Binding StatusColor}"
                                         Padding="15,10"
                                         HorizontalAlignment="Left">
-                                    <TextBlock Text="{Binding StatusText}"
+                                <TextBlock Text="{Binding StatusText}"
                                                Style="{StaticResource BodyMedium}"
                                                FontWeight="Bold"
                                                Foreground="{StaticResource WhitePrimaryBrush}"/>
-                                </Border>
+                            </Border>
 
-                                <TextBlock Text="{Binding EstimatedDelivery, StringFormat='Estimated delivery: MMM dd'}"
+                            <TextBlock Text="{Binding EstimatedDelivery, StringFormat='Estimated delivery: MMM dd'}"
                                            Style="{StaticResource BodySmall}"
                                            Foreground="{StaticResource Gray400Brush}"
                                            Margin="0,15,0,0"/>
-                            </StackPanel>
-                        </Border>
+                        </StackPanel>
+                    </Border>
 
-                        <!-- Tracking Timeline -->
-                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <!-- Tracking Timeline -->
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                                 BorderBrush="{StaticResource BorderDefault}"
                                 BorderThickness="1"
                                 Padding="30"
                                 Margin="0,0,0,30">
-                            <StackPanel>
-                                <TextBlock Text="TRACKING" 
+                        <StackPanel>
+                            <TextBlock Text="TRACKING" 
                                            Style="{StaticResource SubtitleMedium}"
                                            Margin="0,0,0,20"/>
 
-                                <!-- Tracking Items -->
-                                <ItemsControl ItemsSource="{Binding TrackingHistory}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="0,0,0,20">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
+                            <!-- Tracking Items -->
+                            <ItemsControl ItemsSource="{Binding TrackingHistory}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,20">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
 
-                                                <!-- Timeline Dot -->
-                                                <Border Grid.Column="0"
+                                            <!-- Timeline Dot -->
+                                            <Border Grid.Column="0"
                                                         Width="12" 
                                                         Height="12"
                                                         CornerRadius="6"
@@ -217,97 +215,96 @@
                                                         BorderThickness="2"
                                                         Margin="0,2,15,0"/>
 
-                                                <!-- Event Info -->
-                                                <StackPanel Grid.Column="1">
-                                                    <TextBlock Text="{Binding EventTitle}"
+                                            <!-- Event Info -->
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="{Binding EventTitle}"
                                                                Style="{StaticResource BodyMedium}"
                                                                FontWeight="SemiBold"
                                                                Margin="0,0,0,3"/>
-                                                    <TextBlock Text="{Binding EventDate, StringFormat='MMM dd, yyyy HH:mm'}"
+                                                <TextBlock Text="{Binding EventDate, StringFormat='MMM dd, yyyy HH:mm'}"
                                                                Style="{StaticResource Caption}"
                                                                Foreground="{StaticResource TextSecondary}"/>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
 
-                        <!-- Order Summary -->
-                        <Border Background="{StaticResource Gray100Brush}"
+                    <!-- Order Summary -->
+                    <Border Background="{StaticResource Gray100Brush}"
                                 Padding="30">
-                            <StackPanel>
-                                <TextBlock Text="ORDER SUMMARY" 
+                        <StackPanel>
+                            <TextBlock Text="ORDER SUMMARY" 
                                            Style="{StaticResource SubtitleMedium}"
                                            Margin="0,0,0,20"/>
 
-                                <!-- Subtotal -->
-                                <Grid Margin="0,0,0,12">
-                                    <TextBlock Text="Subtotal" 
+                            <!-- Subtotal -->
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Subtotal" 
                                                Style="{StaticResource BodyMedium}"
                                                Foreground="{StaticResource TextSecondary}"/>
-                                    <TextBlock Text="{Binding Subtotal, StringFormat=€{0:N2}}"
+                                <TextBlock Text="{Binding Subtotal, StringFormat=€{0:N2}}"
                                                Style="{StaticResource BodyMedium}"
                                                HorizontalAlignment="Right"/>
-                                </Grid>
+                            </Grid>
 
-                                <!-- Shipping -->
-                                <Grid Margin="0,0,0,12">
-                                    <TextBlock Text="Shipping" 
+                            <!-- Shipping -->
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Shipping" 
                                                Style="{StaticResource BodyMedium}"
                                                Foreground="{StaticResource TextSecondary}"/>
-                                    <TextBlock Text="{Binding ShippingCost, StringFormat=€{0:N2}}"
+                                <TextBlock Text="{Binding ShippingCost, StringFormat=€{0:N2}}"
                                                Style="{StaticResource BodyMedium}"
                                                HorizontalAlignment="Right"/>
-                                </Grid>
+                            </Grid>
 
-                                <!-- Discount -->
-                                <Grid Margin="0,0,0,12"
+                            <!-- Discount -->
+                            <Grid Margin="0,0,0,12"
                                       Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <TextBlock Text="Discount" 
+                                <TextBlock Text="Discount" 
                                                Style="{StaticResource BodyMedium}"
                                                Foreground="{StaticResource SuccessColorBrush}"/>
-                                    <TextBlock Text="{Binding DiscountAmount, StringFormat=-€{0:N2}}"
+                                <TextBlock Text="{Binding DiscountAmount, StringFormat=-€{0:N2}}"
                                                Style="{StaticResource BodyMedium}"
                                                Foreground="{StaticResource SuccessColorBrush}"
                                                HorizontalAlignment="Right"/>
-                                </Grid>
+                            </Grid>
 
-                                <!-- Divider -->
-                                <Border Height="2" 
+                            <!-- Divider -->
+                            <Border Height="2" 
                                         Background="{StaticResource BorderDefault}"
                                         Margin="0,10,0,20"/>
 
-                                <!-- Total -->
-                                <Grid>
-                                    <TextBlock Text="TOTAL" 
+                            <!-- Total -->
+                            <Grid>
+                                <TextBlock Text="TOTAL" 
                                                Style="{StaticResource SubtitleLarge}"
                                                FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Total, StringFormat=€{0:N2}}"
+                                <TextBlock Text="{Binding Total, StringFormat=€{0:N2}}"
                                                Style="{StaticResource SubtitleLarge}"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Right"/>
-                                </Grid>
-                            </StackPanel>
-                        </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
 
-                        <!-- Action Buttons -->
-                        <StackPanel Margin="0,30,0,0">
-                            <Button Content="TRACK PACKAGE" 
+                    <!-- Action Buttons -->
+                    <StackPanel Margin="0,30,0,0">
+                        <Button Content="TRACK PACKAGE" 
                                     Style="{StaticResource PrimaryButton}"
                                     Command="{Binding TrackPackageCommand}"
                                     Margin="0,0,0,15"
                                     HorizontalAlignment="Stretch"/>
 
-                            <Button Content="CONTACT SUPPORT" 
+                        <Button Content="CONTACT SUPPORT" 
                                     Style="{StaticResource OutlineButton}"
                                     Command="{Binding ContactSupportCommand}"
                                     HorizontalAlignment="Stretch"/>
-                        </StackPanel>
                     </StackPanel>
-                </Grid>
-            </StackPanel>
-        </Border>
-    </ScrollViewer>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Border>
 </UserControl>

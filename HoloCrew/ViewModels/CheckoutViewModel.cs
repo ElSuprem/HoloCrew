@@ -60,6 +60,9 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private ObservableCollection<CartItem> _orderItems = new();
 
+        [ObservableProperty]
+        private bool _canCompleteOrder = true;
+
         public bool IsStep1 => CurrentStep == 1;
         public bool IsStep2 => CurrentStep == 2;
         public bool IsStep3 => CurrentStep == 3;
@@ -175,13 +178,14 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private async Task PlaceOrderAsync()
+        private async Task CompleteOrderAsync()
         {
             if (IsProcessing) return;
 
             try
             {
                 IsProcessing = true;
+                CanCompleteOrder = false;
 
                 var order = new Order
                 {
@@ -215,6 +219,7 @@ namespace HoloCrew.ViewModels
             catch (Exception ex)
             {
                 // TODO: Mostrar error
+                CanCompleteOrder = true;
             }
             finally
             {

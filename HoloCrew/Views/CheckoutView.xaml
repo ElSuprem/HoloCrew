@@ -7,488 +7,487 @@
              d:DesignHeight="900" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                  HorizontalScrollBarVisibility="Disabled">
-        <Border Padding="60,40,60,80">
-            <StackPanel>
-                <!-- Título -->
-                <TextBlock Text="CHECKOUT" 
+    <Border Padding="60,40,60,80">
+        <StackPanel>
+            <!-- Título -->
+            <TextBlock Text="CHECKOUT" 
                            Style="{StaticResource HeadingLarge}"
                            Margin="0,0,0,40" />
 
-                <!-- Progress Steps -->
-                <Border Background="{StaticResource Gray100Brush}"
+            <!-- Progress Steps -->
+            <Border Background="{StaticResource Gray100Brush}"
                         Padding="40,30"
                         Margin="0,0,0,50">
-                    <Grid HorizontalAlignment="Center">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                <Grid HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                        <!-- Step 1: Shipping -->
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <Border Background="{StaticResource BlackPrimaryBrush}"
+                    <!-- Step 1: Shipping -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Border Background="{StaticResource BlackPrimaryBrush}"
                                     Width="50" 
                                     Height="50"
                                     CornerRadius="25">
-                                <TextBlock Text="1" 
+                            <TextBlock Text="1" 
                                            Style="{StaticResource SubtitleLarge}"
                                            FontWeight="Bold"
                                            Foreground="{StaticResource WhitePrimaryBrush}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"/>
-                            </Border>
-                            <TextBlock Text="SHIPPING" 
+                        </Border>
+                        <TextBlock Text="SHIPPING" 
                                        Style="{StaticResource SubtitleMedium}"
                                        VerticalAlignment="Center"
                                        Margin="15,0,0,0"/>
-                        </StackPanel>
+                    </StackPanel>
 
-                        <!-- Connector 1 -->
-                        <Rectangle Grid.Column="1"
+                    <!-- Connector 1 -->
+                    <Rectangle Grid.Column="1"
                                    Height="3" 
                                    Fill="{StaticResource Gray300Brush}"
                                    VerticalAlignment="Center"
                                    Margin="20,0"/>
 
-                        <!-- Step 2: Payment -->
-                        <StackPanel Grid.Column="2" Orientation="Horizontal">
-                            <Border Background="{StaticResource Gray300Brush}"
+                    <!-- Step 2: Payment -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <Border Background="{StaticResource Gray300Brush}"
                                     Width="50" 
                                     Height="50"
                                     CornerRadius="25">
-                                <TextBlock Text="2" 
+                            <TextBlock Text="2" 
                                            Style="{StaticResource SubtitleLarge}"
                                            FontWeight="Bold"
                                            Foreground="{StaticResource Gray600Brush}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"/>
-                            </Border>
-                            <TextBlock Text="PAYMENT" 
+                        </Border>
+                        <TextBlock Text="PAYMENT" 
                                        Style="{StaticResource SubtitleMedium}"
                                        Foreground="{StaticResource Gray600Brush}"
                                        VerticalAlignment="Center"
                                        Margin="15,0,0,0"/>
-                        </StackPanel>
+                    </StackPanel>
 
-                        <!-- Connector 2 -->
-                        <Rectangle Grid.Column="3"
+                    <!-- Connector 2 -->
+                    <Rectangle Grid.Column="3"
                                    Height="3" 
                                    Fill="{StaticResource Gray300Brush}"
                                    VerticalAlignment="Center"
                                    Margin="20,0"/>
 
-                        <!-- Step 3: Confirmation -->
-                        <StackPanel Grid.Column="4" Orientation="Horizontal">
-                            <Border Background="{StaticResource Gray300Brush}"
+                    <!-- Step 3: Confirmation -->
+                    <StackPanel Grid.Column="4" Orientation="Horizontal">
+                        <Border Background="{StaticResource Gray300Brush}"
                                     Width="50" 
                                     Height="50"
                                     CornerRadius="25">
-                                <TextBlock Text="3" 
+                            <TextBlock Text="3" 
                                            Style="{StaticResource SubtitleLarge}"
                                            FontWeight="Bold"
                                            Foreground="{StaticResource Gray600Brush}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"/>
-                            </Border>
-                            <TextBlock Text="CONFIRMATION" 
+                        </Border>
+                        <TextBlock Text="CONFIRMATION" 
                                        Style="{StaticResource SubtitleMedium}"
                                        Foreground="{StaticResource Gray600Brush}"
                                        VerticalAlignment="Center"
                                        Margin="15,0,0,0"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
-                <!-- Main Content -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <!-- Formularios -->
-                        <ColumnDefinition Width="400" />
-                        <!-- Resumen -->
-                    </Grid.ColumnDefinitions>
+            <!-- Main Content -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <!-- Formularios -->
+                    <ColumnDefinition Width="400" />
+                    <!-- Resumen -->
+                </Grid.ColumnDefinitions>
 
-                    <!-- ============================================
+                <!-- ============================================
                          FORMULARIOS (SHIPPING & PAYMENT)
                          ============================================ -->
-                    <StackPanel Grid.Column="0" Margin="0,0,40,0">
+                <StackPanel Grid.Column="0" Margin="0,0,40,0">
 
-                        <!-- SHIPPING ADDRESS -->
-                        <TextBlock Text="SHIPPING ADDRESS" 
+                    <!-- SHIPPING ADDRESS -->
+                    <TextBlock Text="SHIPPING ADDRESS" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,25" />
 
-                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                                 BorderBrush="{StaticResource BorderDefault}"
                                 BorderThickness="1"
                                 Padding="40"
                                 Margin="0,0,0,40">
-                            <StackPanel>
-                                <!-- Nombre y Apellidos -->
-                                <Grid Margin="0,0,0,25">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <!-- Nombre y Apellidos -->
+                            <Grid Margin="0,0,0,25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="FIRST NAME" 
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="FIRST NAME" 
                                                    Style="{StaticResource BodyMedium}"
                                                    FontWeight="SemiBold"
                                                    Margin="0,0,0,10"/>
-                                        <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
                                                 BorderThickness="2"
                                                 Height="50">
-                                            <TextBox Text="{Binding ShippingFirstName}"
+                                        <TextBox Text="{Binding ShippingFirstName}"
                                                      Background="Transparent"
                                                      BorderThickness="0"
                                                      Padding="15,0"
                                                      VerticalAlignment="Center"
                                                      FontSize="14"/>
-                                        </Border>
-                                    </StackPanel>
+                                    </Border>
+                                </StackPanel>
 
-                                    <StackPanel Grid.Column="2">
-                                        <TextBlock Text="LAST NAME" 
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="LAST NAME" 
                                                    Style="{StaticResource BodyMedium}"
                                                    FontWeight="SemiBold"
                                                    Margin="0,0,0,10"/>
-                                        <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
                                                 BorderThickness="2"
                                                 Height="50">
-                                            <TextBox Text="{Binding ShippingLastName}"
+                                        <TextBox Text="{Binding ShippingLastName}"
                                                      Background="Transparent"
                                                      BorderThickness="0"
                                                      Padding="15,0"
                                                      VerticalAlignment="Center"
                                                      FontSize="14"/>
-                                        </Border>
-                                    </StackPanel>
-                                </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
 
-                                <!-- Dirección -->
-                                <StackPanel Margin="0,0,0,25">
-                                    <TextBlock Text="ADDRESS" 
+                            <!-- Dirección -->
+                            <StackPanel Margin="0,0,0,25">
+                                <TextBlock Text="ADDRESS" 
                                                Style="{StaticResource BodyMedium}"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,10"/>
-                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                                <Border BorderBrush="{StaticResource BorderDefault}"
                                             BorderThickness="2"
                                             Height="50">
-                                        <TextBox Text="{Binding ShippingAddress}"
+                                    <TextBox Text="{Binding ShippingAddress}"
                                                  Background="Transparent"
                                                  BorderThickness="0"
                                                  Padding="15,0"
                                                  VerticalAlignment="Center"
                                                  FontSize="14"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Ciudad, CP, País -->
+                            <Grid Margin="0,0,0,25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="CITY" 
+                                                   Style="{StaticResource BodyMedium}"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,10"/>
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                                                BorderThickness="2"
+                                                Height="50">
+                                        <TextBox Text="{Binding ShippingCity}"
+                                                     Background="Transparent"
+                                                     BorderThickness="0"
+                                                     Padding="15,0"
+                                                     VerticalAlignment="Center"
+                                                     FontSize="14"/>
                                     </Border>
                                 </StackPanel>
 
-                                <!-- Ciudad, CP, País -->
-                                <Grid Margin="0,0,0,25">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="15"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="15"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="CITY" 
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="ZIP CODE" 
                                                    Style="{StaticResource BodyMedium}"
                                                    FontWeight="SemiBold"
                                                    Margin="0,0,0,10"/>
-                                        <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
                                                 BorderThickness="2"
                                                 Height="50">
-                                            <TextBox Text="{Binding ShippingCity}"
+                                        <TextBox Text="{Binding ShippingZipCode}"
                                                      Background="Transparent"
                                                      BorderThickness="0"
                                                      Padding="15,0"
                                                      VerticalAlignment="Center"
                                                      FontSize="14"/>
-                                        </Border>
-                                    </StackPanel>
+                                    </Border>
+                                </StackPanel>
 
-                                    <StackPanel Grid.Column="2">
-                                        <TextBlock Text="ZIP CODE" 
+                                <StackPanel Grid.Column="4">
+                                    <TextBlock Text="COUNTRY" 
                                                    Style="{StaticResource BodyMedium}"
                                                    FontWeight="SemiBold"
                                                    Margin="0,0,0,10"/>
-                                        <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
                                                 BorderThickness="2"
                                                 Height="50">
-                                            <TextBox Text="{Binding ShippingZipCode}"
+                                        <TextBox Text="{Binding ShippingCountry}"
                                                      Background="Transparent"
                                                      BorderThickness="0"
                                                      Padding="15,0"
                                                      VerticalAlignment="Center"
                                                      FontSize="14"/>
-                                        </Border>
-                                    </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
 
-                                    <StackPanel Grid.Column="4">
-                                        <TextBlock Text="COUNTRY" 
+                            <!-- Teléfono y Email -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="PHONE" 
                                                    Style="{StaticResource BodyMedium}"
                                                    FontWeight="SemiBold"
                                                    Margin="0,0,0,10"/>
-                                        <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
                                                 BorderThickness="2"
                                                 Height="50">
-                                            <TextBox Text="{Binding ShippingCountry}"
+                                        <TextBox Text="{Binding ShippingPhone}"
                                                      Background="Transparent"
                                                      BorderThickness="0"
                                                      Padding="15,0"
                                                      VerticalAlignment="Center"
                                                      FontSize="14"/>
-                                        </Border>
-                                    </StackPanel>
-                                </Grid>
+                                    </Border>
+                                </StackPanel>
 
-                                <!-- Teléfono y Email -->
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="PHONE" 
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="EMAIL" 
                                                    Style="{StaticResource BodyMedium}"
                                                    FontWeight="SemiBold"
                                                    Margin="0,0,0,10"/>
-                                        <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
                                                 BorderThickness="2"
                                                 Height="50">
-                                            <TextBox Text="{Binding ShippingPhone}"
+                                        <TextBox Text="{Binding ShippingEmail}"
                                                      Background="Transparent"
                                                      BorderThickness="0"
                                                      Padding="15,0"
                                                      VerticalAlignment="Center"
                                                      FontSize="14"/>
-                                        </Border>
-                                    </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
 
-                                    <StackPanel Grid.Column="2">
-                                        <TextBlock Text="EMAIL" 
-                                                   Style="{StaticResource BodyMedium}"
-                                                   FontWeight="SemiBold"
-                                                   Margin="0,0,0,10"/>
-                                        <Border BorderBrush="{StaticResource BorderDefault}"
-                                                BorderThickness="2"
-                                                Height="50">
-                                            <TextBox Text="{Binding ShippingEmail}"
-                                                     Background="Transparent"
-                                                     BorderThickness="0"
-                                                     Padding="15,0"
-                                                     VerticalAlignment="Center"
-                                                     FontSize="14"/>
-                                        </Border>
-                                    </StackPanel>
-                                </Grid>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- PAYMENT METHOD -->
-                        <TextBlock Text="PAYMENT METHOD" 
+                    <!-- PAYMENT METHOD -->
+                    <TextBlock Text="PAYMENT METHOD" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,25" />
 
-                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                                 BorderBrush="{StaticResource BorderDefault}"
                                 BorderThickness="1"
                                 Padding="40">
-                            <StackPanel>
-                                <!-- Card Number -->
-                                <StackPanel Margin="0,0,0,25">
-                                    <TextBlock Text="CARD NUMBER" 
+                        <StackPanel>
+                            <!-- Card Number -->
+                            <StackPanel Margin="0,0,0,25">
+                                <TextBlock Text="CARD NUMBER" 
                                                Style="{StaticResource BodyMedium}"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,10"/>
-                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                                <Border BorderBrush="{StaticResource BorderDefault}"
                                             BorderThickness="2"
                                             Height="50">
-                                        <TextBox Text="{Binding CardNumber}"
+                                    <TextBox Text="{Binding CardNumber}"
                                                  Background="Transparent"
                                                  BorderThickness="0"
                                                  Padding="15,0"
                                                  VerticalAlignment="Center"
                                                  FontSize="14"/>
-                                    </Border>
-                                </StackPanel>
-
-                                <!-- Card Holder -->
-                                <StackPanel Margin="0,0,0,25">
-                                    <TextBlock Text="CARDHOLDER NAME" 
-                                               Style="{StaticResource BodyMedium}"
-                                               FontWeight="SemiBold"
-                                               Margin="0,0,0,10"/>
-                                    <Border BorderBrush="{StaticResource BorderDefault}"
-                                            BorderThickness="2"
-                                            Height="50">
-                                        <TextBox Text="{Binding CardHolderName}"
-                                                 Background="Transparent"
-                                                 BorderThickness="0"
-                                                 Padding="15,0"
-                                                 VerticalAlignment="Center"
-                                                 FontSize="14"/>
-                                    </Border>
-                                </StackPanel>
-
-                                <!-- Expiry & CVV -->
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="EXPIRY DATE" 
-                                                   Style="{StaticResource BodyMedium}"
-                                                   FontWeight="SemiBold"
-                                                   Margin="0,0,0,10"/>
-                                        <Border BorderBrush="{StaticResource BorderDefault}"
-                                                BorderThickness="2"
-                                                Height="50">
-                                            <TextBox Text="{Binding CardExpiry}"
-                                                     Background="Transparent"
-                                                     BorderThickness="0"
-                                                     Padding="15,0"
-                                                     VerticalAlignment="Center"
-                                                     FontSize="14"/>
-                                        </Border>
-                                    </StackPanel>
-
-                                    <StackPanel Grid.Column="2">
-                                        <TextBlock Text="CVV" 
-                                                   Style="{StaticResource BodyMedium}"
-                                                   FontWeight="SemiBold"
-                                                   Margin="0,0,0,10"/>
-                                        <Border BorderBrush="{StaticResource BorderDefault}"
-                                                BorderThickness="2"
-                                                Height="50">
-                                            <TextBox Text="{Binding CardCVV}"
-                                                     Background="Transparent"
-                                                     BorderThickness="0"
-                                                     Padding="15,0"
-                                                     VerticalAlignment="Center"
-                                                     FontSize="14"/>
-                                        </Border>
-                                    </StackPanel>
-                                </Grid>
+                                </Border>
                             </StackPanel>
-                        </Border>
-                    </StackPanel>
 
-                    <!-- ============================================
+                            <!-- Card Holder -->
+                            <StackPanel Margin="0,0,0,25">
+                                <TextBlock Text="CARDHOLDER NAME" 
+                                               Style="{StaticResource BodyMedium}"
+                                               FontWeight="SemiBold"
+                                               Margin="0,0,0,10"/>
+                                <Border BorderBrush="{StaticResource BorderDefault}"
+                                            BorderThickness="2"
+                                            Height="50">
+                                    <TextBox Text="{Binding CardHolderName}"
+                                                 Background="Transparent"
+                                                 BorderThickness="0"
+                                                 Padding="15,0"
+                                                 VerticalAlignment="Center"
+                                                 FontSize="14"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Expiry & CVV -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="EXPIRY DATE" 
+                                                   Style="{StaticResource BodyMedium}"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,10"/>
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                                                BorderThickness="2"
+                                                Height="50">
+                                        <TextBox Text="{Binding CardExpiry}"
+                                                     Background="Transparent"
+                                                     BorderThickness="0"
+                                                     Padding="15,0"
+                                                     VerticalAlignment="Center"
+                                                     FontSize="14"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="CVV" 
+                                                   Style="{StaticResource BodyMedium}"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,10"/>
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                                                BorderThickness="2"
+                                                Height="50">
+                                        <TextBox Text="{Binding CardCVV}"
+                                                     Background="Transparent"
+                                                     BorderThickness="0"
+                                                     Padding="15,0"
+                                                     VerticalAlignment="Center"
+                                                     FontSize="14"/>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- ============================================
                          RESUMEN DEL PEDIDO (SIDEBAR)
                          ============================================ -->
-                    <Border Grid.Column="1" 
+                <Border Grid.Column="1" 
                             Background="{StaticResource Gray100Brush}"
                             BorderBrush="{StaticResource BorderDefault}"
                             BorderThickness="1">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <Border Padding="40,40,40,50">
-                                <StackPanel>
-                                    <!-- Título -->
-                                    <TextBlock Text="ORDER SUMMARY" 
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                      PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                        <Border Padding="40,40,40,50">
+                            <StackPanel>
+                                <!-- Título -->
+                                <TextBlock Text="ORDER SUMMARY" 
                                                Style="{StaticResource HeadingMedium}"
                                                Margin="0,0,0,30" />
 
-                                    <!-- Lista de Productos -->
-                                    <ItemsControl ItemsSource="{Binding OrderItems}"
+                                <!-- Lista de Productos -->
+                                <ItemsControl ItemsSource="{Binding OrderItems}"
                                                   Margin="0,0,0,30">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="{StaticResource BorderDefault}"
                                                         BorderThickness="0,0,0,1"
                                                         Padding="0,0,0,15"
                                                         Margin="0,0,0,15">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="Auto"/>
-                                                        </Grid.ColumnDefinitions>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
 
-                                                        <StackPanel Grid.Column="0">
-                                                            <TextBlock Text="{Binding ProductName}" 
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock Text="{Binding ProductName}" 
                                                                        Style="{StaticResource BodyMedium}"
                                                                        FontWeight="SemiBold"
                                                                        TextTrimming="CharacterEllipsis"
                                                                        Margin="0,0,0,5"/>
-                                                            <TextBlock Style="{StaticResource BodySmall}"
+                                                        <TextBlock Style="{StaticResource BodySmall}"
                                                                        Foreground="{StaticResource TextSecondary}">
                                                                 <Run Text="Qty:"/>
                                                                 <Run Text="{Binding Quantity}"/>
-                                                            </TextBlock>
-                                                        </StackPanel>
+                                                        </TextBlock>
+                                                    </StackPanel>
 
-                                                        <TextBlock Grid.Column="1"
+                                                    <TextBlock Grid.Column="1"
                                                                    Text="{Binding TotalPrice, StringFormat=€{0:N2}}"
                                                                    Style="{StaticResource BodyMedium}"
                                                                    FontWeight="SemiBold"
                                                                    VerticalAlignment="Top"/>
-                                                    </Grid>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
 
-                                    <!-- Totales -->
-                                    <StackPanel>
-                                        <Grid Margin="0,0,0,15">
-                                            <TextBlock Text="Subtotal" 
+                                <!-- Totales -->
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,15">
+                                        <TextBlock Text="Subtotal" 
                                                        Style="{StaticResource BodyLarge}"
                                                        Foreground="{StaticResource TextSecondary}"/>
-                                            <TextBlock Text="{Binding Subtotal, StringFormat=€{0:N2}}"
+                                        <TextBlock Text="{Binding Subtotal, StringFormat=€{0:N2}}"
                                                        Style="{StaticResource BodyLarge}"
                                                        HorizontalAlignment="Right"/>
-                                        </Grid>
+                                    </Grid>
 
-                                        <Grid Margin="0,0,0,15">
-                                            <TextBlock Text="Shipping" 
+                                    <Grid Margin="0,0,0,15">
+                                        <TextBlock Text="Shipping" 
                                                        Style="{StaticResource BodyLarge}"
                                                        Foreground="{StaticResource TextSecondary}"/>
-                                            <TextBlock Text="{Binding ShippingCost, StringFormat=€{0:N2}}"
+                                        <TextBlock Text="{Binding ShippingCost, StringFormat=€{0:N2}}"
                                                        Style="{StaticResource BodyLarge}"
                                                        HorizontalAlignment="Right"/>
-                                        </Grid>
+                                    </Grid>
 
-                                        <Grid Margin="0,0,0,15"
+                                    <Grid Margin="0,0,0,15"
                                               Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
-                                            <TextBlock Text="Discount" 
+                                        <TextBlock Text="Discount" 
                                                        Style="{StaticResource BodyLarge}"
                                                        Foreground="{StaticResource SuccessColorBrush}"/>
-                                            <TextBlock Text="{Binding DiscountAmount, StringFormat=-€{0:N2}}"
+                                        <TextBlock Text="{Binding DiscountAmount, StringFormat=-€{0:N2}}"
                                                        Style="{StaticResource BodyLarge}"
                                                        Foreground="{StaticResource SuccessColorBrush}"
                                                        HorizontalAlignment="Right"/>
-                                        </Grid>
+                                    </Grid>
 
-                                        <Border Height="2" 
+                                    <Border Height="2" 
                                                 Background="{StaticResource BorderDefault}"
                                                 Margin="0,10,0,25"/>
 
-                                        <!-- Total -->
-                                        <Grid Margin="0,0,0,40">
-                                            <TextBlock Text="TOTAL" 
+                                    <!-- Total -->
+                                    <Grid Margin="0,0,0,40">
+                                        <TextBlock Text="TOTAL" 
                                                        Style="{StaticResource HeadingSmall}"/>
-                                            <TextBlock Text="{Binding Total, StringFormat=€{0:N2}}"
+                                        <TextBlock Text="{Binding Total, StringFormat=€{0:N2}}"
                                                        Style="{StaticResource HeadingSmall}"
                                                        HorizontalAlignment="Right"/>
-                                        </Grid>
+                                    </Grid>
 
-                                        <!-- Botón Complete Order -->
-                                        <Button Content="COMPLETE ORDER" 
+                                    <!-- Botón Complete Order -->
+                                    <Button Content="COMPLETE ORDER" 
                                                 Style="{StaticResource PrimaryButton}"
                                                 FontSize="15"
                                                 Padding="0,18"
@@ -497,50 +496,49 @@
                                                 HorizontalAlignment="Stretch"
                                                 Margin="0,0,0,30"/>
 
-                                        <!-- Info de Seguridad -->
-                                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                                    <!-- Info de Seguridad -->
+                                    <Border Background="{StaticResource WhitePrimaryBrush}"
                                                 Padding="20">
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="🔒" 
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="🔒" 
                                                            FontSize="24" 
                                                            Margin="0,0,15,0"/>
-                                                <StackPanel>
-                                                    <TextBlock Text="SECURE CHECKOUT" 
+                                            <StackPanel>
+                                                <TextBlock Text="SECURE CHECKOUT" 
                                                                Style="{StaticResource BodyMedium}"
                                                                FontWeight="SemiBold"
                                                                Margin="0,0,0,5"/>
-                                                    <TextBlock Text="Your information is protected with SSL encryption" 
+                                                <TextBlock Text="Your information is protected with SSL encryption" 
                                                                Style="{StaticResource BodySmall}"
                                                                Foreground="{StaticResource TextSecondary}"
                                                                TextWrapping="Wrap"/>
-                                                </StackPanel>
                                             </StackPanel>
-                                        </Border>
-                                    </StackPanel>
+                                        </StackPanel>
+                                    </Border>
                                 </StackPanel>
-                            </Border>
-                        </ScrollViewer>
-                    </Border>
-                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
 
-                <!-- Loading Overlay -->
-                <Border Background="{StaticResource OverlayLightBrush}"
+            <!-- Loading Overlay -->
+            <Border Background="{StaticResource OverlayLightBrush}"
                         Height="600"
                         Margin="0,50,0,0"
                         Visibility="{Binding IsProcessing, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <StackPanel HorizontalAlignment="Center" 
+                <StackPanel HorizontalAlignment="Center" 
                                 VerticalAlignment="Center">
-                        <TextBlock Text="⏳" 
+                    <TextBlock Text="⏳" 
                                    FontSize="60" 
                                    HorizontalAlignment="Center" 
                                    Margin="0,0,0,20"/>
-                        <TextBlock Text="PROCESSING PAYMENT..." 
+                    <TextBlock Text="PROCESSING PAYMENT..." 
                                    Style="{StaticResource SubtitleLarge}"
                                    Foreground="{StaticResource TextSecondary}"
                                    HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
-    </ScrollViewer>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Border>
 </UserControl>

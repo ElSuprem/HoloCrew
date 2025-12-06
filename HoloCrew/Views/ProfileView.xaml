@@ -22,7 +22,8 @@
                 Background="{StaticResource BlackPrimaryBrush}"
                 BorderBrush="{StaticResource Gray800Brush}"
                 BorderThickness="0,0,1,0">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <Border Padding="30,40">
                     <StackPanel>
                         <!-- Avatar + User Info -->
@@ -141,7 +142,8 @@
              ============================================ -->
         <ScrollViewer Grid.Column="1" 
                       VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled">
+                      HorizontalScrollBarVisibility="Disabled"
+                      PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
             <Border Padding="60,40,60,80">
                 <StackPanel>
                     <!-- Header -->
@@ -287,7 +289,7 @@
                                                 <Run Text="Order #"/>
                                                 <Run Text="{Binding OrderNumber}"/>
                                             </TextBlock>
-                                            <TextBlock Text="{Binding OrderDate, StringFormat={}{0:MMMM dd, yyyy}}"
+                                            <TextBlock Text="{Binding OrderDate, StringFormat='MMMM dd, yyyy'}"
                                                        Style="{StaticResource BodySmall}"
                                                        Foreground="{StaticResource TextSecondary}"
                                                        Margin="0,5,0,0"/>

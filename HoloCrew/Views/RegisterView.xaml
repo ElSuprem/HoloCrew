@@ -7,174 +7,172 @@
              d:DesignHeight="800" d:DesignWidth="1200"
              Background="{StaticResource BackgroundPrimary}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Disabled">
-        <Grid MinHeight="800">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <!-- Panel Negro -->
-                <ColumnDefinition Width="*" />
-                <!-- Formulario -->
-            </Grid.ColumnDefinitions>
+    <Grid MinHeight="800">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <!-- Panel Negro -->
+            <ColumnDefinition Width="*" />
+            <!-- Formulario -->
+        </Grid.ColumnDefinitions>
 
-            <!-- ============================================
+        <!-- ============================================
                  PANEL IZQUIERDO (NEGRO)
                  ============================================ -->
-            <Border Grid.Column="0" 
+        <Border Grid.Column="0" 
                     Background="{StaticResource BlackPrimaryBrush}">
-                <StackPanel HorizontalAlignment="Center" 
+            <StackPanel HorizontalAlignment="Center" 
                             VerticalAlignment="Center"
                             Margin="60">
-                    <!-- Logo -->
-                    <TextBlock Text="HOLOCREW" 
+                <!-- Logo -->
+                <TextBlock Text="HOLOCREW" 
                                FontSize="48" 
                                FontWeight="Black" 
                                Foreground="{StaticResource WhitePrimaryBrush}" 
                                HorizontalAlignment="Center"
                                Margin="0,0,0,40"/>
 
-                    <!-- Emoji -->
-                    <TextBlock Text="🎉" 
+                <!-- Emoji -->
+                <TextBlock Text="🎉" 
                                FontSize="100"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,40" />
 
-                    <!-- Mensaje -->
-                    <TextBlock Text="JOIN THE CREW" 
+                <!-- Mensaje -->
+                <TextBlock Text="JOIN THE CREW" 
                                Style="{StaticResource HeadingLarge}"
                                Foreground="{StaticResource WhitePrimaryBrush}"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,15" />
-                    <TextBlock Text="Create your account and start your streetwear journey" 
+                <TextBlock Text="Create your account and start your streetwear journey" 
                                Style="{StaticResource BodyLarge}"
                                Foreground="{StaticResource Gray400Brush}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
                                MaxWidth="350"/>
-                </StackPanel>
-            </Border>
+            </StackPanel>
+        </Border>
 
-            <!-- ============================================
+        <!-- ============================================
                  FORMULARIO DERECHO
                  ============================================ -->
-            <Border Grid.Column="1" 
+        <Border Grid.Column="1" 
                     Background="{StaticResource WhitePrimaryBrush}"
                     Padding="80,60">
-                <StackPanel VerticalAlignment="Center"
+            <StackPanel VerticalAlignment="Center"
                             MaxWidth="450">
 
-                    <!-- Título -->
-                    <TextBlock Text="CREATE ACCOUNT" 
+                <!-- Título -->
+                <TextBlock Text="CREATE ACCOUNT" 
                                Style="{StaticResource HeadingLarge}"
                                Margin="0,0,0,40" />
 
-                    <!-- First Name & Last Name -->
-                    <Grid Margin="0,0,0,25">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="15"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                <!-- First Name & Last Name -->
+                <Grid Margin="0,0,0,25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="FIRST NAME" 
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="FIRST NAME" 
                                        Style="{StaticResource BodyMedium}"
                                        FontWeight="SemiBold"
                                        Margin="0,0,0,10"/>
-                            <Border BorderBrush="{StaticResource BorderDefault}"
+                        <Border BorderBrush="{StaticResource BorderDefault}"
                                     BorderThickness="2"
                                     Height="50">
-                                <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
                                          Background="Transparent"
                                          BorderThickness="0"
                                          Padding="15,0"
                                          VerticalAlignment="Center"
                                          FontSize="14"/>
-                            </Border>
-                        </StackPanel>
+                        </Border>
+                    </StackPanel>
 
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="LAST NAME" 
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="LAST NAME" 
                                        Style="{StaticResource BodyMedium}"
                                        FontWeight="SemiBold"
                                        Margin="0,0,0,10"/>
-                            <Border BorderBrush="{StaticResource BorderDefault}"
+                        <Border BorderBrush="{StaticResource BorderDefault}"
                                     BorderThickness="2"
                                     Height="50">
-                                <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
                                          Background="Transparent"
                                          BorderThickness="0"
                                          Padding="15,0"
                                          VerticalAlignment="Center"
                                          FontSize="14"/>
-                            </Border>
-                        </StackPanel>
-                    </Grid>
+                        </Border>
+                    </StackPanel>
+                </Grid>
 
-                    <!-- Email -->
-                    <TextBlock Text="EMAIL" 
+                <!-- Email -->
+                <TextBlock Text="EMAIL" 
                                Style="{StaticResource BodyMedium}"
                                FontWeight="SemiBold"
                                Margin="0,0,0,10"/>
-                    <Border BorderBrush="{StaticResource BorderDefault}"
+                <Border BorderBrush="{StaticResource BorderDefault}"
                             BorderThickness="2"
                             Height="50"
                             Margin="0,0,0,25">
-                        <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                                  Background="Transparent"
                                  BorderThickness="0"
                                  Padding="15,0"
                                  VerticalAlignment="Center"
                                  FontSize="14"/>
-                    </Border>
+                </Border>
 
-                    <!-- Password & Confirm Password -->
-                    <Grid Margin="0,0,0,25">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="15"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                <!-- Password & Confirm Password -->
+                <Grid Margin="0,0,0,25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="PASSWORD" 
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="PASSWORD" 
                                        Style="{StaticResource BodyMedium}"
                                        FontWeight="SemiBold"
                                        Margin="0,0,0,10"/>
-                            <Border BorderBrush="{StaticResource BorderDefault}"
+                        <Border BorderBrush="{StaticResource BorderDefault}"
                                     BorderThickness="2"
                                     Height="50">
-                                <PasswordBox x:Name="PasswordBox"
+                            <PasswordBox x:Name="PasswordBox"
                                              Background="Transparent"
                                              BorderThickness="0"
                                              Padding="15,0"
                                              VerticalAlignment="Center"
                                              FontSize="14"/>
-                            </Border>
-                        </StackPanel>
+                        </Border>
+                    </StackPanel>
 
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="CONFIRM PASSWORD" 
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="CONFIRM PASSWORD" 
                                        Style="{StaticResource BodyMedium}"
                                        FontWeight="SemiBold"
                                        Margin="0,0,0,10"/>
-                            <Border BorderBrush="{StaticResource BorderDefault}"
+                        <Border BorderBrush="{StaticResource BorderDefault}"
                                     BorderThickness="2"
                                     Height="50">
-                                <PasswordBox x:Name="ConfirmPasswordBox"
+                            <PasswordBox x:Name="ConfirmPasswordBox"
                                              Background="Transparent"
                                              BorderThickness="0"
                                              Padding="15,0"
                                              VerticalAlignment="Center"
                                              FontSize="14"/>
-                            </Border>
-                        </StackPanel>
-                    </Grid>
+                        </Border>
+                    </StackPanel>
+                </Grid>
 
-                    <!-- Terms & Conditions -->
-                    <CheckBox Margin="0,0,0,30">
-                        <TextBlock Style="{StaticResource BodySmall}"
+                <!-- Terms & Conditions -->
+                <CheckBox Margin="0,0,0,30">
+                    <TextBlock Style="{StaticResource BodySmall}"
                                    TextWrapping="Wrap">
                             <Run Text="I agree to the"/>
                             <Hyperlink>
@@ -184,11 +182,11 @@
                             <Hyperlink>
                                 <Run Text="Privacy Policy"/>
                             </Hyperlink>
-                        </TextBlock>
-                    </CheckBox>
+                    </TextBlock>
+                </CheckBox>
 
-                    <!-- Create Account Button -->
-                    <Button Content="CREATE ACCOUNT" 
+                <!-- Create Account Button -->
+                <Button Content="CREATE ACCOUNT" 
                             Style="{StaticResource PrimaryButton}"
                             FontSize="15"
                             Padding="0,18"
@@ -197,84 +195,83 @@
                             Margin="0,0,0,30"
                             HorizontalAlignment="Stretch"/>
 
-                    <!-- Login Link -->
-                    <StackPanel Orientation="Horizontal" 
+                <!-- Login Link -->
+                <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Center"
                                 Margin="0,0,0,30">
-                        <TextBlock Text="Already have an account? " 
+                    <TextBlock Text="Already have an account? " 
                                    Style="{StaticResource BodyMedium}"
                                    Foreground="{StaticResource TextSecondary}"/>
-                        <Button Content="Sign in here" 
+                    <Button Content="Sign in here" 
                                 Style="{StaticResource TextButton}"
                                 FontSize="14"
                                 FontWeight="SemiBold"
                                 Padding="0"
                                 Command="{Binding NavigateToLoginCommand}"/>
-                    </StackPanel>
+                </StackPanel>
 
-                    <!-- Divider -->
-                    <Grid Margin="0,0,0,30">
-                        <Border Height="1" 
+                <!-- Divider -->
+                <Grid Margin="0,0,0,30">
+                    <Border Height="1" 
                                 Background="{StaticResource BorderDefault}"/>
-                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                                 Padding="15,0"
                                 HorizontalAlignment="Center">
-                            <TextBlock Text="OR CONTINUE WITH" 
+                        <TextBlock Text="OR CONTINUE WITH" 
                                        Style="{StaticResource Caption}"
                                        Foreground="{StaticResource TextSecondary}"/>
-                        </Border>
-                    </Grid>
+                    </Border>
+                </Grid>
 
-                    <!-- Social Login -->
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="15"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                <!-- Social Login -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="0"
+                    <Button Grid.Column="0"
                                 Content="GOOGLE"
                                 Style="{StaticResource OutlineButton}"
                                 FontSize="13"
                                 Padding="0,15"
                                 HorizontalAlignment="Stretch"/>
 
-                        <Button Grid.Column="2"
+                    <Button Grid.Column="2"
                                 Content="FACEBOOK"
                                 Style="{StaticResource OutlineButton}"
                                 FontSize="13"
                                 Padding="0,15"
                                 HorizontalAlignment="Stretch"/>
-                    </Grid>
+                </Grid>
 
-                    <!-- Error Message -->
-                    <Border Background="{StaticResource ErrorColorBrush}"
+                <!-- Error Message -->
+                <Border Background="{StaticResource ErrorColorBrush}"
                             Padding="15"
                             Margin="0,30,0,0"
                             Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}">
-                        <TextBlock Text="{Binding ErrorMessage}" 
+                    <TextBlock Text="{Binding ErrorMessage}" 
                                    Style="{StaticResource BodySmall}"
                                    Foreground="{StaticResource WhitePrimaryBrush}"
                                    TextWrapping="Wrap"
                                    TextAlignment="Center"/>
-                    </Border>
+                </Border>
 
-                    <!-- Loading -->
-                    <StackPanel HorizontalAlignment="Center"
+                <!-- Loading -->
+                <StackPanel HorizontalAlignment="Center"
                                 Margin="0,30,0,0"
                                 Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <TextBlock Text="⏳" 
+                    <TextBlock Text="⏳" 
                                    FontSize="32" 
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,10"/>
-                        <TextBlock Text="CREATING ACCOUNT..." 
+                    <TextBlock Text="CREATING ACCOUNT..." 
                                    Style="{StaticResource BodyMedium}"
                                    Foreground="{StaticResource TextSecondary}"
                                    HorizontalAlignment="Center"/>
-                    </StackPanel>
                 </StackPanel>
-            </Border>
-        </Grid>
-    </ScrollViewer>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>
