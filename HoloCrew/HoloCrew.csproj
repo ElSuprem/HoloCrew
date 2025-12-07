@@ -6,12 +6,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\Icons\LogosHolowCrew.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Icons\LogosHolowCrew.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
     <Folder Include="Resources\Fonts\" />
-    <Folder Include="Resources\Icons\" />
     <Folder Include="Resources\Images\" />
   </ItemGroup>
 
