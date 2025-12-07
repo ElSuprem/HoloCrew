@@ -3,13 +3,12 @@ using CommunityToolkit.Mvvm.Input;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
 {
-    /// <summary>
-    /// ViewModel para la lista de deseos (wishlist)
-    /// </summary>
     public partial class WishlistViewModel : ViewModelBase
     {
         private readonly IWishlistService _wishlistService;
@@ -26,8 +25,15 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private int _itemCount;
 
+        // ⭐ PROPIEDADES AGREGADAS
         [ObservableProperty]
-        private bool _hasItems;
+        private int _wishlistItemCount;
+
+        [ObservableProperty]
+        private bool _isWishlistEmpty = true;
+
+        [ObservableProperty]
+        private ObservableCollection<Product> _recommendedProducts = new();
 
         public WishlistViewModel(
             IWishlistService wishlistService,
@@ -47,6 +53,7 @@ namespace HoloCrew.ViewModels
         {
             base.OnNavigatedTo(parameter);
             await LoadWishlistAsync();
+            LoadRecommendedProducts();
         }
 
         [RelayCommand]
@@ -62,18 +69,30 @@ namespace HoloCrew.ViewModels
                     var items = await _wishlistService.GetWishlistAsync(currentUser.Id);
                     WishlistItems = new ObservableCollection<Product>(items);
                     ItemCount = WishlistItems.Count;
+                    WishlistItemCount = WishlistItems.Count;
                     IsEmpty = ItemCount == 0;
-                    HasItems = !IsEmpty;
+                    IsWishlistEmpty = ItemCount == 0;
                 }
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                // Manejar error
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+
+        private void LoadRecommendedProducts()
+        {
+            // Productos recomendados (mock data)
+            RecommendedProducts = new ObservableCollection<Product>
+            {
+                new Product { Id = 1, Name = "Recommended Item 1", Price = 49.99m },
+                new Product { Id = 2, Name = "Recommended Item 2", Price = 59.99m },
+                new Product { Id = 3, Name = "Recommended Item 3", Price = 39.99m }
+            };
         }
 
         [RelayCommand]
@@ -84,11 +103,10 @@ namespace HoloCrew.ViewModels
             try
             {
                 await _cartService.AddToCartAsync(product, 1);
-                // TODO: Mostrar notificación de éxito
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                // Manejar error
             }
         }
 
@@ -102,13 +120,13 @@ namespace HoloCrew.ViewModels
                 await _wishlistService.RemoveFromWishlistAsync(product.Id);
                 WishlistItems.Remove(product);
                 ItemCount = WishlistItems.Count;
+                WishlistItemCount = WishlistItems.Count;
                 IsEmpty = ItemCount == 0;
-                HasItems = !IsEmpty;
-                // TODO: Mostrar notificación
+                IsWishlistEmpty = ItemCount == 0;
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                // Manejar error
             }
         }
 
@@ -131,12 +149,11 @@ namespace HoloCrew.ViewModels
                     await _cartService.AddToCartAsync(product, 1);
                 }
 
-                // TODO: Mostrar notificación de éxito
                 _navigationService.NavigateTo<CartViewModel>();
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                // Manejar error
             }
             finally
             {
@@ -152,24 +169,24 @@ namespace HoloCrew.ViewModels
                 await _wishlistService.ClearWishlistAsync();
                 WishlistItems.Clear();
                 ItemCount = 0;
+                WishlistItemCount = 0;
                 IsEmpty = true;
-                HasItems = false;
-                // TODO: Mostrar notificación
+                IsWishlistEmpty = true;
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                // Manejar error
             }
         }
 
         [RelayCommand]
         private void ShareWishlist()
         {
-            // TODO: Implementar compartir wishlist (generar URL o exportar)
+            // Implementar compartir wishlist
         }
 
         [RelayCommand]
-        private void BrowseProducts()
+        private void ContinueShopping()
         {
             _navigationService.NavigateTo<ProductCatalogViewModel>();
         }

@@ -2,31 +2,30 @@
 using CommunityToolkit.Mvvm.Input;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
+using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
 {
-    /// <summary>
-    /// ViewModel para el inicio de sesión
-    /// </summary>
     public partial class LoginViewModel : ViewModelBase
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly INavigationService _navigationService;
 
         [ObservableProperty]
-        private string _email;
+        private string _email = string.Empty;
 
         [ObservableProperty]
-        private string _password;
+        private string _password = string.Empty;
 
         [ObservableProperty]
         private bool _rememberMe;
 
         [ObservableProperty]
-        private string _errorMessage;
+        private string _errorMessage = string.Empty;
 
         [ObservableProperty]
-        private bool _isLoggingIn;
+        private bool _isLoading = false;
 
         public LoginViewModel(
             IAuthenticationService authenticationService,
@@ -41,40 +40,36 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private async Task LoginAsync()
         {
-            // Validación básica
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
-            {
-                ErrorMessage = "Por favor, complete todos los campos.";
-                return;
-            }
-
-            if (IsLoggingIn) return;
-
             try
             {
-                IsLoggingIn = true;
-                ErrorMessage = null;
+                IsLoading = true;
+                ErrorMessage = string.Empty;
 
+                if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+                {
+                    ErrorMessage = "Por favor, completa todos los campos";
+                    return;
+                }
+
+                // ⭐ CAMBIADO: LoginAsync devuelve User, no bool
                 var user = await _authenticationService.LoginAsync(Email, Password);
 
-                if (user != null)
+                if (user != null)  // ⭐ CAMBIADO: Verificar si user no es null
                 {
-                    // Login exitoso
-                    // TODO: Actualizar estado global de usuario logueado
                     _navigationService.NavigateTo<HomeViewModel>();
                 }
                 else
                 {
-                    ErrorMessage = "Credenciales incorrectas. Intente nuevamente.";
+                    ErrorMessage = "Email o contraseña incorrectos";
                 }
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Error al iniciar sesión. Por favor, intente más tarde.";
+                ErrorMessage = "Error al iniciar sesión. Intenta nuevamente.";
             }
             finally
             {
-                IsLoggingIn = false;
+                IsLoading = false;
             }
         }
 
@@ -87,22 +82,7 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private void ForgotPassword()
         {
-            // TODO: Implementar recuperación de contraseña
-            ErrorMessage = "Funcionalidad de recuperación de contraseña próximamente.";
-        }
-
-        [RelayCommand]
-        private void LoginWithGoogle()
-        {
-            // TODO: Implementar login con Google
-            ErrorMessage = "Login con Google próximamente.";
-        }
-
-        [RelayCommand]
-        private void LoginWithFacebook()
-        {
-            // TODO: Implementar login con Facebook
-            ErrorMessage = "Login con Facebook próximamente.";
+            // Implementar recuperación de contraseña
         }
     }
 }
