@@ -51,10 +51,10 @@ namespace HoloCrew.ViewModels
                     return;
                 }
 
-                // ⭐ CAMBIADO: LoginAsync devuelve User, no bool
+                // ⭐ ARREGLADO: LoginAsync devuelve User, no bool
                 var user = await _authenticationService.LoginAsync(Email, Password);
 
-                if (user != null)  // ⭐ CAMBIADO: Verificar si user no es null
+                if (user != null)
                 {
                     _navigationService.NavigateTo<HomeViewModel>();
                 }

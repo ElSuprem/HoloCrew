@@ -1,13 +1,14 @@
 ﻿<!-- ========================================
-     HOLOCREW - ESTILOS DE TEXTO
-     Usa StaticResource de Brushes.xaml (ya cargado)
-     Compatible con diseñador VS 2022
+     HOLOCREW - ESTILOS DE TEXTO PREMIUM
+     Jerarquía tipográfica profesional
+     Line-heights optimizados
+     Compatible con VS 2022
      ======================================== -->
 
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ========== TÍTULOS GRANDES ========== -->
+    <!-- ========== HERO & DISPLAY ========== -->
     <Style x:Key="HeroTitle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="72" />
@@ -15,13 +16,24 @@
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
         <Setter Property="TextWrapping" Value="NoWrap" />
         <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="LineHeight" Value="80" />
     </Style>
 
+    <Style x:Key="DisplayLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="60" />
+        <Setter Property="FontWeight" Value="Black" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="68" />
+    </Style>
+
+    <!-- ========== HEADINGS ========== -->
     <Style x:Key="HeadingXL" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="48" />
         <Setter Property="FontWeight" Value="Black" />
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="56" />
     </Style>
 
     <Style x:Key="HeadingLarge" TargetType="TextBlock">
@@ -29,6 +41,7 @@
         <Setter Property="FontSize" Value="36" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="44" />
     </Style>
 
     <Style x:Key="HeadingMedium" TargetType="TextBlock">
@@ -36,6 +49,7 @@
         <Setter Property="FontSize" Value="28" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="36" />
     </Style>
 
     <Style x:Key="HeadingSmall" TargetType="TextBlock">
@@ -43,14 +57,16 @@
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="28" />
     </Style>
 
-    <!-- ========== SUBTÍTULOS ========== -->
+    <!-- ========== SUBTITLES ========== -->
     <Style x:Key="SubtitleLarge" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="26" />
     </Style>
 
     <Style x:Key="SubtitleMedium" TargetType="TextBlock">
@@ -58,14 +74,24 @@
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="24" />
     </Style>
 
-    <!-- ========== TEXTO DE CUERPO ========== -->
+    <Style x:Key="SubtitleSmall" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="20" />
+    </Style>
+
+    <!-- ========== BODY TEXT ========== -->
     <Style x:Key="BodyLarge" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="24" />
     </Style>
 
     <Style x:Key="BodyMedium" TargetType="TextBlock">
@@ -73,6 +99,7 @@
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="22" />
     </Style>
 
     <Style x:Key="BodySmall" TargetType="TextBlock">
@@ -80,16 +107,41 @@
         <Setter Property="FontSize" Value="13" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="LineHeight" Value="20" />
     </Style>
 
+    <!-- ========== CAPTIONS & LABELS ========== -->
     <Style x:Key="Caption" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="LineHeight" Value="18" />
     </Style>
 
-    <!-- ========== ESTILOS ESPECIALES PARA PRODUCTOS ========== -->
+    <Style x:Key="CaptionBold" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="18" />
+    </Style>
+
+    <Style x:Key="Label" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+    </Style>
+
+    <Style x:Key="Overline" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+    </Style>
+
+    <!-- ========== PRODUCT STYLES ========== -->
     <Style x:Key="ProductTitle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
@@ -97,6 +149,24 @@
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         <Setter Property="MaxHeight" Value="48" />
+        <Setter Property="LineHeight" Value="24" />
+    </Style>
+
+    <Style x:Key="ProductDescription" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="LineHeight" Value="22" />
+    </Style>
+
+    <!-- ========== PRICE STYLES ========== -->
+    <Style x:Key="PriceHero" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="36" />
+        <Setter Property="FontWeight" Value="Black" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
     </Style>
 
     <Style x:Key="PriceMain" TargetType="TextBlock">
@@ -113,33 +183,138 @@
         <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
     </Style>
 
+    <Style x:Key="PriceSmall" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+    </Style>
+
     <Style x:Key="PriceOriginal" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Foreground" Value="{StaticResource Gray400Brush}" />
         <Setter Property="TextDecorations" Value="Strikethrough" />
     </Style>
 
+    <Style x:Key="PriceDiscount" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource SuccessColorBrush}" />
+    </Style>
+
+    <!-- ========== BADGE & TAG STYLES ========== -->
     <Style x:Key="BadgeText" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="11" />
-        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontWeight" Value="Black" />
         <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}" />
     </Style>
 
-    <!-- ========== VARIANTES DE COLOR (ESTILOS) ========== -->
-    <Style x:Key="TextOnDarkStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource TextOnDark}" />
+    <Style x:Key="TagText" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
     </Style>
 
-    <Style x:Key="TextMutedStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+    <!-- ========== BUTTON TEXT ========== -->
+    <Style x:Key="ButtonTextLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
-    <Style x:Key="TextAccentStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource AccentPrimary}" />
+    <Style x:Key="ButtonTextMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="ButtonTextSmall" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <!-- ========== COLOR VARIANTS ========== -->
+    <Style x:Key="TextOnDark" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
+        <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}" />
+    </Style>
+
+    <Style x:Key="TextSecondaryStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+    </Style>
+
+    <Style x:Key="TextMuted" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
+        <Setter Property="Foreground" Value="{StaticResource Gray400Brush}" />
+    </Style>
+
+    <Style x:Key="TextAccent" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
+        <Setter Property="Foreground" Value="{StaticResource RedAccentBrush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style x:Key="TextSuccess" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
+        <Setter Property="Foreground" Value="{StaticResource SuccessColorBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style x:Key="TextError" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
+        <Setter Property="Foreground" Value="{StaticResource ErrorColorBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style x:Key="TextWarning" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
+        <Setter Property="Foreground" Value="{StaticResource WarningColorBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <!-- ========== LINK STYLES ========== -->
+    <Style x:Key="LinkText" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Foreground" Value="{StaticResource RedAccentBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style x:Key="LinkTextUnderline" TargetType="TextBlock" BasedOn="{StaticResource LinkText}">
+        <Setter Property="TextDecorations" Value="Underline" />
+    </Style>
+
+    <!-- ========== NUMBER STYLES ========== -->
+    <Style x:Key="NumberLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="48" />
+        <Setter Property="FontWeight" Value="Black" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+    </Style>
+
+    <Style x:Key="NumberMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+    </Style>
+
+    <Style x:Key="NumberSmall" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+    </Style>
+
+    <!-- ========== CODE & MONOSPACE ========== -->
+    <Style x:Key="CodeText" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Consolas, Courier New" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Background" Value="{StaticResource Gray100Brush}" />
+        <Setter Property="Padding" Value="4,2" />
     </Style>
 
 </ResourceDictionary>

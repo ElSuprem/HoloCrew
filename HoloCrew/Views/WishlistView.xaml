@@ -7,98 +7,100 @@
              d:DesignHeight="800" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <Border Padding="60,40,60,80">
-        <StackPanel>
-            <!-- Header -->
-            <Grid Margin="0,0,0,40">
-                <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="MY WISHLIST" 
+    <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                  HorizontalScrollBarVisibility="Disabled">
+        <Border Padding="60,40,60,80">
+            <StackPanel>
+                <!-- Header -->
+                <Grid Margin="0,0,0,40">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="MY WISHLIST" 
                                    Style="{StaticResource HeadingLarge}"
                                    Margin="0,0,0,5"/>
-                    <TextBlock Foreground="{StaticResource TextSecondary}"
+                        <TextBlock Foreground="{StaticResource TextSecondary}"
                                    Style="{StaticResource BodyLarge}">
                             <Run Text="{Binding WishlistItemCount, Mode=OneWay}"/>
                             <Run Text=" items saved"/>
-                    </TextBlock>
-                </StackPanel>
+                        </TextBlock>
+                    </StackPanel>
 
-                <!-- Clear All Button -->
-                <Button Content="CLEAR ALL" 
+                    <!-- Clear All Button -->
+                    <Button Content="CLEAR ALL" 
                             Style="{StaticResource OutlineButton}"
                             Command="{Binding ClearWishlistCommand}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Visibility="{Binding HasItems, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            </Grid>
+                </Grid>
 
-            <!-- Empty State -->
-            <Border Background="{StaticResource Gray100Brush}"
+                <!-- Empty State -->
+                <Border Background="{StaticResource Gray100Brush}"
                         Padding="60,80"
                         Visibility="{Binding IsWishlistEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="❤️" 
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="❤️" 
                                    FontSize="100"
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,30" />
-                    <TextBlock Text="YOUR WISHLIST IS EMPTY" 
+                        <TextBlock Text="YOUR WISHLIST IS EMPTY" 
                                    Style="{StaticResource HeadingMedium}"
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,15"/>
-                    <TextBlock Text="Save your favorite products here to buy them later" 
+                        <TextBlock Text="Save your favorite products here to buy them later" 
                                    Style="{StaticResource BodyLarge}"
                                    Foreground="{StaticResource TextSecondary}"
                                    TextAlignment="Center"
                                    MaxWidth="400"
                                    TextWrapping="Wrap"
                                    Margin="0,0,0,30"/>
-                    <Button Content="EXPLORE PRODUCTS" 
+                        <Button Content="EXPLORE PRODUCTS" 
                                 Style="{StaticResource PrimaryButton}"
                                 Command="{Binding BrowseProductsCommand}"/>
-                </StackPanel>
-            </Border>
+                    </StackPanel>
+                </Border>
 
-            <!-- Grid de Productos -->
-            <ItemsControl ItemsSource="{Binding WishlistItems}"
+                <!-- Grid de Productos -->
+                <ItemsControl ItemsSource="{Binding WishlistItems}"
                               Visibility="{Binding IsWishlistEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="4"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Background="Transparent"
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="Transparent"
                                     Margin="0,0,30,30"
                                     Cursor="Hand">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="400"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="400"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                                <!-- Imagen del producto -->
-                                <Border Grid.Row="0" 
+                                    <!-- Imagen del producto -->
+                                    <Border Grid.Row="0" 
                                             Background="{StaticResource Gray100Brush}">
-                                    <Grid>
-                                        <Rectangle Fill="{StaticResource Gray200Brush}"/>
+                                        <Grid>
+                                            <Rectangle Fill="{StaticResource Gray200Brush}"/>
 
-                                        <!-- Badge descuento -->
-                                        <Border Background="{StaticResource RedAccentBrush}"
+                                            <!-- Badge descuento -->
+                                            <Border Background="{StaticResource RedAccentBrush}"
                                                     Width="60" 
                                                     Height="30"
                                                     HorizontalAlignment="Right"
                                                     VerticalAlignment="Top"
                                                     Margin="15"
                                                     Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <TextBlock Text="{Binding DiscountPercentage, StringFormat=-{0}%}"
+                                                <TextBlock Text="{Binding DiscountPercentage, StringFormat=-{0}%}"
                                                            Style="{StaticResource BadgeText}"
                                                            FontSize="13"
                                                            VerticalAlignment="Center"
                                                            HorizontalAlignment="Center"/>
-                                        </Border>
+                                            </Border>
 
-                                        <!-- Botón Remove (X) -->
-                                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                                            <!-- Botón Remove (X) -->
+                                            <Border Background="{StaticResource WhitePrimaryBrush}"
                                                     Width="40" 
                                                     Height="40"
                                                     CornerRadius="20"
@@ -106,131 +108,132 @@
                                                     VerticalAlignment="Top"
                                                     Margin="15"
                                                     Cursor="Hand">
-                                            <Border.InputBindings>
-                                                <MouseBinding Command="{Binding DataContext.RemoveFromWishlistCommand, 
+                                                <Border.InputBindings>
+                                                    <MouseBinding Command="{Binding DataContext.RemoveFromWishlistCommand, 
                                                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                   CommandParameter="{Binding}"
                                                                   MouseAction="LeftClick"/>
-                                            </Border.InputBindings>
-                                            <TextBlock Text="✕" 
+                                                </Border.InputBindings>
+                                                <TextBlock Text="✕" 
                                                            Foreground="{StaticResource BlackPrimaryBrush}"
                                                            FontSize="18"
                                                            FontWeight="Bold"
                                                            HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"/>
-                                        </Border>
-                                    </Grid>
-                                </Border>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
 
-                                <!-- Información del producto -->
-                                <StackPanel Grid.Row="1" Margin="0,20,0,0">
-                                    <!-- Nombre -->
-                                    <TextBlock Text="{Binding Name}"
+                                    <!-- Información del producto -->
+                                    <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                                        <!-- Nombre -->
+                                        <TextBlock Text="{Binding Name}"
                                                    Style="{StaticResource ProductTitle}"
                                                    Margin="0,0,0,8">
-                                        <TextBlock.InputBindings>
-                                            <MouseBinding Command="{Binding DataContext.ViewProductDetailCommand, 
+                                            <TextBlock.InputBindings>
+                                                <MouseBinding Command="{Binding DataContext.ViewProductDetailCommand, 
                                                               RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                                               CommandParameter="{Binding}" 
                                                               MouseAction="LeftClick"/>
-                                        </TextBlock.InputBindings>
-                                    </TextBlock>
+                                            </TextBlock.InputBindings>
+                                        </TextBlock>
 
-                                    <!-- Rating -->
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                                        <TextBlock Text="★" 
+                                        <!-- Rating -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                            <TextBlock Text="★" 
                                                        Foreground="{StaticResource StarBrush}" 
                                                        FontSize="14"/>
-                                        <TextBlock Text="{Binding AverageRating, StringFormat={}{0:F1}}"
+                                            <TextBlock Text="{Binding AverageRating, StringFormat={}{0:F1}}"
                                                        Style="{StaticResource Caption}"
                                                        Margin="4,0,6,0"
                                                        VerticalAlignment="Center"/>
-                                        <TextBlock Text="{Binding ReviewCount, StringFormat={}({0})}"
+                                            <TextBlock Text="{Binding ReviewCount, StringFormat={}({0})}"
                                                        Style="{StaticResource Caption}"
                                                        Foreground="{StaticResource TextMuted}"
                                                        VerticalAlignment="Center"/>
-                                    </StackPanel>
+                                        </StackPanel>
 
-                                    <!-- Precio -->
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                                        <TextBlock Text="{Binding Price, StringFormat=€{0:N2}}"
+                                        <!-- Precio -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                            <TextBlock Text="{Binding Price, StringFormat=€{0:N2}}"
                                                        Style="{StaticResource PriceCard}"
                                                        Foreground="{StaticResource TextPrimary}"/>
 
-                                        <TextBlock Text="{Binding OriginalPrice, StringFormat=€{0:N2}}"
+                                            <TextBlock Text="{Binding OriginalPrice, StringFormat=€{0:N2}}"
                                                        Style="{StaticResource PriceOriginal}"
                                                        Margin="10,0,0,0"
                                                        VerticalAlignment="Center"
                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    </StackPanel>
+                                        </StackPanel>
 
-                                    <!-- Botón Add to Cart -->
-                                    <Button Content="ADD TO CART" 
+                                        <!-- Botón Add to Cart -->
+                                        <Button Content="ADD TO CART" 
                                                 Style="{StaticResource AddToCartButton}"
                                                 Command="{Binding DataContext.AddToCartCommand, 
                                                           RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
                                                 HorizontalAlignment="Stretch"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-            <!-- Sección de recomendaciones (opcional) -->
-            <Border Padding="0,60,0,0"
+                <!-- Sección de recomendaciones (opcional) -->
+                <Border Padding="0,60,0,0"
                         Visibility="{Binding HasItems, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <StackPanel>
-                    <TextBlock Text="YOU MAY ALSO LIKE" 
+                    <StackPanel>
+                        <TextBlock Text="YOU MAY ALSO LIKE" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,40"/>
 
-                    <ItemsControl ItemsSource="{Binding RecommendedProducts}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="4"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="Transparent"
+                        <ItemsControl ItemsSource="{Binding RecommendedProducts}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="4"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="Transparent"
                                             Margin="0,0,30,0"
                                             Cursor="Hand">
-                                    <Border.InputBindings>
-                                        <MouseBinding Command="{Binding DataContext.ViewProductDetailCommand, 
+                                        <Border.InputBindings>
+                                            <MouseBinding Command="{Binding DataContext.ViewProductDetailCommand, 
                                                           RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                                           CommandParameter="{Binding}" 
                                                           MouseAction="LeftClick"/>
-                                    </Border.InputBindings>
+                                        </Border.InputBindings>
 
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="350"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="350"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
 
-                                        <!-- Imagen -->
-                                        <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
-                                            <Rectangle Fill="{StaticResource Gray200Brush}"/>
-                                        </Border>
+                                            <!-- Imagen -->
+                                            <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
+                                                <Rectangle Fill="{StaticResource Gray200Brush}"/>
+                                            </Border>
 
-                                        <!-- Info -->
-                                        <StackPanel Grid.Row="1" Margin="0,15,0,0">
-                                            <TextBlock Text="{Binding Name}" 
+                                            <!-- Info -->
+                                            <StackPanel Grid.Row="1" Margin="0,15,0,0">
+                                                <TextBlock Text="{Binding Name}" 
                                                            Style="{StaticResource ProductTitle}"
                                                            Margin="0,0,0,10"/>
-                                            <TextBlock Text="{Binding Price, StringFormat=€{0:N2}}" 
+                                                <TextBlock Text="{Binding Price, StringFormat=€{0:N2}}" 
                                                            Style="{StaticResource PriceCard}"
                                                            Foreground="{StaticResource TextPrimary}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </Border>
-        </StackPanel>
-    </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
 </UserControl>
