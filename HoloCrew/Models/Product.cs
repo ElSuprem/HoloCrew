@@ -17,6 +17,7 @@
         public int ReviewCount { get; set; }
         public bool IsFeatured { get; set; }
         public bool IsNew { get; set; }
+        public string? Gender { get; set; } // "Men", "Women", "Unisex"
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

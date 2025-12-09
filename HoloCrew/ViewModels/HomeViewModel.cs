@@ -113,5 +113,11 @@ namespace HoloCrew.ViewModels
         {
             _navigationService.NavigateTo<ProductCatalogViewModel>();
         }
+
+        [RelayCommand]
+        private void NavigateToMembers()
+        {
+            _navigationService.NavigateTo<MembersClubViewModel>();
+        }
     }
 }

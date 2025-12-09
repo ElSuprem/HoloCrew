@@ -4,6 +4,9 @@ using System.Windows.Input;
 
 namespace HoloCrew.Views
 {
+    /// <summary>
+    /// Vista de catálogo de productos
+    /// </summary>
     public partial class ProductCatalogView : UserControl
     {
         public ProductCatalogView()

@@ -19,17 +19,55 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private ObservableCollection<Product> _filteredProducts = new();
 
+        // BÚSQUEDA
         [ObservableProperty]
         private string _searchQuery;
 
+        // PRECIO
         [ObservableProperty]
-        private Category _selectedCategory;
-
-        [ObservableProperty]
-        private decimal _minPrice;
+        private decimal _minPrice = 0;
 
         [ObservableProperty]
         private decimal _maxPrice = 1000;
+
+        // CATEGORÍA
+        [ObservableProperty]
+        private string _selectedCategory = "All";
+
+        // TALLAS (múltiple selección)
+        [ObservableProperty]
+        private ObservableCollection<string> _selectedSizes = new();
+
+        public ObservableCollection<string> AvailableSizes { get; } = new()
+        {
+            "XS", "S", "M", "L", "XL", "XXL"
+        };
+
+        // COLORES (múltiple selección)
+        [ObservableProperty]
+        private ObservableCollection<string> _selectedColors = new();
+
+        public ObservableCollection<string> AvailableColors { get; } = new()
+        {
+            "Black", "White", "Gray", "Blue", "Red", "Green"
+        };
+
+        // GÉNERO
+        [ObservableProperty]
+        private bool _genderMen = false;
+
+        [ObservableProperty]
+        private bool _genderWomen = false;
+
+        [ObservableProperty]
+        private bool _genderUnisex = false;
+
+        // DISPONIBILIDAD
+        [ObservableProperty]
+        private bool _inStockOnly = false;
+
+        [ObservableProperty]
+        private bool _onSaleOnly = false;
 
         [ObservableProperty]
         private bool _isFiltering;
@@ -52,8 +90,12 @@ namespace HoloCrew.ViewModels
 
             if (parameter is int categoryId)
             {
-                // Navegar con filtro de categoría
                 await LoadProductsByCategoryAsync(categoryId);
+            }
+            else if (parameter is string searchQuery)
+            {
+                SearchQuery = searchQuery;
+                await SearchAsync();
             }
             else
             {
@@ -69,7 +111,7 @@ namespace HoloCrew.ViewModels
             try
             {
                 IsBusy = true;
-                var products = await _productService.GetProductsByCategoryAsync(0); // 0 = todas
+                var products = await _productService.GetProductsByCategoryAsync(0);
                 Products = new ObservableCollection<Product>(products);
                 FilteredProducts = new ObservableCollection<Product>(products);
             }
@@ -107,7 +149,8 @@ namespace HoloCrew.ViewModels
             {
                 IsFiltering = true;
                 var results = await _productService.SearchProductsAsync(SearchQuery);
-                FilteredProducts = new ObservableCollection<Product>(results);
+                Products = new ObservableCollection<Product>(results);
+                ApplyAllFilters();
             }
             finally
             {
@@ -116,14 +159,99 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
+        private void SelectCategory(string category)
+        {
+            SelectedCategory = category;
+            ApplyFilters();
+        }
+
+        [RelayCommand]
+        private void ToggleSize(string size)
+        {
+            if (SelectedSizes.Contains(size))
+            {
+                SelectedSizes.Remove(size);
+            }
+            else
+            {
+                SelectedSizes.Add(size);
+            }
+        }
+
+        [RelayCommand]
+        private void ToggleColor(string color)
+        {
+            if (SelectedColors.Contains(color))
+            {
+                SelectedColors.Remove(color);
+            }
+            else
+            {
+                SelectedColors.Add(color);
+            }
+        }
+
+        [RelayCommand]
         private void ApplyFilters()
         {
-            var filtered = Products.Where(p =>
-                p.Price >= MinPrice &&
-                p.Price <= MaxPrice
-            ).ToList();
+            ApplyAllFilters();
+        }
 
-            FilteredProducts = new ObservableCollection<Product>(filtered);
+        private void ApplyAllFilters()
+        {
+            var filtered = Products.AsEnumerable();
+
+            // Filtro de PRECIO
+            filtered = filtered.Where(p => p.Price >= MinPrice && p.Price <= MaxPrice);
+
+            // Filtro de CATEGORÍA
+            if (SelectedCategory != "All" && !string.IsNullOrEmpty(SelectedCategory))
+            {
+                filtered = filtered.Where(p => p.Category?.Name == SelectedCategory);
+            }
+
+            // Filtro de TALLAS (si hay alguna seleccionada)
+            if (SelectedSizes.Any())
+            {
+                // Asumiendo que Product tiene una propiedad AvailableSizes
+                // filtered = filtered.Where(p => p.AvailableSizes?.Any(s => SelectedSizes.Contains(s)) == true);
+
+                // Si no tienes esa propiedad aún, se omite este filtro por ahora
+            }
+
+            // Filtro de COLORES (si hay alguno seleccionado)
+            if (SelectedColors.Any())
+            {
+                // Asumiendo que Product tiene una propiedad AvailableColors
+                // filtered = filtered.Where(p => p.AvailableColors?.Any(c => SelectedColors.Contains(c)) == true);
+
+                // Si no tienes esa propiedad aún, se omite este filtro por ahora
+            }
+
+            // Filtro de GÉNERO
+            if (GenderMen || GenderWomen || GenderUnisex)
+            {
+                filtered = filtered.Where(p =>
+                {
+                    if (GenderMen && p.Gender == "Men") return true;
+                    if (GenderWomen && p.Gender == "Women") return true;
+                    if (GenderUnisex && p.Gender == "Unisex") return true;
+                    return false;
+                });
+            }
+
+            // Filtro de DISPONIBILIDAD
+            if (InStockOnly)
+            {
+                filtered = filtered.Where(p => p.Stock > 0);
+            }
+
+            if (OnSaleOnly)
+            {
+                filtered = filtered.Where(p => p.HasDiscount);
+            }
+
+            FilteredProducts = new ObservableCollection<Product>(filtered.ToList());
         }
 
         [RelayCommand]
@@ -132,6 +260,15 @@ namespace HoloCrew.ViewModels
             SearchQuery = string.Empty;
             MinPrice = 0;
             MaxPrice = 1000;
+            SelectedCategory = "All";
+            SelectedSizes.Clear();
+            SelectedColors.Clear();
+            GenderMen = false;
+            GenderWomen = false;
+            GenderUnisex = false;
+            InStockOnly = false;
+            OnSaleOnly = false;
+
             FilteredProducts = new ObservableCollection<Product>(Products);
         }
 
@@ -148,5 +285,14 @@ namespace HoloCrew.ViewModels
             if (product == null) return;
             await _cartService.AddToCartAsync(product, 1);
         }
+
+        // Auto-filtrar cuando cambian los valores
+        partial void OnMinPriceChanged(decimal value) => ApplyFilters();
+        partial void OnMaxPriceChanged(decimal value) => ApplyFilters();
+        partial void OnGenderMenChanged(bool value) => ApplyFilters();
+        partial void OnGenderWomenChanged(bool value) => ApplyFilters();
+        partial void OnGenderUnisexChanged(bool value) => ApplyFilters();
+        partial void OnInStockOnlyChanged(bool value) => ApplyFilters();
+        partial void OnOnSaleOnlyChanged(bool value) => ApplyFilters();
     }
 }
