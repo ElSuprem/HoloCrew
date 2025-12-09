@@ -191,7 +191,7 @@
         <!-- CONTENT AREA + FOOTER -->
         <ScrollViewer x:Name="MainScrollViewer"
                       Grid.Row="2" 
-                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled"
                       HorizontalScrollBarVisibility="Disabled">
             <Grid>
                 <Grid.RowDefinitions>

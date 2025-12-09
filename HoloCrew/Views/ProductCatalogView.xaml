@@ -22,7 +22,7 @@
                 <DropShadowEffect Color="Black" Opacity="0.2" BlurRadius="15" ShadowDepth="0" Direction="0"/>
             </Border.Effect>
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
+            <ScrollViewer VerticalScrollBarVisibility="Auto" PreviewMouseWheel="FiltersScrollViewer_PreviewMouseWheel"
                           HorizontalScrollBarVisibility="Disabled"
                           Padding="35,45,30,45">
                 <StackPanel>
@@ -404,10 +404,9 @@
         </Border>
 
         <!-- GRID PRODUCTOS -->
-        <ScrollViewer Grid.Column="1" 
+        <ScrollViewer Grid.Column="1" PreviewMouseWheel="ProductsScrollViewer_PreviewMouseWheel" 
                       VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled"
-                      PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                      HorizontalScrollBarVisibility="Disabled">
             <Border Padding="60,50,60,80">
                 <StackPanel>
                     <!-- Header -->

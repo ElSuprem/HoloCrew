@@ -7,196 +7,200 @@
              d:DesignHeight="1000" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <StackPanel>
+    <!-- ⭐ ScrollViewer agregado -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
 
-        <!-- HERO BANNER -->
-        <Border Background="{StaticResource BlackSecondaryBrush}" Height="550">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.2" BlurRadius="20" ShadowDepth="0"/>
-            </Border.Effect>
-            <Grid>
-                <Rectangle Fill="{StaticResource Gray800Brush}" Opacity="0.3"/>
+            <!-- HERO BANNER -->
+            <Border Background="{StaticResource BlackSecondaryBrush}" Height="550">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.2" BlurRadius="20" ShadowDepth="0"/>
+                </Border.Effect>
+                <Grid>
+                    <Rectangle Fill="{StaticResource Gray800Brush}" Opacity="0.3"/>
 
-                <!-- Gradient overlay -->
-                <Rectangle>
-                    <Rectangle.Fill>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop Color="#00000000" Offset="0"/>
-                            <GradientStop Color="#40000000" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Rectangle.Fill>
-                </Rectangle>
+                    <!-- Gradient overlay -->
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#00000000" Offset="0"/>
+                                <GradientStop Color="#40000000" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
 
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,30">
-                    <TextBlock Text="RISE WITH THE CREW" 
-                               Style="{StaticResource HeroTitle}"
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,30">
+                        <TextBlock Text="RISE WITH THE CREW" 
+                                   Style="{StaticResource HeroTitle}"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,25"/>
+                        <TextBlock Text="Discover our premium streetwear collection designed for comfort and style" 
+                                   Style="{StaticResource SubtitleLarge}"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
+                                   TextAlignment="Center"
+                                   Opacity="0.9"
+                                   Margin="0,0,0,50"/>
+                        <Button Content="SHOP NOW" 
+                                Style="{StaticResource HeroButton}"
+                                Command="{Binding NavigateToCatalogCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- BENEFICIOS -->
+            <Border Background="{StaticResource WhitePrimaryBrush}" 
+                    BorderBrush="{StaticResource BorderDefault}" 
+                    BorderThickness="0,1,0,1"
+                    Padding="80,45">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Padding="20">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="🔄" FontSize="48" TextAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="14 DAYS RETURN POLICY" 
+                                       Style="{StaticResource SubtitleMedium}"
+                                       TextAlignment="Center" Margin="0,0,0,8"/>
+                            <TextBlock Text="Easy returns within 14 days"
+                                       Style="{StaticResource BodySmall}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1" Padding="20" BorderBrush="{StaticResource BorderDefault}" BorderThickness="1,0">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="🚚" FontSize="48" TextAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="FREE SHIPPING OVER 50€" 
+                                       Style="{StaticResource SubtitleMedium}"
+                                       TextAlignment="Center" Margin="0,0,0,8"/>
+                            <TextBlock Text="Free delivery on eligible orders"
+                                       Style="{StaticResource BodySmall}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Padding="20">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="🌍" FontSize="48" TextAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="WORLDWIDE SHIPPING" 
+                                       Style="{StaticResource SubtitleMedium}"
+                                       TextAlignment="Center" Margin="0,0,0,8"/>
+                            <TextBlock Text="We ship to over 100 countries"
+                                       Style="{StaticResource BodySmall}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- FEATURED PRODUCTS - DINÁMICO -->
+            <Border Padding="80,80,80,100">
+                <StackPanel>
+                    <TextBlock Text="FEATURED PRODUCTS" 
+                               Style="{StaticResource HeadingLarge}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Handpicked selection from our latest collection" 
+                               Style="{StaticResource BodyLarge}"
+                               Foreground="{StaticResource TextSecondary}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,60"/>
+
+                    <!-- ItemsControl dinámico -->
+                    <ItemsControl ItemsSource="{Binding FeaturedProducts}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4" HorizontalAlignment="Stretch"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource WhitePrimaryBrush}"
+                                        BorderBrush="{StaticResource BorderDefault}"
+                                        BorderThickness="1"
+                                        Margin="0,0,30,0"
+                                        Cursor="Hand">
+                                    <!-- Click en toda la card para navegar -->
+                                    <Border.InputBindings>
+                                        <MouseBinding MouseAction="LeftClick" 
+                                                      Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                      CommandParameter="{Binding}"/>
+                                    </Border.InputBindings>
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="Black" Opacity="0.08" BlurRadius="10" ShadowDepth="2"/>
+                                    </Border.Effect>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="350"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Imagen del producto -->
+                                        <Rectangle Grid.Row="0" Fill="{StaticResource Gray200Brush}"/>
+
+                                        <!-- Información del producto -->
+                                        <Border Grid.Row="1" Padding="25,20">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}" 
+                                                           Style="{StaticResource SubtitleMedium}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Margin="0,0,0,8"/>
+                                                <TextBlock Text="{Binding Price, StringFormat={}{0:C}}" 
+                                                           FontSize="20" 
+                                                           FontWeight="Bold"
+                                                           Margin="0,0,0,15"/>
+                                                <Button Content="ADD TO CART" 
+                                                        Style="{StaticResource AddToCartButton}"
+                                                        Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- CTA SECTION -->
+            <Border Background="{StaticResource RedAccentBrush}" 
+                    Padding="80,60">
+                <Border.Effect>
+                    <DropShadowEffect Color="#E31E24" Opacity="0.3" BlurRadius="30" ShadowDepth="0"/>
+                </Border.Effect>
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="JOIN THE CREW" 
+                               Style="{StaticResource HeadingLarge}"
                                Foreground="{StaticResource WhitePrimaryBrush}"
                                TextAlignment="Center"
-                               Margin="0,0,0,25"/>
-                    <TextBlock Text="Discover our premium streetwear collection designed for comfort and style" 
+                               Margin="0,0,0,20"/>
+                    <TextBlock Text="Get exclusive access to limited drops, early sales, and member-only perks" 
                                Style="{StaticResource SubtitleLarge}"
                                Foreground="{StaticResource WhitePrimaryBrush}"
                                TextAlignment="Center"
-                               Opacity="0.9"
-                               Margin="0,0,0,50"/>
-                    <Button Content="SHOP NOW" 
-                            Style="{StaticResource HeroButton}"
-                            Command="{Binding NavigateToCatalogCommand}"/>
+                               Opacity="0.95"
+                               Margin="0,0,0,40"/>
+                    <Button Content="SUBSCRIBE NOW" 
+                            Style="{StaticResource OutlineButton}"
+                            Foreground="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource WhitePrimaryBrush}"
+                            Command="{Binding NavigateToMembersCommand}"/>
                 </StackPanel>
-            </Grid>
-        </Border>
+            </Border>
 
-        <!-- BENEFICIOS -->
-        <Border Background="{StaticResource WhitePrimaryBrush}" 
-                BorderBrush="{StaticResource BorderDefault}" 
-                BorderThickness="0,1,0,1"
-                Padding="80,45">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Border Grid.Column="0" Padding="20">
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="🔄" FontSize="48" TextAlignment="Center" Margin="0,0,0,15"/>
-                        <TextBlock Text="14 DAYS RETURN POLICY" 
-                                   Style="{StaticResource SubtitleMedium}"
-                                   TextAlignment="Center" Margin="0,0,0,8"/>
-                        <TextBlock Text="Easy returns within 14 days"
-                                   Style="{StaticResource BodySmall}"
-                                   Foreground="{StaticResource TextSecondary}"
-                                   TextAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-
-                <Border Grid.Column="1" Padding="20" BorderBrush="{StaticResource BorderDefault}" BorderThickness="1,0">
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="🚚" FontSize="48" TextAlignment="Center" Margin="0,0,0,15"/>
-                        <TextBlock Text="FREE SHIPPING OVER 50€" 
-                                   Style="{StaticResource SubtitleMedium}"
-                                   TextAlignment="Center" Margin="0,0,0,8"/>
-                        <TextBlock Text="Free delivery on eligible orders"
-                                   Style="{StaticResource BodySmall}"
-                                   Foreground="{StaticResource TextSecondary}"
-                                   TextAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-
-                <Border Grid.Column="2" Padding="20">
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="🌍" FontSize="48" TextAlignment="Center" Margin="0,0,0,15"/>
-                        <TextBlock Text="WORLDWIDE SHIPPING" 
-                                   Style="{StaticResource SubtitleMedium}"
-                                   TextAlignment="Center" Margin="0,0,0,8"/>
-                        <TextBlock Text="We ship to over 100 countries"
-                                   Style="{StaticResource BodySmall}"
-                                   Foreground="{StaticResource TextSecondary}"
-                                   TextAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
-        </Border>
-
-        <!-- FEATURED PRODUCTS - DINÁMICO -->
-        <Border Padding="80,80,80,100">
-            <StackPanel>
-                <TextBlock Text="FEATURED PRODUCTS" 
-                           Style="{StaticResource HeadingLarge}"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,15"/>
-
-                <TextBlock Text="Handpicked selection from our latest collection" 
-                           Style="{StaticResource BodyLarge}"
-                           Foreground="{StaticResource TextSecondary}"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,60"/>
-
-                <!-- ItemsControl dinámico -->
-                <ItemsControl ItemsSource="{Binding FeaturedProducts}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="4" HorizontalAlignment="Stretch"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Background="{StaticResource WhitePrimaryBrush}"
-                                    BorderBrush="{StaticResource BorderDefault}"
-                                    BorderThickness="1"
-                                    Margin="0,0,30,0"
-                                    Cursor="Hand">
-                                <!-- Click en toda la card para navegar -->
-                                <Border.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick" 
-                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                  CommandParameter="{Binding}"/>
-                                </Border.InputBindings>
-                                <Border.Effect>
-                                    <DropShadowEffect Color="Black" Opacity="0.08" BlurRadius="10" ShadowDepth="2"/>
-                                </Border.Effect>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="350"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <!-- Imagen del producto -->
-                                    <Rectangle Grid.Row="0" Fill="{StaticResource Gray200Brush}"/>
-
-                                    <!-- Información del producto -->
-                                    <Border Grid.Row="1" Padding="25,20">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Name}" 
-                                                       Style="{StaticResource SubtitleMedium}"
-                                                       TextTrimming="CharacterEllipsis"
-                                                       Margin="0,0,0,8"/>
-                                            <TextBlock Text="{Binding Price, StringFormat={}{0:C}}" 
-                                                       FontSize="20" 
-                                                       FontWeight="Bold"
-                                                       Margin="0,0,0,15"/>
-                                            <Button Content="ADD TO CART" 
-                                                    Style="{StaticResource AddToCartButton}"
-                                                    Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}"/>
-                                        </StackPanel>
-                                    </Border>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
-        </Border>
-
-        <!-- CTA SECTION -->
-        <Border Background="{StaticResource RedAccentBrush}" 
-                Padding="80,60">
-            <Border.Effect>
-                <DropShadowEffect Color="#E31E24" Opacity="0.3" BlurRadius="30" ShadowDepth="0"/>
-            </Border.Effect>
-            <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="JOIN THE CREW" 
-                           Style="{StaticResource HeadingLarge}"
-                           Foreground="{StaticResource WhitePrimaryBrush}"
-                           TextAlignment="Center"
-                           Margin="0,0,0,20"/>
-                <TextBlock Text="Get exclusive access to limited drops, early sales, and member-only perks" 
-                           Style="{StaticResource SubtitleLarge}"
-                           Foreground="{StaticResource WhitePrimaryBrush}"
-                           TextAlignment="Center"
-                           Opacity="0.95"
-                           Margin="0,0,0,40"/>
-                <Button Content="SUBSCRIBE NOW" 
-                        Style="{StaticResource OutlineButton}"
-                        Foreground="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource WhitePrimaryBrush}"
-                        Command="{Binding NavigateToMembersCommand}"/>
-            </StackPanel>
-        </Border>
-
-    </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
 
 </UserControl>

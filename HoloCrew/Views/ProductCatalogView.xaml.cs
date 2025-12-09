@@ -14,18 +14,16 @@ namespace HoloCrew.Views
             InitializeComponent();
         }
 
-        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        // Scroll para el área de PRODUCTOS (derecha)
+        private void ProductsScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            // Pasar el evento al ScrollViewer padre (MainWindow)
             if (sender is ScrollViewer scrollViewer)
             {
-                // Solo pasar si el ScrollViewer interno no puede hacer scroll más
                 var canScrollUp = scrollViewer.VerticalOffset > 0;
                 var canScrollDown = scrollViewer.VerticalOffset < scrollViewer.ScrollableHeight;
 
                 if ((e.Delta > 0 && !canScrollUp) || (e.Delta < 0 && !canScrollDown))
                 {
-                    // Crear un nuevo evento y pasarlo al padre
                     var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
                     {
                         RoutedEvent = UIElement.MouseWheelEvent,
@@ -36,6 +34,17 @@ namespace HoloCrew.Views
                     parent?.RaiseEvent(eventArg);
                     e.Handled = true;
                 }
+            }
+        }
+
+        // Scroll para el área de FILTROS (izquierda)
+        private void FiltersScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (sender is ScrollViewer scrollViewer)
+            {
+                // El sidebar de filtros hace scroll independiente
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                e.Handled = true;
             }
         }
     }

@@ -7,294 +7,298 @@
              d:DesignHeight="800" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="420"/>
-        </Grid.ColumnDefinitions>
+    <!-- ⭐ ScrollViewer agregado -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="420"/>
+            </Grid.ColumnDefinitions>
 
-        <!-- CART ITEMS - Mejorado -->
-        <Border Grid.Column="0" Padding="70,50,40,80">
-            <StackPanel>
-                <!-- Título -->
-                <TextBlock Text="YOUR CART" 
+            <!-- CART ITEMS - Mejorado -->
+            <Border Grid.Column="0" Padding="70,50,40,80">
+                <StackPanel>
+                    <!-- Título -->
+                    <TextBlock Text="YOUR CART" 
                            Style="{StaticResource HeadingLarge}"
                            Margin="0,0,0,10"/>
-                <TextBlock Style="{StaticResource BodyLarge}"
+                    <TextBlock Style="{StaticResource BodyLarge}"
                            Foreground="{StaticResource TextSecondary}"
                            Margin="0,0,0,50">
                     <Run Text="3"/>
                     <Run Text=" items in your cart"/>
-                </TextBlock>
+                    </TextBlock>
 
-                <!-- Item 1 -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <!-- Item 1 -->
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                         BorderBrush="{StaticResource BorderDefault}"
                         BorderThickness="1"
                         Padding="25"
                         Margin="0,0,0,20">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
-                    </Border.Effect>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- Imagen producto -->
-                        <Rectangle Grid.Column="0" 
+                            <!-- Imagen producto -->
+                            <Rectangle Grid.Column="0" 
                                    Fill="{StaticResource Gray200Brush}"
                                    Width="120" Height="120"/>
 
-                        <!-- Info producto -->
-                        <Border Grid.Column="1" Padding="25,0,0,0">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="OVERSIZED HOODIE" 
+                            <!-- Info producto -->
+                            <Border Grid.Column="1" Padding="25,0,0,0">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="OVERSIZED HOODIE" 
                                            Style="{StaticResource SubtitleLarge}"
                                            Margin="0,0,0,8"/>
-                                <TextBlock Text="Size: M • Color: Black" 
+                                    <TextBlock Text="Size: M • Color: Black" 
                                            Style="{StaticResource BodyMedium}"
                                            Foreground="{StaticResource TextSecondary}"
                                            Margin="0,0,0,15"/>
 
-                                <!-- Quantity selector -->
-                                <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <!-- Quantity selector -->
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
                                         BorderThickness="1"
                                         Width="120"
                                         HorizontalAlignment="Left">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="40"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="40"/>
-                                        </Grid.ColumnDefinitions>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="40"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="40"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <Button Grid.Column="0" Content="-" 
+                                            <Button Grid.Column="0" Content="-" 
                                                 Background="Transparent"
                                                 BorderThickness="0"
                                                 FontSize="18"
                                                 FontWeight="Bold"
                                                 Cursor="Hand"/>
 
-                                        <TextBlock Grid.Column="1"
+                                            <TextBlock Grid.Column="1"
                                                    Text="1"
                                                    FontSize="14"
                                                    FontWeight="SemiBold"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"/>
 
-                                        <Button Grid.Column="2" Content="+" 
+                                            <Button Grid.Column="2" Content="+" 
                                                 Background="Transparent"
                                                 BorderThickness="0"
                                                 FontSize="18"
                                                 FontWeight="Bold"
                                                 Cursor="Hand"/>
-                                    </Grid>
-                                </Border>
-                            </StackPanel>
-                        </Border>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
 
-                        <!-- Precio y eliminar -->
-                        <Border Grid.Column="2" Padding="20,0,0,0">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="59.99€" 
+                            <!-- Precio y eliminar -->
+                            <Border Grid.Column="2" Padding="20,0,0,0">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="59.99€" 
                                            FontSize="22" 
                                            FontWeight="Black"
                                            Margin="0,0,0,20"/>
-                                <Button Content="✕ Remove" 
+                                    <Button Content="✕ Remove" 
                                         Style="{StaticResource TextButton}"
                                         Foreground="{StaticResource ErrorColorBrush}"/>
-                            </StackPanel>
-                        </Border>
-                    </Grid>
-                </Border>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
 
-                <!-- Item 2 -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <!-- Item 2 -->
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                         BorderBrush="{StaticResource BorderDefault}"
                         BorderThickness="1"
                         Padding="25"
                         Margin="0,0,0,20">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
-                    </Border.Effect>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Rectangle Grid.Column="0" 
+                            <Rectangle Grid.Column="0" 
                                    Fill="{StaticResource Gray200Brush}"
                                    Width="120" Height="120"/>
 
-                        <Border Grid.Column="1" Padding="25,0,0,0">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="CARGO PANTS" 
+                            <Border Grid.Column="1" Padding="25,0,0,0">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="CARGO PANTS" 
                                            Style="{StaticResource SubtitleLarge}"
                                            Margin="0,0,0,8"/>
-                                <TextBlock Text="Size: L - Color: Olive" 
+                                    <TextBlock Text="Size: L - Color: Olive" 
                                            Style="{StaticResource BodyMedium}"
                                            Foreground="{StaticResource TextSecondary}"
                                            Margin="0,0,0,15"/>
 
-                                <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{StaticResource BorderDefault}"
                                         BorderThickness="1"
                                         Width="120"
                                         HorizontalAlignment="Left">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="40"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="40"/>
-                                        </Grid.ColumnDefinitions>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="40"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="40"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <Button Grid.Column="0" Content="-" 
+                                            <Button Grid.Column="0" Content="-" 
                                                 Background="Transparent"
                                                 BorderThickness="0"
                                                 FontSize="18"
                                                 FontWeight="Bold"
                                                 Cursor="Hand"/>
 
-                                        <TextBlock Grid.Column="1"
+                                            <TextBlock Grid.Column="1"
                                                    Text="2"
                                                    FontSize="14"
                                                    FontWeight="SemiBold"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"/>
 
-                                        <Button Grid.Column="2" Content="+" 
+                                            <Button Grid.Column="2" Content="+" 
                                                 Background="Transparent"
                                                 BorderThickness="0"
                                                 FontSize="18"
                                                 FontWeight="Bold"
                                                 Cursor="Hand"/>
-                                    </Grid>
-                                </Border>
-                            </StackPanel>
-                        </Border>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
 
-                        <Border Grid.Column="2" Padding="20,0,0,0">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="159.98€" 
+                            <Border Grid.Column="2" Padding="20,0,0,0">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="159.98€" 
                                            FontSize="22" 
                                            FontWeight="Black"
                                            Margin="0,0,0,20"/>
-                                <Button Content="✕ Remove" 
+                                    <Button Content="✕ Remove" 
                                         Style="{StaticResource TextButton}"
                                         Foreground="{StaticResource ErrorColorBrush}"/>
-                            </StackPanel>
-                        </Border>
-                    </Grid>
-                </Border>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
 
-                <!-- Continue Shopping -->
-                <Button Content="← CONTINUE SHOPPING" 
+                    <!-- Continue Shopping -->
+                    <Button Content="← CONTINUE SHOPPING" 
                         Style="{StaticResource TextButton}"
                         Margin="0,30,0,0"
                         HorizontalAlignment="Left"/>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
 
-        <!-- ORDER SUMMARY - Mejorado -->
-        <Border Grid.Column="1" 
+            <!-- ORDER SUMMARY - Mejorado -->
+            <Border Grid.Column="1" 
                 Background="{StaticResource Gray50Brush}"
                 BorderBrush="{StaticResource BorderDefault}"
                 BorderThickness="1,0,0,0"
                 Padding="45,50,45,80">
-            <StackPanel>
-                <TextBlock Text="ORDER SUMMARY" 
+                <StackPanel>
+                    <TextBlock Text="ORDER SUMMARY" 
                            Style="{StaticResource HeadingMedium}"
                            Margin="0,0,0,35"/>
 
-                <!-- Subtotal -->
-                <Grid Margin="0,0,0,20">
-                    <TextBlock Text="Subtotal" 
+                    <!-- Subtotal -->
+                    <Grid Margin="0,0,0,20">
+                        <TextBlock Text="Subtotal" 
                                Style="{StaticResource BodyLarge}"/>
-                    <TextBlock Text="219.97€" 
+                        <TextBlock Text="219.97€" 
                                Style="{StaticResource BodyLarge}"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Right"/>
-                </Grid>
+                    </Grid>
 
-                <!-- Shipping -->
-                <Grid Margin="0,0,0,20">
-                    <TextBlock Text="Shipping" 
+                    <!-- Shipping -->
+                    <Grid Margin="0,0,0,20">
+                        <TextBlock Text="Shipping" 
                                Style="{StaticResource BodyLarge}"/>
-                    <TextBlock Text="FREE" 
+                        <TextBlock Text="FREE" 
                                Style="{StaticResource BodyLarge}"
                                FontWeight="SemiBold"
                                Foreground="{StaticResource SuccessColorBrush}"
                                HorizontalAlignment="Right"/>
-                </Grid>
+                    </Grid>
 
-                <!-- Tax -->
-                <Grid Margin="0,0,0,30">
-                    <TextBlock Text="Tax (21%)" 
+                    <!-- Tax -->
+                    <Grid Margin="0,0,0,30">
+                        <TextBlock Text="Tax (21%)" 
                                Style="{StaticResource BodyLarge}"/>
-                    <TextBlock Text="46.19€" 
+                        <TextBlock Text="46.19€" 
                                Style="{StaticResource BodyLarge}"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Right"/>
-                </Grid>
+                    </Grid>
 
-                <Border Height="1" 
+                    <Border Height="1" 
                         Background="{StaticResource BorderDefault}"
                         Margin="0,0,0,30"/>
 
-                <!-- Total -->
-                <Grid Margin="0,0,0,40">
-                    <TextBlock Text="Total" 
+                    <!-- Total -->
+                    <Grid Margin="0,0,0,40">
+                        <TextBlock Text="Total" 
                                Style="{StaticResource HeadingMedium}"/>
-                    <TextBlock Text="266.16€" 
+                        <TextBlock Text="266.16€" 
                                Style="{StaticResource HeadingMedium}"
                                HorizontalAlignment="Right"/>
-                </Grid>
+                    </Grid>
 
-                <!-- Checkout Button -->
-                <Button Content="PROCEED TO CHECKOUT" 
+                    <!-- Checkout Button -->
+                    <Button Content="PROCEED TO CHECKOUT" 
                         Style="{StaticResource AccentButton}"
                         Padding="0,18"
                         Margin="0,0,0,25"/>
 
-                <!-- Payment methods -->
-                <TextBlock Text="We accept" 
+                    <!-- Payment methods -->
+                    <TextBlock Text="We accept" 
                            Style="{StaticResource BodySmall}"
                            Foreground="{StaticResource TextSecondary}"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,15"/>
 
-                <StackPanel Orientation="Horizontal" 
+                    <StackPanel Orientation="Horizontal" 
                             HorizontalAlignment="Center">
-                    <Border Background="{StaticResource Gray200Brush}"
+                        <Border Background="{StaticResource Gray200Brush}"
                             Width="50" Height="32"
                             Margin="0,0,8,0">
-                        <TextBlock Text="💳" 
+                            <TextBlock Text="💳" 
                                    FontSize="18"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
-                    </Border>
-                    <Border Background="{StaticResource Gray200Brush}"
+                        </Border>
+                        <Border Background="{StaticResource Gray200Brush}"
                             Width="50" Height="32"
                             Margin="0,0,8,0">
-                        <TextBlock Text="💰" 
+                            <TextBlock Text="💰" 
                                    FontSize="18"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
-                    </Border>
-                    <Border Background="{StaticResource Gray200Brush}"
+                        </Border>
+                        <Border Background="{StaticResource Gray200Brush}"
                             Width="50" Height="32">
-                        <TextBlock Text="📱" 
+                            <TextBlock Text="📱" 
                                    FontSize="18"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
-                    </Border>
+                        </Border>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </Border>
-    </Grid>
+            </Border>
+        </Grid>
 
+    </ScrollViewer>
 </UserControl>

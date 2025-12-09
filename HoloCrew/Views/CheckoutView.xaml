@@ -7,405 +7,409 @@
              d:DesignHeight="1000" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="450"/>
-        </Grid.ColumnDefinitions>
+    <!-- ⭐ ScrollViewer agregado -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="450"/>
+            </Grid.ColumnDefinitions>
 
-        <!-- FORMULARIO DE CHECKOUT - Mejorado -->
-        <Border Grid.Column="0" Padding="80,50,40,80">
-            <StackPanel>
-                <TextBlock Text="CHECKOUT" 
+            <!-- FORMULARIO DE CHECKOUT - Mejorado -->
+            <Border Grid.Column="0" Padding="80,50,40,80">
+                <StackPanel>
+                    <TextBlock Text="CHECKOUT" 
                            Style="{StaticResource HeadingLarge}"
                            Margin="0,0,0,50"/>
 
-                <!-- INFORMACIÓN DE ENVÍO -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <!-- INFORMACIÓN DE ENVÍO -->
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                         BorderBrush="{StaticResource BorderDefault}"
                         BorderThickness="1"
                         Padding="35,30"
                         Margin="0,0,0,30">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
-                    </Border.Effect>
-                    <StackPanel>
-                        <TextBlock Text="INFORMACIÓN DE ENVÍO" 
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="INFORMACIÓN DE ENVÍO" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,25"/>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Border Grid.Column="0">
-                                <StackPanel>
-                                    <TextBlock Text="Nombre" 
+                                <Border Grid.Column="0">
+                                    <StackPanel>
+                                        <TextBlock Text="Nombre" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <TextBox Height="48"
+                                        <TextBox Height="48"
                                              Padding="15,0"
                                              FontSize="14"
                                              BorderBrush="{StaticResource BorderDefault}"
                                              BorderThickness="1"/>
-                                </StackPanel>
-                            </Border>
+                                    </StackPanel>
+                                </Border>
 
-                            <Border Grid.Column="2">
-                                <StackPanel>
-                                    <TextBlock Text="Apellidos" 
+                                <Border Grid.Column="2">
+                                    <StackPanel>
+                                        <TextBlock Text="Apellidos" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <TextBox Height="48"
+                                        <TextBox Height="48"
                                              Padding="15,0"
                                              FontSize="14"
                                              BorderBrush="{StaticResource BorderDefault}"
                                              BorderThickness="1"/>
-                                </StackPanel>
-                            </Border>
-                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
 
-                        <Border Margin="0,20,0,0">
-                            <StackPanel>
-                                <TextBlock Text="Dirección" 
+                            <Border Margin="0,20,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Dirección" 
                                            Style="{StaticResource BodyMedium}"
                                            Margin="0,0,0,8"/>
-                                <TextBox Height="48"
+                                    <TextBox Height="48"
                                          Padding="15,0"
                                          FontSize="14"
                                          BorderBrush="{StaticResource BorderDefault}"
                                          BorderThickness="1"/>
-                            </StackPanel>
-                        </Border>
+                                </StackPanel>
+                            </Border>
 
-                        <Grid Margin="0,20,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid Margin="0,20,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Border Grid.Column="0">
-                                <StackPanel>
-                                    <TextBlock Text="Ciudad" 
+                                <Border Grid.Column="0">
+                                    <StackPanel>
+                                        <TextBlock Text="Ciudad" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <TextBox Height="48"
+                                        <TextBox Height="48"
                                              Padding="15,0"
                                              FontSize="14"
                                              BorderBrush="{StaticResource BorderDefault}"
                                              BorderThickness="1"/>
-                                </StackPanel>
-                            </Border>
+                                    </StackPanel>
+                                </Border>
 
-                            <Border Grid.Column="2">
-                                <StackPanel>
-                                    <TextBlock Text="C.P." 
+                                <Border Grid.Column="2">
+                                    <StackPanel>
+                                        <TextBlock Text="C.P." 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <TextBox Height="48"
+                                        <TextBox Height="48"
                                              Padding="15,0"
                                              FontSize="14"
                                              BorderBrush="{StaticResource BorderDefault}"
                                              BorderThickness="1"/>
-                                </StackPanel>
-                            </Border>
-                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
 
-                        <Border Margin="0,20,0,0">
-                            <StackPanel>
-                                <TextBlock Text="Teléfono" 
+                            <Border Margin="0,20,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Teléfono" 
                                            Style="{StaticResource BodyMedium}"
                                            Margin="0,0,0,8"/>
-                                <TextBox Height="48"
+                                    <TextBox Height="48"
                                          Padding="15,0"
                                          FontSize="14"
                                          BorderBrush="{StaticResource BorderDefault}"
                                          BorderThickness="1"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </Border>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
 
-                <!-- MÉTODO DE PAGO -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <!-- MÉTODO DE PAGO -->
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                         BorderBrush="{StaticResource BorderDefault}"
                         BorderThickness="1"
                         Padding="35,30">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
-                    </Border.Effect>
-                    <StackPanel>
-                        <TextBlock Text="MÉTODO DE PAGO" 
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="MÉTODO DE PAGO" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,25"/>
 
-                        <!-- Opciones de pago -->
-                        <Border BorderBrush="{StaticResource BorderDefault}"
+                            <!-- Opciones de pago -->
+                            <Border BorderBrush="{StaticResource BorderDefault}"
                                 BorderThickness="2"
                                 Padding="20"
                                 Margin="0,0,0,15"
                                 Cursor="Hand">
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="24" 
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="24" 
                                         Height="24" 
                                         BorderBrush="{StaticResource BlackPrimaryBrush}"
                                         BorderThickness="2"
                                         CornerRadius="12"
                                         Margin="0,0,15,0"/>
-                                <TextBlock Text="💳 Tarjeta de crédito/débito" 
+                                    <TextBlock Text="💳 Tarjeta de crédito/débito" 
                                            Style="{StaticResource BodyLarge}"
                                            FontWeight="SemiBold"
                                            VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
+                                </StackPanel>
+                            </Border>
 
-                        <Border BorderBrush="{StaticResource BorderDefault}"
+                            <Border BorderBrush="{StaticResource BorderDefault}"
                                 BorderThickness="2"
                                 Padding="20"
                                 Margin="0,0,0,15"
                                 Cursor="Hand">
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="24" 
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="24" 
                                         Height="24" 
                                         BorderBrush="{StaticResource Gray300Brush}"
                                         BorderThickness="2"
                                         CornerRadius="12"
                                         Margin="0,0,15,0"/>
-                                <TextBlock Text="💰 PayPal" 
+                                    <TextBlock Text="💰 PayPal" 
                                            Style="{StaticResource BodyLarge}"
                                            VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
+                                </StackPanel>
+                            </Border>
 
-                        <Border BorderBrush="{StaticResource BorderDefault}"
+                            <Border BorderBrush="{StaticResource BorderDefault}"
                                 BorderThickness="2"
                                 Padding="20"
                                 Margin="0,0,0,25"
                                 Cursor="Hand">
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="24" 
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="24" 
                                         Height="24" 
                                         BorderBrush="{StaticResource Gray300Brush}"
                                         BorderThickness="2"
                                         CornerRadius="12"
                                         Margin="0,0,15,0"/>
-                                <TextBlock Text="📱 Apple Pay" 
+                                    <TextBlock Text="📱 Apple Pay" 
                                            Style="{StaticResource BodyLarge}"
                                            VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
+                                </StackPanel>
+                            </Border>
 
-                        <!-- Datos de tarjeta -->
-                        <Border>
-                            <StackPanel>
-                                <TextBlock Text="Número de tarjeta" 
+                            <!-- Datos de tarjeta -->
+                            <Border>
+                                <StackPanel>
+                                    <TextBlock Text="Número de tarjeta" 
                                            Style="{StaticResource BodyMedium}"
                                            Margin="0,0,0,8"/>
-                                <TextBox Height="48"
+                                    <TextBox Height="48"
                                          Padding="15,0"
                                          FontSize="14"
                                          BorderBrush="{StaticResource BorderDefault}"
                                          BorderThickness="1"
                                          Margin="0,0,0,20"/>
 
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="20"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <Border Grid.Column="0">
-                                        <StackPanel>
-                                            <TextBlock Text="Fecha de caducidad" 
+                                        <Border Grid.Column="0">
+                                            <StackPanel>
+                                                <TextBlock Text="Fecha de caducidad" 
                                                        Style="{StaticResource BodyMedium}"
                                                        Margin="0,0,0,8"/>
-                                            <TextBox Height="48"
+                                                <TextBox Height="48"
                                                      Padding="15,0"
                                                      FontSize="14"
                                                      BorderBrush="{StaticResource BorderDefault}"
                                                      BorderThickness="1"/>
-                                        </StackPanel>
-                                    </Border>
+                                            </StackPanel>
+                                        </Border>
 
-                                    <Border Grid.Column="2">
-                                        <StackPanel>
-                                            <TextBlock Text="CVV" 
+                                        <Border Grid.Column="2">
+                                            <StackPanel>
+                                                <TextBlock Text="CVV" 
                                                        Style="{StaticResource BodyMedium}"
                                                        Margin="0,0,0,8"/>
-                                            <TextBox Height="48"
+                                                <TextBox Height="48"
                                                      Padding="15,0"
                                                      FontSize="14"
                                                      BorderBrush="{StaticResource BorderDefault}"
                                                      BorderThickness="1"/>
-                                        </StackPanel>
-                                    </Border>
-                                </Grid>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
 
-        <!-- RESUMEN DEL PEDIDO - Mejorado -->
-        <Border Grid.Column="1" 
+            <!-- RESUMEN DEL PEDIDO - Mejorado -->
+            <Border Grid.Column="1" 
                 Background="{StaticResource Gray50Brush}"
                 BorderBrush="{StaticResource BorderDefault}"
                 BorderThickness="1,0,0,0"
                 Padding="45,50,45,80">
-            <StackPanel>
-                <TextBlock Text="RESUMEN DEL PEDIDO" 
+                <StackPanel>
+                    <TextBlock Text="RESUMEN DEL PEDIDO" 
                            Style="{StaticResource HeadingMedium}"
                            Margin="0,0,0,35"/>
 
-                <!-- Productos en el pedido -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <!-- Productos en el pedido -->
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                         BorderBrush="{StaticResource BorderDefault}"
                         BorderThickness="1"
                         Padding="20"
                         Margin="0,0,0,30">
-                    <StackPanel>
-                        <!-- Item 1 -->
-                        <Grid Margin="0,0,0,20">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <!-- Item 1 -->
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Rectangle Grid.Column="0" 
+                                <Rectangle Grid.Column="0" 
                                        Fill="{StaticResource Gray200Brush}"
                                        Width="70" Height="70"/>
 
-                            <Border Grid.Column="1" Padding="15,0,0,0">
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Text="Product Name" 
+                                <Border Grid.Column="1" Padding="15,0,0,0">
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Product Name" 
                                                Style="{StaticResource SubtitleMedium}"
                                                Margin="0,0,0,4"/>
-                                    <TextBlock Text="Size: M - Qty: 1" 
+                                        <TextBlock Text="Size: M - Qty: 1" 
                                                Style="{StaticResource BodySmall}"
                                                Foreground="{StaticResource TextSecondary}"/>
-                                </StackPanel>
-                            </Border>
+                                    </StackPanel>
+                                </Border>
 
-                            <TextBlock Grid.Column="2"
+                                <TextBlock Grid.Column="2"
                                        Text="59.99€"
                                        Style="{StaticResource SubtitleMedium}"
                                        VerticalAlignment="Center"/>
-                        </Grid>
+                            </Grid>
 
-                        <Border Height="1" 
+                            <Border Height="1" 
                                 Background="{StaticResource BorderDefault}"
                                 Margin="0,0,0,20"/>
 
-                        <!-- Item 2 -->
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                            <!-- Item 2 -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Rectangle Grid.Column="0" 
+                                <Rectangle Grid.Column="0" 
                                        Fill="{StaticResource Gray200Brush}"
                                        Width="70" Height="70"/>
 
-                            <Border Grid.Column="1" Padding="15,0,0,0">
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Text="Product Name 2" 
+                                <Border Grid.Column="1" Padding="15,0,0,0">
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Product Name 2" 
                                                Style="{StaticResource SubtitleMedium}"
                                                Margin="0,0,0,4"/>
-                                    <TextBlock Text="Size: L - Qty: 2" 
+                                        <TextBlock Text="Size: L - Qty: 2" 
                                                Style="{StaticResource BodySmall}"
                                                Foreground="{StaticResource TextSecondary}"/>
-                                </StackPanel>
-                            </Border>
+                                    </StackPanel>
+                                </Border>
 
-                            <TextBlock Grid.Column="2"
+                                <TextBlock Grid.Column="2"
                                        Text="159.98€"
                                        Style="{StaticResource SubtitleMedium}"
                                        VerticalAlignment="Center"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
 
-                <!-- Totales -->
-                <Border Margin="0,0,0,30">
-                    <StackPanel>
-                        <Grid Margin="0,0,0,15">
-                            <TextBlock Text="Subtotal" 
+                    <!-- Totales -->
+                    <Border Margin="0,0,0,30">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,15">
+                                <TextBlock Text="Subtotal" 
                                        Style="{StaticResource BodyLarge}"/>
-                            <TextBlock Text="219.97€" 
+                                <TextBlock Text="219.97€" 
                                        Style="{StaticResource BodyLarge}"
                                        HorizontalAlignment="Right"/>
-                        </Grid>
+                            </Grid>
 
-                        <Grid Margin="0,0,0,15">
-                            <TextBlock Text="Envío" 
+                            <Grid Margin="0,0,0,15">
+                                <TextBlock Text="Envío" 
                                        Style="{StaticResource BodyLarge}"/>
-                            <TextBlock Text="FREE" 
+                                <TextBlock Text="FREE" 
                                        Style="{StaticResource BodyLarge}"
                                        Foreground="{StaticResource SuccessColorBrush}"
                                        FontWeight="SemiBold"
                                        HorizontalAlignment="Right"/>
-                        </Grid>
+                            </Grid>
 
-                        <Grid Margin="0,0,0,20">
-                            <TextBlock Text="IVA (21%)" 
+                            <Grid Margin="0,0,0,20">
+                                <TextBlock Text="IVA (21%)" 
                                        Style="{StaticResource BodyLarge}"/>
-                            <TextBlock Text="46.19€" 
+                                <TextBlock Text="46.19€" 
                                        Style="{StaticResource BodyLarge}"
                                        HorizontalAlignment="Right"/>
-                        </Grid>
+                            </Grid>
 
-                        <Border Height="2" 
+                            <Border Height="2" 
                                 Background="{StaticResource BorderDefault}"
                                 Margin="0,0,0,20"/>
 
-                        <Grid>
-                            <TextBlock Text="Total" 
+                            <Grid>
+                                <TextBlock Text="Total" 
                                        Style="{StaticResource HeadingMedium}"/>
-                            <TextBlock Text="266.16€" 
+                                <TextBlock Text="266.16€" 
                                        Style="{StaticResource HeadingMedium}"
                                        HorizontalAlignment="Right"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
 
-                <!-- Botón finalizar -->
-                <Button Content="COMPLETAR PEDIDO" 
+                    <!-- Botón finalizar -->
+                    <Button Content="COMPLETAR PEDIDO" 
                         Style="{StaticResource AccentButton}"
                         FontSize="16"
                         Padding="0,20"
                         Margin="0,0,0,20"/>
 
-                <!-- Seguridad -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
+                    <!-- Seguridad -->
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
                         BorderBrush="{StaticResource BorderDefault}"
                         BorderThickness="1"
                         Padding="20">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                            <TextBlock Text="🔒" 
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="🔒" 
                                        FontSize="18"
                                        Margin="0,0,10,0"/>
-                            <TextBlock Text="Pago 100% seguro" 
+                                <TextBlock Text="Pago 100% seguro" 
                                        Style="{StaticResource BodySmall}"
                                        FontWeight="SemiBold"/>
-                        </StackPanel>
-                        <TextBlock Text="Tus datos están protegidos con encriptación SSL" 
+                            </StackPanel>
+                            <TextBlock Text="Tus datos están protegidos con encriptación SSL" 
                                    Style="{StaticResource BodySmall}"
                                    Foreground="{StaticResource TextSecondary}"
                                    TextWrapping="Wrap"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
-    </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
 
+    </ScrollViewer>
 </UserControl>
