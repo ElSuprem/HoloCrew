@@ -37,6 +37,7 @@ namespace HoloCrew
             // Singleton: Servicios que mantienen estado global
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ICartService, CartService>();
+            services.AddSingleton<ISettingsService, SettingsService>();
             services.AddSingleton<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<IThemeService, ThemeService>();

@@ -1,74 +1,37 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Models;
+using HoloCrew.Services;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System;
 
 namespace HoloCrew.ViewModels
 {
     public partial class SettingsViewModel : ViewModelBase
     {
-        private readonly IThemeService _themeService;
+        private readonly IAuthenticationService _authenticationService;
         private readonly INavigationService _navigationService;
+        private readonly ISettingsService _settingsService;
 
+        [ObservableProperty]
+        private bool _isUserLoggedIn;
+
+        [ObservableProperty]
+        private string _currentUserName = "Invitado";
+
+        [ObservableProperty]
+        private string _currentUserEmail = "No has iniciado sesión";
+
+        // APARIENCIA
         [ObservableProperty]
         private bool _isDarkMode;
 
         [ObservableProperty]
         private string _selectedLanguage = "Español";
 
-        [ObservableProperty]
-        private bool _notificationsEnabled = true;
-
-        [ObservableProperty]
-        private bool _soundEnabled = true;
-
-        [ObservableProperty]
-        private string _cacheSize = "0 MB";
-
-        [ObservableProperty]
-        private string _appVersion = "1.0.0";
-
-        [ObservableProperty]
-        private bool _autoUpdate = true;
-
-        // ⭐ PROPIEDADES AGREGADAS PARA BINDINGS
-        [ObservableProperty]
-        private string _selectedCurrency = "EUR";
-
-        [ObservableProperty]
-        private string _selectedTimeZone = "Europe/Madrid";
-
-        [ObservableProperty]
-        private bool _isLightThemeSelected = true;
-
-        [ObservableProperty]
-        private bool _isDarkThemeSelected = false;
-
-        [ObservableProperty]
-        private int _selectedFontSize = 14;
-
-        [ObservableProperty]
-        private bool _emailNotificationsEnabled = true;
-
-        [ObservableProperty]
-        private bool _pushNotificationsEnabled = true;
-
-        [ObservableProperty]
-        private bool _smsNotificationsEnabled = false;
-
-        [ObservableProperty]
-        private bool _shareUsageData = true;
-
-        [ObservableProperty]
-        private bool _saveSearchHistory = true;
-
-        [ObservableProperty]
-        private bool _showPublicProfile = true;
-
-        public List<string> AvailableLanguages { get; } = new List<string>
+        public ObservableCollection<string> AvailableLanguages { get; } = new()
         {
             "Español",
             "English",
@@ -77,177 +40,242 @@ namespace HoloCrew.ViewModels
             "Italiano"
         };
 
-        // ⭐ LISTAS AGREGADAS
-        public List<string> Languages => AvailableLanguages;
+        // NOTIFICACIONES
+        [ObservableProperty]
+        private bool _notificationsEnabled = true;
 
-        public List<string> Currencies { get; } = new List<string>
-        {
-            "EUR",
-            "USD",
-            "GBP",
-            "JPY"
-        };
+        [ObservableProperty]
+        private bool _emailNotifications = true;
 
-        public List<string> TimeZones { get; } = new List<string>
-        {
-            "Europe/Madrid",
-            "America/New_York",
-            "America/Los_Angeles",
-            "Asia/Tokyo"
-        };
+        [ObservableProperty]
+        private bool _pushNotifications = true;
 
-        public List<int> FontSizes { get; } = new List<int>
-        {
-            12, 14, 16, 18, 20
-        };
+        [ObservableProperty]
+        private bool _orderUpdates = true;
+
+        [ObservableProperty]
+        private bool _promotionalEmails = false;
+
+        // PRIVACIDAD
+        [ObservableProperty]
+        private bool _dataCollectionEnabled = true;
+
+        [ObservableProperty]
+        private bool _personalizedAds = false;
+
+        [ObservableProperty]
+        private bool _shareDataWithPartners = false;
 
         public SettingsViewModel(
-            IThemeService themeService,
-            INavigationService navigationService)
+            IAuthenticationService authenticationService,
+            INavigationService navigationService,
+            ISettingsService settingsService)
         {
-            _themeService = themeService;
+            _authenticationService = authenticationService;
             _navigationService = navigationService;
+            _settingsService = settingsService;
 
             Title = "Configuración";
 
+            // Cargar configuración guardada
             LoadSettings();
-        }
 
-        private void LoadSettings()
-        {
-            IsDarkMode = _themeService.GetCurrentTheme() == AppTheme.Dark;
-            IsLightThemeSelected = !IsDarkMode;
-            IsDarkThemeSelected = IsDarkMode;
+            // Actualizar estado de autenticación
+            UpdateAuthenticationState();
 
-            CalculateCacheSize();
-        }
-
-        [RelayCommand]
-        private void ToggleTheme()
-        {
-            _themeService.ToggleTheme();
-            IsDarkMode = _themeService.GetCurrentTheme() == AppTheme.Dark;
-            IsLightThemeSelected = !IsDarkMode;
-            IsDarkThemeSelected = IsDarkMode;
+            // ⭐ Suscribirse a cambios de propiedades para guardar automáticamente
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName != nameof(IsUserLoggedIn) &&
+                    e.PropertyName != nameof(CurrentUserName) &&
+                    e.PropertyName != nameof(CurrentUserEmail) &&
+                    e.PropertyName != nameof(Title) &&
+                    e.PropertyName != nameof(IsBusy))
+                {
+                    SaveSettings();
+                }
+            };
         }
 
         [RelayCommand]
         private void ChangeLanguage(string language)
         {
-            if (string.IsNullOrEmpty(language)) return;
             SelectedLanguage = language;
+            SaveSettings();
+
+            System.Diagnostics.Debug.WriteLine($"🌍 Idioma cambiado a: {language}");
         }
 
         [RelayCommand]
         private void ToggleNotifications()
         {
-            // Guardar preferencia
+            SaveSettings();
+            System.Diagnostics.Debug.WriteLine($"🔔 Notificaciones: {(NotificationsEnabled ? "Activadas" : "Desactivadas")}");
         }
 
         [RelayCommand]
-        private void ToggleSound()
+        private void NavigateToProfile()
         {
-            // Guardar preferencia
-        }
-
-        [RelayCommand]
-        private async Task ClearCacheAsync()
-        {
-            try
+            if (IsUserLoggedIn)
             {
-                IsBusy = true;
-                await Task.Delay(1000);
-                CacheSize = "0 MB";
+                _navigationService.NavigateTo<ProfileViewModel>();
             }
-            finally
+            else
             {
-                IsBusy = false;
+                _navigationService.NavigateTo<LoginViewModel>();
             }
         }
 
         [RelayCommand]
-        private async Task CheckForUpdatesAsync()
+        private void ChangePassword()
         {
-            try
+            if (!IsUserLoggedIn)
             {
-                IsBusy = true;
-                await Task.Delay(2000);
+                _navigationService.NavigateTo<LoginViewModel>();
+                return;
             }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
 
-        // ⭐ COMANDOS AGREGADOS
-        [RelayCommand]
-        private void SavePreferences()
-        {
-            // Guardar todas las preferencias
+            System.Diagnostics.Debug.WriteLine("🔒 Cambiar contraseña");
         }
 
         [RelayCommand]
-        private async Task DownloadDataAsync()
+        private async Task LogoutAsync()
         {
-            try
+            if (!IsUserLoggedIn)
             {
-                IsBusy = true;
-                await Task.Delay(2000);
-                // Descargar datos del usuario
+                return;
             }
-            finally
-            {
-                IsBusy = false;
-            }
+
+            await _authenticationService.LogoutAsync();
+            UpdateAuthenticationState();
+
+            System.Diagnostics.Debug.WriteLine("👋 Sesión cerrada");
         }
 
         [RelayCommand]
-        private async Task DeleteAccountAsync()
+        private void DeleteAccount()
         {
-            // Confirmación y eliminación de cuenta
-            await Task.CompletedTask;
+            if (!IsUserLoggedIn)
+            {
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine("⚠️ Eliminar cuenta");
         }
 
         [RelayCommand]
-        private void ViewAbout()
+        private void ClearCache()
         {
-            // Mostrar ventana "Acerca de"
+            System.Diagnostics.Debug.WriteLine("🗑️ Caché limpiada");
+        }
+
+        [RelayCommand]
+        private void ExportData()
+        {
+            if (!IsUserLoggedIn)
+            {
+                _navigationService.NavigateTo<LoginViewModel>();
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine("📥 Exportar datos");
         }
 
         [RelayCommand]
         private void ViewPrivacyPolicy()
         {
-            // Abrir política de privacidad
+            System.Diagnostics.Debug.WriteLine("📄 Ver política de privacidad");
         }
 
         [RelayCommand]
         private void ViewTermsOfService()
         {
-            // Abrir términos de servicio
+            System.Diagnostics.Debug.WriteLine("📄 Ver términos de servicio");
         }
 
         [RelayCommand]
         private void ContactSupport()
         {
-            // Abrir formulario de contacto
+            System.Diagnostics.Debug.WriteLine("💬 Contactar soporte");
         }
 
-        [RelayCommand]
-        private void ResetToDefaults()
+        private async void UpdateAuthenticationState()
         {
-            IsDarkMode = false;
-            _themeService.SetTheme(AppTheme.Light);
-            SelectedLanguage = "Español";
-            NotificationsEnabled = true;
-            SoundEnabled = true;
-            AutoUpdate = true;
-            IsLightThemeSelected = true;
-            IsDarkThemeSelected = false;
+            IsUserLoggedIn = await _authenticationService.IsAuthenticatedAsync();
+
+            if (IsUserLoggedIn)
+            {
+                var user = _authenticationService.GetCurrentUser();
+                CurrentUserName = user?.FullName ?? "Usuario";
+                CurrentUserEmail = user?.Email ?? "";
+            }
+            else
+            {
+                CurrentUserName = "Invitado";
+                CurrentUserEmail = "No has iniciado sesión";
+            }
         }
 
-        private void CalculateCacheSize()
+        private void LoadSettings()
         {
-            CacheSize = "12.5 MB";
+            var settings = _settingsService.LoadSettings();
+
+            // Cargar valores sin disparar PropertyChanged
+            _isDarkMode = settings.IsDarkMode;
+            _selectedLanguage = settings.SelectedLanguage;
+            _notificationsEnabled = settings.NotificationsEnabled;
+            _emailNotifications = settings.EmailNotifications;
+            _pushNotifications = settings.PushNotifications;
+            _orderUpdates = settings.OrderUpdates;
+            _promotionalEmails = settings.PromotionalEmails;
+            _dataCollectionEnabled = settings.DataCollectionEnabled;
+            _personalizedAds = settings.PersonalizedAds;
+            _shareDataWithPartners = settings.ShareDataWithPartners;
+
+            // Notificar cambios
+            OnPropertyChanged(nameof(IsDarkMode));
+            OnPropertyChanged(nameof(SelectedLanguage));
+            OnPropertyChanged(nameof(NotificationsEnabled));
+            OnPropertyChanged(nameof(EmailNotifications));
+            OnPropertyChanged(nameof(PushNotifications));
+            OnPropertyChanged(nameof(OrderUpdates));
+            OnPropertyChanged(nameof(PromotionalEmails));
+            OnPropertyChanged(nameof(DataCollectionEnabled));
+            OnPropertyChanged(nameof(PersonalizedAds));
+            OnPropertyChanged(nameof(ShareDataWithPartners));
+
+            // ⭐ Aplicar tema cargado usando ThemeManager
+            ThemeManager.ApplyTheme(IsDarkMode);
+
+            System.Diagnostics.Debug.WriteLine("⚙️ Configuración cargada desde JSON");
+        }
+
+        private void SaveSettings()
+        {
+            var settings = new AppSettings
+            {
+                IsDarkMode = IsDarkMode,
+                SelectedLanguage = SelectedLanguage,
+                NotificationsEnabled = NotificationsEnabled,
+                EmailNotifications = EmailNotifications,
+                PushNotifications = PushNotifications,
+                OrderUpdates = OrderUpdates,
+                PromotionalEmails = PromotionalEmails,
+                DataCollectionEnabled = DataCollectionEnabled,
+                PersonalizedAds = PersonalizedAds,
+                ShareDataWithPartners = ShareDataWithPartners
+            };
+
+            _settingsService.SaveSettings(settings);
+
+            // ⭐ Aplicar tema cuando IsDarkMode cambia
+            ThemeManager.ApplyTheme(IsDarkMode);
+        }
+
+        public override void OnNavigatedTo(object parameter)
+        {
+            base.OnNavigatedTo(parameter);
+            UpdateAuthenticationState();
         }
     }
 }

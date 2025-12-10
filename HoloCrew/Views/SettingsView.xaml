@@ -4,370 +4,419 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="900" d:DesignWidth="1400"
+             d:DesignHeight="800" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <Border Padding="60,40,60,80">
-        <StackPanel MaxWidth="900">
-            <!-- Header -->
-            <TextBlock Text="SETTINGS" 
-                           Style="{StaticResource HeadingLarge}"
-                           Margin="0,0,0,40" />
+    <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                  HorizontalScrollBarVisibility="Disabled">
+        <Border Padding="60,40,60,80">
+            <StackPanel MaxWidth="900">
 
-            <!-- ============================================
-                     ACCOUNT SETTINGS
-                     ============================================ -->
-            <TextBlock Text="ACCOUNT" 
-                           Style="{StaticResource HeadingMedium}"
-                           Margin="0,0,0,20" />
+                <!-- HEADER -->
+                <TextBlock Text="CONFIGURACIÓN" 
+                           FontSize="42"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
 
-            <Border Background="{StaticResource WhitePrimaryBrush}"
+                <TextBlock Text="Personaliza tu experiencia en HoloCrew" 
+                           FontSize="16"
+                           Foreground="{StaticResource TextSecondary}"
+                           Margin="0,0,0,40"/>
+
+                <!-- ========== SECCIÓN: PERFIL ========== -->
+                <Border Background="{StaticResource WhitePrimaryBrush}"
                         BorderBrush="{StaticResource BorderDefault}"
                         BorderThickness="1"
-                        Padding="40"
-                        Margin="0,0,0,40">
-                <StackPanel>
-                    <!-- Language & Currency -->
-                    <Grid Margin="0,0,0,25">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        Padding="30"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="👤 PERFIL" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,20"/>
 
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="LANGUAGE" 
-                                           Style="{StaticResource BodyMedium}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,10"/>
-                            <ComboBox ItemsSource="{Binding Languages}"
-                                          SelectedItem="{Binding SelectedLanguage}"
-                                          Height="50"
-                                          Padding="15,0"
-                                          FontSize="14"/>
-                        </StackPanel>
+                        <!-- User Info -->
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="CURRENCY" 
-                                           Style="{StaticResource BodyMedium}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,10"/>
-                            <ComboBox ItemsSource="{Binding Currencies}"
-                                          SelectedItem="{Binding SelectedCurrency}"
-                                          Height="50"
-                                          Padding="15,0"
-                                          FontSize="14"/>
-                        </StackPanel>
-                    </Grid>
+                            <!-- Avatar -->
+                            <Border Grid.Column="0"
+                                    Width="60" Height="60"
+                                    Background="{StaticResource Gray200Brush}"
+                                    CornerRadius="30"
+                                    Margin="0,0,20,0">
+                                <TextBlock Text="👨" 
+                                           FontSize="32"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
 
-                    <!-- Timezone -->
-                    <StackPanel Margin="0,0,0,25">
-                        <TextBlock Text="TIMEZONE" 
-                                       Style="{StaticResource BodyMedium}"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,10"/>
-                        <ComboBox ItemsSource="{Binding TimeZones}"
-                                      SelectedItem="{Binding SelectedTimeZone}"
-                                      Height="50"
-                                      Padding="15,0"
-                                      FontSize="14"/>
-                    </StackPanel>
-
-                    <!-- Save Button -->
-                    <Button Content="SAVE PREFERENCES" 
-                                Style="{StaticResource PrimaryButton}"
-                                Command="{Binding SavePreferencesCommand}"
-                                Width="200"
-                                HorizontalAlignment="Right"/>
-                </StackPanel>
-            </Border>
-
-            <!-- ============================================
-                     DISPLAY SETTINGS
-                     ============================================ -->
-            <TextBlock Text="DISPLAY" 
-                           Style="{StaticResource HeadingMedium}"
-                           Margin="0,0,0,20" />
-
-            <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="40"
-                        Margin="0,0,0,40">
-                <StackPanel>
-                    <!-- Theme -->
-                    <Grid Margin="0,0,0,25">
-                        <TextBlock Text="THEME" 
-                                       Style="{StaticResource BodyMedium}"
-                                       FontWeight="SemiBold"
-                                       VerticalAlignment="Center"/>
-
-                        <StackPanel Orientation="Horizontal" 
-                                        HorizontalAlignment="Right">
-                            <RadioButton Content="Light"
-                                             GroupName="Theme"
-                                             IsChecked="{Binding IsLightThemeSelected}"
-                                             FontSize="14"
-                                             Margin="0,0,20,0"
-                                             VerticalAlignment="Center"/>
-
-                            <RadioButton Content="Dark"
-                                             GroupName="Theme"
-                                             IsChecked="{Binding IsDarkThemeSelected}"
-                                             FontSize="14"
-                                             VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- Font Size -->
-                    <Grid>
-                        <TextBlock Text="FONT SIZE" 
-                                       Style="{StaticResource BodyMedium}"
-                                       FontWeight="SemiBold"
-                                       VerticalAlignment="Center"/>
-
-                        <ComboBox ItemsSource="{Binding FontSizes}"
-                                      SelectedItem="{Binding SelectedFontSize}"
-                                      Width="200"
-                                      Height="50"
-                                      Padding="15,0"
-                                      FontSize="14"
-                                      HorizontalAlignment="Right"/>
-                    </Grid>
-                </StackPanel>
-            </Border>
-
-            <!-- ============================================
-                     NOTIFICATIONS SETTINGS
-                     ============================================ -->
-            <TextBlock Text="NOTIFICATIONS" 
-                           Style="{StaticResource HeadingMedium}"
-                           Margin="0,0,0,20" />
-
-            <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="40"
-                        Margin="0,0,0,40">
-                <StackPanel>
-                    <!-- Email Notifications -->
-                    <Grid Margin="0,0,0,20">
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Email Notifications" 
-                                           Style="{StaticResource BodyMedium}"
+                            <!-- Info -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding CurrentUserName}" 
+                                           FontSize="18"
                                            FontWeight="SemiBold"
                                            Margin="0,0,0,5"/>
-                            <TextBlock Text="Receive updates about orders and promotions" 
-                                           Style="{StaticResource BodySmall}"
+                                <TextBlock Text="{Binding CurrentUserEmail}" 
+                                           FontSize="14"
                                            Foreground="{StaticResource TextSecondary}"/>
-                        </StackPanel>
+                            </StackPanel>
 
-                        <CheckBox IsChecked="{Binding EmailNotificationsEnabled}"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"/>
-                    </Grid>
-
-                    <!-- Push Notifications -->
-                    <Grid Margin="0,0,0,20">
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Push Notifications" 
-                                           Style="{StaticResource BodyMedium}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                            <TextBlock Text="Get notified about order status changes" 
-                                           Style="{StaticResource BodySmall}"
-                                           Foreground="{StaticResource TextSecondary}"/>
-                        </StackPanel>
-
-                        <CheckBox IsChecked="{Binding PushNotificationsEnabled}"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"/>
-                    </Grid>
-
-                    <!-- SMS Notifications -->
-                    <Grid>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="SMS Notifications" 
-                                           Style="{StaticResource BodyMedium}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                            <TextBlock Text="Receive delivery updates via SMS" 
-                                           Style="{StaticResource BodySmall}"
-                                           Foreground="{StaticResource TextSecondary}"/>
-                        </StackPanel>
-
-                        <CheckBox IsChecked="{Binding SmsNotificationsEnabled}"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"/>
-                    </Grid>
-                </StackPanel>
-            </Border>
-
-            <!-- ============================================
-                     PRIVACY SETTINGS
-                     ============================================ -->
-            <TextBlock Text="PRIVACY" 
-                           Style="{StaticResource HeadingMedium}"
-                           Margin="0,0,0,20" />
-
-            <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="40"
-                        Margin="0,0,0,40">
-                <StackPanel>
-                    <!-- Share Usage Data -->
-                    <Grid Margin="0,0,0,20">
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Share Usage Data" 
-                                           Style="{StaticResource BodyMedium}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                            <TextBlock Text="Help improve the app by sharing anonymous usage data" 
-                                           Style="{StaticResource BodySmall}"
-                                           Foreground="{StaticResource TextSecondary}"/>
-                        </StackPanel>
-
-                        <CheckBox IsChecked="{Binding ShareUsageData}"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"/>
-                    </Grid>
-
-                    <!-- Save Search History -->
-                    <Grid Margin="0,0,0,20">
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Save Search History" 
-                                           Style="{StaticResource BodyMedium}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                            <TextBlock Text="Keep track of your searches for easier shopping" 
-                                           Style="{StaticResource BodySmall}"
-                                           Foreground="{StaticResource TextSecondary}"/>
-                        </StackPanel>
-
-                        <CheckBox IsChecked="{Binding SaveSearchHistory}"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"/>
-                    </Grid>
-
-                    <!-- Public Profile -->
-                    <Grid Margin="0,0,0,30">
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Public Profile" 
-                                           Style="{StaticResource BodyMedium}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                            <TextBlock Text="Make your profile visible to other users" 
-                                           Style="{StaticResource BodySmall}"
-                                           Foreground="{StaticResource TextSecondary}"/>
-                        </StackPanel>
-
-                        <CheckBox IsChecked="{Binding ShowPublicProfile}"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"/>
-                    </Grid>
-
-                    <!-- Download Data Button -->
-                    <Button Content="DOWNLOAD MY DATA" 
-                                Style="{StaticResource OutlineButton}"
-                                Command="{Binding DownloadDataCommand}"
-                                Width="220"
-                                HorizontalAlignment="Left"/>
-                </StackPanel>
-            </Border>
-
-            <!-- ============================================
-                     ADVANCED SETTINGS
-                     ============================================ -->
-            <TextBlock Text="ADVANCED" 
-                           Style="{StaticResource HeadingMedium}"
-                           Margin="0,0,0,20" />
-
-            <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="40">
-                <StackPanel>
-                    <!-- Clear Cache -->
-                    <Grid Margin="0,0,0,30">
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Application Cache" 
-                                           Style="{StaticResource BodyMedium}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                            <TextBlock Style="{StaticResource BodySmall}"
-                                           Foreground="{StaticResource TextSecondary}">
-                                    <Run Text="Current size:"/>
-                                    <Run Text="{Binding CacheSize}"/>
-                            </TextBlock>
-                        </StackPanel>
-
-                        <Button Content="CLEAR CACHE" 
+                            <!-- Button -->
+                            <Button Grid.Column="2"
+                                    Content="Ver perfil"
+                                    Command="{Binding NavigateToProfileCommand}"
                                     Style="{StaticResource OutlineButton}"
-                                    FontSize="13"
-                                    Padding="20,12"
-                                    Command="{Binding ClearCacheCommand}"
-                                    HorizontalAlignment="Right"
+                                    Height="40"
+                                    Padding="20,0"
                                     VerticalAlignment="Center"/>
-                    </Grid>
+                        </Grid>
+                    </StackPanel>
+                </Border>
 
-                    <!-- Divider -->
-                    <Border Height="1" 
-                                Background="{StaticResource BorderDefault}"
-                                Margin="0,0,0,30"/>
+                <!-- ========== SECCIÓN: APARIENCIA ========== -->
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="30"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="🎨 APARIENCIA" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,20"/>
 
-                    <!-- Delete Account -->
-                    <Grid>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Delete Account" 
-                                           Style="{StaticResource BodyMedium}"
+                        <!-- Tema -->
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Modo oscuro" 
+                                           FontSize="15"
                                            FontWeight="SemiBold"
-                                           Foreground="{StaticResource ErrorColorBrush}"
                                            Margin="0,0,0,5"/>
-                            <TextBlock Text="Permanently delete your account and all associated data" 
-                                           Style="{StaticResource BodySmall}"
+                                <TextBlock Text="Reduce el brillo de la pantalla" 
+                                           FontSize="13"
                                            Foreground="{StaticResource TextSecondary}"/>
-                        </StackPanel>
+                            </StackPanel>
 
-                        <Button Content="DELETE ACCOUNT" 
-                                    Background="Transparent"
-                                    BorderBrush="{StaticResource ErrorColorBrush}"
-                                    BorderThickness="2"
-                                    Foreground="{StaticResource ErrorColorBrush}"
-                                    FontSize="13"
-                                    FontWeight="Bold"
-                                    Padding="20,12"
-                                    Cursor="Hand"
-                                    Command="{Binding DeleteAccountCommand}"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Background="{TemplateBinding Background}"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                                            Padding="{TemplateBinding Padding}">
-                                                    <ContentPresenter HorizontalAlignment="Center"
-                                                                          VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource ErrorColorBrush}"/>
-                                            <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                    </Grid>
-                </StackPanel>
-            </Border>
-        </StackPanel>
-    </Border>
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding IsDarkMode}"
+                                      Command="{Binding ToggleDarkModeCommand}"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Idioma -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Idioma" 
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Selecciona tu idioma preferido" 
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+
+                            <ComboBox Grid.Column="1"
+                                      ItemsSource="{Binding AvailableLanguages}"
+                                      SelectedItem="{Binding SelectedLanguage}"
+                                      Width="150"
+                                      Height="40"
+                                      VerticalAlignment="Center"
+                                      FontSize="14"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ========== SECCIÓN: NOTIFICACIONES ========== -->
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="30"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="🔔 NOTIFICACIONES" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,20"/>
+
+                        <!-- Notificaciones generales -->
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Activar notificaciones" 
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Recibe actualizaciones importantes" 
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding NotificationsEnabled}"
+                                      Command="{Binding ToggleNotificationsCommand}"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,10,0,15"/>
+
+                        <!-- Email notifications -->
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="Notificaciones por email"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding EmailNotifications}"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Push notifications -->
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="Notificaciones push"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding PushNotifications}"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Order updates -->
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="Actualizaciones de pedidos"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding OrderUpdates}"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Promotional emails -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="Emails promocionales y ofertas"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding PromotionalEmails}"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ========== SECCIÓN: PRIVACIDAD ========== -->
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="30"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="🔒 PRIVACIDAD Y SEGURIDAD" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,20"/>
+
+                        <!-- Data collection -->
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Recopilación de datos" 
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="Ayúdanos a mejorar tu experiencia" 
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding DataCollectionEnabled}"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,10,0,15"/>
+
+                        <!-- Personalized ads -->
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="Anuncios personalizados"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding PersonalizedAds}"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Share with partners -->
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="Compartir datos con socios"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding ShareDataWithPartners}"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Links -->
+                        <StackPanel>
+                            <Button Content="📄 Política de privacidad"
+                                    Command="{Binding ViewPrivacyPolicyCommand}"
+                                    Style="{StaticResource TextButton}"
+                                    Foreground="{StaticResource AccentBrush}"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,0,0,10"/>
+                            <Button Content="📄 Términos de servicio"
+                                    Command="{Binding ViewTermsOfServiceCommand}"
+                                    Style="{StaticResource TextButton}"
+                                    Foreground="{StaticResource AccentBrush}"
+                                    HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- ========== SECCIÓN: CUENTA ========== -->
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="30"
+                        Margin="0,0,0,20"
+                        Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel>
+                        <TextBlock Text="👤 CUENTA" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,20"/>
+
+                        <!-- Change password -->
+                        <Button Content="🔒 Cambiar contraseña"
+                                Command="{Binding ChangePasswordCommand}"
+                                Style="{StaticResource OutlineButton}"
+                                Height="45"
+                                HorizontalAlignment="Stretch"
+                                Margin="0,0,0,10"/>
+
+                        <!-- Export data -->
+                        <Button Content="📥 Exportar mis datos"
+                                Command="{Binding ExportDataCommand}"
+                                Style="{StaticResource OutlineButton}"
+                                Height="45"
+                                HorizontalAlignment="Stretch"
+                                Margin="0,0,0,10"/>
+
+                        <!-- Logout -->
+                        <Button Content="👋 Cerrar sesión"
+                                Command="{Binding LogoutCommand}"
+                                Style="{StaticResource OutlineButton}"
+                                Height="45"
+                                HorizontalAlignment="Stretch"
+                                Margin="0,0,0,20"/>
+
+                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,10,0,20"/>
+
+                        <!-- Delete account -->
+                        <Button Content="⚠️ Eliminar cuenta"
+                                Command="{Binding DeleteAccountCommand}"
+                                Height="45"
+                                HorizontalAlignment="Stretch"
+                                Background="#FEE"
+                                BorderBrush="#F88"
+                                BorderThickness="1"
+                                Foreground="#C00"
+                                FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- ========== SECCIÓN: OTROS ========== -->
+                <Border Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderThickness="1"
+                        Padding="30">
+                    <StackPanel>
+                        <TextBlock Text="⚙️ OTROS" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,20"/>
+
+                        <!-- Clear cache -->
+                        <Button Content="🗑️ Limpiar caché"
+                                Command="{Binding ClearCacheCommand}"
+                                Style="{StaticResource OutlineButton}"
+                                Height="45"
+                                HorizontalAlignment="Stretch"
+                                Margin="0,0,0,10"/>
+
+                        <!-- Contact support -->
+                        <Button Content="💬 Contactar soporte"
+                                Command="{Binding ContactSupportCommand}"
+                                Style="{StaticResource OutlineButton}"
+                                Height="45"
+                                HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- VERSION -->
+                <TextBlock Text="HoloCrew v1.0.0"
+                           FontSize="13"
+                           Foreground="{StaticResource TextSecondary}"
+                           HorizontalAlignment="Center"
+                           Margin="0,30,0,0"/>
+
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
 </UserControl>
