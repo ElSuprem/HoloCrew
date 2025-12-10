@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
-using System;
 using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
@@ -19,13 +18,10 @@ namespace HoloCrew.ViewModels
         private string _password = string.Empty;
 
         [ObservableProperty]
-        private bool _rememberMe;
-
-        [ObservableProperty]
         private string _errorMessage = string.Empty;
 
         [ObservableProperty]
-        private bool _isLoading = false;
+        private bool _rememberMe;
 
         public LoginViewModel(
             IAuthenticationService authenticationService,
@@ -40,36 +36,59 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private async Task LoginAsync()
         {
+            // Limpiar error previo
+            ErrorMessage = string.Empty;
+
+            // Validar campos
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                ErrorMessage = "Por favor, ingresa tu email.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessage = "Por favor, ingresa tu contraseña.";
+                return;
+            }
+
+            if (!IsValidEmail(Email))
+            {
+                ErrorMessage = "El formato del email no es válido.";
+                return;
+            }
+
             try
             {
-                IsLoading = true;
-                ErrorMessage = string.Empty;
+                IsBusy = true;
 
-                if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
-                {
-                    ErrorMessage = "Por favor, completa todos los campos";
-                    return;
-                }
-
-                // ⭐ ARREGLADO: LoginAsync devuelve User, no bool
+                // ⭐ ARREGLADO: AuthenticationService devuelve User, no bool
                 var user = await _authenticationService.LoginAsync(Email, Password);
+                var success = user != null;
 
-                if (user != null)
+                if (success)
                 {
+                    // Login exitoso
+                    System.Diagnostics.Debug.WriteLine($"✅ Login exitoso: {Email}");
+
+                    // Navegar a Home
                     _navigationService.NavigateTo<HomeViewModel>();
                 }
                 else
                 {
-                    ErrorMessage = "Email o contraseña incorrectos";
+                    // Credenciales incorrectas
+                    ErrorMessage = "Email o contraseña incorrectos. Inténtalo de nuevo.";
+                    System.Diagnostics.Debug.WriteLine($"❌ Login fallido: {Email}");
                 }
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Error al iniciar sesión. Intenta nuevamente.";
+                ErrorMessage = "Error al iniciar sesión. Por favor, inténtalo más tarde.";
+                System.Diagnostics.Debug.WriteLine($"❌ Error en login: {ex.Message}");
             }
             finally
             {
-                IsLoading = false;
+                IsBusy = false;
             }
         }
 
@@ -82,7 +101,46 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private void ForgotPassword()
         {
-            // Implementar recuperación de contraseña
+            // TODO: Implementar recuperación de contraseña
+            ErrorMessage = "Funcionalidad en desarrollo. Contacta con soporte.";
+        }
+
+        [RelayCommand]
+        private void LoginWithGoogle()
+        {
+            // TODO: Implementar OAuth con Google
+            ErrorMessage = "Login con Google próximamente disponible.";
+        }
+
+        [RelayCommand]
+        private void LoginWithFacebook()
+        {
+            // TODO: Implementar OAuth con Facebook
+            ErrorMessage = "Login con Facebook próximamente disponible.";
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Limpiar campos al navegar
+        public override void OnNavigatedTo(object parameter)
+        {
+            base.OnNavigatedTo(parameter);
+            ErrorMessage = string.Empty;
+            Password = string.Empty; // Limpiar contraseña por seguridad
         }
     }
 }

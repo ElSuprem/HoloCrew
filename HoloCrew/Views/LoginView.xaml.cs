@@ -1,16 +1,22 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace HoloCrew.Views
 {
-    /// <summary>
-    /// Vista de inicio de sesión
-    /// NO contiene lógica - todo está en LoginViewModel
-    /// </summary>
     public partial class LoginView : UserControl
     {
         public LoginView()
         {
             InitializeComponent();
+        }
+
+        // Sincronizar PasswordBox con ViewModel
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.LoginViewModel viewModel)
+            {
+                viewModel.Password = ((PasswordBox)sender).Password;
+            }
         }
     }
 }

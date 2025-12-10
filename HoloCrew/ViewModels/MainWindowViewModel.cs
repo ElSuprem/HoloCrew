@@ -98,15 +98,18 @@ namespace HoloCrew.ViewModels
             UpdateWishlistCount(); // Actualizar al navegar
         }
 
+        // ⭐ NAVEGACIÓN INTELIGENTE AL PERFIL
         [RelayCommand]
         private void NavigateToProfile()
         {
             if (IsUserLoggedIn)
             {
+                // Usuario autenticado → ir a perfil
                 _navigationService.NavigateTo<ProfileViewModel>();
             }
             else
             {
+                // Usuario NO autenticado → ir a login
                 _navigationService.NavigateTo<LoginViewModel>();
             }
         }

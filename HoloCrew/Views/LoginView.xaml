@@ -4,204 +4,217 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="700" d:DesignWidth="1200"
+             d:DesignHeight="800" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <!-- Panel Negro -->
-            <ColumnDefinition Width="*" />
-            <!-- Formulario -->
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="500"/>
         </Grid.ColumnDefinitions>
 
-        <!-- ============================================
-             PANEL IZQUIERDO (NEGRO)
-             ============================================ -->
-        <Border Grid.Column="0" 
-                Background="{StaticResource BlackPrimaryBrush}">
-            <StackPanel HorizontalAlignment="Center" 
-                        VerticalAlignment="Center"
-                        Margin="60">
-                <!-- Logo -->
-                <TextBlock Text="HOLOCREW" 
-                           FontSize="48" 
-                           FontWeight="Black" 
-                           Foreground="{StaticResource WhitePrimaryBrush}" 
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,40"/>
-
-                <!-- Emoji -->
-                <TextBlock Text="👋" 
+        <!-- LEFT SIDE - HERO IMAGE/INFO -->
+        <Border Grid.Column="0"
+                Background="{StaticResource BlackPrimaryBrush}"
+                Padding="80">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="🛍️" 
                            FontSize="100"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,40" />
+                           Margin="0,0,0,30"/>
 
-                <!-- Mensaje -->
-                <TextBlock Text="WELCOME BACK" 
-                           Style="{StaticResource HeadingLarge}"
+                <TextBlock Text="HOLOCREW" 
+                           FontSize="56"
+                           FontWeight="Bold"
                            Foreground="{StaticResource WhitePrimaryBrush}"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,15" />
-                <TextBlock Text="Sign in to continue your shopping experience" 
-                           Style="{StaticResource BodyLarge}"
+                           Margin="0,0,0,20"/>
+
+                <TextBlock Text="Tu tienda online de confianza" 
+                           FontSize="20"
                            Foreground="{StaticResource Gray400Brush}"
                            HorizontalAlignment="Center"
-                           TextAlignment="Center"
-                           TextWrapping="Wrap"
-                           MaxWidth="350"/>
+                           Margin="0,0,0,50"/>
+
+                <!-- Benefits -->
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <TextBlock Text="✓" 
+                                   FontSize="24"
+                                   Foreground="{StaticResource AccentBrush}"
+                                   Margin="0,0,15,0"/>
+                        <TextBlock Text="Envío gratis en pedidos superiores a 50€" 
+                                   FontSize="16"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <TextBlock Text="✓" 
+                                   FontSize="24"
+                                   Foreground="{StaticResource AccentBrush}"
+                                   Margin="0,0,15,0"/>
+                        <TextBlock Text="Devoluciones gratis en 30 días" 
+                                   FontSize="16"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="✓" 
+                                   FontSize="24"
+                                   Foreground="{StaticResource AccentBrush}"
+                                   Margin="0,0,15,0"/>
+                        <TextBlock Text="Descuentos exclusivos para miembros" 
+                                   FontSize="16"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"/>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
         </Border>
 
-        <!-- ============================================
-             FORMULARIO DERECHO
-             ============================================ -->
-        <Border Grid.Column="1" 
+        <!-- RIGHT SIDE - LOGIN FORM -->
+        <Border Grid.Column="1"
                 Background="{StaticResource WhitePrimaryBrush}"
-                Padding="80,60">
-            <StackPanel VerticalAlignment="Center"
-                        MaxWidth="400">
+                Padding="60">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel VerticalAlignment="Center">
 
-                <!-- Título -->
-                <TextBlock Text="SIGN IN" 
-                           Style="{StaticResource HeadingLarge}"
-                           Margin="0,0,0,50" />
-
-                <!-- Email -->
-                <TextBlock Text="EMAIL" 
-                           Style="{StaticResource BodyMedium}"
-                           FontWeight="SemiBold"
-                           Margin="0,0,0,10"/>
-                <Border BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="2"
-                        Height="55"
-                        Margin="0,0,0,25">
-                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Padding="15,0"
-                             VerticalAlignment="Center"
-                             FontSize="15"/>
-                </Border>
-
-                <!-- Password -->
-                <TextBlock Text="PASSWORD" 
-                           Style="{StaticResource BodyMedium}"
-                           FontWeight="SemiBold"
-                           Margin="0,0,0,10"/>
-                <Border BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="2"
-                        Height="55"
-                        Margin="0,0,0,15">
-                    <PasswordBox x:Name="PasswordBox"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 Padding="15,0"
-                                 VerticalAlignment="Center"
-                                 FontSize="15"/>
-                </Border>
-
-                <!-- Remember Me & Forgot Password -->
-                <Grid Margin="0,0,0,35">
-                    <CheckBox Content="Remember me"
-                              FontSize="14"
-                              VerticalAlignment="Center"/>
-                    <Button Content="Forgot password?" 
-                            Style="{StaticResource TextButton}"
-                            FontSize="14"
-                            Foreground="{StaticResource TextSecondary}"
-                            HorizontalAlignment="Right"
-                            Command="{Binding ForgotPasswordCommand}"/>
-                </Grid>
-
-                <!-- Sign In Button -->
-                <Button Content="SIGN IN" 
-                        Style="{StaticResource PrimaryButton}"
-                        FontSize="15"
-                        Padding="0,18"
-                        Command="{Binding LoginCommand}"
-                        CommandParameter="{Binding ElementName=PasswordBox}"
-                        IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                        Margin="0,0,0,30"
-                        HorizontalAlignment="Stretch"/>
-
-                <!-- Register Link -->
-                <StackPanel Orientation="Horizontal" 
-                            HorizontalAlignment="Center"
-                            Margin="0,0,0,30">
-                    <TextBlock Text="Don't have an account? " 
-                               Style="{StaticResource BodyMedium}"
-                               Foreground="{StaticResource TextSecondary}"/>
-                    <Button Content="Register here" 
-                            Style="{StaticResource TextButton}"
-                            FontSize="14"
-                            FontWeight="SemiBold"
-                            Padding="0"
-                            Command="{Binding NavigateToRegisterCommand}"/>
-                </StackPanel>
-
-                <!-- Divider -->
-                <Grid Margin="0,0,0,30">
-                    <Border Height="1" 
-                            Background="{StaticResource BorderDefault}"/>
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                            Padding="15,0"
-                            HorizontalAlignment="Center">
-                        <TextBlock Text="OR CONTINUE WITH" 
-                                   Style="{StaticResource Caption}"
-                                   Foreground="{StaticResource TextSecondary}"/>
-                    </Border>
-                </Grid>
-
-                <!-- Social Login -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="15"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Column="0"
-                            Content="GOOGLE"
-                            Style="{StaticResource OutlineButton}"
-                            FontSize="13"
-                            Padding="0,15"
-                            HorizontalAlignment="Stretch"/>
-
-                    <Button Grid.Column="2"
-                            Content="FACEBOOK"
-                            Style="{StaticResource OutlineButton}"
-                            FontSize="13"
-                            Padding="0,15"
-                            HorizontalAlignment="Stretch"/>
-                </Grid>
-
-                <!-- Error Message -->
-                <Border Background="{StaticResource ErrorColorBrush}"
-                        Padding="15"
-                        Margin="0,30,0,0"
-                        Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}">
-                    <TextBlock Text="{Binding ErrorMessage}" 
-                               Style="{StaticResource BodySmall}"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               TextWrapping="Wrap"
-                               TextAlignment="Center"/>
-                </Border>
-
-                <!-- Loading -->
-                <StackPanel HorizontalAlignment="Center"
-                            Margin="0,30,0,0"
-                            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Text="⏳" 
-                               FontSize="32" 
-                               HorizontalAlignment="Center"
+                    <!-- Header -->
+                    <TextBlock Text="Iniciar Sesión" 
+                               FontSize="36"
+                               FontWeight="Bold"
                                Margin="0,0,0,10"/>
-                    <TextBlock Text="SIGNING IN..." 
-                               Style="{StaticResource BodyMedium}"
+
+                    <TextBlock Text="Bienvenido de nuevo" 
+                               FontSize="16"
                                Foreground="{StaticResource TextSecondary}"
-                               HorizontalAlignment="Center"/>
+                               Margin="0,0,0,40"/>
+
+                    <!-- Error Message -->
+                    <Border Background="#FFF3CD"
+                            BorderBrush="#FF6B6B"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="15"
+                            Margin="0,0,0,20"
+                            Visibility="{Binding ErrorMessage, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
+                        <TextBlock Text="{Binding ErrorMessage}" 
+                                   Foreground="#721C24"
+                                   TextWrapping="Wrap"
+                                   FontSize="14"/>
+                    </Border>
+
+                    <!-- Email Field -->
+                    <TextBlock Text="Email" 
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8"/>
+                    <!-- ⭐ SIN ESTILO PERSONALIZADO -->
+                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="16"
+                             Padding="10"
+                             BorderThickness="1"
+                             BorderBrush="{StaticResource BorderDefault}"
+                             Margin="0,0,0,20"/>
+
+                    <!-- Password Field -->
+                    <TextBlock Text="Contraseña" 
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8"/>
+                    <!-- ⭐ SIN ESTILO PERSONALIZADO -->
+                    <PasswordBox x:Name="PasswordBox"
+                                 PasswordChanged="PasswordBox_PasswordChanged"
+                                 FontSize="16"
+                                 Padding="10"
+                                 BorderThickness="1"
+                                 BorderBrush="{StaticResource BorderDefault}"
+                                 Margin="0,0,0,10"/>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <Grid Margin="0,0,0,30">
+                        <CheckBox Content="Recordarme"
+                                  IsChecked="{Binding RememberMe}"
+                                  VerticalAlignment="Center"
+                                  FontSize="14"/>
+
+                        <TextBlock HorizontalAlignment="Right"
+                                   VerticalAlignment="Center">
+                            <Hyperlink Command="{Binding ForgotPasswordCommand}"
+                                       TextDecorations="None"
+                                       Foreground="{StaticResource AccentBrush}">
+                                <Run Text="¿Olvidaste tu contraseña?" FontSize="14"/>
+                            </Hyperlink>
+                        </TextBlock>
+                    </Grid>
+
+                    <!-- Login Button -->
+                    <Button Content="INICIAR SESIÓN"
+                            Command="{Binding LoginCommand}"
+                            Style="{StaticResource AccentButton}"
+                            Height="50"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Margin="0,0,0,20"/>
+
+                    <!-- Divider -->
+                    <Grid Margin="0,0,0,20">
+                        <Border Height="1"
+                                Background="{StaticResource BorderDefault}"
+                                VerticalAlignment="Center"/>
+                        <TextBlock Text="O continúa con"
+                                   Background="{StaticResource WhitePrimaryBrush}"
+                                   Padding="15,0"
+                                   HorizontalAlignment="Center"
+                                   FontSize="14"
+                                   Foreground="{StaticResource TextSecondary}"/>
+                    </Grid>
+
+                    <!-- Social Login Buttons -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Google -->
+                        <Button Grid.Column="0"
+                                Command="{Binding LoginWithGoogleCommand}"
+                                Style="{StaticResource OutlineButton}"
+                                Height="50"
+                                Margin="0,0,10,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🔵" FontSize="20" Margin="0,0,10,0"/>
+                                <TextBlock Text="Google" FontSize="14"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Facebook -->
+                        <Button Grid.Column="1"
+                                Command="{Binding LoginWithFacebookCommand}"
+                                Style="{StaticResource OutlineButton}"
+                                Height="50"
+                                Margin="10,0,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📘" FontSize="20" Margin="0,0,10,0"/>
+                                <TextBlock Text="Facebook" FontSize="14"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <!-- Register Link -->
+                    <TextBlock HorizontalAlignment="Center"
+                               Margin="0,30,0,0"
+                               FontSize="14">
+                        <Run Text="¿No tienes cuenta?" Foreground="{StaticResource TextSecondary}"/>
+                        <Hyperlink Command="{Binding NavigateToRegisterCommand}"
+                                   TextDecorations="None"
+                                   Foreground="{StaticResource AccentBrush}">
+                            <Run Text="Regístrate" FontWeight="SemiBold"/>
+                        </Hyperlink>
+                    </TextBlock>
+
                 </StackPanel>
-            </StackPanel>
+            </ScrollViewer>
         </Border>
     </Grid>
 </UserControl>
