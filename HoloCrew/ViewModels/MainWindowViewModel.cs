@@ -12,7 +12,10 @@ namespace HoloCrew.ViewModels
         private readonly IAuthenticationService _authenticationService;
 
         [ObservableProperty]
-        private object _currentView;  // IMPORTANTE: Este binding muestra la vista actual
+        private object _currentView;
+
+        [ObservableProperty]
+        private string _searchQuery;  // ⭐ SOLO UNA VEZ
 
         [ObservableProperty]
         private int _cartItemCount;
@@ -22,9 +25,6 @@ namespace HoloCrew.ViewModels
 
         [ObservableProperty]
         private string _currentUserName;
-
-        [ObservableProperty]
-        private string _searchQuery;
 
         public MainWindowViewModel(
             INavigationService navigationService,
@@ -37,13 +37,8 @@ namespace HoloCrew.ViewModels
 
             Title = "HoloCrew";
 
-            // Suscribirse a cambios en el carrito
             _cartService.CartUpdated += OnCartUpdated;
-
-            // Actualizar estado de autenticación
             UpdateAuthenticationState();
-
-            // Actualizar contador del carrito
             CartItemCount = _cartService.GetCartItemCount();
         }
 
@@ -61,6 +56,16 @@ namespace HoloCrew.ViewModels
         private void NavigateToCatalog()
         {
             _navigationService.NavigateTo<ProductCatalogViewModel>();
+        }
+
+        [RelayCommand]
+        private void ExecuteSearch()  // ⭐ COMANDO ÚNICO
+        {
+            if (string.IsNullOrWhiteSpace(SearchQuery))
+                return;
+
+            _navigationService.NavigateTo<ProductCatalogViewModel>(SearchQuery);
+            SearchQuery = string.Empty;
         }
 
         [RelayCommand]
@@ -122,20 +127,6 @@ namespace HoloCrew.ViewModels
         private void NavigateToMembersClub()
         {
             _navigationService.NavigateTo<MembersClubViewModel>();
-        }
-
-        // ============================
-        // BÚSQUEDA
-        // ============================
-
-        [RelayCommand]
-        private void Search()
-        {
-            if (!string.IsNullOrWhiteSpace(_searchQuery))
-            {
-                // Navegar al catálogo con query de búsqueda
-                _navigationService.NavigateTo<ProductCatalogViewModel>(_searchQuery);
-            }
         }
 
         // ============================

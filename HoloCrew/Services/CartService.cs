@@ -1,146 +1,168 @@
 ﻿using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace HoloCrew.Services
 {
     /// <summary>
-    /// Implementación del servicio de carrito
-    /// Mantiene el carrito en memoria (en producción podría ser persistente)
+    /// Servicio del carrito con datos MOCK para testing
+    /// Implementa correctamente ICartService
     /// </summary>
     public class CartService : ICartService
     {
-        private List<CartItem> _cartItems = new();
-        private decimal _currentDiscount = 0;
-        private int _nextCartItemId = 1;
+        private ObservableCollection<CartItem> _cartItems;
+        private decimal _appliedDiscount = 0;
 
         public event EventHandler CartUpdated;
 
-        public Task AddToCartAsync(Product product, int quantity, string variant = null)
+        public CartService()
         {
-            if (product == null || quantity <= 0)
-            {
-                return Task.CompletedTask;
-            }
+            InitializeMockCart();
+        }
 
-            // Verificar si el producto ya está en el carrito
-            var existingItem = _cartItems.FirstOrDefault(ci =>
-                ci.ProductId == product.Id && ci.SelectedVariant == variant);
+        private void InitializeMockCart()
+        {
+            _cartItems = new ObservableCollection<CartItem>
+            {
+                new CartItem
+                {
+                    Id = 1,
+                    ProductId = 6,
+                    ProductName = "OVERSIZED HOODIE BLACK",
+                    Price = 79.99m,
+                    Quantity = 2,
+                    Size = "L",
+                    Color = "Black",
+                    ImageUrl = "/Resources/Images/hoodie1.jpg"
+                },
+                new CartItem
+                {
+                    Id = 2,
+                    ProductId = 22,
+                    ProductName = "TACTICAL CARGO PANTS",
+                    Price = 79.99m,
+                    Quantity = 1,
+                    Size = "M",
+                    Color = "Olive",
+                    ImageUrl = "/Resources/Images/cargo1.jpg"
+                },
+                new CartItem
+                {
+                    Id = 3,
+                    ProductId = 41,
+                    ProductName = "ARMBO LOW WHITE",
+                    Price = 129.99m,
+                    Quantity = 1,
+                    Size = "42",
+                    Color = "White",
+                    ImageUrl = "/Resources/Images/armbo1.jpg"
+                }
+            };
+        }
+
+        public async Task AddToCartAsync(Product product, int quantity, string variant = null)
+        {
+            var size = variant ?? "M"; // Default size si no se especifica
+
+            var existingItem = _cartItems.FirstOrDefault(i =>
+                i.ProductId == product.Id &&
+                i.Size == size);
 
             if (existingItem != null)
             {
-                // Incrementar cantidad
                 existingItem.Quantity += quantity;
             }
             else
             {
-                // Agregar nuevo item
-                var cartItem = new CartItem
+                var newItem = new CartItem
                 {
-                    Id = _nextCartItemId++,
+                    Id = _cartItems.Any() ? _cartItems.Max(i => i.Id) + 1 : 1,
                     ProductId = product.Id,
-                    Product = product,
+                    ProductName = product.Name,
+                    Price = product.Price,
                     Quantity = quantity,
-                    SelectedVariant = variant,
-                    UnitPrice = product.Price
+                    Size = size,
+                    Color = "Default",
+                    ImageUrl = product.MainImageUrl
                 };
-
-                _cartItems.Add(cartItem);
+                _cartItems.Add(newItem);
             }
 
             OnCartUpdated();
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
-        public Task UpdateQuantityAsync(int cartItemId, int newQuantity)
+        public async Task UpdateQuantityAsync(int cartItemId, int newQuantity)
         {
-            var item = _cartItems.FirstOrDefault(ci => ci.Id == cartItemId);
-
+            var item = _cartItems.FirstOrDefault(i => i.Id == cartItemId);
             if (item != null)
             {
-                if (newQuantity <= 0)
-                {
-                    _cartItems.Remove(item);
-                }
-                else
-                {
-                    item.Quantity = newQuantity;
-                }
-
+                item.Quantity = newQuantity;
                 OnCartUpdated();
             }
-
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
-        public Task RemoveFromCartAsync(int cartItemId)
+        public async Task RemoveFromCartAsync(int cartItemId)
         {
-            var item = _cartItems.FirstOrDefault(ci => ci.Id == cartItemId);
-
+            var item = _cartItems.FirstOrDefault(i => i.Id == cartItemId);
             if (item != null)
             {
                 _cartItems.Remove(item);
                 OnCartUpdated();
             }
-
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
-        public Task ClearCartAsync()
+        public async Task ClearCartAsync()
         {
             _cartItems.Clear();
-            _currentDiscount = 0;
+            _appliedDiscount = 0;
             OnCartUpdated();
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
-        public Task<List<CartItem>> GetCartItemsAsync()
+        public async Task<List<CartItem>> GetCartItemsAsync()
         {
-            return Task.FromResult(_cartItems.ToList());
+            return await Task.FromResult(_cartItems.ToList());
         }
 
-        public Task<decimal> GetCartTotalAsync()
+        public async Task<decimal> GetCartTotalAsync()
         {
-            var subtotal = _cartItems.Sum(item => item.Subtotal);
-            var total = subtotal - _currentDiscount;
-            return Task.FromResult(total);
+            var subtotal = _cartItems.Sum(i => i.Subtotal);
+            var shipping = subtotal > 50 ? 0 : 5.99m;
+            var tax = subtotal * 0.21m;
+            return await Task.FromResult(subtotal + shipping + tax - _appliedDiscount);
         }
 
         public int GetCartItemCount()
         {
-            return _cartItems.Sum(item => item.Quantity);
+            return _cartItems.Sum(i => i.Quantity);
         }
 
-        public Task<bool> ApplyCouponAsync(string couponCode)
+        public async Task<bool> ApplyCouponAsync(string couponCode)
         {
-            if (string.IsNullOrWhiteSpace(couponCode))
-            {
-                return Task.FromResult(false);
-            }
-
-            // TODO: Validar cupón con el servidor
-            // Por ahora, cupones hardcodeados para desarrollo
+            // Cupones de ejemplo
             var validCoupons = new Dictionary<string, decimal>
             {
-                { "DESCUENTO10", 10m },
-                { "BIENVENIDO", 5m },
-                { "VERANO2024", 15m }
+                { "WELCOME10", 10m },
+                { "SAVE20", 20m },
+                { "CREW50", 50m }
             };
 
             if (validCoupons.TryGetValue(couponCode.ToUpper(), out var discount))
             {
-                _currentDiscount = discount;
+                _appliedDiscount = discount;
                 OnCartUpdated();
-                return Task.FromResult(true);
+                return await Task.FromResult(true);
             }
 
-            return Task.FromResult(false);
+            return await Task.FromResult(false);
         }
 
         public decimal GetCurrentDiscount()
         {
-            return _currentDiscount;
+            return _appliedDiscount;
         }
 
         private void OnCartUpdated()

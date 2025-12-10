@@ -1,26 +1,58 @@
-﻿namespace HoloCrew.Models
-{
-    // ===== ENUM =====
-    public enum NotificationType
-    {
-        OrderUpdate = 0,
-        Promotion = 1,
-        NewProduct = 2,
-        PriceAlert = 3,
-        System = 4
-    }
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-    // ===== CLASE PRINCIPAL =====
-    public class Notification
+namespace HoloCrew.Models
+{
+    /// <summary>
+    /// Modelo de notificación
+    /// </summary>
+    public partial class Notification : ObservableObject
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public NotificationType Type { get; set; }
-        public string Title { get; set; }
-        public string Message { get; set; }
-        public string IconUrl { get; set; }
-        public bool IsRead { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string ActionUrl { get; set; }
+        [ObservableProperty]
+        private int _id;
+
+        [ObservableProperty]
+        private int _userId;
+
+        [ObservableProperty]
+        private string _title;
+
+        [ObservableProperty]
+        private string _message;
+
+        [ObservableProperty]
+        private string _type; // "Order", "Promotion", "Alert", "Info"
+
+        [ObservableProperty]
+        private DateTime _createdAt;
+
+        [ObservableProperty]
+        private bool _isRead;
+
+        [ObservableProperty]
+        private string _icon; // Emoji o icono
+
+        /// <summary>
+        /// Tiempo transcurrido desde la notificación
+        /// </summary>
+        public string TimeAgo
+        {
+            get
+            {
+                var timeSpan = DateTime.Now - CreatedAt;
+
+                if (timeSpan.TotalMinutes < 1)
+                    return "Just now";
+                if (timeSpan.TotalMinutes < 60)
+                    return $"{(int)timeSpan.TotalMinutes}m ago";
+                if (timeSpan.TotalHours < 24)
+                    return $"{(int)timeSpan.TotalHours}h ago";
+                if (timeSpan.TotalDays < 7)
+                    return $"{(int)timeSpan.TotalDays}d ago";
+                if (timeSpan.TotalDays < 30)
+                    return $"{(int)(timeSpan.TotalDays / 7)}w ago";
+
+                return CreatedAt.ToString("MMM dd");
+            }
+        }
     }
 }

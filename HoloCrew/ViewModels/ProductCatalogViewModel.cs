@@ -12,6 +12,7 @@ namespace HoloCrew.ViewModels
         private readonly IProductService _productService;
         private readonly INavigationService _navigationService;
         private readonly ICartService _cartService;
+        private readonly IWishlistService _wishlistService;  // ⭐ AGREGADO
 
         [ObservableProperty]
         private ObservableCollection<Product> _products = new();
@@ -75,11 +76,13 @@ namespace HoloCrew.ViewModels
         public ProductCatalogViewModel(
             IProductService productService,
             INavigationService navigationService,
-            ICartService cartService)
+            ICartService cartService,
+            IWishlistService wishlistService)  // ⭐ AGREGADO
         {
             _productService = productService;
             _navigationService = navigationService;
             _cartService = cartService;
+            _wishlistService = wishlistService;  // ⭐ AGREGADO
 
             Title = "Catálogo de Productos";
         }
@@ -284,6 +287,23 @@ namespace HoloCrew.ViewModels
         {
             if (product == null) return;
             await _cartService.AddToCartAsync(product, 1);
+            // TODO: Mostrar mensaje "Added to cart"
+        }
+
+        // ⭐ NUEVO: Agregar a wishlist
+        [RelayCommand]
+        private async Task AddToWishlistAsync(int productId)
+        {
+            try
+            {
+                await _wishlistService.AddToWishlistAsync(productId);
+                // TODO: Mostrar mensaje "Added to wishlist ❤️"
+            }
+            catch (Exception ex)
+            {
+                // TODO: Manejar error
+                System.Diagnostics.Debug.WriteLine($"Error adding to wishlist: {ex.Message}");
+            }
         }
 
         // Auto-filtrar cuando cambian los valores

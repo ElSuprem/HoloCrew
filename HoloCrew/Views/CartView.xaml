@@ -7,7 +7,6 @@
              d:DesignHeight="800" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <!-- ⭐ ScrollViewer agregado -->
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled">
         <Grid>
@@ -16,289 +15,276 @@
                 <ColumnDefinition Width="420"/>
             </Grid.ColumnDefinitions>
 
-            <!-- CART ITEMS - Mejorado -->
+            <!-- CART ITEMS - DINÁMICO -->
             <Border Grid.Column="0" Padding="70,50,40,80">
                 <StackPanel>
                     <!-- Título -->
                     <TextBlock Text="YOUR CART" 
-                           Style="{StaticResource HeadingLarge}"
-                           Margin="0,0,0,10"/>
+                               Style="{StaticResource HeadingLarge}"
+                               Margin="0,0,0,10"/>
                     <TextBlock Style="{StaticResource BodyLarge}"
-                           Foreground="{StaticResource TextSecondary}"
-                           Margin="0,0,0,50">
-                    <Run Text="3"/>
-                    <Run Text=" items in your cart"/>
+                               Foreground="{StaticResource TextSecondary}"
+                               Margin="0,0,0,50">
+                        <Run Text="{Binding CartItems.Count, Mode=OneWay}"/>
+                        <Run Text=" items in your cart"/>
                     </TextBlock>
 
-                    <!-- Item 1 -->
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="25"
-                        Margin="0,0,0,20">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
-                        </Border.Effect>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="120"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                    <!-- CARRITO VACÍO -->
+                    <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="0,100,0,0">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsCartEmpty}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="🛒" 
+                                   FontSize="80" 
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,30"/>
+                        <TextBlock Text="Your cart is empty" 
+                                   Style="{StaticResource HeadingMedium}"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,15"/>
+                        <TextBlock Text="Browse our collection and add items to your cart" 
+                                   Style="{StaticResource BodyLarge}"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,40"/>
+                        <Button Content="BROWSE PRODUCTS" 
+                                Style="{StaticResource AccentButton}"
+                                Command="{Binding BrowseProductsCommand}"
+                                Padding="40,15"/>
+                    </StackPanel>
 
-                            <!-- Imagen producto -->
-                            <Rectangle Grid.Column="0" 
-                                   Fill="{StaticResource Gray200Brush}"
-                                   Width="120" Height="120"/>
-
-                            <!-- Info producto -->
-                            <Border Grid.Column="1" Padding="25,0,0,0">
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Text="OVERSIZED HOODIE" 
-                                           Style="{StaticResource SubtitleLarge}"
-                                           Margin="0,0,0,8"/>
-                                    <TextBlock Text="Size: M • Color: Black" 
-                                           Style="{StaticResource BodyMedium}"
-                                           Foreground="{StaticResource TextSecondary}"
-                                           Margin="0,0,0,15"/>
-
-                                    <!-- Quantity selector -->
-                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                    <!-- LISTA DE ITEMS DINÁMICOS -->
+                    <ItemsControl ItemsSource="{Binding CartItems}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource WhitePrimaryBrush}"
+                                        BorderBrush="{StaticResource BorderDefault}"
                                         BorderThickness="1"
-                                        Width="120"
-                                        HorizontalAlignment="Left">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="40"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="40"/>
-                                            </Grid.ColumnDefinitions>
+                                        Padding="25"
+                                        Margin="0,0,0,20">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
+                                    </Border.Effect>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                                            <Button Grid.Column="0" Content="-" 
-                                                Background="Transparent"
-                                                BorderThickness="0"
-                                                FontSize="18"
-                                                FontWeight="Bold"
-                                                Cursor="Hand"/>
+                                        <!-- Imagen producto -->
+                                        <Rectangle Grid.Column="0" 
+                                                   Fill="{StaticResource Gray200Brush}" 
+                                                   Width="120" 
+                                                   Height="120"/>
 
-                                            <TextBlock Grid.Column="1"
-                                                   Text="1"
-                                                   FontSize="14"
-                                                   FontWeight="SemiBold"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
+                                        <!-- Info del producto -->
+                                        <StackPanel Grid.Column="1" Margin="25,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding ProductName}" 
+                                                       Style="{StaticResource SubtitleLarge}"
+                                                       Margin="0,0,0,8"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                                <TextBlock Text="Size: " 
+                                                           Foreground="{StaticResource TextSecondary}"
+                                                           FontSize="14"/>
+                                                <TextBlock Text="{Binding Size}" 
+                                                           FontSize="14" 
+                                                           FontWeight="SemiBold"/>
+                                                <TextBlock Text=" • Color: " 
+                                                           Foreground="{StaticResource TextSecondary}"
+                                                           FontSize="14" 
+                                                           Margin="10,0,0,0"/>
+                                                <TextBlock Text="{Binding Color}" 
+                                                           FontSize="14" 
+                                                           FontWeight="SemiBold"/>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Price, StringFormat={}{0:C}}" 
+                                                       FontSize="20" 
+                                                       FontWeight="Bold"/>
+                                        </StackPanel>
 
-                                            <Button Grid.Column="2" Content="+" 
-                                                Background="Transparent"
-                                                BorderThickness="0"
-                                                FontSize="18"
-                                                FontWeight="Bold"
-                                                Cursor="Hand"/>
-                                        </Grid>
-                                    </Border>
-                                </StackPanel>
-                            </Border>
+                                        <!-- Cantidad y eliminar -->
+                                        <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                            <!-- Contador de cantidad -->
+                                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                                    BorderThickness="1"
+                                                    Padding="5"
+                                                    Margin="0,0,0,15">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Content="-" 
+                                                            Width="35" 
+                                                            Height="35"
+                                                            Style="{StaticResource OutlineButton}"
+                                                            FontSize="18"
+                                                            FontWeight="Bold"
+                                                            Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"/>
+                                                    <TextBlock Text="{Binding Quantity}" 
+                                                               FontSize="18" 
+                                                               FontWeight="SemiBold"
+                                                               VerticalAlignment="Center"
+                                                               HorizontalAlignment="Center"
+                                                               Width="45"
+                                                               TextAlignment="Center"/>
+                                                    <Button Content="+" 
+                                                            Width="35" 
+                                                            Height="35"
+                                                            Style="{StaticResource OutlineButton}"
+                                                            FontSize="18"
+                                                            FontWeight="Bold"
+                                                            Command="{Binding DataContext.IncreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"/>
+                                                </StackPanel>
+                                            </Border>
 
-                            <!-- Precio y eliminar -->
-                            <Border Grid.Column="2" Padding="20,0,0,0">
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Text="59.99€" 
-                                           FontSize="22" 
-                                           FontWeight="Black"
-                                           Margin="0,0,0,20"/>
-                                    <Button Content="✕ Remove" 
-                                        Style="{StaticResource TextButton}"
-                                        Foreground="{StaticResource ErrorColorBrush}"/>
-                                </StackPanel>
-                            </Border>
-                        </Grid>
-                    </Border>
+                                            <!-- Botón eliminar -->
+                                            <Button Content="Remove" 
+                                                    Style="{StaticResource TextButton}"
+                                                    Foreground="{StaticResource RedAccentBrush}"
+                                                    FontSize="14"
+                                                    Command="{Binding DataContext.RemoveFromCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"/>
 
-                    <!-- Item 2 -->
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="25"
-                        Margin="0,0,0,20">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
-                        </Border.Effect>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="120"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Rectangle Grid.Column="0" 
-                                   Fill="{StaticResource Gray200Brush}"
-                                   Width="120" Height="120"/>
-
-                            <Border Grid.Column="1" Padding="25,0,0,0">
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Text="CARGO PANTS" 
-                                           Style="{StaticResource SubtitleLarge}"
-                                           Margin="0,0,0,8"/>
-                                    <TextBlock Text="Size: L - Color: Olive" 
-                                           Style="{StaticResource BodyMedium}"
-                                           Foreground="{StaticResource TextSecondary}"
-                                           Margin="0,0,0,15"/>
-
-                                    <Border BorderBrush="{StaticResource BorderDefault}"
-                                        BorderThickness="1"
-                                        Width="120"
-                                        HorizontalAlignment="Left">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="40"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="40"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <Button Grid.Column="0" Content="-" 
-                                                Background="Transparent"
-                                                BorderThickness="0"
-                                                FontSize="18"
-                                                FontWeight="Bold"
-                                                Cursor="Hand"/>
-
-                                            <TextBlock Grid.Column="1"
-                                                   Text="2"
-                                                   FontSize="14"
-                                                   FontWeight="SemiBold"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
-
-                                            <Button Grid.Column="2" Content="+" 
-                                                Background="Transparent"
-                                                BorderThickness="0"
-                                                FontSize="18"
-                                                FontWeight="Bold"
-                                                Cursor="Hand"/>
-                                        </Grid>
-                                    </Border>
-                                </StackPanel>
-                            </Border>
-
-                            <Border Grid.Column="2" Padding="20,0,0,0">
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Text="159.98€" 
-                                           FontSize="22" 
-                                           FontWeight="Black"
-                                           Margin="0,0,0,20"/>
-                                    <Button Content="✕ Remove" 
-                                        Style="{StaticResource TextButton}"
-                                        Foreground="{StaticResource ErrorColorBrush}"/>
-                                </StackPanel>
-                            </Border>
-                        </Grid>
-                    </Border>
-
-                    <!-- Continue Shopping -->
-                    <Button Content="← CONTINUE SHOPPING" 
-                        Style="{StaticResource TextButton}"
-                        Margin="0,30,0,0"
-                        HorizontalAlignment="Left"/>
+                                            <!-- Subtotal del item -->
+                                            <TextBlock Text="{Binding Subtotal, StringFormat=Subtotal: {0:C}}" 
+                                                       FontSize="16" 
+                                                       FontWeight="Bold"
+                                                       Margin="0,10,0,0"
+                                                       TextAlignment="Right"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
             </Border>
 
-            <!-- ORDER SUMMARY - Mejorado -->
+            <!-- RESUMEN DEL PEDIDO -->
             <Border Grid.Column="1" 
-                Background="{StaticResource Gray50Brush}"
-                BorderBrush="{StaticResource BorderDefault}"
-                BorderThickness="1,0,0,0"
-                Padding="45,50,45,80">
+                    Background="{StaticResource Gray50Brush}"
+                    Padding="40,50">
                 <StackPanel>
                     <TextBlock Text="ORDER SUMMARY" 
-                           Style="{StaticResource HeadingMedium}"
-                           Margin="0,0,0,35"/>
+                               Style="{StaticResource HeadingMedium}"
+                               Margin="0,0,0,30"/>
 
                     <!-- Subtotal -->
-                    <Grid Margin="0,0,0,20">
+                    <Grid Margin="0,0,0,15">
                         <TextBlock Text="Subtotal" 
-                               Style="{StaticResource BodyLarge}"/>
-                        <TextBlock Text="219.97€" 
-                               Style="{StaticResource BodyLarge}"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Right"/>
+                                   Style="{StaticResource BodyLarge}"/>
+                        <TextBlock Text="{Binding Subtotal, StringFormat={}{0:C}}" 
+                                   Style="{StaticResource BodyLarge}"
+                                   HorizontalAlignment="Right"/>
                     </Grid>
 
-                    <!-- Shipping -->
-                    <Grid Margin="0,0,0,20">
+                    <!-- Envío -->
+                    <Grid Margin="0,0,0,15">
                         <TextBlock Text="Shipping" 
-                               Style="{StaticResource BodyLarge}"/>
-                        <TextBlock Text="FREE" 
-                               Style="{StaticResource BodyLarge}"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource SuccessColorBrush}"
-                               HorizontalAlignment="Right"/>
+                                   Style="{StaticResource BodyLarge}"/>
+                        <TextBlock Text="{Binding ShippingCost, StringFormat={}{0:C}}" 
+                                   Style="{StaticResource BodyLarge}"
+                                   HorizontalAlignment="Right"/>
                     </Grid>
 
                     <!-- Tax -->
-                    <Grid Margin="0,0,0,30">
+                    <Grid Margin="0,0,0,15">
                         <TextBlock Text="Tax (21%)" 
-                               Style="{StaticResource BodyLarge}"/>
-                        <TextBlock Text="46.19€" 
-                               Style="{StaticResource BodyLarge}"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Right"/>
+                                   Style="{StaticResource BodyLarge}"/>
+                        <TextBlock Text="{Binding Tax, StringFormat={}{0:C}}" 
+                                   Style="{StaticResource BodyLarge}"
+                                   HorizontalAlignment="Right"/>
                     </Grid>
 
-                    <Border Height="1" 
-                        Background="{StaticResource BorderDefault}"
-                        Margin="0,0,0,30"/>
-
-                    <!-- Total -->
-                    <Grid Margin="0,0,0,40">
-                        <TextBlock Text="Total" 
-                               Style="{StaticResource HeadingMedium}"/>
-                        <TextBlock Text="266.16€" 
-                               Style="{StaticResource HeadingMedium}"
-                               HorizontalAlignment="Right"/>
+                    <!-- Descuento -->
+                    <Grid Margin="0,0,0,15">
+                        <TextBlock Text="Discount" 
+                                   Style="{StaticResource BodyLarge}"
+                                   Foreground="{StaticResource RedAccentBrush}"/>
+                        <TextBlock Text="{Binding Discount, StringFormat=-{0:C}}" 
+                                   Style="{StaticResource BodyLarge}"
+                                   Foreground="{StaticResource RedAccentBrush}"
+                                   HorizontalAlignment="Right"/>
                     </Grid>
 
-                    <!-- Checkout Button -->
+                    <Border BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="0,1,0,0"
+                            Padding="0,20,0,0"
+                            Margin="0,10,0,30">
+                        <Grid>
+                            <TextBlock Text="TOTAL" 
+                                       Style="{StaticResource HeadingMedium}"
+                                       FontSize="22"/>
+                            <TextBlock Text="{Binding Total, StringFormat={}{0:C}}" 
+                                       Style="{StaticResource HeadingMedium}"
+                                       FontSize="22"
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Cupón -->
+                    <TextBlock Text="Have a coupon?" 
+                               Style="{StaticResource SubtitleMedium}"
+                               Margin="0,0,0,15"/>
+                    <Grid Margin="0,0,0,25">
+                        <TextBox Text="{Binding CouponCode, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="50"
+                                 Padding="15,0,100,0"
+                                 FontSize="14"
+                                 BorderBrush="{StaticResource BorderDefault}"
+                                 BorderThickness="1"/>
+                        <TextBlock Text="Enter code"
+                                   Foreground="{StaticResource Gray400Brush}"
+                                   FontSize="14"
+                                   VerticalAlignment="Center"
+                                   Margin="15,0,0,0"
+                                   IsHitTestVisible="False">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CouponCode}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CouponCode}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <Button Content="APPLY" 
+                                Style="{StaticResource AccentButton}"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Padding="20,0"
+                                HorizontalAlignment="Right"
+                                Margin="5"
+                                Command="{Binding ApplyCouponCommand}"/>
+                    </Grid>
+
+                    <!-- Botones -->
                     <Button Content="PROCEED TO CHECKOUT" 
-                        Style="{StaticResource AccentButton}"
-                        Padding="0,18"
-                        Margin="0,0,0,25"/>
-
-                    <!-- Payment methods -->
-                    <TextBlock Text="We accept" 
-                           Style="{StaticResource BodySmall}"
-                           Foreground="{StaticResource TextSecondary}"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,15"/>
-
-                    <StackPanel Orientation="Horizontal" 
-                            HorizontalAlignment="Center">
-                        <Border Background="{StaticResource Gray200Brush}"
-                            Width="50" Height="32"
-                            Margin="0,0,8,0">
-                            <TextBlock Text="💳" 
-                                   FontSize="18"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                        </Border>
-                        <Border Background="{StaticResource Gray200Brush}"
-                            Width="50" Height="32"
-                            Margin="0,0,8,0">
-                            <TextBlock Text="💰" 
-                                   FontSize="18"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                        </Border>
-                        <Border Background="{StaticResource Gray200Brush}"
-                            Width="50" Height="32">
-                            <TextBlock Text="📱" 
-                                   FontSize="18"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                        </Border>
-                    </StackPanel>
+                            Style="{StaticResource AccentButton}"
+                            Padding="0,18"
+                            Margin="0,0,0,15"
+                            Command="{Binding CheckoutCommandCommand}"
+                            IsEnabled="{Binding CanCheckout}"/>
+                    <Button Content="CONTINUE SHOPPING" 
+                            Style="{StaticResource OutlineButton}"
+                            Padding="0,18"
+                            Command="{Binding BrowseProductsCommand}"/>
                 </StackPanel>
             </Border>
         </Grid>
-
     </ScrollViewer>
 </UserControl>
