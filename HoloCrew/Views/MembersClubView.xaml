@@ -4,366 +4,372 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="1000" d:DesignWidth="1400"
+             d:DesignHeight="800" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <StackPanel>
-
-        <!-- HERO BANNER -->
-        <Border Background="{StaticResource BlackPrimaryBrush}" Height="500">
-            <Grid>
-                <Border Background="{StaticResource RedAccentBrush}"
-                        Height="4"
-                        VerticalAlignment="Top"
-                        Margin="0,80,0,0"/>
-                <Border Background="{StaticResource RedAccentBrush}"
-                        Height="4"
-                        VerticalAlignment="Bottom"
-                        Margin="0,0,0,80"/>
-
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="👑" 
-                               FontSize="80" 
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,20"/>
-
-                    <TextBlock Text="MEMBERS CLUB" 
-                               FontSize="64" 
-                               FontWeight="Black" 
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,15"/>
-
-                    <TextBlock Text="ÚNETE AL CLUB EXCLUSIVO DE HOLOCREW" 
-                               FontSize="18" 
-                               FontWeight="SemiBold" 
-                               Foreground="{StaticResource Gray400Brush}"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,40"/>
-
-                    <Button Content="UNIRSE AHORA" 
-                            Style="{StaticResource AccentButton}"
-                            FontSize="16"
-                            Padding="50,18"
-                            Cursor="Hand"/>
-                </StackPanel>
-            </Grid>
-        </Border>
-
-        <!-- BENEFICIOS -->
-        <Border Padding="60,80,60,60">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                  HorizontalScrollBarVisibility="Disabled">
+        <Border Padding="60,40,60,80">
             <StackPanel>
-                <TextBlock Text="BENEFICIOS EXCLUSIVOS" 
-                           Style="{StaticResource HeadingLarge}"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,60"/>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="40"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                <!-- HERO SECTION -->
+                <Border Background="{StaticResource BlackPrimaryBrush}"
+                    CornerRadius="20"
+                    Padding="60,50"
+                    Margin="0,0,0,50">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="30" ShadowDepth="5"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <!-- Beneficio 1 -->
-                    <Border Grid.Column="0" Grid.Row="0"
-                            Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
-                            BorderThickness="1"
-                            Padding="40">
-                        <StackPanel>
-                            <TextBlock Text="🎁" 
-                                       FontSize="48" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,20"/>
+                        <!-- Contenido Izquierdo -->
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="MEMBERS CLUB" 
+                                   FontSize="48"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource WhitePrimaryBrush}"
+                                   Margin="0,0,0,10"/>
 
-                            <TextBlock Text="DESCUENTOS ESPECIALES" 
-                                       FontSize="20" 
-                                       FontWeight="Black" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,15"/>
+                            <TextBlock Text="Recompensas Exclusivas, Descuentos y Más" 
+                                   FontSize="20"
+                                   Foreground="{StaticResource Gray400Brush}"
+                                   Margin="0,0,0,30"/>
 
-                            <TextBlock Text="15% adicional en todos tus pedidos" 
-                                       Style="{StaticResource BodyMedium}"
-                                       Foreground="{StaticResource TextSecondary}"
-                                       HorizontalAlignment="Center"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Beneficio 2 -->
-                    <Border Grid.Column="2" Grid.Row="0"
-                            Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
-                            BorderThickness="1"
-                            Padding="40">
-                        <StackPanel>
-                            <TextBlock Text="🚚" 
-                                       FontSize="48" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,20"/>
-
-                            <TextBlock Text="ENVÍO GRATIS" 
-                                       FontSize="20" 
-                                       FontWeight="Black" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,15"/>
-
-                            <TextBlock Text="Envío gratuito en todos tus pedidos" 
-                                       Style="{StaticResource BodyMedium}"
-                                       Foreground="{StaticResource TextSecondary}"
-                                       HorizontalAlignment="Center"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Beneficio 3 -->
-                    <Border Grid.Column="0" Grid.Row="2"
-                            Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
-                            BorderThickness="1"
-                            Padding="40">
-                        <StackPanel>
-                            <TextBlock Text="⚡" 
-                                       FontSize="48" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,20"/>
-
-                            <TextBlock Text="ACCESO ANTICIPADO" 
-                                       FontSize="20" 
-                                       FontWeight="Black" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,15"/>
-
-                            <TextBlock Text="Sé el primero en ver nuevas colecciones" 
-                                       Style="{StaticResource BodyMedium}"
-                                       Foreground="{StaticResource TextSecondary}"
-                                       HorizontalAlignment="Center"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Beneficio 4 -->
-                    <Border Grid.Column="2" Grid.Row="2"
-                            Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
-                            BorderThickness="1"
-                            Padding="40">
-                        <StackPanel>
-                            <TextBlock Text="🎉" 
-                                       FontSize="48" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,20"/>
-
-                            <TextBlock Text="EVENTOS EXCLUSIVOS" 
-                                       FontSize="20" 
-                                       FontWeight="Black" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,15"/>
-
-                            <TextBlock Text="Invitaciones a lanzamientos y eventos" 
-                                       Style="{StaticResource BodyMedium}"
-                                       Foreground="{StaticResource TextSecondary}"
-                                       HorizontalAlignment="Center"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-                </Grid>
-            </StackPanel>
-        </Border>
-
-        <!-- PLANES -->
-        <Border Background="{StaticResource Gray100Brush}" Padding="60,80">
-            <StackPanel>
-                <TextBlock Text="ELIGE TU PLAN" 
-                           Style="{StaticResource HeadingLarge}"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,60"/>
-
-                <UniformGrid Columns="3">
-
-                    <!-- SILVER -->
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
-                            BorderThickness="1"
-                            Margin="0,0,15,0"
-                            Padding="40">
-                        <StackPanel>
-                            <TextBlock Text="SILVER" 
-                                       FontSize="24" 
-                                       FontWeight="Black" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,10"/>
-
-                            <TextBlock Text="9.99€" 
-                                       FontSize="48" 
-                                       FontWeight="Black" 
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,5"/>
-
-                            <TextBlock Text="por mes" 
-                                       Style="{StaticResource BodySmall}"
-                                       Foreground="{StaticResource TextSecondary}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,30"/>
-
-                            <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,0,0,20"/>
-
-                            <Border Margin="0,0,0,30">
+                            <!-- Nivel Actual -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <TextBlock Text="{Binding CurrentTier.Icon}" 
+                                       FontSize="40"
+                                       Margin="0,0,15,0"/>
                                 <StackPanel>
-                                    <TextBlock Text="✓ 10% de descuento" 
-                                               Style="{StaticResource BodyMedium}"
-                                               Margin="0,0,0,10"/>
-                                    <TextBlock Text="✓ Envío gratis +50€" 
-                                               Style="{StaticResource BodyMedium}"
-                                               Margin="0,0,0,10"/>
-                                    <TextBlock Text="✓ Devoluciones gratis" 
-                                               Style="{StaticResource BodyMedium}"
-                                               Margin="0,0,0,10"/>
+                                    <TextBlock Text="{Binding CurrentTier.Name}" 
+                                           FontSize="32"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                    <TextBlock Text="MEMBER" 
+                                           FontSize="14"
+                                           Foreground="{StaticResource Gray400Brush}"/>
                                 </StackPanel>
-                            </Border>
+                            </StackPanel>
 
-                            <Button Content="SELECCIONAR" 
-                                    Style="{StaticResource PrimaryButton}"
-                                    Cursor="Hand"/>
-                        </StackPanel>
-                    </Border>
+                            <!-- Stats -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                    <!-- GOLD -->
-                    <Border Background="{StaticResource RedAccentBrush}"
-                            Margin="0,0,15,0"
-                            Padding="40">
-                        <StackPanel>
-                            <Border Background="{StaticResource WhitePrimaryBrush}"
-                                    Padding="8,4"
-                                    HorizontalAlignment="Center"
-                                    Margin="0,0,0,15">
-                                <TextBlock Text="MÁS POPULAR" 
-                                           FontSize="10" 
-                                           FontWeight="Black" 
-                                           Foreground="{StaticResource BlackPrimaryBrush}"/>
-                            </Border>
-
-                            <TextBlock Text="GOLD" 
-                                       FontSize="24" 
-                                       FontWeight="Black" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,10"/>
-
-                            <TextBlock Text="19.99€" 
-                                       FontSize="48" 
-                                       FontWeight="Black" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,5"/>
-
-                            <TextBlock Text="por mes" 
-                                       FontSize="12"
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,30"/>
-
-                            <Border Height="1" Background="{StaticResource WhitePrimaryBrush}" Opacity="0.3" Margin="0,0,0,20"/>
-
-                            <Border Margin="0,0,0,30">
-                                <StackPanel>
-                                    <TextBlock Text="✓ 15% de descuento" 
-                                               FontSize="14"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               Margin="0,0,0,10"/>
-                                    <TextBlock Text="✓ Envío gratis siempre" 
-                                               FontSize="14"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               Margin="0,0,0,10"/>
-                                    <TextBlock Text="✓ Acceso anticipado" 
-                                               FontSize="14"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               Margin="0,0,0,10"/>
-                                    <TextBlock Text="✓ Eventos exclusivos" 
-                                               FontSize="14"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               Margin="0,0,0,10"/>
+                                <!-- Total Points -->
+                                <StackPanel Grid.Column="0" Margin="0,0,50,0">
+                                    <TextBlock Text="{Binding UserMembership.TotalPoints}" 
+                                           FontSize="36"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                    <TextBlock Text="Puntos Totales" 
+                                           FontSize="14"
+                                           Foreground="{StaticResource Gray400Brush}"/>
                                 </StackPanel>
-                            </Border>
 
-                            <Button Content="SELECCIONAR" 
-                                    Background="{StaticResource WhitePrimaryBrush}"
-                                    Foreground="{StaticResource BlackPrimaryBrush}"
-                                    FontSize="14"
-                                    FontWeight="Bold"
-                                    Padding="0,15"
-                                    BorderThickness="0"
-                                    Cursor="Hand"/>
+                                <!-- Total Orders -->
+                                <StackPanel Grid.Column="1" Margin="0,0,50,0">
+                                    <TextBlock Text="{Binding UserMembership.TotalOrders}" 
+                                           FontSize="36"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                    <TextBlock Text="Pedidos" 
+                                           FontSize="14"
+                                           Foreground="{StaticResource Gray400Brush}"/>
+                                </StackPanel>
+
+                                <!-- Member Since -->
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="{Binding UserMembership.MemberSince, StringFormat='{}{0:MMM yyyy}'}" 
+                                           FontSize="36"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                    <TextBlock Text="Miembro Desde" 
+                                           FontSize="14"
+                                           Foreground="{StaticResource Gray400Brush}"/>
+                                </StackPanel>
+                            </Grid>
                         </StackPanel>
-                    </Border>
 
-                    <!-- PLATINUM -->
-                    <Border Background="{StaticResource BlackPrimaryBrush}"
-                            Padding="40">
-                        <StackPanel>
-                            <TextBlock Text="PLATINUM" 
-                                       FontSize="24" 
-                                       FontWeight="Black" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,10"/>
-
-                            <TextBlock Text="29.99€" 
-                                       FontSize="48" 
-                                       FontWeight="Black" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,5"/>
-
-                            <TextBlock Text="por mes" 
-                                       FontSize="12"
+                        <!-- Progreso Derecha -->
+                        <Border Grid.Column="1"
+                            Background="#1A1A1A"
+                            CornerRadius="15"
+                            Padding="40,30"
+                            MinWidth="350">
+                            <StackPanel>
+                                <TextBlock Text="PROGRESO AL SIGUIENTE NIVEL" 
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
                                        Foreground="{StaticResource Gray400Brush}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,30"/>
+                                       Margin="0,0,0,20"/>
 
-                            <Border Height="1" Background="{StaticResource Gray700Brush}" Margin="0,0,0,20"/>
-
-                            <Border Margin="0,0,0,30">
-                                <StackPanel>
-                                    <TextBlock Text="✓ 20% de descuento" 
-                                               FontSize="14"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               Margin="0,0,0,10"/>
-                                    <TextBlock Text="✓ Todo lo de GOLD" 
-                                               FontSize="14"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               Margin="0,0,0,10"/>
-                                    <TextBlock Text="✓ Styling personal" 
-                                               FontSize="14"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               Margin="0,0,0,10"/>
-                                    <TextBlock Text="✓ Regalos mensuales" 
-                                               FontSize="14"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               Margin="0,0,0,10"/>
+                                <!-- Next Level Icon -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <TextBlock Text="{Binding NextTier.Icon}" 
+                                           FontSize="50"/>
+                                    <StackPanel Margin="15,0,0,0">
+                                        <TextBlock Text="{Binding NextTier.Name}" 
+                                               FontSize="28"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                        <TextBlock FontSize="14" Foreground="{StaticResource Gray400Brush}">
+                                        <Run Text="{Binding UserMembership.PointsToNextLevel}"/>
+                                        <Run Text=" puntos restantes"/>
+                                        </TextBlock>
+                                    </StackPanel>
                                 </StackPanel>
-                            </Border>
 
-                            <Button Content="SELECCIONAR" 
-                                    Background="{StaticResource RedAccentBrush}"
-                                    Foreground="{StaticResource WhitePrimaryBrush}"
-                                    FontSize="14"
-                                    FontWeight="Bold"
-                                    Padding="0,15"
-                                    BorderThickness="0"
-                                    Cursor="Hand"/>
-                        </StackPanel>
-                    </Border>
-                </UniformGrid>
+                                <!-- ⭐ PROGRESS BAR SIMPLE (ancho fijo calculado manualmente) -->
+                                <Grid Margin="0,0,0,10">
+                                    <Border Background="#2A2A2A"
+                                        Height="12"
+                                        CornerRadius="6"
+                                        Width="270"/>
+                                    <!-- 75% de 270 = 202.5 -->
+                                    <Border Background="{StaticResource AccentBrush}"
+                                        Height="12"
+                                        CornerRadius="6"
+                                        HorizontalAlignment="Left"
+                                        Width="202"/>
+                                </Grid>
+
+                                <TextBlock HorizontalAlignment="Right">
+                                <Run Text="{Binding UserMembership.ProgressPercentage, StringFormat={}{0:F0}}" 
+                                     FontSize="16" 
+                                     FontWeight="Bold" 
+                                     Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                <Run Text="%" 
+                                     FontSize="16" 
+                                     Foreground="{StaticResource Gray400Brush}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- BENEFITS SECTION -->
+                <StackPanel Margin="0,0,0,50">
+                    <TextBlock Text="TUS BENEFICIOS ACTUALES" 
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Margin="0,0,0,30"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Benefit 1: Descuento -->
+                        <Border Grid.Column="0"
+                            Background="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="1"
+                            Padding="30"
+                            Margin="0,0,15,0">
+                            <StackPanel>
+                                <TextBlock Text="💳" 
+                                       FontSize="48"
+                                       Margin="0,0,0,15"/>
+                                <TextBlock FontSize="28" 
+                                       FontWeight="Bold" 
+                                       Margin="0,0,0,10">
+                                <Run Text="{Binding CurrentTier.DiscountPercentage}"/>
+                                <Run Text="%"/>
+                                </TextBlock>
+                                <TextBlock Text="Descuento" 
+                                       FontSize="16"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Benefit 2: Puntos Multiplier -->
+                        <Border Grid.Column="1"
+                            Background="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="1"
+                            Padding="30"
+                            Margin="0,0,15,0">
+                            <StackPanel>
+                                <TextBlock Text="⭐" 
+                                       FontSize="48"
+                                       Margin="0,0,0,15"/>
+                                <TextBlock FontSize="28" 
+                                       FontWeight="Bold" 
+                                       Margin="0,0,0,10">
+                                <Run Text="{Binding CurrentTier.PointsMultiplier}"/>
+                                <Run Text="x"/>
+                                </TextBlock>
+                                <TextBlock Text="Puntos por €1" 
+                                       FontSize="16"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Benefit 3: Free Shipping -->
+                        <Border Grid.Column="2"
+                            Background="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="1"
+                            Padding="30">
+                            <StackPanel>
+                                <TextBlock Text="🚚" 
+                                       FontSize="48"
+                                       Margin="0,0,0,15"/>
+                                <TextBlock Text="Envío" 
+                                       FontSize="28" 
+                                       FontWeight="Bold" 
+                                       Margin="0,0,0,10"/>
+                                <TextBlock FontSize="16" Foreground="{StaticResource TextSecondary}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="Con condiciones"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CurrentTier.FreeShipping}" Value="True">
+                                                    <Setter Property="Text" Value="GRATIS"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+
+                <!-- ALL TIERS SECTION -->
+                <StackPanel Margin="0,0,0,50">
+                    <TextBlock Text="TODOS LOS NIVELES" 
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Margin="0,0,0,30"/>
+
+                    <ItemsControl ItemsSource="{Binding MembershipTiers}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource WhitePrimaryBrush}"
+                                    BorderBrush="{StaticResource BorderDefault}"
+                                    BorderThickness="2"
+                                    Padding="25,30"
+                                    Margin="0,0,15,0">
+                                    <StackPanel>
+                                        <!-- Icon & Name -->
+                                        <TextBlock Text="{Binding Icon}" 
+                                               FontSize="60"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,0,0,15"/>
+                                        <TextBlock Text="{Binding Name}" 
+                                               FontSize="20"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,0,0,5"/>
+                                        <TextBlock HorizontalAlignment="Center" 
+                                               FontSize="14" 
+                                               Foreground="{StaticResource TextSecondary}"
+                                               Margin="0,0,0,20">
+                                        <Run Text="{Binding PointsRequired}"/>
+                                        <Run Text=" pts"/>
+                                        </TextBlock>
+
+                                        <!-- Benefits List -->
+                                        <ItemsControl ItemsSource="{Binding Benefits}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}" 
+                                                           FontSize="12"
+                                                           TextWrapping="Wrap"
+                                                           Margin="0,0,0,8"
+                                                           Foreground="{StaticResource TextSecondary}"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- REWARDS SECTION -->
+                <StackPanel>
+                    <TextBlock Text="CANJEA TUS PUNTOS" 
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Margin="0,0,0,30"/>
+
+                    <ItemsControl ItemsSource="{Binding AvailableRewards}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="3"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource WhitePrimaryBrush}"
+                                    BorderBrush="{StaticResource BorderDefault}"
+                                    BorderThickness="1"
+                                    Padding="25"
+                                    Margin="0,0,15,15">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Icon -->
+                                        <TextBlock Grid.Row="0"
+                                               Text="{Binding Icon}" 
+                                               FontSize="48"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,0,0,15"/>
+
+                                        <!-- Info -->
+                                        <StackPanel Grid.Row="1">
+                                            <TextBlock Text="{Binding Title}" 
+                                                   FontSize="18"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,8"/>
+                                            <TextBlock Text="{Binding Description}" 
+                                                   FontSize="14"
+                                                   TextWrapping="Wrap"
+                                                   Foreground="{StaticResource TextSecondary}"
+                                                   Margin="0,0,0,15"/>
+                                            <TextBlock FontSize="16" FontWeight="Bold" Foreground="{StaticResource AccentBrush}">
+                                            <Run Text="{Binding PointsCost}"/>
+                                            <Run Text=" puntos"/>
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <!-- Button -->
+                                        <Button Grid.Row="2"
+                                            Content="CANJEAR"
+                                            Style="{StaticResource AccentButton}"
+                                            Command="{Binding DataContext.RedeemRewardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Margin="0,15,0,0"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
             </StackPanel>
         </Border>
-
-    </StackPanel>
-
+    </ScrollViewer>
 </UserControl>

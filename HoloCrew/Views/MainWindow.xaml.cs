@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace HoloCrew.Views
 {
@@ -30,21 +31,25 @@ namespace HoloCrew.Views
             var mousePosition = e.GetPosition(scrollViewer);
             var elementUnderMouse = scrollViewer.InputHitTest(mousePosition) as DependencyObject;
 
-            // Buscar si hay un ScrollViewer interno en la jerarquía
-            var innerScrollViewer = FindParentScrollViewer(elementUnderMouse, scrollViewer);
-
-            if (innerScrollViewer != null)
+            // ⭐ ARREGLADO: Verificar que elementUnderMouse sea un Visual antes de buscar
+            if (elementUnderMouse != null && (elementUnderMouse is Visual || elementUnderMouse is Visual3D))
             {
-                // HAY un ScrollViewer interno
-                // Verificar si puede hacer scroll
-                bool canScrollUp = innerScrollViewer.VerticalOffset > 0;
-                bool canScrollDown = innerScrollViewer.VerticalOffset < innerScrollViewer.ScrollableHeight;
+                // Buscar si hay un ScrollViewer interno en la jerarquía
+                var innerScrollViewer = FindParentScrollViewer(elementUnderMouse, scrollViewer);
 
-                if ((e.Delta > 0 && canScrollUp) || (e.Delta < 0 && canScrollDown))
+                if (innerScrollViewer != null)
                 {
-                    // El ScrollViewer interno PUEDE hacer scroll
-                    // NO capturamos el evento, dejamos que el interno lo maneje
-                    return;
+                    // HAY un ScrollViewer interno
+                    // Verificar si puede hacer scroll
+                    bool canScrollUp = innerScrollViewer.VerticalOffset > 0;
+                    bool canScrollDown = innerScrollViewer.VerticalOffset < innerScrollViewer.ScrollableHeight;
+
+                    if ((e.Delta > 0 && canScrollUp) || (e.Delta < 0 && canScrollDown))
+                    {
+                        // El ScrollViewer interno PUEDE hacer scroll
+                        // NO capturamos el evento, dejamos que el interno lo maneje
+                        return;
+                    }
                 }
             }
 
@@ -72,23 +77,33 @@ namespace HoloCrew.Views
         {
             if (child == null) return null;
 
-            DependencyObject parent = VisualTreeHelper.GetParent(child);
-
-            while (parent != null)
+            // ⭐ ARREGLADO: Try-catch para manejar elementos no visuales
+            try
             {
-                // Si encontramos el MainScrollViewer, paramos (no queremos encontrarnos a nosotros mismos)
-                if (parent == scrollViewerToExclude)
-                {
-                    return null;
-                }
+                DependencyObject parent = VisualTreeHelper.GetParent(child);
 
-                // Si encontramos un ScrollViewer, lo devolvemos
-                if (parent is ScrollViewer scrollViewer)
+                while (parent != null)
                 {
-                    return scrollViewer;
-                }
+                    // Si encontramos el MainScrollViewer, paramos (no queremos encontrarnos a nosotros mismos)
+                    if (parent == scrollViewerToExclude)
+                    {
+                        return null;
+                    }
 
-                parent = VisualTreeHelper.GetParent(parent);
+                    // Si encontramos un ScrollViewer, lo devolvemos
+                    if (parent is ScrollViewer scrollViewer)
+                    {
+                        return scrollViewer;
+                    }
+
+                    parent = VisualTreeHelper.GetParent(parent);
+                }
+            }
+            catch (System.InvalidOperationException)
+            {
+                // El elemento no está en el árbol visual (ej: Run, TextElement)
+                // Simplemente retornamos null
+                return null;
             }
 
             return null;
