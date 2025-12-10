@@ -25,7 +25,6 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private int _itemCount;
 
-        // ⭐ PROPIEDADES AGREGADAS
         [ObservableProperty]
         private int _wishlistItemCount;
 
@@ -34,6 +33,9 @@ namespace HoloCrew.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<Product> _recommendedProducts = new();
+
+        // ⭐ PROPIEDAD FALTANTE
+        public bool HasItems => !IsWishlistEmpty;
 
         public WishlistViewModel(
             IWishlistService wishlistService,
@@ -47,14 +49,25 @@ namespace HoloCrew.ViewModels
             _navigationService = navigationService;
 
             Title = "Mi Lista de Deseos";
+
+            // ⭐ COMENTADO: IWishlistService no tiene el evento
+            // _wishlistService.WishlistUpdated += OnWishlistUpdated;
         }
 
         public override async void OnNavigatedTo(object parameter)
         {
             base.OnNavigatedTo(parameter);
-            await LoadWishlistAsync();
+            await LoadWishlistAsync();  // ⭐ Siempre recarga al navegar
             LoadRecommendedProducts();
         }
+
+        // ⭐ COMENTADO: Evento no disponible
+        /*
+        private async void OnWishlistUpdated(object sender, EventArgs e)
+        {
+            await LoadWishlistAsync();
+        }
+        */
 
         [RelayCommand]
         private async Task LoadWishlistAsync()
@@ -63,20 +76,21 @@ namespace HoloCrew.ViewModels
             {
                 IsBusy = true;
 
-                var currentUser = _authenticationService.GetCurrentUser();
-                if (currentUser != null)
-                {
-                    var items = await _wishlistService.GetWishlistAsync(currentUser.Id);
-                    WishlistItems = new ObservableCollection<Product>(items);
-                    ItemCount = WishlistItems.Count;
-                    WishlistItemCount = WishlistItems.Count;
-                    IsEmpty = ItemCount == 0;
-                    IsWishlistEmpty = ItemCount == 0;
-                }
+                // ⭐ CAMBIO: No requiere usuario autenticado para testing
+                var items = await _wishlistService.GetWishlistAsync(1); // userId = 1 por defecto
+
+                WishlistItems = new ObservableCollection<Product>(items);
+                ItemCount = WishlistItems.Count;
+                WishlistItemCount = WishlistItems.Count;
+                IsEmpty = ItemCount == 0;
+                IsWishlistEmpty = ItemCount == 0;
+                OnPropertyChanged(nameof(HasItems)); // ⭐ Notificar cambio
+
+                System.Diagnostics.Debug.WriteLine($"✅ Wishlist loaded: {ItemCount} items");
             }
             catch (Exception ex)
             {
-                // Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error loading wishlist: {ex.Message}");
             }
             finally
             {
@@ -103,10 +117,11 @@ namespace HoloCrew.ViewModels
             try
             {
                 await _cartService.AddToCartAsync(product, 1);
+                System.Diagnostics.Debug.WriteLine($"✅ Added to cart: {product.Name}");
             }
             catch (Exception ex)
             {
-                // Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error adding to cart: {ex.Message}");
             }
         }
 
@@ -123,10 +138,13 @@ namespace HoloCrew.ViewModels
                 WishlistItemCount = WishlistItems.Count;
                 IsEmpty = ItemCount == 0;
                 IsWishlistEmpty = ItemCount == 0;
+                OnPropertyChanged(nameof(HasItems)); // ⭐ Notificar cambio
+
+                System.Diagnostics.Debug.WriteLine($"✅ Removed from wishlist: {product.Name}");
             }
             catch (Exception ex)
             {
-                // Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error removing from wishlist: {ex.Message}");
             }
         }
 
@@ -149,11 +167,12 @@ namespace HoloCrew.ViewModels
                     await _cartService.AddToCartAsync(product, 1);
                 }
 
+                System.Diagnostics.Debug.WriteLine($"✅ Added all {WishlistItems.Count} items to cart");
                 _navigationService.NavigateTo<CartViewModel>();
             }
             catch (Exception ex)
             {
-                // Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error adding all to cart: {ex.Message}");
             }
             finally
             {
@@ -172,10 +191,13 @@ namespace HoloCrew.ViewModels
                 WishlistItemCount = 0;
                 IsEmpty = true;
                 IsWishlistEmpty = true;
+                OnPropertyChanged(nameof(HasItems)); // ⭐ Notificar cambio
+
+                System.Diagnostics.Debug.WriteLine("✅ Wishlist cleared");
             }
             catch (Exception ex)
             {
-                // Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error clearing wishlist: {ex.Message}");
             }
         }
 
@@ -183,6 +205,13 @@ namespace HoloCrew.ViewModels
         private void ShareWishlist()
         {
             // Implementar compartir wishlist
+            System.Diagnostics.Debug.WriteLine("📤 Share wishlist (not implemented yet)");
+        }
+
+        [RelayCommand]
+        private void BrowseProducts()
+        {
+            _navigationService.NavigateTo<ProductCatalogViewModel>();
         }
 
         [RelayCommand]

@@ -10,15 +10,19 @@ namespace HoloCrew.ViewModels
         private readonly INavigationService _navigationService;
         private readonly ICartService _cartService;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IWishlistService _wishlistService;
 
         [ObservableProperty]
         private object _currentView;
 
         [ObservableProperty]
-        private string _searchQuery;  // ⭐ SOLO UNA VEZ
+        private string _searchQuery;
 
         [ObservableProperty]
         private int _cartItemCount;
+
+        [ObservableProperty]
+        private int _wishlistItemCount;
 
         [ObservableProperty]
         private bool _isUserLoggedIn;
@@ -29,17 +33,30 @@ namespace HoloCrew.ViewModels
         public MainWindowViewModel(
             INavigationService navigationService,
             ICartService cartService,
-            IAuthenticationService authenticationService)
+            IAuthenticationService authenticationService,
+            IWishlistService wishlistService)
         {
             _navigationService = navigationService;
             _cartService = cartService;
             _authenticationService = authenticationService;
+            _wishlistService = wishlistService;
 
             Title = "HoloCrew";
 
+            // Suscribirse a cambios en el carrito
             _cartService.CartUpdated += OnCartUpdated;
+
+            // ⭐ Suscribirse a cambios en wishlist
+            _wishlistService.WishlistUpdated += OnWishlistUpdated;
+
+            // Actualizar estado de autenticación
             UpdateAuthenticationState();
+
+            // Actualizar contador del carrito
             CartItemCount = _cartService.GetCartItemCount();
+
+            // Actualizar contador de wishlist
+            UpdateWishlistCount();
         }
 
         // ============================
@@ -59,7 +76,7 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private void ExecuteSearch()  // ⭐ COMANDO ÚNICO
+        private void ExecuteSearch()
         {
             if (string.IsNullOrWhiteSpace(SearchQuery))
                 return;
@@ -78,6 +95,7 @@ namespace HoloCrew.ViewModels
         private void NavigateToWishlist()
         {
             _navigationService.NavigateTo<WishlistViewModel>();
+            UpdateWishlistCount(); // Actualizar al navegar
         }
 
         [RelayCommand]
@@ -146,6 +164,12 @@ namespace HoloCrew.ViewModels
             CartItemCount = _cartService.GetCartItemCount();
         }
 
+        // ⭐ NUEVO: Evento para actualizar contador de wishlist automáticamente
+        private void OnWishlistUpdated(object sender, EventArgs e)
+        {
+            UpdateWishlistCount();
+        }
+
         private async void UpdateAuthenticationState()
         {
             IsUserLoggedIn = await _authenticationService.IsAuthenticatedAsync();
@@ -159,6 +183,18 @@ namespace HoloCrew.ViewModels
             {
                 CurrentUserName = null;
             }
+        }
+
+        private async void UpdateWishlistCount()
+        {
+            WishlistItemCount = await _wishlistService.GetWishlistCountAsync(1);
+        }
+
+        public override void OnNavigatedTo(object parameter)
+        {
+            base.OnNavigatedTo(parameter);
+            UpdateWishlistCount();
+            CartItemCount = _cartService.GetCartItemCount();
         }
     }
 }

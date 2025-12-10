@@ -1,6 +1,10 @@
-﻿namespace HoloCrew.Models
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using System.Collections.Generic;
+
+namespace HoloCrew.Models
 {
-    public class Product
+    public partial class Product : ObservableObject
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -27,5 +31,9 @@
             ? Math.Round(((OriginalPrice.Value - Price) / OriginalPrice.Value) * 100, 0)
             : 0;
         public bool IsInStock => Stock > 0;
+
+        // ⭐ NUEVA: Estado de wishlist para UI reactiva
+        [ObservableProperty]
+        private bool _isInWishlist;
     }
 }

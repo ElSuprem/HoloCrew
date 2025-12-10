@@ -8,6 +8,11 @@ namespace HoloCrew.Services.Interfaces
     public interface IWishlistService
     {
         /// <summary>
+        /// Evento que se dispara cuando la wishlist cambia
+        /// </summary>
+        event EventHandler WishlistUpdated;
+
+        /// <summary>
         /// Agrega un producto a la wishlist
         /// </summary>
         Task AddToWishlistAsync(int productId);

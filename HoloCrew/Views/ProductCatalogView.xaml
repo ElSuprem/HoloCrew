@@ -462,28 +462,40 @@
                                         <Rectangle Grid.Row="0" Fill="{StaticResource Gray200Brush}"/>
 
                                         <!-- ⭐ BOTÓN WISHLIST EN LA ESQUINA -->
-                                        <Border Grid.Row="0"
-                                                Background="{StaticResource WhitePrimaryBrush}"
-                                                Width="40"
-                                                Height="40"
-                                                CornerRadius="20"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Top"
-                                                Margin="15"
-                                                Cursor="Hand">
+                                        <!-- ⭐ BOTÓN WISHLIST DINÁMICO -->
+                                        <Border Background="{StaticResource WhitePrimaryBrush}"
+        Width="40"
+        Height="40"
+        CornerRadius="20"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Top"
+        Margin="15"
+        Cursor="Hand">
                                             <Border.Effect>
                                                 <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="2"/>
                                             </Border.Effect>
                                             <Border.InputBindings>
                                                 <MouseBinding MouseAction="LeftClick" 
-                                                              Command="{Binding DataContext.AddToWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                              CommandParameter="{Binding Id}"/>
+                      Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      CommandParameter="{Binding}"/>
                                             </Border.InputBindings>
-                                            <TextBlock Text="♡" 
-                                                       FontSize="20"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="{StaticResource BlackPrimaryBrush}"/>
+
+                                            <!-- ⭐ CORAZÓN DINÁMICO -->
+                                            <TextBlock FontSize="20"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Foreground="{StaticResource BlackPrimaryBrush}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="♡"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
+                                                                <Setter Property="Text" Value="❤️"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
                                         </Border>
 
                                         <!-- Información del producto -->

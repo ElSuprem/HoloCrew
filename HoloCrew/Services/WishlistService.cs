@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 namespace HoloCrew.Services
 {
     /// <summary>
-    /// Servicio de wishlist FUNCIONAL con datos MOCK
+    /// Servicio de wishlist funcional
     /// </summary>
     public class WishlistService : IWishlistService
     {
@@ -24,33 +24,8 @@ namespace HoloCrew.Services
 
         private void InitializeMockWishlist()
         {
-            // Empezar con wishlist vacía por defecto
-            // Los productos mock se pueden agregar al hacer debug
+            // ⭐ WISHLIST VACÍA - Los productos se agregan desde la app
             _wishlistItems = new ObservableCollection<Product>();
-
-            // ⭐ DESCOMENTA ESTO PARA VER PRODUCTOS INICIALES
-            /*
-            _wishlistItems = new ObservableCollection<Product>
-            {
-                new Product
-                {
-                    Id = 6,
-                    Name = "OVERSIZED HOODIE BLACK",
-                    Description = "Premium heavyweight cotton",
-                    Price = 79.99m,
-                    OriginalPrice = 99.99m,
-                    Stock = 75,
-                    MainImageUrl = "/Resources/Images/hoodie1.jpg",
-                    CategoryId = 1,
-                    Category = new Category { Id = 1, Name = "Tops" },
-                    AverageRating = 4.9,
-                    ReviewCount = 456,
-                    IsFeatured = true,
-                    IsNew = true,
-                    Gender = "Unisex"
-                }
-            };
-            */
         }
 
         public async Task<List<Product>> GetWishlistAsync(int userId)
@@ -62,25 +37,33 @@ namespace HoloCrew.Services
         {
             try
             {
-                // Verificar si ya está en wishlist
+                System.Diagnostics.Debug.WriteLine($"🔍 Attempting to add product {productId} to wishlist");
+
+                // Verificar si ya está
                 if (_wishlistItems.Any(p => p.Id == productId))
                 {
-                    return; // Ya está en wishlist
+                    System.Diagnostics.Debug.WriteLine($"⚠️ Product {productId} already in wishlist");
+                    return;
                 }
 
-                // Cargar el producto completo desde ProductService
+                // Cargar producto
                 var product = await _productService.GetProductByIdAsync(productId);
 
                 if (product != null)
                 {
                     _wishlistItems.Add(product);
+                    System.Diagnostics.Debug.WriteLine($"✅ Added product {productId} ({product.Name}) to wishlist. Total: {_wishlistItems.Count}");
                     OnWishlistUpdated();
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ Product {productId} not found");
                 }
             }
             catch (Exception ex)
             {
-                // Log error
-                System.Diagnostics.Debug.WriteLine($"Error adding to wishlist: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"❌ Error adding to wishlist: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
             }
 
             await Task.CompletedTask;
@@ -92,6 +75,7 @@ namespace HoloCrew.Services
             if (item != null)
             {
                 _wishlistItems.Remove(item);
+                System.Diagnostics.Debug.WriteLine($"✅ Removed product {productId} from wishlist. Remaining: {_wishlistItems.Count}");
                 OnWishlistUpdated();
             }
             await Task.CompletedTask;
@@ -110,26 +94,24 @@ namespace HoloCrew.Services
         public async Task ClearWishlistAsync()
         {
             _wishlistItems.Clear();
+            System.Diagnostics.Debug.WriteLine("✅ Wishlist cleared");
             OnWishlistUpdated();
             await Task.CompletedTask;
         }
 
         public async Task MoveAllToCartAsync(int userId)
         {
-            // Agregar todos los items al carrito
             foreach (var product in _wishlistItems.ToList())
             {
                 await _cartService.AddToCartAsync(product, 1);
             }
-
-            // Opcionalmente, limpiar la wishlist después
-            // await ClearWishlistAsync();
-
+            System.Diagnostics.Debug.WriteLine($"✅ Moved {_wishlistItems.Count} items to cart");
             await Task.CompletedTask;
         }
 
         private void OnWishlistUpdated()
         {
+            System.Diagnostics.Debug.WriteLine($"📢 WishlistUpdated event fired. Items: {_wishlistItems.Count}");
             WishlistUpdated?.Invoke(this, EventArgs.Empty);
         }
     }

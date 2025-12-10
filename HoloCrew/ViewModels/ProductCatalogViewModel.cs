@@ -12,7 +12,7 @@ namespace HoloCrew.ViewModels
         private readonly IProductService _productService;
         private readonly INavigationService _navigationService;
         private readonly ICartService _cartService;
-        private readonly IWishlistService _wishlistService;  // ⭐ AGREGADO
+        private readonly IWishlistService _wishlistService;
 
         [ObservableProperty]
         private ObservableCollection<Product> _products = new();
@@ -77,14 +77,17 @@ namespace HoloCrew.ViewModels
             IProductService productService,
             INavigationService navigationService,
             ICartService cartService,
-            IWishlistService wishlistService)  // ⭐ AGREGADO
+            IWishlistService wishlistService)
         {
             _productService = productService;
             _navigationService = navigationService;
             _cartService = cartService;
-            _wishlistService = wishlistService;  // ⭐ AGREGADO
+            _wishlistService = wishlistService;
 
             Title = "Catálogo de Productos";
+
+            // ⭐ Suscribirse a cambios en wishlist
+            _wishlistService.WishlistUpdated += OnWishlistUpdated;
         }
 
         public override async void OnNavigatedTo(object parameter)
@@ -117,6 +120,9 @@ namespace HoloCrew.ViewModels
                 var products = await _productService.GetProductsByCategoryAsync(0);
                 Products = new ObservableCollection<Product>(products);
                 FilteredProducts = new ObservableCollection<Product>(products);
+
+                // ⭐ Cargar estado de wishlist para cada producto
+                await LoadWishlistStates();
             }
             finally
             {
@@ -132,6 +138,9 @@ namespace HoloCrew.ViewModels
                 var products = await _productService.GetProductsByCategoryAsync(categoryId);
                 Products = new ObservableCollection<Product>(products);
                 FilteredProducts = new ObservableCollection<Product>(products);
+
+                // ⭐ Cargar estado de wishlist para cada producto
+                await LoadWishlistStates();
             }
             finally
             {
@@ -154,11 +163,29 @@ namespace HoloCrew.ViewModels
                 var results = await _productService.SearchProductsAsync(SearchQuery);
                 Products = new ObservableCollection<Product>(results);
                 ApplyAllFilters();
+
+                // ⭐ Cargar estado de wishlist para cada producto
+                await LoadWishlistStates();
             }
             finally
             {
                 IsFiltering = false;
             }
+        }
+
+        // ⭐ NUEVO: Cargar estado de wishlist para todos los productos
+        private async Task LoadWishlistStates()
+        {
+            foreach (var product in FilteredProducts)
+            {
+                product.IsInWishlist = await _wishlistService.IsInWishlistAsync(product.Id);
+            }
+        }
+
+        // ⭐ NUEVO: Evento que se dispara cuando cambia la wishlist
+        private async void OnWishlistUpdated(object sender, EventArgs e)
+        {
+            await LoadWishlistStates();
         }
 
         [RelayCommand]
@@ -287,22 +314,30 @@ namespace HoloCrew.ViewModels
         {
             if (product == null) return;
             await _cartService.AddToCartAsync(product, 1);
-            // TODO: Mostrar mensaje "Added to cart"
         }
 
-        // ⭐ NUEVO: Agregar a wishlist
+        // ⭐ NUEVO: Toggle wishlist con actualización de estado
         [RelayCommand]
-        private async Task AddToWishlistAsync(int productId)
+        private async Task ToggleWishlistAsync(Product product)
         {
+            if (product == null) return;
+
             try
             {
-                await _wishlistService.AddToWishlistAsync(productId);
-                // TODO: Mostrar mensaje "Added to wishlist ❤️"
+                if (product.IsInWishlist)
+                {
+                    await _wishlistService.RemoveFromWishlistAsync(product.Id);
+                    product.IsInWishlist = false;
+                }
+                else
+                {
+                    await _wishlistService.AddToWishlistAsync(product.Id);
+                    product.IsInWishlist = true;
+                }
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
-                System.Diagnostics.Debug.WriteLine($"Error adding to wishlist: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"❌ Error toggling wishlist: {ex.Message}");
             }
         }
 

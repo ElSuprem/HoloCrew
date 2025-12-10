@@ -180,19 +180,37 @@
                         </Grid>
                     </Border>
 
-                    <!-- Wishlist Icon -->
+                    <!-- Wishlist Icon con Badge -->
                     <Border Background="Transparent" 
-                            Width="44" Height="44" 
-                            Cursor="Hand" 
-                            Margin="0,0,10,0">
+        Width="44" Height="44" 
+        Cursor="Hand" 
+        Margin="0,0,10,0">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToWishlistCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
-                        <TextBlock Text="🤍" 
-                                   FontSize="22" 
-                                   HorizontalAlignment="Center" 
-                                   VerticalAlignment="Center"/>
+                        <Grid>
+                            <TextBlock Text="🤍" 
+                   FontSize="22" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"/>
+                            <!-- Badge de wishlist -->
+                            <Border Background="{StaticResource RedAccentBrush}"
+                CornerRadius="8"
+                Width="16" Height="16"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,8,8,0"
+                Visibility="{Binding WishlistItemCount, Converter={StaticResource CountToVisibilityConverter}}">
+                                <TextBlock Text="{Binding WishlistItemCount}"
+                       Foreground="White"
+                       FontSize="10"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
                     </Border>
+
 
                     <!-- Cart Icon con Badge -->
                     <Border Background="Transparent" 

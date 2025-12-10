@@ -247,7 +247,7 @@
                             <Button Content="♥ ADD TO WISHLIST" 
                                 Style="{StaticResource OutlineButton}"
                                 Padding="0,18"
-                                Command="{Binding AddToWishlistCommand}"/>
+                                Command="{Binding ToggleWishlistCommand}"/>
 
                             <!-- Información adicional -->
                             <Border Background="{StaticResource Gray50Brush}"

@@ -44,7 +44,7 @@ namespace HoloCrew
             // Transient: Nueva instancia cada vez que se solicita
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IOrderService, OrderService>();
-            services.AddTransient<IWishlistService, WishlistService>();
+            services.AddSingleton<IWishlistService, WishlistService>();
 
             // ========== VIEWMODELS ==========
             // Transient: Cada vista obtiene su propia instancia del ViewModel

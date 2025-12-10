@@ -78,6 +78,8 @@ namespace HoloCrew.ViewModels
 
                     // Verificar si está en wishlist
                     IsInWishlist = await _wishlistService.IsInWishlistAsync(productId);
+
+                    System.Diagnostics.Debug.WriteLine($"🔍 Product {productId} IsInWishlist: {IsInWishlist}");
                 }
             }
             finally
@@ -110,26 +112,34 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private async Task AddToWishlistAsync()
+        private async Task ToggleWishlistAsync()
         {
             if (Product == null) return;
 
             try
             {
+                System.Diagnostics.Debug.WriteLine($"🔍 ToggleWishlist called. Current state: {IsInWishlist}");
+
                 if (IsInWishlist)
                 {
+                    // Quitar de wishlist
+                    System.Diagnostics.Debug.WriteLine($"❌ Removing product {Product.Id} from wishlist");
                     await _wishlistService.RemoveFromWishlistAsync(Product.Id);
                     IsInWishlist = false;
                 }
                 else
                 {
+                    // Agregar a wishlist
+                    System.Diagnostics.Debug.WriteLine($"✅ Adding product {Product.Id} to wishlist");
                     await _wishlistService.AddToWishlistAsync(Product.Id);
                     IsInWishlist = true;
                 }
+
+                System.Diagnostics.Debug.WriteLine($"🔍 New state: {IsInWishlist}");
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error toggling wishlist: {ex.Message}");
             }
         }
 
