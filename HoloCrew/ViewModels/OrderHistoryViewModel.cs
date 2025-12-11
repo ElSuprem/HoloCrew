@@ -3,8 +3,11 @@ using CommunityToolkit.Mvvm.Input;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace HoloCrew.ViewModels
 {
@@ -72,7 +75,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                // TODO: Mostrar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error loading orders: {ex.Message}");
             }
             finally
             {
@@ -104,7 +107,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error reordering: {ex.Message}");
             }
         }
 

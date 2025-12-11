@@ -1,4 +1,7 @@
-﻿namespace HoloCrew.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace HoloCrew.Models
 {
     /// <summary>
     /// Niveles de membresía del HoloCrew Members Club

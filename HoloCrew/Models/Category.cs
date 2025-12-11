@@ -1,4 +1,6 @@
-﻿namespace HoloCrew.Models
+﻿using System.Collections.Generic;
+
+namespace HoloCrew.Models
 {
     public class Category
     {

@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows.Media.Imaging;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using HoloCrew.Constants;
 
 namespace HoloCrew.Helpers
 {
@@ -10,8 +11,20 @@ namespace HoloCrew.Helpers
     {
         // Regex para validación de email
         private static readonly Regex EmailRegex = new Regex(
-            @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+            AppConstants.RegexPatterns.Email,
             RegexOptions.Compiled | RegexOptions.IgnoreCase
+        );
+
+        // Regex para validación de teléfono español
+        private static readonly Regex PhoneRegex = new Regex(
+            AppConstants.RegexPatterns.Phone,
+            RegexOptions.Compiled
+        );
+
+        // Regex para código postal español
+        private static readonly Regex PostalCodeRegex = new Regex(
+            AppConstants.RegexPatterns.PostalCode,
+            RegexOptions.Compiled
         );
 
         /// <summary>
@@ -27,13 +40,17 @@ namespace HoloCrew.Helpers
 
         /// <summary>
         /// Valida si una contraseña cumple los requisitos mínimos
+        /// ⭐ CORREGIDO: Usa AppConstants.MinPasswordLength por defecto
         /// </summary>
-        public static bool IsValidPassword(string password, int minLength = 6)
+        public static bool IsValidPassword(string password, int minLength = 0)
         {
             if (string.IsNullOrWhiteSpace(password))
                 return false;
 
-            return password.Length >= minLength;
+            // Si no se especifica minLength, usar la constante
+            int effectiveMinLength = minLength > 0 ? minLength : AppConstants.MinPasswordLength;
+
+            return password.Length >= effectiveMinLength;
         }
 
         /// <summary>
@@ -56,27 +73,38 @@ namespace HoloCrew.Helpers
         }
 
         /// <summary>
-        /// Valida si un número de teléfono es válido (formato básico)
+        /// Valida si un número de teléfono español es válido
         /// </summary>
         public static bool IsValidPhone(string phone)
         {
             if (string.IsNullOrWhiteSpace(phone))
                 return false;
 
-            // Permitir solo números, espacios, guiones y paréntesis
-            var cleanPhone = Regex.Replace(phone, @"[\s\-\(\)]", "");
-            return cleanPhone.Length >= 9 && cleanPhone.Length <= 15 && Regex.IsMatch(cleanPhone, @"^\d+$");
+            // Usar el regex de AppConstants para teléfonos españoles
+            return PhoneRegex.IsMatch(phone);
         }
 
         /// <summary>
-        /// Valida código postal español (5 dígitos)
+        /// Valida código postal español (5 dígitos, provincias válidas 01-52)
         /// </summary>
         public static bool IsValidSpanishPostalCode(string postalCode)
         {
             if (string.IsNullOrWhiteSpace(postalCode))
                 return false;
 
-            return Regex.IsMatch(postalCode, @"^\d{5}$");
+            return PostalCodeRegex.IsMatch(postalCode);
+        }
+
+        /// <summary>
+        /// Valida si un nombre cumple los requisitos de longitud
+        /// </summary>
+        public static bool IsValidName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            return name.Length >= AppConstants.MinNameLength &&
+                   name.Length <= AppConstants.MaxNameLength;
         }
     }
 }

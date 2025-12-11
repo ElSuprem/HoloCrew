@@ -34,7 +34,6 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private ObservableCollection<Product> _recommendedProducts = new();
 
-        // ⭐ PROPIEDAD FALTANTE
         public bool HasItems => !IsWishlistEmpty;
 
         public WishlistViewModel(
@@ -50,24 +49,24 @@ namespace HoloCrew.ViewModels
 
             Title = "Mi Lista de Deseos";
 
-            // ⭐ COMENTADO: IWishlistService no tiene el evento
-            // _wishlistService.WishlistUpdated += OnWishlistUpdated;
+            // ⭐ CORREGIDO: Suscribirse al evento WishlistUpdated
+            _wishlistService.WishlistUpdated += OnWishlistUpdated;
         }
 
         public override async void OnNavigatedTo(object parameter)
         {
             base.OnNavigatedTo(parameter);
-            await LoadWishlistAsync();  // ⭐ Siempre recarga al navegar
+            await LoadWishlistAsync();
             LoadRecommendedProducts();
         }
 
-        // ⭐ COMENTADO: Evento no disponible
-        /*
+        /// <summary>
+        /// Evento que se dispara cuando la wishlist cambia desde otro lugar
+        /// </summary>
         private async void OnWishlistUpdated(object sender, EventArgs e)
         {
             await LoadWishlistAsync();
         }
-        */
 
         [RelayCommand]
         private async Task LoadWishlistAsync()
@@ -76,7 +75,6 @@ namespace HoloCrew.ViewModels
             {
                 IsBusy = true;
 
-                // ⭐ CAMBIO: No requiere usuario autenticado para testing
                 var items = await _wishlistService.GetWishlistAsync(1); // userId = 1 por defecto
 
                 WishlistItems = new ObservableCollection<Product>(items);
@@ -84,7 +82,7 @@ namespace HoloCrew.ViewModels
                 WishlistItemCount = WishlistItems.Count;
                 IsEmpty = ItemCount == 0;
                 IsWishlistEmpty = ItemCount == 0;
-                OnPropertyChanged(nameof(HasItems)); // ⭐ Notificar cambio
+                OnPropertyChanged(nameof(HasItems));
 
                 System.Diagnostics.Debug.WriteLine($"✅ Wishlist loaded: {ItemCount} items");
             }
@@ -138,7 +136,7 @@ namespace HoloCrew.ViewModels
                 WishlistItemCount = WishlistItems.Count;
                 IsEmpty = ItemCount == 0;
                 IsWishlistEmpty = ItemCount == 0;
-                OnPropertyChanged(nameof(HasItems)); // ⭐ Notificar cambio
+                OnPropertyChanged(nameof(HasItems));
 
                 System.Diagnostics.Debug.WriteLine($"✅ Removed from wishlist: {product.Name}");
             }
@@ -191,7 +189,7 @@ namespace HoloCrew.ViewModels
                 WishlistItemCount = 0;
                 IsEmpty = true;
                 IsWishlistEmpty = true;
-                OnPropertyChanged(nameof(HasItems)); // ⭐ Notificar cambio
+                OnPropertyChanged(nameof(HasItems));
 
                 System.Diagnostics.Debug.WriteLine("✅ Wishlist cleared");
             }
@@ -204,7 +202,6 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private void ShareWishlist()
         {
-            // Implementar compartir wishlist
             System.Diagnostics.Debug.WriteLine("📤 Share wishlist (not implemented yet)");
         }
 

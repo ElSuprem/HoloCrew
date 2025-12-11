@@ -1,4 +1,7 @@
-﻿namespace HoloCrew.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace HoloCrew.Models
 {
     // ===== ENUM =====
     public enum OrderStatus

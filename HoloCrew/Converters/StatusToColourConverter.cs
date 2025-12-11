@@ -8,7 +8,7 @@ namespace HoloCrew.Converters
 {
     /// <summary>
     /// Convierte OrderStatus a color
-    /// ⭐ CORREGIDO: Nombre de clase coincide con nombre de archivo
+    /// ⭐ CORREGIDO: Manejo seguro de ColorConverter.ConvertFromString
     /// </summary>
     public class StatusToColourConverter : IValueConverter
     {
@@ -18,14 +18,14 @@ namespace HoloCrew.Converters
             {
                 return status switch
                 {
-                    OrderStatus.Pending => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFA500")),      // Naranja
-                    OrderStatus.Confirmed => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1976D2")),    // Azul
-                    OrderStatus.Processing => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1976D2")),   // Azul
-                    OrderStatus.Shipped => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2196F3")),      // Azul claro
-                    OrderStatus.Delivered => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CAF50")),    // Verde
-                    OrderStatus.Cancelled => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F44336")),    // Rojo
-                    OrderStatus.Refunded => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF9800")),     // Naranja oscuro
-                    _ => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#757575"))                          // Gris
+                    OrderStatus.Pending => CreateBrush("#FFA500"),      // Naranja
+                    OrderStatus.Confirmed => CreateBrush("#1976D2"),    // Azul
+                    OrderStatus.Processing => CreateBrush("#1976D2"),   // Azul
+                    OrderStatus.Shipped => CreateBrush("#2196F3"),      // Azul claro
+                    OrderStatus.Delivered => CreateBrush("#4CAF50"),    // Verde
+                    OrderStatus.Cancelled => CreateBrush("#F44336"),    // Rojo
+                    OrderStatus.Refunded => CreateBrush("#FF9800"),     // Naranja oscuro
+                    _ => CreateBrush("#757575")                          // Gris
                 };
             }
             return new SolidColorBrush(Colors.Gray);
@@ -34,6 +34,27 @@ namespace HoloCrew.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Crea un SolidColorBrush de forma segura desde un código hex
+        /// </summary>
+        private static SolidColorBrush CreateBrush(string hexColor)
+        {
+            try
+            {
+                var colorObj = ColorConverter.ConvertFromString(hexColor);
+                if (colorObj != null)
+                {
+                    return new SolidColorBrush((Color)colorObj);
+                }
+            }
+            catch
+            {
+                // Si falla la conversión, usar gris por defecto
+            }
+
+            return new SolidColorBrush(Colors.Gray);
         }
     }
 }

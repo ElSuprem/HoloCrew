@@ -1,7 +1,7 @@
 ﻿using HoloCrew.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace HoloCrew.Infrastructure.Database
+namespace HoloCrew.Infraestructure.Database
 {
     /// <summary>
     /// Contexto de base de datos para Entity Framework Core
@@ -45,7 +45,6 @@ namespace HoloCrew.Infrastructure.Database
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.OriginalPrice).HasColumnType("decimal(18,2)");
-                entity.Property(e => e.Category).HasMaxLength(100);
             });
 
             // Configuración de Category
@@ -78,7 +77,7 @@ namespace HoloCrew.Infrastructure.Database
             modelBuilder.Entity<CartItem>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.UnitPrice).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
 
                 // Relación con Product
                 entity.HasOne(c => c.Product)

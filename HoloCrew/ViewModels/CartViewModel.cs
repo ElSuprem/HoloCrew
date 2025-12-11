@@ -3,7 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
 {
@@ -39,6 +42,12 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _canCheckout = true;
 
+        [ObservableProperty]
+        private string _couponMessage;
+
+        [ObservableProperty]
+        private bool _isCouponApplied;
+
         public CartViewModel(
             ICartService cartService,
             INavigationService navigationService)
@@ -67,6 +76,10 @@ namespace HoloCrew.ViewModels
                 IsCartEmpty = !CartItems.Any();
                 CanCheckout = !IsCartEmpty;
 
+                // ⭐ CORREGIDO: Cargar el descuento actual del servicio
+                Discount = _cartService.GetCurrentDiscount();
+                IsCouponApplied = Discount > 0;
+
                 CalculateTotals();
             }
             finally
@@ -88,7 +101,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error decreasing quantity: {ex.Message}");
             }
         }
 
@@ -105,7 +118,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error increasing quantity: {ex.Message}");
             }
         }
 
@@ -124,7 +137,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error removing from cart: {ex.Message}");
             }
         }
 
@@ -137,35 +150,51 @@ namespace HoloCrew.ViewModels
                 CartItems.Clear();
                 IsCartEmpty = true;
                 CanCheckout = false;
+                Discount = 0;
+                IsCouponApplied = false;
+                CouponCode = string.Empty;
+                CouponMessage = string.Empty;
                 CalculateTotals();
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                System.Diagnostics.Debug.WriteLine($"❌ Error clearing cart: {ex.Message}");
             }
         }
 
         [RelayCommand]
         private async Task ApplyCouponAsync()
         {
-            if (string.IsNullOrWhiteSpace(CouponCode)) return;
+            if (string.IsNullOrWhiteSpace(CouponCode))
+            {
+                CouponMessage = "Por favor, introduce un código de cupón.";
+                return;
+            }
 
             try
             {
                 var applied = await _cartService.ApplyCouponAsync(CouponCode);
+
                 if (applied)
                 {
-                    // TODO: Mostrar éxito
+                    // ⭐ CORREGIDO: Actualizar el descuento desde el servicio
+                    Discount = _cartService.GetCurrentDiscount();
+                    IsCouponApplied = true;
+                    CouponMessage = $"¡Cupón aplicado! Descuento: €{Discount:N2}";
                     CalculateTotals();
+
+                    System.Diagnostics.Debug.WriteLine($"✅ Coupon applied: {CouponCode}, Discount: €{Discount}");
                 }
                 else
                 {
-                    // TODO: Mostrar error "Cupón inválido"
+                    CouponMessage = "Cupón inválido o expirado.";
+                    System.Diagnostics.Debug.WriteLine($"❌ Invalid coupon: {CouponCode}");
                 }
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                CouponMessage = "Error al aplicar el cupón.";
+                System.Diagnostics.Debug.WriteLine($"❌ Error applying coupon: {ex.Message}");
             }
         }
 
@@ -188,6 +217,9 @@ namespace HoloCrew.ViewModels
             ShippingCost = Subtotal > 50 ? 0 : 5.99m; // Envío gratis sobre 50€
             Tax = Subtotal * 0.21m; // IVA 21%
             Total = Subtotal + ShippingCost + Tax - Discount;
+
+            // Asegurar que el total no sea negativo
+            if (Total < 0) Total = 0;
         }
     }
 }

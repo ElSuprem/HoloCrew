@@ -1,5 +1,6 @@
 ﻿using HoloCrew.Models;
 using HoloCrew.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,8 +9,11 @@ namespace HoloCrew.Repositories
 {
     /// <summary>
     /// Implementación del repositorio de productos
-    /// NOTA: Esta implementación usa datos MOCK en memoria
-    /// En producción, conectaría con una API real o base de datos
+    /// ⭐ CORREGIDO: Categorías unificadas con ProductService (Streetwear)
+    /// - CategoryId 1: Tops
+    /// - CategoryId 2: Bottoms
+    /// - CategoryId 3: Footwear
+    /// - CategoryId 4: Accessories
     /// </summary>
     public class ProductRepository : IProductRepository
     {
@@ -54,7 +58,7 @@ namespace HoloCrew.Repositories
             var lowerQuery = query.ToLower();
             var results = _products
                 .Where(p => p.Name.ToLower().Contains(lowerQuery) ||
-                           p.Description.ToLower().Contains(lowerQuery))
+                           (p.Description != null && p.Description.ToLower().Contains(lowerQuery)))
                 .ToList();
 
             return Task.FromResult(results);
@@ -110,311 +114,313 @@ namespace HoloCrew.Repositories
             return Task.FromResult(newProducts);
         }
 
+        /// <summary>
+        /// Inicializa datos mock con las mismas categorías que ProductService
+        /// ⭐ CORREGIDO: Categorías unificadas (Tops, Bottoms, Footwear, Accessories)
+        /// </summary>
         private void InitializeMockData()
         {
             _products = new List<Product>
             {
-                // Electrónica
+                // ============================================
+                // TOPS (CategoryId = 1)
+                // ============================================
                 new Product
                 {
                     Id = _nextId++,
-                    Name = "Laptop HP Pavilion",
-                    Description = "Laptop potente para trabajo y entretenimiento",
-                    LongDescription = "Laptop HP Pavilion con procesador Intel Core i5, 8GB RAM, 256GB SSD. Perfecta para productividad y multimedia.",
-                    Price = 699.99m,
-                    OriginalPrice = 849.99m,
-                    Stock = 15,
-                    MainImageUrl = "/Resources/Images/Products/laptop1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/laptop1.jpg", "/Resources/Images/Products/laptop1-2.jpg" },
-                    CategoryId = 1,
-                    Category = new Category { Id = 1, Name = "Electrónica" },
-                    AverageRating = 4.5,
-                    ReviewCount = 127,
-                    IsFeatured = true,
-                    IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-3),
-                    UpdatedAt = DateTime.Now.AddMonths(-3)
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "Auriculares Sony WH-1000XM4",
-                    Description = "Auriculares con cancelación de ruido",
-                    LongDescription = "Auriculares premium con cancelación de ruido líder en la industria, hasta 30 horas de batería.",
-                    Price = 279.99m,
-                    OriginalPrice = 349.99m,
-                    Stock = 32,
-                    MainImageUrl = "/Resources/Images/Products/headphones1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/headphones1.jpg" },
-                    CategoryId = 1,
-                    Category = new Category { Id = 1, Name = "Electrónica" },
-                    AverageRating = 4.8,
-                    ReviewCount = 203,
-                    IsFeatured = true,
-                    IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-5),
-                    UpdatedAt = DateTime.Now.AddMonths(-5)
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "iPhone 15 Pro",
-                    Description = "El último smartphone de Apple",
-                    LongDescription = "iPhone 15 Pro con chip A17 Pro, cámara de 48MP, titanio aeroespacial.",
-                    Price = 1199.99m,
-                    Stock = 8,
-                    MainImageUrl = "/Resources/Images/Products/iphone15.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/iphone15.jpg" },
-                    CategoryId = 1,
-                    Category = new Category { Id = 1, Name = "Electrónica" },
-                    AverageRating = 4.9,
-                    ReviewCount = 456,
-                    IsFeatured = true,
-                    IsNew = true,
-                    CreatedAt = DateTime.Now.AddDays(-15),
-                    UpdatedAt = DateTime.Now.AddDays(-15)
-                },
-
-                // Ropa
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "Camiseta Nike Dri-FIT",
-                    Description = "Camiseta deportiva transpirable",
-                    LongDescription = "Camiseta deportiva Nike con tecnología Dri-FIT para mantenerte seco y cómodo.",
-                    Price = 29.99m,
-                    OriginalPrice = 39.99m,
-                    Stock = 50,
-                    MainImageUrl = "/Resources/Images/Products/tshirt1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/tshirt1.jpg" },
-                    CategoryId = 2,
-                    Category = new Category { Id = 2, Name = "Ropa" },
-                    AverageRating = 4.3,
-                    ReviewCount = 89,
-                    IsFeatured = false,
-                    IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-6),
-                    UpdatedAt = DateTime.Now.AddMonths(-6)
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "Zapatillas Adidas Ultraboost",
-                    Description = "Zapatillas running premium",
-                    LongDescription = "Zapatillas Adidas Ultraboost con tecnología BOOST para máximo retorno de energía.",
-                    Price = 179.99m,
-                    OriginalPrice = 220.00m,
-                    Stock = 25,
-                    MainImageUrl = "/Resources/Images/Products/shoes1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/shoes1.jpg" },
-                    CategoryId = 2,
-                    Category = new Category { Id = 2, Name = "Ropa" },
-                    AverageRating = 4.7,
-                    ReviewCount = 312,
-                    IsFeatured = true,
-                    IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-4),
-                    UpdatedAt = DateTime.Now.AddMonths(-4)
-                },
-
-                // Hogar
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "Aspiradora Roomba i7+",
-                    Description = "Robot aspirador inteligente",
-                    LongDescription = "Roomba i7+ con vaciado automático, mapeo inteligente y control por app.",
-                    Price = 599.99m,
-                    Stock = 12,
-                    MainImageUrl = "/Resources/Images/Products/roomba.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/roomba.jpg" },
-                    CategoryId = 3,
-                    Category = new Category { Id = 3, Name = "Hogar" },
-                    AverageRating = 4.6,
-                    ReviewCount = 178,
-                    IsFeatured = true,
-                    IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-7),
-                    UpdatedAt = DateTime.Now.AddMonths(-7)
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "Cafetera Nespresso",
-                    Description = "Cafetera de cápsulas premium",
-                    LongDescription = "Cafetera Nespresso Vertuo con sistema de cápsulas y preparación en un toque.",
-                    Price = 149.99m,
-                    OriginalPrice = 199.99m,
-                    Stock = 30,
-                    MainImageUrl = "/Resources/Images/Products/nespresso.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/nespresso.jpg" },
-                    CategoryId = 3,
-                    Category = new Category { Id = 3, Name = "Hogar" },
-                    AverageRating = 4.4,
-                    ReviewCount = 95,
-                    IsFeatured = false,
-                    IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-8),
-                    UpdatedAt = DateTime.Now.AddMonths(-8)
-                },
-
-                // Deportes
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "Bicicleta de Montaña Trek",
-                    Description = "Bicicleta todo terreno profesional",
-                    LongDescription = "Trek Mountain Bike con suspensión completa, 27 velocidades, cuadro de aluminio.",
-                    Price = 899.99m,
-                    Stock = 6,
-                    MainImageUrl = "/Resources/Images/Products/bike.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/bike.jpg" },
-                    CategoryId = 4,
-                    Category = new Category { Id = 4, Name = "Deportes" },
-                    AverageRating = 4.8,
-                    ReviewCount = 67,
-                    IsFeatured = true,
-                    IsNew = true,
-                    CreatedAt = DateTime.Now.AddDays(-20),
-                    UpdatedAt = DateTime.Now.AddDays(-20)
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "Mancuernas Ajustables 20kg",
-                    Description = "Set de mancuernas para gimnasio en casa",
-                    LongDescription = "Set de mancuernas ajustables de 5 a 20kg por mancuerna, compactas y fáciles de usar.",
-                    Price = 89.99m,
-                    Stock = 18,
-                    MainImageUrl = "/Resources/Images/Products/dumbbells.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/dumbbells.jpg" },
-                    CategoryId = 4,
-                    Category = new Category { Id = 4, Name = "Deportes" },
-                    AverageRating = 4.5,
-                    ReviewCount = 134,
-                    IsFeatured = false,
-                    IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-2),
-                    UpdatedAt = DateTime.Now.AddMonths(-2)
-                },
-
-                // Libros
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "Cien Años de Soledad",
-                    Description = "Clásico de Gabriel García Márquez",
-                    LongDescription = "Obra maestra del realismo mágico, una de las novelas más importantes del siglo XX.",
-                    Price = 14.99m,
-                    Stock = 40,
-                    MainImageUrl = "/Resources/Images/Products/book1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/book1.jpg" },
-                    CategoryId = 5,
-                    Category = new Category { Id = 5, Name = "Libros" },
-                    AverageRating = 4.9,
-                    ReviewCount = 523,
-                    IsFeatured = false,
-                    IsNew = false,
-                    CreatedAt = DateTime.Now.AddYears(-1),
-                    UpdatedAt = DateTime.Now.AddYears(-1)
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "El Código Limpio",
-                    Description = "Manual de programación ágil",
-                    LongDescription = "Clean Code de Robert C. Martin, guía esencial para escribir código mantenible.",
+                    Name = "PREMIUM LOGO TEE",
+                    Description = "Essential cotton t-shirt with embroidered logo",
+                    LongDescription = "100% premium cotton t-shirt. Relaxed fit, ribbed crew neck. Available in multiple colors.",
                     Price = 34.99m,
-                    Stock = 22,
-                    MainImageUrl = "/Resources/Images/Products/cleancode.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/cleancode.jpg" },
-                    CategoryId = 5,
-                    Category = new Category { Id = 5, Name = "Libros" },
-                    AverageRating = 4.7,
-                    ReviewCount = 287,
-                    IsFeatured = true,
-                    IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-10),
-                    UpdatedAt = DateTime.Now.AddMonths(-10)
-                },
-
-                // Más productos...
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "Smart TV Samsung 55\"",
-                    Description = "Televisor 4K UHD con HDR",
-                    LongDescription = "Smart TV Samsung 55 pulgadas con resolución 4K, HDR10+, Tizen OS y asistente de voz.",
-                    Price = 549.99m,
-                    OriginalPrice = 699.99m,
-                    Stock = 10,
-                    MainImageUrl = "/Resources/Images/Products/tv.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/tv.jpg" },
+                    OriginalPrice = 44.99m,
+                    Stock = 150,
+                    MainImageUrl = "/Resources/Images/Products/tee1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/tee1.jpg", "/Resources/Images/Products/tee1-2.jpg" },
                     CategoryId = 1,
-                    Category = new Category { Id = 1, Name = "Electrónica" },
-                    AverageRating = 4.6,
+                    Category = new Category { Id = 1, Name = "Tops" },
+                    AverageRating = 4.5,
                     ReviewCount = 234,
                     IsFeatured = true,
                     IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-4),
-                    UpdatedAt = DateTime.Now.AddMonths(-4)
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddMonths(-3),
+                    UpdatedAt = DateTime.Now
                 },
                 new Product
                 {
                     Id = _nextId++,
-                    Name = "Reloj Inteligente Apple Watch Series 9",
-                    Description = "Smartwatch con monitoreo de salud",
-                    LongDescription = "Apple Watch Series 9 con pantalla siempre activa, GPS, monitoreo cardíaco y ECG.",
-                    Price = 429.99m,
-                    Stock = 16,
-                    MainImageUrl = "/Resources/Images/Products/applewatch.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/applewatch.jpg" },
+                    Name = "OVERSIZED HOODIE",
+                    Description = "Premium heavyweight hoodie",
+                    LongDescription = "450GSM cotton blend hoodie with oversized fit. Kangaroo pocket, adjustable drawstring hood.",
+                    Price = 79.99m,
+                    Stock = 85,
+                    MainImageUrl = "/Resources/Images/Products/hoodie1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/hoodie1.jpg" },
                     CategoryId = 1,
-                    Category = new Category { Id = 1, Name = "Electrónica" },
+                    Category = new Category { Id = 1, Name = "Tops" },
                     AverageRating = 4.8,
-                    ReviewCount = 389,
+                    ReviewCount = 312,
                     IsFeatured = true,
                     IsNew = true,
-                    CreatedAt = DateTime.Now.AddDays(-10),
-                    UpdatedAt = DateTime.Now.AddDays(-10)
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddDays(-15),
+                    UpdatedAt = DateTime.Now
                 },
                 new Product
                 {
                     Id = _nextId++,
-                    Name = "Chaqueta Impermeable North Face",
-                    Description = "Chaqueta outdoor profesional",
-                    LongDescription = "Chaqueta North Face con tecnología Gore-Tex, perfecta para senderismo y aventuras.",
-                    Price = 199.99m,
-                    Stock = 28,
-                    MainImageUrl = "/Resources/Images/Products/jacket.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/jacket.jpg" },
-                    CategoryId = 2,
-                    Category = new Category { Id = 2, Name = "Ropa" },
-                    AverageRating = 4.7,
-                    ReviewCount = 156,
+                    Name = "CREWNECK SWEATSHIRT",
+                    Description = "Classic crew neck sweatshirt",
+                    LongDescription = "Soft fleece interior, ribbed cuffs and hem. Perfect layering piece.",
+                    Price = 64.99m,
+                    OriginalPrice = 79.99m,
+                    Stock = 95,
+                    MainImageUrl = "/Resources/Images/Products/crew1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/crew1.jpg" },
+                    CategoryId = 1,
+                    Category = new Category { Id = 1, Name = "Tops" },
+                    AverageRating = 4.6,
+                    ReviewCount = 178,
                     IsFeatured = false,
                     IsNew = false,
-                    CreatedAt = DateTime.Now.AddMonths(-5),
-                    UpdatedAt = DateTime.Now.AddMonths(-5)
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddMonths(-2),
+                    UpdatedAt = DateTime.Now
+                },
+
+                // ============================================
+                // BOTTOMS (CategoryId = 2)
+                // ============================================
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "TACTICAL CARGO PANTS",
+                    Description = "Military-inspired cargo pants",
+                    LongDescription = "Durable ripstop fabric, multiple utility pockets, adjustable waist. Perfect for urban exploration.",
+                    Price = 89.99m,
+                    Stock = 65,
+                    MainImageUrl = "/Resources/Images/Products/cargo1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/cargo1.jpg" },
+                    CategoryId = 2,
+                    Category = new Category { Id = 2, Name = "Bottoms" },
+                    AverageRating = 4.7,
+                    ReviewCount = 267,
+                    IsFeatured = true,
+                    IsNew = false,
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddMonths(-1),
+                    UpdatedAt = DateTime.Now
                 },
                 new Product
                 {
                     Id = _nextId++,
-                    Name = "Kindle Paperwhite",
-                    Description = "Lector de libros electrónicos",
-                    LongDescription = "Kindle Paperwhite con pantalla de 6.8 pulgadas, resistente al agua, luz ajustable.",
-                    Price = 139.99m,
-                    Stock = 35,
-                    MainImageUrl = "/Resources/Images/Products/kindle.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/kindle.jpg" },
-                    CategoryId = 5,
-                    Category = new Category { Id = 5, Name = "Libros" },
-                    AverageRating = 4.7,
-                    ReviewCount = 421,
+                    Name = "SLIM FIT DENIM",
+                    Description = "Classic black slim fit jeans",
+                    LongDescription = "Stretch denim for comfort. Slim through hip and thigh, narrow leg opening.",
+                    Price = 69.99m,
+                    Stock = 100,
+                    MainImageUrl = "/Resources/Images/Products/jeans1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/jeans1.jpg" },
+                    CategoryId = 2,
+                    Category = new Category { Id = 2, Name = "Bottoms" },
+                    AverageRating = 4.5,
+                    ReviewCount = 189,
+                    IsFeatured = false,
+                    IsNew = true,
+                    Gender = "Men",
+                    CreatedAt = DateTime.Now.AddDays(-10),
+                    UpdatedAt = DateTime.Now
+                },
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "TECH JOGGERS",
+                    Description = "Performance jogger pants",
+                    LongDescription = "Moisture-wicking fabric, zippered pockets, elastic cuffs. From gym to street.",
+                    Price = 59.99m,
+                    OriginalPrice = 74.99m,
+                    Stock = 120,
+                    MainImageUrl = "/Resources/Images/Products/jogger1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/jogger1.jpg" },
+                    CategoryId = 2,
+                    Category = new Category { Id = 2, Name = "Bottoms" },
+                    AverageRating = 4.6,
+                    ReviewCount = 223,
                     IsFeatured = true,
                     IsNew = false,
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddMonths(-2),
+                    UpdatedAt = DateTime.Now
+                },
+
+                // ============================================
+                // FOOTWEAR (CategoryId = 3)
+                // ============================================
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "ARMBO LOW WHITE",
+                    Description = "Clean minimal leather sneakers",
+                    LongDescription = "Premium full-grain leather, cushioned insole, durable rubber outsole. Timeless design.",
+                    Price = 129.99m,
+                    Stock = 55,
+                    MainImageUrl = "/Resources/Images/Products/sneaker1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/sneaker1.jpg" },
+                    CategoryId = 3,
+                    Category = new Category { Id = 3, Name = "Footwear" },
+                    AverageRating = 4.8,
+                    ReviewCount = 345,
+                    IsFeatured = true,
+                    IsNew = false,
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddMonths(-4),
+                    UpdatedAt = DateTime.Now
+                },
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "HIGH-TOP CANVAS",
+                    Description = "Classic canvas high-tops",
+                    LongDescription = "Durable canvas upper, vulcanized rubber sole, metal eyelets. Street style essential.",
+                    Price = 79.99m,
+                    OriginalPrice = 99.99m,
+                    Stock = 80,
+                    MainImageUrl = "/Resources/Images/Products/hightop1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/hightop1.jpg" },
+                    CategoryId = 3,
+                    Category = new Category { Id = 3, Name = "Footwear" },
+                    AverageRating = 4.6,
+                    ReviewCount = 198,
+                    IsFeatured = false,
+                    IsNew = true,
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddDays(-7),
+                    UpdatedAt = DateTime.Now
+                },
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "CHUNKY RUNNER",
+                    Description = "Retro-inspired chunky sneakers",
+                    LongDescription = "Multi-layer foam sole, mesh and suede upper, maximum cushioning. Dad shoe vibes.",
+                    Price = 149.99m,
+                    Stock = 40,
+                    MainImageUrl = "/Resources/Images/Products/chunky1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/chunky1.jpg" },
+                    CategoryId = 3,
+                    Category = new Category { Id = 3, Name = "Footwear" },
+                    AverageRating = 4.5,
+                    ReviewCount = 156,
+                    IsFeatured = true,
+                    IsNew = false,
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddMonths(-2),
+                    UpdatedAt = DateTime.Now
+                },
+
+                // ============================================
+                // ACCESSORIES (CategoryId = 4)
+                // ============================================
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "LOGO BASEBALL CAP",
+                    Description = "Classic 6-panel cap",
+                    LongDescription = "Adjustable strap, embroidered logo, curved brim. One size fits most.",
+                    Price = 29.99m,
+                    Stock = 200,
+                    MainImageUrl = "/Resources/Images/Products/cap1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/cap1.jpg" },
+                    CategoryId = 4,
+                    Category = new Category { Id = 4, Name = "Accessories" },
+                    AverageRating = 4.7,
+                    ReviewCount = 456,
+                    IsFeatured = true,
+                    IsNew = false,
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddMonths(-5),
+                    UpdatedAt = DateTime.Now
+                },
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "CROSSBODY BAG",
+                    Description = "Compact everyday bag",
+                    LongDescription = "Water-resistant nylon, adjustable strap, multiple compartments. Perfect for essentials.",
+                    Price = 49.99m,
+                    Stock = 90,
+                    MainImageUrl = "/Resources/Images/Products/bag1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/bag1.jpg" },
+                    CategoryId = 4,
+                    Category = new Category { Id = 4, Name = "Accessories" },
+                    AverageRating = 4.6,
+                    ReviewCount = 234,
+                    IsFeatured = false,
+                    IsNew = true,
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddDays(-5),
+                    UpdatedAt = DateTime.Now
+                },
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "RIBBED BEANIE",
+                    Description = "Classic knit beanie",
+                    LongDescription = "Soft acrylic blend, ribbed texture, fold-over cuff. Warm and stylish.",
+                    Price = 24.99m,
+                    Stock = 180,
+                    MainImageUrl = "/Resources/Images/Products/beanie1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/beanie1.jpg" },
+                    CategoryId = 4,
+                    Category = new Category { Id = 4, Name = "Accessories" },
+                    AverageRating = 4.6,
+                    ReviewCount = 478,
+                    IsFeatured = false,
+                    IsNew = false,
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddMonths(-6),
+                    UpdatedAt = DateTime.Now
+                },
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "LEATHER CARDHOLDER",
+                    Description = "Minimalist wallet",
+                    LongDescription = "Genuine leather, 6 card slots, slim profile. Fits front pocket perfectly.",
+                    Price = 39.99m,
+                    Stock = 100,
+                    MainImageUrl = "/Resources/Images/Products/wallet1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/wallet1.jpg" },
+                    CategoryId = 4,
+                    Category = new Category { Id = 4, Name = "Accessories" },
+                    AverageRating = 4.7,
+                    ReviewCount = 298,
+                    IsFeatured = true,
+                    IsNew = false,
+                    Gender = "Unisex",
                     CreatedAt = DateTime.Now.AddMonths(-3),
-                    UpdatedAt = DateTime.Now.AddMonths(-3)
+                    UpdatedAt = DateTime.Now
+                },
+                new Product
+                {
+                    Id = _nextId++,
+                    Name = "CANVAS BELT",
+                    Description = "Military-style web belt",
+                    LongDescription = "Durable canvas webbing, metal D-ring buckle, adjustable length. Versatile accessory.",
+                    Price = 24.99m,
+                    OriginalPrice = 34.99m,
+                    Stock = 150,
+                    MainImageUrl = "/Resources/Images/Products/belt1.jpg",
+                    ImageUrls = new List<string> { "/Resources/Images/Products/belt1.jpg" },
+                    CategoryId = 4,
+                    Category = new Category { Id = 4, Name = "Accessories" },
+                    AverageRating = 4.5,
+                    ReviewCount = 167,
+                    IsFeatured = false,
+                    IsNew = false,
+                    Gender = "Unisex",
+                    CreatedAt = DateTime.Now.AddMonths(-4),
+                    UpdatedAt = DateTime.Now
                 }
             };
         }
