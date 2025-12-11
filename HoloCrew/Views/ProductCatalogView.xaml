@@ -22,8 +22,7 @@
                 <DropShadowEffect Color="Black" Opacity="0.2" BlurRadius="15" ShadowDepth="0" Direction="0"/>
             </Border.Effect>
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                          PreviewMouseWheel="FiltersScrollViewer_PreviewMouseWheel"
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled"
                           Padding="35,45,30,45">
                 <StackPanel>
@@ -406,7 +405,6 @@
 
         <!-- GRID PRODUCTOS -->
         <ScrollViewer Grid.Column="1" 
-                      PreviewMouseWheel="ProductsScrollViewer_PreviewMouseWheel" 
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
             <Border Padding="60,50,60,80">
@@ -458,47 +456,8 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <!-- Imagen del producto -->
                                         <Rectangle Grid.Row="0" Fill="{StaticResource Gray200Brush}"/>
 
-                                        <!-- ⭐ BOTÓN WISHLIST EN LA ESQUINA -->
-                                        <!-- ⭐ BOTÓN WISHLIST DINÁMICO -->
-                                        <Border Background="{StaticResource WhitePrimaryBrush}"
-        Width="40"
-        Height="40"
-        CornerRadius="20"
-        HorizontalAlignment="Right"
-        VerticalAlignment="Top"
-        Margin="15"
-        Cursor="Hand">
-                                            <Border.Effect>
-                                                <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="2"/>
-                                            </Border.Effect>
-                                            <Border.InputBindings>
-                                                <MouseBinding MouseAction="LeftClick" 
-                      Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                      CommandParameter="{Binding}"/>
-                                            </Border.InputBindings>
-
-                                            <!-- ⭐ CORAZÓN DINÁMICO -->
-                                            <TextBlock FontSize="20"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               Foreground="{StaticResource BlackPrimaryBrush}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Text" Value="♡"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
-                                                                <Setter Property="Text" Value="❤️"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </Border>
-
-                                        <!-- Información del producto -->
                                         <Border Grid.Row="1" Padding="25,22">
                                             <StackPanel>
                                                 <TextBlock Text="{Binding Name}" 
