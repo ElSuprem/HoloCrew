@@ -1,7 +1,7 @@
 ﻿<!-- ========================================
-     HOLOCREW - APP.XAML
-     Configuración correcta con orden optimizado
-     Compatible con diseñador VS 2022
+     HOLOCREW - APP.XAML FINAL CORREGIDO
+     ✅ Todos los converters verificados
+     ✅ StatusToColourConverter corregido
      ======================================== -->
 
 <Application x:Class="HoloCrew.App"
@@ -23,7 +23,7 @@
             <converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollectionToVisibilityConverter" />
             <converters:PriceFormatConverter x:Key="PriceFormatConverter" />
             <converters:DateFormatConverter x:Key="DateFormatConverter" />
-            <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
+            <converters:StatusToColourConverter x:Key="StatusToColourConverter" />
             <converters:SelectedButtonTextConverter x:Key="SelectedButtonTextConverter" />
 
             <!-- Converter incorporado de WPF -->
@@ -96,19 +96,23 @@
 
             <!-- ========== ESTILOS - ORDEN CRÍTICO ========== -->
             <ResourceDictionary.MergedDictionaries>
-                <!-- 1. COLORES - Solo definiciones Color -->
+                <!-- 1. COLORES -->
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
 
-                <!-- 2. BRUSHES - Valores HEX directos (NUEVO - evita referencias circulares) -->
+                <!-- 2. BRUSHES -->
                 <ResourceDictionary Source="Resources/Styles/Brushes.xaml" />
 
-                <!-- 3. ESTILOS DE TEXTO - Usa brushes ya cargados -->
+                <!-- 3. ESTILOS DE TEXTO -->
                 <ResourceDictionary Source="Resources/Styles/TextBlocks.xaml" />
 
-                <!-- 4. ESTILOS DE BOTONES - Usa brushes ya cargados -->
+                <!-- 4. ESTILOS DE BOTONES -->
                 <ResourceDictionary Source="Resources/Styles/Buttons.xaml" />
 
-                <!-- 5. RESTO DE ESTILOS ORIGINALES -->
+                <!-- 5. RESTO DE ESTILOS -->
+                <ResourceDictionary Source="Resources/Styles/InputStyles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/ToggleSwitch.xaml" />
+                <ResourceDictionary Source="Resources/Styles/LinkStyles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/EnhancedButtonStyles.xaml" />
                 <ResourceDictionary Source="Resources/Styles/TextBoxes.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Cards.xaml" />
                 <ResourceDictionary Source="Resources/Styles/ScrollViewers.xaml" />

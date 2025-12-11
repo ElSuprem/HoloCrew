@@ -1,4 +1,5 @@
-﻿<UserControl x:Class="HoloCrew.Views.CartView"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="HoloCrew.Views.CartView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,16 +8,17 @@
              d:DesignHeight="800" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Disabled">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="420"/>
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="420"/>
+        </Grid.ColumnDefinitions>
 
-            <!-- CART ITEMS - DINÁMICO -->
-            <Border Grid.Column="0" Padding="70,50,40,80">
+        <!-- CART ITEMS - CON SCROLL -->
+        <ScrollViewer Grid.Column="0"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <Border Padding="70,50,40,80">
                 <StackPanel>
                     <!-- Título -->
                     <TextBlock Text="YOUR CART" 
@@ -150,16 +152,8 @@
                                             <Button Content="Remove" 
                                                     Style="{StaticResource TextButton}"
                                                     Foreground="{StaticResource RedAccentBrush}"
-                                                    FontSize="14"
                                                     Command="{Binding DataContext.RemoveFromCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}"/>
-
-                                            <!-- Subtotal del item -->
-                                            <TextBlock Text="{Binding Subtotal, StringFormat=Subtotal: {0:C}}" 
-                                                       FontSize="16" 
-                                                       FontWeight="Bold"
-                                                       Margin="0,10,0,0"
-                                                       TextAlignment="Right"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -168,123 +162,150 @@
                     </ItemsControl>
                 </StackPanel>
             </Border>
+        </ScrollViewer>
 
-            <!-- RESUMEN DEL PEDIDO -->
-            <Border Grid.Column="1" 
-                    Background="{StaticResource Gray50Brush}"
-                    Padding="40,50">
-                <StackPanel>
-                    <TextBlock Text="ORDER SUMMARY" 
-                               Style="{StaticResource HeadingMedium}"
-                               Margin="0,0,0,30"/>
+        <!-- ⭐ RESUMEN DEL PEDIDO - AHORA CON SCROLLVIEWER -->
+        <Border Grid.Column="1" 
+                Background="{StaticResource Gray50Brush}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <Border Padding="40,50,40,80">
+                    <StackPanel>
+                        <TextBlock Text="ORDER SUMMARY" 
+                                   Style="{StaticResource HeadingMedium}"
+                                   Margin="0,0,0,30"/>
 
-                    <!-- Subtotal -->
-                    <Grid Margin="0,0,0,15">
-                        <TextBlock Text="Subtotal" 
-                                   Style="{StaticResource BodyLarge}"/>
-                        <TextBlock Text="{Binding Subtotal, StringFormat={}{0:C}}" 
-                                   Style="{StaticResource BodyLarge}"
-                                   HorizontalAlignment="Right"/>
-                    </Grid>
-
-                    <!-- Envío -->
-                    <Grid Margin="0,0,0,15">
-                        <TextBlock Text="Shipping" 
-                                   Style="{StaticResource BodyLarge}"/>
-                        <TextBlock Text="{Binding ShippingCost, StringFormat={}{0:C}}" 
-                                   Style="{StaticResource BodyLarge}"
-                                   HorizontalAlignment="Right"/>
-                    </Grid>
-
-                    <!-- Tax -->
-                    <Grid Margin="0,0,0,15">
-                        <TextBlock Text="Tax (21%)" 
-                                   Style="{StaticResource BodyLarge}"/>
-                        <TextBlock Text="{Binding Tax, StringFormat={}{0:C}}" 
-                                   Style="{StaticResource BodyLarge}"
-                                   HorizontalAlignment="Right"/>
-                    </Grid>
-
-                    <!-- Descuento -->
-                    <Grid Margin="0,0,0,15">
-                        <TextBlock Text="Discount" 
-                                   Style="{StaticResource BodyLarge}"
-                                   Foreground="{StaticResource RedAccentBrush}"/>
-                        <TextBlock Text="{Binding Discount, StringFormat=-{0:C}}" 
-                                   Style="{StaticResource BodyLarge}"
-                                   Foreground="{StaticResource RedAccentBrush}"
-                                   HorizontalAlignment="Right"/>
-                    </Grid>
-
-                    <Border BorderBrush="{StaticResource BorderDefault}"
-                            BorderThickness="0,1,0,0"
-                            Padding="0,20,0,0"
-                            Margin="0,10,0,30">
-                        <Grid>
-                            <TextBlock Text="TOTAL" 
-                                       Style="{StaticResource HeadingMedium}"
-                                       FontSize="22"/>
-                            <TextBlock Text="{Binding Total, StringFormat={}{0:C}}" 
-                                       Style="{StaticResource HeadingMedium}"
-                                       FontSize="22"
+                        <!-- Subtotal -->
+                        <Grid Margin="0,0,0,15">
+                            <TextBlock Text="Subtotal" 
+                                       Style="{StaticResource BodyLarge}"/>
+                            <TextBlock Text="{Binding Subtotal, StringFormat={}{0:C}}" 
+                                       Style="{StaticResource BodyLarge}"
                                        HorizontalAlignment="Right"/>
                         </Grid>
-                    </Border>
 
-                    <!-- Cupón -->
-                    <TextBlock Text="Have a coupon?" 
-                               Style="{StaticResource SubtitleMedium}"
-                               Margin="0,0,0,15"/>
-                    <Grid Margin="0,0,0,25">
-                        <TextBox Text="{Binding CouponCode, UpdateSourceTrigger=PropertyChanged}"
-                                 Height="50"
-                                 Padding="15,0,100,0"
-                                 FontSize="14"
-                                 BorderBrush="{StaticResource BorderDefault}"
-                                 BorderThickness="1"/>
-                        <TextBlock Text="Enter code"
-                                   Foreground="{StaticResource Gray400Brush}"
-                                   FontSize="14"
-                                   VerticalAlignment="Center"
-                                   Margin="15,0,0,0"
-                                   IsHitTestVisible="False">
+                        <!-- Envío -->
+                        <Grid Margin="0,0,0,15">
+                            <TextBlock Text="Shipping" 
+                                       Style="{StaticResource BodyLarge}"/>
+                            <TextBlock Text="{Binding ShippingCost, StringFormat={}{0:C}}" 
+                                       Style="{StaticResource BodyLarge}"
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- Tax -->
+                        <Grid Margin="0,0,0,15">
+                            <TextBlock Text="Tax (21%)" 
+                                       Style="{StaticResource BodyLarge}"/>
+                            <TextBlock Text="{Binding Tax, StringFormat={}{0:C}}" 
+                                       Style="{StaticResource BodyLarge}"
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- Descuento -->
+                        <Grid Margin="0,0,0,15">
+                            <TextBlock Text="Discount" 
+                                       Style="{StaticResource BodyLarge}"
+                                       Foreground="{StaticResource RedAccentBrush}"/>
+                            <TextBlock Text="{Binding Discount, StringFormat=-{0:C}}" 
+                                       Style="{StaticResource BodyLarge}"
+                                       Foreground="{StaticResource RedAccentBrush}"
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Border BorderBrush="{StaticResource BorderDefault}"
+                                BorderThickness="0,1,0,0"
+                                Padding="0,20,0,0"
+                                Margin="0,10,0,30">
+                            <Grid>
+                                <TextBlock Text="TOTAL" 
+                                           Style="{StaticResource HeadingMedium}"
+                                           FontSize="22"/>
+                                <TextBlock Text="{Binding Total, StringFormat={}{0:C}}" 
+                                           Style="{StaticResource HeadingMedium}"
+                                           FontSize="22"
+                                           HorizontalAlignment="Right"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Cupón con feedback -->
+                        <TextBlock Text="Have a coupon?" 
+                                   Style="{StaticResource SubtitleMedium}"
+                                   Margin="0,0,0,15"/>
+                        <Grid Margin="0,0,0,10">
+                            <TextBox Text="{Binding CouponCode, UpdateSourceTrigger=PropertyChanged}"
+                                     Height="50"
+                                     Padding="15,0,100,0"
+                                     FontSize="14"
+                                     BorderBrush="{StaticResource BorderDefault}"
+                                     BorderThickness="1"/>
+                            <TextBlock Text="Enter code"
+                                       Foreground="{StaticResource Gray400Brush}"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"
+                                       Margin="15,0,0,0"
+                                       IsHitTestVisible="False">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CouponCode}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CouponCode}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <Button Content="APPLY" 
+                                    Style="{StaticResource AccentButton}"
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                    Padding="20,0"
+                                    HorizontalAlignment="Right"
+                                    Margin="5"
+                                    Command="{Binding ApplyCouponCommand}"/>
+                        </Grid>
+
+                        <!-- ⭐ Mensaje de feedback del cupón -->
+                        <TextBlock Text="{Binding CouponMessage}"
+                                   FontSize="13"
+                                   Margin="0,0,0,25"
+                                   TextWrapping="Wrap">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding CouponCode}" Value="">
+                                        <DataTrigger Binding="{Binding IsCouponValid}" Value="True">
+                                            <Setter Property="Foreground" Value="#10B981"/>
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding CouponCode}" Value="{x:Null}">
+                                        <DataTrigger Binding="{Binding IsCouponValid}" Value="False">
+                                            <Setter Property="Foreground" Value="{StaticResource RedAccentBrush}"/>
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <Button Content="APPLY" 
-                                Style="{StaticResource AccentButton}"
-                                FontSize="12"
-                                FontWeight="Bold"
-                                Padding="20,0"
-                                HorizontalAlignment="Right"
-                                Margin="5"
-                                Command="{Binding ApplyCouponCommand}"/>
-                    </Grid>
 
-                    <!-- Botones -->
-                    <Button Content="PROCEED TO CHECKOUT" 
-                            Style="{StaticResource AccentButton}"
-                            Padding="0,18"
-                            Margin="0,0,0,15"
-                            Command="{Binding CheckoutCommandCommand}"
-                            IsEnabled="{Binding CanCheckout}"/>
-                    <Button Content="CONTINUE SHOPPING" 
-                            Style="{StaticResource OutlineButton}"
-                            Padding="0,18"
-                            Command="{Binding BrowseProductsCommand}"/>
-                </StackPanel>
-            </Border>
-        </Grid>
-    </ScrollViewer>
+                        <!-- ⭐ Botones con separación mejorada -->
+                        <Button Content="PROCEED TO CHECKOUT" 
+                                Style="{StaticResource AccentButton}"
+                                Padding="0,18"
+                                Margin="0,0,0,15"
+                                Command="{Binding CheckoutCommandCommand}"
+                                IsEnabled="{Binding CanCheckout}"/>
+                        <Button Content="CONTINUE SHOPPING" 
+                                Style="{StaticResource OutlineButton}"
+                                Padding="0,18"
+                                Command="{Binding BrowseProductsCommand}"/>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+        </Border>
+    </Grid>
 </UserControl>

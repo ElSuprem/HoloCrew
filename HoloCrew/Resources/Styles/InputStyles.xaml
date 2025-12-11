@@ -1,0 +1,115 @@
+﻿<!-- ========================================
+     ESTILOS PARA INPUTS - TextBox, PasswordBox, ComboBox
+     Consistentes en toda la app
+     ======================================== -->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ========================================
+         TEXTBOX ESTÁNDAR
+         ======================================== -->
+    <Style x:Key="StandardTextBox" TargetType="TextBox">
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Padding" Value="15,0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+        <Setter Property="Background" Value="{StaticResource WhitePrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="{TemplateBinding Padding}"
+                                      VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource Gray400Brush}"/>
+                        </Trigger>
+                        <!-- Focus -->
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ========================================
+         TEXTBOX CON ERROR
+         ======================================== -->
+    <Style x:Key="ErrorTextBox" TargetType="TextBox" BasedOn="{StaticResource StandardTextBox}">
+        <Setter Property="BorderBrush" Value="{StaticResource RedAccentBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <!-- ========================================
+         PASSWORDBOX ESTÁNDAR
+         ======================================== -->
+    <Style x:Key="StandardPasswordBox" TargetType="PasswordBox">
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Padding" Value="15,0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+        <Setter Property="Background" Value="{StaticResource WhitePrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="{TemplateBinding Padding}"
+                                      VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource Gray400Brush}"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ========================================
+         PASSWORDBOX CON ERROR
+         ======================================== -->
+    <Style x:Key="ErrorPasswordBox" TargetType="PasswordBox" BasedOn="{StaticResource StandardPasswordBox}">
+        <Setter Property="BorderBrush" Value="{StaticResource RedAccentBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <!-- ========================================
+         COMBOBOX ESTÁNDAR
+         ======================================== -->
+    <Style x:Key="StandardComboBox" TargetType="ComboBox">
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Padding" Value="15,0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+        <Setter Property="Background" Value="{StaticResource WhitePrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+</ResourceDictionary>

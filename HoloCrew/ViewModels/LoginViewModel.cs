@@ -1,146 +1,218 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Helpers;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
-using System.Threading.Tasks;
+using System;
+using System.Windows.Input;
 
 namespace HoloCrew.ViewModels
 {
     public partial class LoginViewModel : ViewModelBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IAuthenticationService _authService;
         private readonly INavigationService _navigationService;
 
-        [ObservableProperty]
-        private string _email = string.Empty;
-
-        [ObservableProperty]
-        private string _password = string.Empty;
-
-        [ObservableProperty]
-        private string _errorMessage = string.Empty;
-
-        [ObservableProperty]
-        private bool _rememberMe;
-
-        public LoginViewModel(
-            IAuthenticationService authenticationService,
-            INavigationService navigationService)
+        // Properties
+        private string _email;
+        public string Email
         {
-            _authenticationService = authenticationService;
-            _navigationService = navigationService;
-
-            Title = "Iniciar Sesión";
+            get => _email;
+            set
+            {
+                SetProperty(ref _email, value);
+                ValidateEmail();
+                // ⭐ CORREGIDO: NotifyCanExecuteChanged en lugar de RaiseCanExecuteChanged
+                ((RelayCommand)LoginCommand).NotifyCanExecuteChanged();
+            }
         }
 
-        [RelayCommand]
-        private async Task LoginAsync()
+        private string _password;
+        public string Password
         {
-            // Limpiar error previo
-            ErrorMessage = string.Empty;
+            get => _password;
+            set
+            {
+                SetProperty(ref _password, value);
+                ValidatePassword();
+                // ⭐ CORREGIDO: NotifyCanExecuteChanged
+                ((RelayCommand)LoginCommand).NotifyCanExecuteChanged();
+            }
+        }
 
-            // Validar campos
+        private bool _rememberMe;
+        public bool RememberMe
+        {
+            get => _rememberMe;
+            set => SetProperty(ref _rememberMe, value);
+        }
+
+        // ⭐ VALIDACIÓN: Propiedades de error
+        private bool _hasEmailError;
+        public bool HasEmailError
+        {
+            get => _hasEmailError;
+            set => SetProperty(ref _hasEmailError, value);
+        }
+
+        private string _emailErrorMessage;
+        public string EmailErrorMessage
+        {
+            get => _emailErrorMessage;
+            set => SetProperty(ref _emailErrorMessage, value);
+        }
+
+        private bool _hasPasswordError;
+        public bool HasPasswordError
+        {
+            get => _hasPasswordError;
+            set => SetProperty(ref _hasPasswordError, value);
+        }
+
+        private string _passwordErrorMessage;
+        public string PasswordErrorMessage
+        {
+            get => _passwordErrorMessage;
+            set => SetProperty(ref _passwordErrorMessage, value);
+        }
+
+        private string _errorMessage;
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set => SetProperty(ref _errorMessage, value);
+        }
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value);
+        }
+
+        // Commands
+        public ICommand LoginCommand { get; }
+        public ICommand ForgotPasswordCommand { get; }
+        public ICommand NavigateToRegisterCommand { get; }
+
+        public LoginViewModel(
+            IAuthenticationService authService,
+            INavigationService navigationService)
+        {
+            _authService = authService;
+            _navigationService = navigationService;
+
+            LoginCommand = new RelayCommand(ExecuteLogin, CanExecuteLogin);
+            ForgotPasswordCommand = new RelayCommand(ExecuteForgotPassword);
+            NavigateToRegisterCommand = new RelayCommand(ExecuteNavigateToRegister);
+        }
+
+        // ⭐ VALIDACIÓN: Métodos de validación
+        private void ValidateEmail()
+        {
             if (string.IsNullOrWhiteSpace(Email))
             {
-                ErrorMessage = "Por favor, ingresa tu email.";
+                HasEmailError = false;
+                EmailErrorMessage = string.Empty;
                 return;
             }
 
+            if (!ValidationHelper.IsValidEmail(Email))
+            {
+                HasEmailError = true;
+                EmailErrorMessage = "Por favor introduce un email válido";
+            }
+            else
+            {
+                HasEmailError = false;
+                EmailErrorMessage = string.Empty;
+            }
+        }
+
+        private void ValidatePassword()
+        {
             if (string.IsNullOrWhiteSpace(Password))
             {
-                ErrorMessage = "Por favor, ingresa tu contraseña.";
+                HasPasswordError = false;
+                PasswordErrorMessage = string.Empty;
                 return;
             }
 
-            if (!IsValidEmail(Email))
+            if (!ValidationHelper.IsValidPassword(Password))
             {
-                ErrorMessage = "El formato del email no es válido.";
-                return;
+                HasPasswordError = true;
+                PasswordErrorMessage = "La contraseña debe tener al menos 6 caracteres";
             }
+            else
+            {
+                HasPasswordError = false;
+                PasswordErrorMessage = string.Empty;
+            }
+        }
 
+        private bool CanExecuteLogin()
+        {
+            return !string.IsNullOrWhiteSpace(Email) &&
+                   !string.IsNullOrWhiteSpace(Password) &&
+                   !HasEmailError &&
+                   !HasPasswordError &&
+                   !IsLoading;
+        }
+
+        private async void ExecuteLogin()
+        {
             try
             {
-                IsBusy = true;
+                IsLoading = true;
+                ErrorMessage = string.Empty;
 
-                // ⭐ ARREGLADO: AuthenticationService devuelve User, no bool
-                var user = await _authenticationService.LoginAsync(Email, Password);
-                var success = user != null;
+                // Validación final antes de enviar
+                ValidateEmail();
+                ValidatePassword();
 
-                if (success)
+                if (HasEmailError || HasPasswordError)
                 {
-                    // Login exitoso
-                    System.Diagnostics.Debug.WriteLine($"✅ Login exitoso: {Email}");
+                    return;
+                }
 
-                    // Navegar a Home
+                // ⭐ CORREGIDO: LoginAsync solo acepta 2 parámetros (email, password)
+                var user = await _authService.LoginAsync(Email, Password);
+
+                if (user != null)
+                {
+                    // ⭐ CORREGIDO: NavigateTo<TViewModel>() en lugar de NavigateTo(string)
                     _navigationService.NavigateTo<HomeViewModel>();
                 }
                 else
                 {
-                    // Credenciales incorrectas
-                    ErrorMessage = "Email o contraseña incorrectos. Inténtalo de nuevo.";
-                    System.Diagnostics.Debug.WriteLine($"❌ Login fallido: {Email}");
+                    ErrorMessage = "Error al iniciar sesión. Por favor verifica tus credenciales.";
                 }
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Error al iniciar sesión. Por favor, inténtalo más tarde.";
-                System.Diagnostics.Debug.WriteLine($"❌ Error en login: {ex.Message}");
+                ErrorMessage = "Ha ocurrido un error inesperado. Por favor intenta de nuevo.";
+                // Log error
+                System.Diagnostics.Debug.WriteLine($"Login error: {ex.Message}");
             }
             finally
             {
-                IsBusy = false;
+                IsLoading = false;
             }
         }
 
-        [RelayCommand]
-        private void NavigateToRegister()
+        private void ExecuteForgotPassword()
         {
+            // ⭐ CORREGIDO: NavigateTo<TViewModel>()
+            // Asumiendo que existe ForgotPasswordViewModel, si no existe, comentar esta línea
+            // _navigationService.NavigateTo<ForgotPasswordViewModel>();
+
+            // O si solo quieres mostrar un mensaje:
+            ErrorMessage = "Función de recuperación de contraseña en desarrollo.";
+        }
+
+        private void ExecuteNavigateToRegister()
+        {
+            // ⭐ CORREGIDO: NavigateTo<TViewModel>()
             _navigationService.NavigateTo<RegisterViewModel>();
-        }
-
-        [RelayCommand]
-        private void ForgotPassword()
-        {
-            // TODO: Implementar recuperación de contraseña
-            ErrorMessage = "Funcionalidad en desarrollo. Contacta con soporte.";
-        }
-
-        [RelayCommand]
-        private void LoginWithGoogle()
-        {
-            // TODO: Implementar OAuth con Google
-            ErrorMessage = "Login con Google próximamente disponible.";
-        }
-
-        [RelayCommand]
-        private void LoginWithFacebook()
-        {
-            // TODO: Implementar OAuth con Facebook
-            ErrorMessage = "Login con Facebook próximamente disponible.";
-        }
-
-        private bool IsValidEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-                return false;
-
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        // Limpiar campos al navegar
-        public override void OnNavigatedTo(object parameter)
-        {
-            base.OnNavigatedTo(parameter);
-            ErrorMessage = string.Empty;
-            Password = string.Empty; // Limpiar contraseña por seguridad
         }
     }
 }

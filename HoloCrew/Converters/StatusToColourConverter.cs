@@ -8,8 +8,9 @@ namespace HoloCrew.Converters
 {
     /// <summary>
     /// Convierte OrderStatus a color
+    /// ⭐ CORREGIDO: Nombre de clase coincide con nombre de archivo
     /// </summary>
-    public class StatusToColorConverter : IValueConverter
+    public class StatusToColourConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

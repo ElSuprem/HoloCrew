@@ -1,5 +1,4 @@
-﻿using HoloCrew.Converters;
-using System;
+﻿using System;
 using System.Collections;
 using System.Globalization;
 using System.Linq;
@@ -11,6 +10,7 @@ namespace HoloCrew.Converters
     /// <summary>
     /// Convierte una colección vacía a Visibility
     /// Colección vacía = Collapsed, con elementos = Visible
+    /// ⭐ CORREGIDO: Sin using duplicado
     /// </summary>
     public class EmptyCollectionToVisibilityConverter : IValueConverter
     {
