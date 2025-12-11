@@ -145,7 +145,7 @@
                     </Grid>
                 </Border>
 
-                <!-- ⭐ ICONOS ARREGLADOS (RIGHT SIDE) -->
+                <!-- ⭐ ICONOS DEL HEADER (RIGHT SIDE) -->
                 <StackPanel Grid.Column="3" 
                             Orientation="Horizontal" 
                             HorizontalAlignment="Right"
@@ -155,7 +155,8 @@
                     <Border Background="Transparent" 
                             Width="44" Height="44" 
                             Cursor="Hand" 
-                            Margin="0,0,10,0">
+                            Margin="0,0,8,0"
+                            ToolTip="Lista de deseos">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToWishlistCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
@@ -186,7 +187,8 @@
                     <Border Background="Transparent" 
                             Width="44" Height="44" 
                             Cursor="Hand" 
-                            Margin="0,0,10,0">
+                            Margin="0,0,8,0"
+                            ToolTip="Carrito de compras">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCartCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
@@ -212,11 +214,43 @@
                         </Grid>
                     </Border>
 
-                    <!-- ⭐ Profile Icon - SIEMPRE VISIBLE, CAMBIA SEGÚN LOGIN -->
+                    <!-- ⭐ NUEVO: Notifications Icon (Campanita) con Badge -->
                     <Border Background="Transparent" 
                             Width="44" Height="44" 
                             Cursor="Hand" 
-                            Margin="0,0,10,0"
+                            Margin="0,0,8,0"
+                            ToolTip="Notificaciones">
+                        <Border.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToNotificationsCommand}" MouseAction="LeftClick"/>
+                        </Border.InputBindings>
+                        <Grid>
+                            <TextBlock Text="🔔" 
+                                       FontSize="22" 
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center"/>
+                            <!-- Badge de notificaciones no leídas -->
+                            <Border Background="{StaticResource RedAccentBrush}"
+                                    CornerRadius="8"
+                                    Width="16" Height="16"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Margin="0,8,8,0"
+                                    Visibility="{Binding UnreadNotificationCount, Converter={StaticResource CountToVisibilityConverter}}">
+                                <TextBlock Text="{Binding UnreadNotificationCount}"
+                                           Foreground="White"
+                                           FontSize="10"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- Profile Icon - SIEMPRE VISIBLE, CAMBIA SEGÚN LOGIN -->
+                    <Border Background="Transparent" 
+                            Width="44" Height="44" 
+                            Cursor="Hand" 
+                            Margin="0,0,8,0"
                             ToolTip="Mi cuenta">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToProfileCommand}" MouseAction="LeftClick"/>
@@ -240,7 +274,7 @@
                         </TextBlock>
                     </Border>
 
-                    <!-- ⭐ Settings Icon - SIEMPRE VISIBLE -->
+                    <!-- Settings Icon - SIEMPRE VISIBLE -->
                     <Border Background="Transparent" 
                             Width="44" Height="44" 
                             Cursor="Hand"

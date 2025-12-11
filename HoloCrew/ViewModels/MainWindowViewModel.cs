@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
 
 namespace HoloCrew.ViewModels
 {
@@ -11,6 +12,7 @@ namespace HoloCrew.ViewModels
         private readonly ICartService _cartService;
         private readonly IAuthenticationService _authenticationService;
         private readonly IWishlistService _wishlistService;
+        private readonly INotificationService _notificationService;
 
         [ObservableProperty]
         private object _currentView;
@@ -30,24 +32,33 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private string _currentUserName;
 
+        // ⭐ NUEVO: Contador de notificaciones no leídas para la campanita
+        [ObservableProperty]
+        private int _unreadNotificationCount;
+
         public MainWindowViewModel(
             INavigationService navigationService,
             ICartService cartService,
             IAuthenticationService authenticationService,
-            IWishlistService wishlistService)
+            IWishlistService wishlistService,
+            INotificationService notificationService)
         {
             _navigationService = navigationService;
             _cartService = cartService;
             _authenticationService = authenticationService;
             _wishlistService = wishlistService;
+            _notificationService = notificationService;
 
             Title = "HoloCrew";
 
             // Suscribirse a cambios en el carrito
             _cartService.CartUpdated += OnCartUpdated;
 
-            // ⭐ Suscribirse a cambios en wishlist
+            // Suscribirse a cambios en wishlist
             _wishlistService.WishlistUpdated += OnWishlistUpdated;
+
+            // ⭐ NUEVO: Suscribirse a nuevas notificaciones
+            _notificationService.NotificationReceived += OnNotificationReceived;
 
             // Actualizar estado de autenticación
             UpdateAuthenticationState();
@@ -57,6 +68,9 @@ namespace HoloCrew.ViewModels
 
             // Actualizar contador de wishlist
             UpdateWishlistCount();
+
+            // ⭐ NUEVO: Actualizar contador de notificaciones
+            UpdateNotificationCount();
         }
 
         // ============================
@@ -95,7 +109,7 @@ namespace HoloCrew.ViewModels
         private void NavigateToWishlist()
         {
             _navigationService.NavigateTo<WishlistViewModel>();
-            UpdateWishlistCount(); // Actualizar al navegar
+            UpdateWishlistCount();
         }
 
         // ⭐ NAVEGACIÓN INTELIGENTE AL PERFIL
@@ -104,12 +118,10 @@ namespace HoloCrew.ViewModels
         {
             if (IsUserLoggedIn)
             {
-                // Usuario autenticado → ir a perfil
                 _navigationService.NavigateTo<ProfileViewModel>();
             }
             else
             {
-                // Usuario NO autenticado → ir a login
                 _navigationService.NavigateTo<LoginViewModel>();
             }
         }
@@ -124,6 +136,8 @@ namespace HoloCrew.ViewModels
         private void NavigateToNotifications()
         {
             _navigationService.NavigateTo<NotificationsViewModel>();
+            // Actualizar el contador después de navegar (el usuario verá las notificaciones)
+            UpdateNotificationCount();
         }
 
         [RelayCommand]
@@ -162,16 +176,29 @@ namespace HoloCrew.ViewModels
             _navigationService.NavigateTo<HomeViewModel>();
         }
 
+        // ============================
+        // EVENT HANDLERS
+        // ============================
+
         private void OnCartUpdated(object sender, EventArgs e)
         {
             CartItemCount = _cartService.GetCartItemCount();
         }
 
-        // ⭐ NUEVO: Evento para actualizar contador de wishlist automáticamente
         private void OnWishlistUpdated(object sender, EventArgs e)
         {
             UpdateWishlistCount();
         }
+
+        // ⭐ NUEVO: Handler para nuevas notificaciones
+        private void OnNotificationReceived(object sender, Models.Notification notification)
+        {
+            UpdateNotificationCount();
+        }
+
+        // ============================
+        // MÉTODOS AUXILIARES
+        // ============================
 
         private async void UpdateAuthenticationState()
         {
@@ -193,11 +220,18 @@ namespace HoloCrew.ViewModels
             WishlistItemCount = await _wishlistService.GetWishlistCountAsync(1);
         }
 
+        // ⭐ NUEVO: Actualizar contador de notificaciones no leídas
+        private void UpdateNotificationCount()
+        {
+            UnreadNotificationCount = _notificationService.GetUnreadCount();
+        }
+
         public override void OnNavigatedTo(object parameter)
         {
             base.OnNavigatedTo(parameter);
             UpdateWishlistCount();
             CartItemCount = _cartService.GetCartItemCount();
+            UpdateNotificationCount();
         }
     }
 }
