@@ -4,431 +4,386 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="800" d:DesignWidth="1400"
+             d:DesignHeight="900" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
+
+    <UserControl.Resources>
+        <!-- Estilo para los filtros colapsables -->
+        <Style x:Key="FilterExpanderStyle" TargetType="Expander">
+            <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="IsExpanded" Value="True"/>
+        </Style>
+
+        <!-- Estilo para checkbox de filtros -->
+        <Style x:Key="FilterCheckBox" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource Gray700Brush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,8,0,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- Estilo para botones de talla -->
+        <Style x:Key="SizeButton" TargetType="Border">
+            <Setter Property="Width" Value="44"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,8,8"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                    <Setter Property="Background" Value="{StaticResource Gray100Brush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Estilo para botones de color -->
+        <Style x:Key="ColorButton" TargetType="Border">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="280"/>
+            <!-- Sidebar filtros -->
             <ColumnDefinition Width="*"/>
+            <!-- Grid productos -->
         </Grid.ColumnDefinitions>
 
-        <!-- SIDEBAR: FILTROS CON SCROLL Y BINDINGS FUNCIONALES -->
+        <!-- ============================================ -->
+        <!-- SIDEBAR: FILTROS -->
+        <!-- ============================================ -->
         <Border Grid.Column="0" 
-                Background="{StaticResource BlackPrimaryBrush}"
-                BorderBrush="{StaticResource Gray800Brush}"
+                Background="{StaticResource WhitePrimaryBrush}"
+                BorderBrush="{StaticResource Gray200Brush}"
                 BorderThickness="0,0,1,0">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.2" BlurRadius="15" ShadowDepth="0" Direction="0"/>
-            </Border.Effect>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled"
-                          Padding="35,45,30,45">
-                <StackPanel>
-                    <!-- Título -->
-                    <TextBlock Text="FILTERS" 
-                               Style="{StaticResource HeadingMedium}"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               Margin="0,0,0,35"/>
+                          PreviewMouseWheel="FiltersScrollViewer_PreviewMouseWheel">
+                <StackPanel Margin="25,30,25,40">
+
+                    <!-- Header Filtros -->
+                    <Grid Margin="0,0,0,25">
+                        <TextBlock Text="Filters" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource BlackPrimaryBrush}"/>
+                        <TextBlock Text="Clear all" 
+                                   HorizontalAlignment="Right"
+                                   FontSize="13"
+                                   Foreground="{StaticResource Gray500Brush}"
+                                   Cursor="Hand"
+                                   TextDecorations="Underline">
+                            <TextBlock.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" Command="{Binding ClearFiltersCommand}"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                    </Grid>
+
+                    <!-- Separador -->
+                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,0,0,20"/>
 
                     <!-- BÚSQUEDA -->
-                    <TextBlock Text="SEARCH" 
-                               Style="{StaticResource SubtitleSmall}"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
+                    <TextBlock Text="Search" 
+                               FontSize="13" 
+                               FontWeight="SemiBold"
                                Margin="0,0,0,10"/>
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                            Height="44"
-                            Margin="0,0,0,30">
-                        <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 Padding="15,0"
-                                 VerticalAlignment="Center"
-                                 FontSize="14">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
+                    <Border Background="{StaticResource Gray100Brush}"
+                            Height="42"
+                            Margin="0,0,0,25">
+                        <Grid>
+                            <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Padding="12,0,40,0"
+                                     VerticalAlignment="Center"
+                                     FontSize="13">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+                            <TextBlock Text="🔍" 
+                                       FontSize="14" 
+                                       HorizontalAlignment="Right" 
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,12,0"
+                                       Opacity="0.5"/>
+                        </Grid>
                     </Border>
 
                     <!-- CATEGORÍAS -->
-                    <TextBlock Text="CATEGORY" 
-                               Style="{StaticResource SubtitleSmall}"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               Margin="0,0,0,15"/>
-                    <StackPanel Margin="0,0,0,30">
-                        <Border Background="Transparent" Padding="0,10" Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding SelectCategoryCommand}" 
-                                              CommandParameter="All"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="👕 All Products" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       FontSize="14"/>
-                        </Border>
-                        <Border Background="Transparent" Padding="0,10" Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding SelectCategoryCommand}" 
-                                              CommandParameter="Tops"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="👔 Tops" 
-                                       Foreground="{StaticResource Gray400Brush}"
-                                       FontSize="14"/>
-                        </Border>
-                        <Border Background="Transparent" Padding="0,10" Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding SelectCategoryCommand}" 
-                                              CommandParameter="Bottoms"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="👖 Bottoms" 
-                                       Foreground="{StaticResource Gray400Brush}"
-                                       FontSize="14"/>
-                        </Border>
-                        <Border Background="Transparent" Padding="0,10" Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding SelectCategoryCommand}" 
-                                              CommandParameter="Accessories"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="🧢 Accessories" 
-                                       Foreground="{StaticResource Gray400Brush}"
-                                       FontSize="14"/>
-                        </Border>
-                        <Border Background="Transparent" Padding="0,10" Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding SelectCategoryCommand}" 
-                                              CommandParameter="Footwear"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="👟 Footwear" 
-                                       Foreground="{StaticResource Gray400Brush}"
-                                       FontSize="14"/>
-                        </Border>
-                    </StackPanel>
+                    <Expander Header="Category" Style="{StaticResource FilterExpanderStyle}">
+                        <StackPanel Margin="0,10,0,20">
+                            <RadioButton Content="All Products" 
+                                         GroupName="Category"
+                                         IsChecked="True"
+                                         FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6">
+                                <RadioButton.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelectCategoryCommand}" CommandParameter="All"/>
+                                </RadioButton.InputBindings>
+                            </RadioButton>
+                            <RadioButton Content="Tops" GroupName="Category" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6">
+                                <RadioButton.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelectCategoryCommand}" CommandParameter="Tops"/>
+                                </RadioButton.InputBindings>
+                            </RadioButton>
+                            <RadioButton Content="Bottoms" GroupName="Category" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6">
+                                <RadioButton.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelectCategoryCommand}" CommandParameter="Bottoms"/>
+                                </RadioButton.InputBindings>
+                            </RadioButton>
+                            <RadioButton Content="Footwear" GroupName="Category" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6">
+                                <RadioButton.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelectCategoryCommand}" CommandParameter="Footwear"/>
+                                </RadioButton.InputBindings>
+                            </RadioButton>
+                            <RadioButton Content="Accessories" GroupName="Category" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6">
+                                <RadioButton.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelectCategoryCommand}" CommandParameter="Accessories"/>
+                                </RadioButton.InputBindings>
+                            </RadioButton>
+                        </StackPanel>
+                    </Expander>
 
-                    <!-- TALLAS -->
-                    <TextBlock Text="SIZE" 
-                               Style="{StaticResource SubtitleSmall}"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               Margin="0,0,0,15"/>
-                    <WrapPanel Margin="0,0,0,30">
-                        <Border Width="45" Height="45"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                Margin="0,0,8,8"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleSizeCommand}" 
-                                              CommandParameter="XS"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="XS" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       FontSize="13"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                        <Border Width="45" Height="45"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                Margin="0,0,8,8"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleSizeCommand}" 
-                                              CommandParameter="S"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="S" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       FontSize="13"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                        <Border Width="45" Height="45"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                Margin="0,0,8,8"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleSizeCommand}" 
-                                              CommandParameter="M"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="M" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       FontSize="13"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                        <Border Width="45" Height="45"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                Margin="0,0,8,8"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleSizeCommand}" 
-                                              CommandParameter="L"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="L" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       FontSize="13"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                        <Border Width="45" Height="45"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                Margin="0,0,8,8"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleSizeCommand}" 
-                                              CommandParameter="XL"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="XL" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       FontSize="13"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                        <Border Width="45" Height="45"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                Margin="0,0,0,8"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleSizeCommand}" 
-                                              CommandParameter="XXL"/>
-                            </Border.InputBindings>
-                            <TextBlock Text="XXL" 
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       FontSize="12"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                    </WrapPanel>
-
-                    <!-- COLORES -->
-                    <TextBlock Text="COLOR" 
-                               Style="{StaticResource SubtitleSmall}"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               Margin="0,0,0,15"/>
-                    <WrapPanel Margin="0,0,0,30">
-                        <Border Width="38" Height="38"
-                                Background="#000000"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                CornerRadius="19"
-                                Margin="0,0,10,10"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleColorCommand}" 
-                                              CommandParameter="Black"/>
-                            </Border.InputBindings>
-                        </Border>
-                        <Border Width="38" Height="38"
-                                Background="#FFFFFF"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                CornerRadius="19"
-                                Margin="0,0,10,10"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleColorCommand}" 
-                                              CommandParameter="White"/>
-                            </Border.InputBindings>
-                        </Border>
-                        <Border Width="38" Height="38"
-                                Background="#808080"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                CornerRadius="19"
-                                Margin="0,0,10,10"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleColorCommand}" 
-                                              CommandParameter="Gray"/>
-                            </Border.InputBindings>
-                        </Border>
-                        <Border Width="38" Height="38"
-                                Background="#1E40AF"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                CornerRadius="19"
-                                Margin="0,0,10,10"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleColorCommand}" 
-                                              CommandParameter="Blue"/>
-                            </Border.InputBindings>
-                        </Border>
-                        <Border Width="38" Height="38"
-                                Background="#DC2626"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                CornerRadius="19"
-                                Margin="0,0,10,10"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleColorCommand}" 
-                                              CommandParameter="Red"/>
-                            </Border.InputBindings>
-                        </Border>
-                        <Border Width="38" Height="38"
-                                Background="#16A34A"
-                                BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                BorderThickness="2"
-                                CornerRadius="19"
-                                Margin="0,0,10,10"
-                                Cursor="Hand">
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                              Command="{Binding ToggleColorCommand}" 
-                                              CommandParameter="Green"/>
-                            </Border.InputBindings>
-                        </Border>
-                    </WrapPanel>
+                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
 
                     <!-- PRECIO -->
-                    <TextBlock Text="PRICE RANGE" 
-                               Style="{StaticResource SubtitleSmall}"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               Margin="0,0,0,10"/>
-                    <Grid Margin="0,0,0,30">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <Expander Header="Price" Style="{StaticResource FilterExpanderStyle}">
+                        <StackPanel Margin="0,10,0,20">
+                            <Grid Margin="0,0,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="0" 
-                                Background="{StaticResource WhitePrimaryBrush}"
-                                Height="44">
-                            <TextBox Text="{Binding MinPrice, UpdateSourceTrigger=PropertyChanged}" 
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     TextAlignment="Center"
-                                     VerticalAlignment="Center"
-                                     FontSize="14"/>
-                        </Border>
+                                <Border Grid.Column="0" Background="{StaticResource Gray100Brush}" Height="38">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+                                        <TextBlock Text="€" Foreground="{StaticResource Gray500Brush}" FontSize="13" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding MinPrice, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="Transparent" BorderThickness="0"
+                                                 FontSize="13" Width="50" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                    </StackPanel>
+                                </Border>
 
-                        <TextBlock Grid.Column="1"
-                                   Text="-" 
-                                   Foreground="{StaticResource WhitePrimaryBrush}"
-                                   VerticalAlignment="Center"
-                                   Margin="10,0"
-                                   FontSize="16"
-                                   FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="—" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource Gray400Brush}"/>
 
-                        <Border Grid.Column="2"
-                                Background="{StaticResource WhitePrimaryBrush}"
-                                Height="44">
-                            <TextBox Text="{Binding MaxPrice, UpdateSourceTrigger=PropertyChanged}" 
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     TextAlignment="Center"
-                                     VerticalAlignment="Center"
-                                     FontSize="14"/>
-                        </Border>
-                    </Grid>
+                                <Border Grid.Column="2" Background="{StaticResource Gray100Brush}" Height="38">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+                                        <TextBlock Text="€" Foreground="{StaticResource Gray500Brush}" FontSize="13" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding MaxPrice, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="Transparent" BorderThickness="0"
+                                                 FontSize="13" Width="50" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <!-- Slider visual (opcional) -->
+                            <Slider Minimum="0" Maximum="500" 
+                                    Value="{Binding MaxPrice}" 
+                                    TickFrequency="50"
+                                    IsSnapToTickEnabled="True"/>
+                        </StackPanel>
+                    </Expander>
+
+                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
+
+                    <!-- TALLAS -->
+                    <Expander Header="Size" Style="{StaticResource FilterExpanderStyle}">
+                        <WrapPanel Margin="0,10,0,20">
+                            <Border Style="{StaticResource SizeButton}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleSizeCommand}" CommandParameter="XS"/>
+                                </Border.InputBindings>
+                                <TextBlock Text="XS" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <Border Style="{StaticResource SizeButton}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleSizeCommand}" CommandParameter="S"/>
+                                </Border.InputBindings>
+                                <TextBlock Text="S" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <Border Style="{StaticResource SizeButton}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleSizeCommand}" CommandParameter="M"/>
+                                </Border.InputBindings>
+                                <TextBlock Text="M" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <Border Style="{StaticResource SizeButton}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleSizeCommand}" CommandParameter="L"/>
+                                </Border.InputBindings>
+                                <TextBlock Text="L" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <Border Style="{StaticResource SizeButton}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleSizeCommand}" CommandParameter="XL"/>
+                                </Border.InputBindings>
+                                <TextBlock Text="XL" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <Border Style="{StaticResource SizeButton}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleSizeCommand}" CommandParameter="XXL"/>
+                                </Border.InputBindings>
+                                <TextBlock Text="XXL" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </WrapPanel>
+                    </Expander>
+
+                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
+
+                    <!-- COLORES -->
+                    <Expander Header="Color" Style="{StaticResource FilterExpanderStyle}">
+                        <WrapPanel Margin="0,10,0,20">
+                            <Border Style="{StaticResource ColorButton}" Background="#0A0A0A" ToolTip="Black">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleColorCommand}" CommandParameter="Black"/>
+                                </Border.InputBindings>
+                            </Border>
+                            <Border Style="{StaticResource ColorButton}" Background="#FFFFFF" BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" ToolTip="White">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleColorCommand}" CommandParameter="White"/>
+                                </Border.InputBindings>
+                            </Border>
+                            <Border Style="{StaticResource ColorButton}" Background="#6B7280" ToolTip="Gray">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleColorCommand}" CommandParameter="Gray"/>
+                                </Border.InputBindings>
+                            </Border>
+                            <Border Style="{StaticResource ColorButton}" Background="#1E3A5F" ToolTip="Navy">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleColorCommand}" CommandParameter="Navy"/>
+                                </Border.InputBindings>
+                            </Border>
+                            <Border Style="{StaticResource ColorButton}" Background="#DC2626" ToolTip="Red">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleColorCommand}" CommandParameter="Red"/>
+                                </Border.InputBindings>
+                            </Border>
+                            <Border Style="{StaticResource ColorButton}" Background="#16A34A" ToolTip="Green">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleColorCommand}" CommandParameter="Green"/>
+                                </Border.InputBindings>
+                            </Border>
+                        </WrapPanel>
+                    </Expander>
+
+                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
 
                     <!-- GÉNERO -->
-                    <TextBlock Text="GENDER" 
-                               Style="{StaticResource SubtitleSmall}"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               Margin="0,0,0,15"/>
-                    <StackPanel Margin="0,0,0,30">
-                        <CheckBox Content="Men" 
-                                  IsChecked="{Binding GenderMen}"
-                                  Foreground="{StaticResource WhitePrimaryBrush}"
-                                  FontSize="14"
-                                  Margin="0,0,0,10"/>
-                        <CheckBox Content="Women" 
-                                  IsChecked="{Binding GenderWomen}"
-                                  Foreground="{StaticResource WhitePrimaryBrush}"
-                                  FontSize="14"
-                                  Margin="0,0,0,10"/>
-                        <CheckBox Content="Unisex" 
-                                  IsChecked="{Binding GenderUnisex}"
-                                  Foreground="{StaticResource WhitePrimaryBrush}"
-                                  FontSize="14"/>
-                    </StackPanel>
+                    <Expander Header="Gender" Style="{StaticResource FilterExpanderStyle}">
+                        <StackPanel Margin="0,5,0,20">
+                            <CheckBox Content="Men" IsChecked="{Binding GenderMen}" Style="{StaticResource FilterCheckBox}"/>
+                            <CheckBox Content="Women" IsChecked="{Binding GenderWomen}" Style="{StaticResource FilterCheckBox}"/>
+                            <CheckBox Content="Unisex" IsChecked="{Binding GenderUnisex}" Style="{StaticResource FilterCheckBox}"/>
+                        </StackPanel>
+                    </Expander>
+
+                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
 
                     <!-- DISPONIBILIDAD -->
-                    <TextBlock Text="AVAILABILITY" 
-                               Style="{StaticResource SubtitleSmall}"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               Margin="0,0,0,15"/>
-                    <StackPanel Margin="0,0,0,30">
-                        <CheckBox Content="In Stock" 
-                                  IsChecked="{Binding InStockOnly}"
-                                  Foreground="{StaticResource WhitePrimaryBrush}"
-                                  FontSize="14"
-                                  Margin="0,0,0,10"/>
-                        <CheckBox Content="On Sale" 
-                                  IsChecked="{Binding OnSaleOnly}"
-                                  Foreground="{StaticResource WhitePrimaryBrush}"
-                                  FontSize="14"/>
-                    </StackPanel>
+                    <Expander Header="Availability" Style="{StaticResource FilterExpanderStyle}">
+                        <StackPanel Margin="0,5,0,20">
+                            <CheckBox Content="In Stock Only" IsChecked="{Binding InStockOnly}" Style="{StaticResource FilterCheckBox}"/>
+                            <CheckBox Content="On Sale" IsChecked="{Binding OnSaleOnly}" Style="{StaticResource FilterCheckBox}"/>
+                        </StackPanel>
+                    </Expander>
 
-                    <!-- BOTONES -->
-                    <Button Content="APPLY FILTERS" 
-                            Style="{StaticResource AccentButton}"
-                            Margin="0,0,0,12"
-                            Command="{Binding ApplyFiltersCommand}"/>
-
-                    <Button Content="CLEAR FILTERS" 
-                            Style="{StaticResource OutlineButton}"
-                            Foreground="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource WhitePrimaryBrush}"
-                            Command="{Binding ClearFiltersCommand}"/>
                 </StackPanel>
             </ScrollViewer>
         </Border>
 
-        <!-- GRID PRODUCTOS -->
-        <ScrollViewer Grid.Column="1" 
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled">
-            <Border Padding="60,50,60,80">
-                <StackPanel>
-                    <!-- Header -->
-                    <Grid Margin="0,0,0,40">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+        <!-- ============================================ -->
+        <!-- CONTENIDO PRINCIPAL: PRODUCTOS -->
+        <!-- ============================================ -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Header con título y ordenación -->
+                <RowDefinition Height="*"/>
+                <!-- Grid de productos -->
+            </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="ALL PRODUCTS" 
-                                       Style="{StaticResource HeadingLarge}"
-                                       Margin="0,0,0,8"/>
-                            <TextBlock Style="{StaticResource BodyMedium}"
-                                       Foreground="{StaticResource TextSecondary}">
-                                <Run Text="{Binding FilteredProducts.Count, Mode=OneWay}"/>
-                                <Run Text=" products found"/>
-                            </TextBlock>
-                        </StackPanel>
-                    </Grid>
+            <!-- HEADER -->
+            <Border Grid.Row="0" 
+                    Background="{StaticResource WhitePrimaryBrush}"
+                    BorderBrush="{StaticResource Gray200Brush}"
+                    BorderThickness="0,0,0,1"
+                    Padding="40,25">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                    <!-- Grid de productos DINÁMICO -->
-                    <ItemsControl ItemsSource="{Binding FilteredProducts}">
+                    <!-- Título y contador -->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding CurrentCategoryName}" 
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource BlackPrimaryBrush}"/>
+                        <TextBlock Foreground="{StaticResource Gray500Brush}" FontSize="13" Margin="0,5,0,0">
+                            <Run Text="{Binding FilteredProducts.Count, Mode=OneWay}"/>
+                            <Run Text=" products"/>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <!-- Ordenación -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Sort by:" 
+                                   Foreground="{StaticResource Gray600Brush}"
+                                   FontSize="13"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"/>
+                        <ComboBox ItemsSource="{Binding SortOptions}"
+                                  SelectedItem="{Binding SortBy}"
+                                  Width="180"
+                                  Height="38"
+                                  FontSize="13"
+                                  Padding="12,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- GRID DE PRODUCTOS -->
+            <ScrollViewer Grid.Row="1" 
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Background="{StaticResource Gray100Brush}"
+                          PreviewMouseWheel="ProductsScrollViewer_PreviewMouseWheel">
+
+                <!-- Loading indicator -->
+                <ScrollViewer.Style>
+                    <Style TargetType="ScrollViewer">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ScrollViewer.Style>
+
+                <Grid>
+                    <!-- Productos -->
+                    <ItemsControl ItemsSource="{Binding FilteredProducts}" Margin="30,30,30,50">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Columns="3"/>
@@ -437,56 +392,252 @@
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
+                                <!-- PRODUCT CARD -->
                                 <Border Background="{StaticResource WhitePrimaryBrush}"
-                                        BorderBrush="{StaticResource BorderDefault}"
-                                        BorderThickness="1"
-                                        Margin="0,0,25,25"
+                                        Margin="10"
                                         Cursor="Hand">
-                                    <Border.InputBindings>
-                                        <MouseBinding MouseAction="LeftClick" 
-                                                      Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                      CommandParameter="{Binding}"/>
-                                    </Border.InputBindings>
                                     <Border.Effect>
-                                        <DropShadowEffect Color="Black" Opacity="0.08" BlurRadius="12" ShadowDepth="3"/>
+                                        <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2" Direction="270"/>
                                     </Border.Effect>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Effect">
+                                                        <Setter.Value>
+                                                            <DropShadowEffect Color="Black" Opacity="0.12" BlurRadius="20" ShadowDepth="5" Direction="270"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="380"/>
+                                            <RowDefinition Height="340"/>
+                                            <!-- Imagen -->
                                             <RowDefinition Height="Auto"/>
+                                            <!-- Info -->
                                         </Grid.RowDefinitions>
 
-                                        <Rectangle Grid.Row="0" Fill="{StaticResource Gray200Brush}"/>
+                                        <!-- IMAGEN DEL PRODUCTO -->
+                                        <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
+                                            <Border.InputBindings>
+                                                <MouseBinding MouseAction="LeftClick" 
+                                                              Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                              CommandParameter="{Binding}"/>
+                                            </Border.InputBindings>
 
-                                        <Border Grid.Row="1" Padding="25,22">
+                                            <Grid>
+                                                <!-- Placeholder de imagen -->
+                                                <TextBlock Text="📷" 
+                                                           FontSize="48" 
+                                                           Opacity="0.2"
+                                                           HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center"/>
+
+                                                <!-- Badges (NEW, SALE) -->
+                                                <StackPanel Orientation="Horizontal" 
+                                                            HorizontalAlignment="Left" 
+                                                            VerticalAlignment="Top"
+                                                            Margin="12">
+                                                    <!-- Badge NEW -->
+                                                    <Border Background="{StaticResource BlackPrimaryBrush}"
+                                                            Padding="10,5"
+                                                            Margin="0,0,6,0"
+                                                            Visibility="{Binding IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                        <TextBlock Text="NEW" 
+                                                                   Foreground="White" 
+                                                                   FontSize="10" 
+                                                                   FontWeight="Bold"/>
+                                                    </Border>
+                                                    <!-- Badge SALE -->
+                                                    <Border Background="{StaticResource RedAccentBrush}"
+                                                            Padding="10,5"
+                                                            Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                        <TextBlock Foreground="White" FontSize="10" FontWeight="Bold">
+                                                            <Run Text="-"/>
+                                                            <Run Text="{Binding DiscountPercentage, Mode=OneWay}"/>
+                                                            <Run Text="%"/>
+                                                        </TextBlock>
+                                                    </Border>
+                                                </StackPanel>
+
+                                                <!-- Botón Wishlist -->
+                                                <Border Width="40" Height="40"
+                                                        Background="{StaticResource WhitePrimaryBrush}"
+                                                        CornerRadius="20"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Top"
+                                                        Margin="12"
+                                                        Cursor="Hand">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="1"/>
+                                                    </Border.Effect>
+                                                    <Border.InputBindings>
+                                                        <MouseBinding MouseAction="LeftClick"
+                                                                      Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                      CommandParameter="{Binding}"/>
+                                                    </Border.InputBindings>
+                                                    <TextBlock FontSize="18" 
+                                                               HorizontalAlignment="Center" 
+                                                               VerticalAlignment="Center">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Text" Value="🤍"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
+                                                                        <Setter Property="Text" Value="❤️"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Border>
+
+                                                <!-- Quick Add (aparece en hover) -->
+                                                <Border Background="{StaticResource BlackPrimaryBrush}"
+                                                        Height="45"
+                                                        VerticalAlignment="Bottom"
+                                                        Cursor="Hand"
+                                                        Opacity="0"
+                                                        x:Name="QuickAddButton">
+                                                    <Border.InputBindings>
+                                                        <MouseBinding MouseAction="LeftClick"
+                                                                      Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                      CommandParameter="{Binding}"/>
+                                                    </Border.InputBindings>
+                                                    <TextBlock Text="QUICK ADD +"
+                                                               Foreground="White"
+                                                               FontSize="12"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- INFO DEL PRODUCTO -->
+                                        <Border Grid.Row="1" Padding="18,16,18,20">
+                                            <Border.InputBindings>
+                                                <MouseBinding MouseAction="LeftClick" 
+                                                              Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                              CommandParameter="{Binding}"/>
+                                            </Border.InputBindings>
                                             <StackPanel>
+                                                <!-- Categoría -->
+                                                <TextBlock Text="{Binding Category.Name}" 
+                                                           FontSize="11"
+                                                           Foreground="{StaticResource Gray500Brush}"
+                                                           Margin="0,0,0,4"
+                                                           Typography.Capitals="AllSmallCaps"/>
+
+                                                <!-- Nombre -->
                                                 <TextBlock Text="{Binding Name}" 
-                                                           Style="{StaticResource SubtitleMedium}"
+                                                           FontSize="14"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource BlackPrimaryBrush}"
                                                            TextTrimming="CharacterEllipsis"
-                                                           Margin="0,0,0,6"/>
-                                                <TextBlock Text="{Binding Description}" 
-                                                           Style="{StaticResource BodySmall}"
-                                                           Foreground="{StaticResource TextSecondary}"
-                                                           TextTrimming="CharacterEllipsis"
-                                                           Margin="0,0,0,12"/>
-                                                <TextBlock Text="{Binding Price, StringFormat={}{0:C}}" 
-                                                           FontSize="20" 
-                                                           FontWeight="Bold"
-                                                           Margin="0,0,0,18"/>
-                                                <Button Content="ADD TO CART" 
-                                                        Style="{StaticResource AddToCartButton}"
-                                                        Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}"/>
+                                                           Margin="0,0,0,8"/>
+
+                                                <!-- Precios -->
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Price, StringFormat='€{0:N2}'}" 
+                                                               FontSize="15"
+                                                               FontWeight="Bold"
+                                                               Foreground="{StaticResource BlackPrimaryBrush}"/>
+
+                                                    <!-- Precio original (si hay descuento) -->
+                                                    <TextBlock Text="{Binding OriginalPrice, StringFormat='€{0:N2}'}"
+                                                               FontSize="13"
+                                                               Foreground="{StaticResource Gray400Brush}"
+                                                               TextDecorations="Strikethrough"
+                                                               Margin="10,0,0,0"
+                                                               VerticalAlignment="Center"
+                                                               Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                                </StackPanel>
+
+                                                <!-- Rating (opcional) -->
+                                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                                    <TextBlock Text="⭐" FontSize="12"/>
+                                                    <TextBlock Text="{Binding AverageRating, StringFormat='{}{0:N1}'}" 
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource Gray600Brush}"
+                                                               Margin="4,0,0,0"/>
+                                                    <TextBlock FontSize="12"
+                                                               Foreground="{StaticResource Gray400Brush}"
+                                                               Margin="6,0,0,0">
+                                                        <Run Text="("/>
+                                                        <Run Text="{Binding ReviewCount, Mode=OneWay}"/>
+                                                        <Run Text=")"/>
+                                                    </TextBlock>
+                                                </StackPanel>
                                             </StackPanel>
                                         </Border>
                                     </Grid>
+
+                                    <!-- Trigger para mostrar Quick Add en hover -->
+                                    <Border.Triggers>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="QuickAddButton"
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     To="1" Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="QuickAddButton"
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     To="0" Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Border.Triggers>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </StackPanel>
-            </Border>
-        </ScrollViewer>
+
+                    <!-- Empty state -->
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Visibility="{Binding FilteredProducts.Count, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
+                        <TextBlock Text="🔍" FontSize="64" HorizontalAlignment="Center" Opacity="0.3"/>
+                        <TextBlock Text="No products found" 
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,20,0,8"/>
+                        <TextBlock Text="Try adjusting your filters"
+                                   FontSize="14"
+                                   Foreground="{StaticResource Gray500Brush}"
+                                   HorizontalAlignment="Center"/>
+                        <Button Content="Clear Filters"
+                                Style="{StaticResource OutlineButton}"
+                                Padding="24,12"
+                                Margin="0,20,0,0"
+                                Command="{Binding ClearFiltersCommand}"/>
+                    </StackPanel>
+
+                    <!-- Loading overlay -->
+                    <Border Background="#80FFFFFF"
+                            Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="⏳" FontSize="48" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Loading products..." 
+                                       FontSize="14" 
+                                       Margin="0,15,0,0"
+                                       Foreground="{StaticResource Gray600Brush}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 
 </UserControl>

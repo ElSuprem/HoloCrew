@@ -5,7 +5,7 @@ using System.Windows.Input;
 namespace HoloCrew.Views
 {
     /// <summary>
-    /// Vista de catálogo de productos
+    /// Vista de catálogo de productos con filtros y grid moderno
     /// </summary>
     public partial class ProductCatalogView : UserControl
     {
@@ -14,7 +14,10 @@ namespace HoloCrew.Views
             InitializeComponent();
         }
 
-        // Scroll para el área de PRODUCTOS (derecha)
+        /// <summary>
+        /// Scroll para el área de PRODUCTOS (derecha)
+        /// Propaga el scroll al padre cuando llega al límite
+        /// </summary>
         private void ProductsScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (sender is ScrollViewer scrollViewer)
@@ -22,6 +25,7 @@ namespace HoloCrew.Views
                 var canScrollUp = scrollViewer.VerticalOffset > 0;
                 var canScrollDown = scrollViewer.VerticalOffset < scrollViewer.ScrollableHeight;
 
+                // Si no puede seguir scrolleando, propagar al padre
                 if ((e.Delta > 0 && !canScrollUp) || (e.Delta < 0 && !canScrollDown))
                 {
                     var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
@@ -37,7 +41,10 @@ namespace HoloCrew.Views
             }
         }
 
-        // Scroll para el área de FILTROS (izquierda)
+        /// <summary>
+        /// Scroll para el área de FILTROS (izquierda)
+        /// Scroll independiente que no propaga al padre
+        /// </summary>
         private void FiltersScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (sender is ScrollViewer scrollViewer)
