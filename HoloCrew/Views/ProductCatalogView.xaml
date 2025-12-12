@@ -62,13 +62,11 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280"/>
-            <!-- Sidebar filtros -->
             <ColumnDefinition Width="*"/>
-            <!-- Grid productos -->
         </Grid.ColumnDefinitions>
 
         <!-- ============================================ -->
-        <!-- SIDEBAR: FILTROS -->
+        <!-- SIDEBAR: FILTROS (siempre visible) -->
         <!-- ============================================ -->
         <Border Grid.Column="0" 
                 Background="{StaticResource WhitePrimaryBrush}"
@@ -76,8 +74,7 @@
                 BorderThickness="0,0,1,0">
 
             <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled"
-                          PreviewMouseWheel="FiltersScrollViewer_PreviewMouseWheel">
+                          HorizontalScrollBarVisibility="Disabled">
                 <StackPanel Margin="25,30,25,40">
 
                     <!-- Header Filtros -->
@@ -98,17 +95,11 @@
                         </TextBlock>
                     </Grid>
 
-                    <!-- Separador -->
                     <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,0,0,20"/>
 
                     <!-- BÚSQUEDA -->
-                    <TextBlock Text="Search" 
-                               FontSize="13" 
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,10"/>
-                    <Border Background="{StaticResource Gray100Brush}"
-                            Height="42"
-                            Margin="0,0,0,25">
+                    <TextBlock Text="Search" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                    <Border Background="{StaticResource Gray100Brush}" Height="42" Margin="0,0,0,25">
                         <Grid>
                             <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                                      Background="Transparent"
@@ -120,22 +111,14 @@
                                     <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
-                            <TextBlock Text="🔍" 
-                                       FontSize="14" 
-                                       HorizontalAlignment="Right" 
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,12,0"
-                                       Opacity="0.5"/>
+                            <TextBlock Text="🔍" FontSize="14" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,12,0" Opacity="0.5"/>
                         </Grid>
                     </Border>
 
                     <!-- CATEGORÍAS -->
                     <Expander Header="Category" Style="{StaticResource FilterExpanderStyle}">
                         <StackPanel Margin="0,10,0,20">
-                            <RadioButton Content="All Products" 
-                                         GroupName="Category"
-                                         IsChecked="True"
-                                         FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6">
+                            <RadioButton Content="All Products" GroupName="Category" IsChecked="True" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6">
                                 <RadioButton.InputBindings>
                                     <MouseBinding MouseAction="LeftClick" Command="{Binding SelectCategoryCommand}" CommandParameter="All"/>
                                 </RadioButton.InputBindings>
@@ -174,7 +157,6 @@
                                     <ColumnDefinition Width="20"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-
                                 <Border Grid.Column="0" Background="{StaticResource Gray100Brush}" Height="38">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
                                         <TextBlock Text="€" Foreground="{StaticResource Gray500Brush}" FontSize="13" VerticalAlignment="Center"/>
@@ -183,9 +165,7 @@
                                                  FontSize="13" Width="50" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                     </StackPanel>
                                 </Border>
-
                                 <TextBlock Grid.Column="1" Text="—" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource Gray400Brush}"/>
-
                                 <Border Grid.Column="2" Background="{StaticResource Gray100Brush}" Height="38">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
                                         <TextBlock Text="€" Foreground="{StaticResource Gray500Brush}" FontSize="13" VerticalAlignment="Center"/>
@@ -195,12 +175,7 @@
                                     </StackPanel>
                                 </Border>
                             </Grid>
-
-                            <!-- Slider visual (opcional) -->
-                            <Slider Minimum="0" Maximum="500" 
-                                    Value="{Binding MaxPrice}" 
-                                    TickFrequency="50"
-                                    IsSnapToTickEnabled="True"/>
+                            <Slider Minimum="0" Maximum="500" Value="{Binding MaxPrice}" TickFrequency="50" IsSnapToTickEnabled="True"/>
                         </StackPanel>
                     </Expander>
 
@@ -306,338 +281,384 @@
                             <CheckBox Content="On Sale" IsChecked="{Binding OnSaleOnly}" Style="{StaticResource FilterCheckBox}"/>
                         </StackPanel>
                     </Expander>
-
                 </StackPanel>
             </ScrollViewer>
         </Border>
 
         <!-- ============================================ -->
-        <!-- CONTENIDO PRINCIPAL: PRODUCTOS -->
+        <!-- CONTENIDO PRINCIPAL -->
         <!-- ============================================ -->
         <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <!-- Header con título y ordenación -->
-                <RowDefinition Height="*"/>
-                <!-- Grid de productos -->
-            </Grid.RowDefinitions>
+            
+            <!-- ════════════════════════════════════════════════════════════════════
+                 LOADING STATE - Skeleton
+            ════════════════════════════════════════════════════════════════════ -->
+            <Grid Visibility="{Binding ShowLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <!-- HEADER -->
-            <Border Grid.Row="0" 
-                    Background="{StaticResource WhitePrimaryBrush}"
-                    BorderBrush="{StaticResource Gray200Brush}"
-                    BorderThickness="0,0,0,1"
-                    Padding="40,25">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                <!-- Header skeleton -->
+                <Border Grid.Row="0" Background="{StaticResource WhitePrimaryBrush}" BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="40,25">
+                    <Grid>
+                        <StackPanel>
+                            <Border Background="{StaticResource Gray200Brush}" Height="28" Width="180" HorizontalAlignment="Left" Margin="0,0,0,5"/>
+                            <Border Background="{StaticResource Gray100Brush}" Height="16" Width="100" HorizontalAlignment="Left"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Border Background="{StaticResource Gray100Brush}" Height="16" Width="60" Margin="0,0,10,0"/>
+                            <Border Background="{StaticResource Gray200Brush}" Height="38" Width="180"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-                    <!-- Título y contador -->
-                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding CurrentCategoryName}" 
-                                   FontSize="24"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource BlackPrimaryBrush}"/>
-                        <TextBlock Foreground="{StaticResource Gray500Brush}" FontSize="13" Margin="0,5,0,0">
-                            <Run Text="{Binding FilteredProducts.Count, Mode=OneWay}"/>
-                            <Run Text=" products"/>
-                        </TextBlock>
-                    </StackPanel>
+                <!-- Products skeleton grid -->
+                <ScrollViewer Grid.Row="1" Background="{StaticResource Gray100Brush}">
+                    <UniformGrid Columns="3" Margin="30">
+                        <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10">
+                            <StackPanel>
+                                <Border Background="{StaticResource Gray200Brush}" Height="340"/>
+                                <Border Padding="18,16,18,20">
+                                    <StackPanel>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="12" Width="60" HorizontalAlignment="Left" Margin="0,0,0,4"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="16" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="18" Width="80" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="14" Width="100" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10">
+                            <StackPanel>
+                                <Border Background="{StaticResource Gray200Brush}" Height="340"/>
+                                <Border Padding="18,16,18,20">
+                                    <StackPanel>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="12" Width="50" HorizontalAlignment="Left" Margin="0,0,0,4"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="16" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="18" Width="70" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="14" Width="90" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10">
+                            <StackPanel>
+                                <Border Background="{StaticResource Gray200Brush}" Height="340"/>
+                                <Border Padding="18,16,18,20">
+                                    <StackPanel>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="12" Width="70" HorizontalAlignment="Left" Margin="0,0,0,4"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="16" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="18" Width="90" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="14" Width="80" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10">
+                            <StackPanel>
+                                <Border Background="{StaticResource Gray200Brush}" Height="340"/>
+                                <Border Padding="18,16,18,20">
+                                    <StackPanel>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="12" Width="55" HorizontalAlignment="Left" Margin="0,0,0,4"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="16" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="18" Width="75" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="14" Width="95" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10">
+                            <StackPanel>
+                                <Border Background="{StaticResource Gray200Brush}" Height="340"/>
+                                <Border Padding="18,16,18,20">
+                                    <StackPanel>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="12" Width="65" HorizontalAlignment="Left" Margin="0,0,0,4"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="16" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="18" Width="85" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="14" Width="75" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10">
+                            <StackPanel>
+                                <Border Background="{StaticResource Gray200Brush}" Height="340"/>
+                                <Border Padding="18,16,18,20">
+                                    <StackPanel>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="12" Width="45" HorizontalAlignment="Left" Margin="0,0,0,4"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="16" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray200Brush}" Height="18" Width="65" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                                        <Border Background="{StaticResource Gray100Brush}" Height="14" Width="85" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+                </ScrollViewer>
+            </Grid>
 
-                    <!-- Ordenación -->
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Sort by:" 
-                                   Foreground="{StaticResource Gray600Brush}"
-                                   FontSize="13"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,10,0"/>
-                        <ComboBox ItemsSource="{Binding SortOptions}"
-                                  SelectedItem="{Binding SortBy}"
-                                  Width="180"
-                                  Height="38"
-                                  FontSize="13"
-                                  Padding="12,0"/>
-                    </StackPanel>
-                </Grid>
+            <!-- ════════════════════════════════════════════════════════════════════
+                 ERROR STATE
+            ════════════════════════════════════════════════════════════════════ -->
+            <Border Visibility="{Binding ShowError, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Background="#FEF2F2"
+                    Padding="60">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="⚠️" FontSize="64" TextAlignment="Center" Margin="0,0,0,25"/>
+                    <TextBlock Text="Failed to load products" 
+                               FontSize="22"
+                               FontWeight="SemiBold"
+                               TextAlignment="Center"
+                               Foreground="#DC2626"
+                               Margin="0,0,0,10"/>
+                    <TextBlock Text="{Binding ErrorMessage}" 
+                               FontSize="14"
+                               TextAlignment="Center"
+                               Foreground="#7F1D1D"
+                               MaxWidth="350"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,30"/>
+                    <Button Content="TRY AGAIN" 
+                            Style="{StaticResource AccentButton}"
+                            Command="{Binding RetryCommand}"
+                            Padding="35,15"/>
+                </StackPanel>
             </Border>
 
-            <!-- GRID DE PRODUCTOS -->
-            <ScrollViewer Grid.Row="1" 
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled"
-                          Background="{StaticResource Gray100Brush}"
-                          PreviewMouseWheel="ProductsScrollViewer_PreviewMouseWheel">
+            <!-- ════════════════════════════════════════════════════════════════════
+                 CONTENT STATE - TU DISEÑO ORIGINAL
+            ════════════════════════════════════════════════════════════════════ -->
+            <Grid Visibility="{Binding ShowContent, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                <!-- Loading indicator -->
-                <ScrollViewer.Style>
-                    <Style TargetType="ScrollViewer">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsBusy}" Value="True">
-                                <Setter Property="Opacity" Value="0.5"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ScrollViewer.Style>
+                <!-- HEADER -->
+                <Border Grid.Row="0" 
+                        Background="{StaticResource WhitePrimaryBrush}"
+                        BorderBrush="{StaticResource Gray200Brush}"
+                        BorderThickness="0,0,0,1"
+                        Padding="40,25">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                <Grid>
-                    <!-- Productos -->
-                    <ItemsControl ItemsSource="{Binding FilteredProducts}" Margin="30,30,30,50">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="3"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding CurrentCategoryName}" 
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BlackPrimaryBrush}"/>
+                            <TextBlock Foreground="{StaticResource Gray500Brush}" FontSize="13" Margin="0,5,0,0">
+                                <Run Text="{Binding FilteredProducts.Count, Mode=OneWay}"/>
+                                <Run Text=" products"/>
+                            </TextBlock>
+                        </StackPanel>
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <!-- PRODUCT CARD -->
-                                <Border Background="{StaticResource WhitePrimaryBrush}"
-                                        Margin="10"
-                                        Cursor="Hand">
-                                    <Border.Effect>
-                                        <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2" Direction="270"/>
-                                    </Border.Effect>
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Effect">
-                                                        <Setter.Value>
-                                                            <DropShadowEffect Color="Black" Opacity="0.12" BlurRadius="20" ShadowDepth="5" Direction="270"/>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Sort by:" 
+                                       Foreground="{StaticResource Gray600Brush}"
+                                       FontSize="13"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                            <ComboBox ItemsSource="{Binding SortOptions}"
+                                      SelectedItem="{Binding SortBy}"
+                                      Width="180"
+                                      Height="38"
+                                      FontSize="13"
+                                      Padding="12,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="340"/>
-                                            <!-- Imagen -->
-                                            <RowDefinition Height="Auto"/>
-                                            <!-- Info -->
-                                        </Grid.RowDefinitions>
+                <!-- GRID DE PRODUCTOS -->
+                <ScrollViewer Grid.Row="1" 
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Background="{StaticResource Gray100Brush}">
+                    <Grid>
+                        <!-- Productos -->
+                        <ItemsControl ItemsSource="{Binding FilteredProducts}" Margin="30,30,30,50">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="3"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
 
-                                        <!-- IMAGEN DEL PRODUCTO -->
-                                        <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
-                                            <Border.InputBindings>
-                                                <MouseBinding MouseAction="LeftClick" 
-                                                              Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                              CommandParameter="{Binding}"/>
-                                            </Border.InputBindings>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10" Cursor="Hand">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2" Direction="270"/>
+                                        </Border.Effect>
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Effect">
+                                                            <Setter.Value>
+                                                                <DropShadowEffect Color="Black" Opacity="0.12" BlurRadius="20" ShadowDepth="5" Direction="270"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
 
-                                            <Grid>
-                                                <!-- Placeholder de imagen -->
-                                                <TextBlock Text="📷" 
-                                                           FontSize="48" 
-                                                           Opacity="0.2"
-                                                           HorizontalAlignment="Center" 
-                                                           VerticalAlignment="Center"/>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="340"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
 
-                                                <!-- Badges (NEW, SALE) -->
-                                                <StackPanel Orientation="Horizontal" 
-                                                            HorizontalAlignment="Left" 
-                                                            VerticalAlignment="Top"
-                                                            Margin="12">
-                                                    <!-- Badge NEW -->
-                                                    <Border Background="{StaticResource BlackPrimaryBrush}"
-                                                            Padding="10,5"
-                                                            Margin="0,0,6,0"
-                                                            Visibility="{Binding IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                        <TextBlock Text="NEW" 
-                                                                   Foreground="White" 
-                                                                   FontSize="10" 
-                                                                   FontWeight="Bold"/>
-                                                    </Border>
-                                                    <!-- Badge SALE -->
-                                                    <Border Background="{StaticResource RedAccentBrush}"
-                                                            Padding="10,5"
-                                                            Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                        <TextBlock Foreground="White" FontSize="10" FontWeight="Bold">
-                                                            <Run Text="-"/>
-                                                            <Run Text="{Binding DiscountPercentage, Mode=OneWay}"/>
-                                                            <Run Text="%"/>
+                                            <!-- IMAGEN DEL PRODUCTO -->
+                                            <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
+                                                <Border.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick" 
+                                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  CommandParameter="{Binding}"/>
+                                                </Border.InputBindings>
+
+                                                <Grid>
+                                                    <TextBlock Text="📷" FontSize="48" Opacity="0.2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                    <!-- Badges -->
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12">
+                                                        <Border Background="{StaticResource BlackPrimaryBrush}" Padding="10,5" Margin="0,0,6,0"
+                                                                Visibility="{Binding IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                            <TextBlock Text="NEW" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                        </Border>
+                                                        <Border Background="{StaticResource RedAccentBrush}" Padding="10,5"
+                                                                Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                            <TextBlock Foreground="White" FontSize="10" FontWeight="Bold">
+                                                                <Run Text="-"/><Run Text="{Binding DiscountPercentage, Mode=OneWay}"/><Run Text="%"/>
+                                                            </TextBlock>
+                                                        </Border>
+                                                    </StackPanel>
+
+                                                    <!-- Wishlist button -->
+                                                    <Border Width="40" Height="40" Background="{StaticResource WhitePrimaryBrush}" CornerRadius="20"
+                                                            HorizontalAlignment="Right" VerticalAlignment="Top" Margin="12" Cursor="Hand">
+                                                        <Border.Effect>
+                                                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="1"/>
+                                                        </Border.Effect>
+                                                        <Border.InputBindings>
+                                                            <MouseBinding MouseAction="LeftClick"
+                                                                          Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                          CommandParameter="{Binding}"/>
+                                                        </Border.InputBindings>
+                                                        <TextBlock FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value="🤍"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
+                                                                            <Setter Property="Text" Value="❤️"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
                                                         </TextBlock>
                                                     </Border>
+
+                                                    <!-- Quick Add -->
+                                                    <Border Background="{StaticResource BlackPrimaryBrush}" Height="45" VerticalAlignment="Bottom" Cursor="Hand" Opacity="0" x:Name="QuickAddButton">
+                                                        <Border.InputBindings>
+                                                            <MouseBinding MouseAction="LeftClick"
+                                                                          Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                          CommandParameter="{Binding}"/>
+                                                        </Border.InputBindings>
+                                                        <TextBlock Text="QUICK ADD +" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- INFO DEL PRODUCTO -->
+                                            <Border Grid.Row="1" Padding="18,16,18,20">
+                                                <Border.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick" 
+                                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  CommandParameter="{Binding}"/>
+                                                </Border.InputBindings>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Category.Name}" FontSize="11" Foreground="{StaticResource Gray500Brush}" Margin="0,0,0,4" Typography.Capitals="AllSmallCaps"/>
+                                                    <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource BlackPrimaryBrush}" TextTrimming="CharacterEllipsis" Margin="0,0,0,8"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Price, StringFormat='€{0:N2}'}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource BlackPrimaryBrush}"/>
+                                                        <TextBlock Text="{Binding OriginalPrice, StringFormat='€{0:N2}'}" FontSize="13" Foreground="{StaticResource Gray400Brush}" TextDecorations="Strikethrough" Margin="10,0,0,0" VerticalAlignment="Center"
+                                                                   Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                                        <TextBlock Text="⭐" FontSize="12"/>
+                                                        <TextBlock Text="{Binding AverageRating, StringFormat='{}{0:N1}'}" FontSize="12" Foreground="{StaticResource Gray600Brush}" Margin="4,0,0,0"/>
+                                                        <TextBlock FontSize="12" Foreground="{StaticResource Gray400Brush}" Margin="6,0,0,0">
+                                                            <Run Text="("/><Run Text="{Binding ReviewCount, Mode=OneWay}"/><Run Text=")"/>
+                                                        </TextBlock>
+                                                    </StackPanel>
                                                 </StackPanel>
+                                            </Border>
+                                        </Grid>
 
-                                                <!-- Botón Wishlist -->
-                                                <Border Width="40" Height="40"
-                                                        Background="{StaticResource WhitePrimaryBrush}"
-                                                        CornerRadius="20"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Top"
-                                                        Margin="12"
-                                                        Cursor="Hand">
-                                                    <Border.Effect>
-                                                        <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="1"/>
-                                                    </Border.Effect>
-                                                    <Border.InputBindings>
-                                                        <MouseBinding MouseAction="LeftClick"
-                                                                      Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                      CommandParameter="{Binding}"/>
-                                                    </Border.InputBindings>
-                                                    <TextBlock FontSize="18" 
-                                                               HorizontalAlignment="Center" 
-                                                               VerticalAlignment="Center">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="TextBlock">
-                                                                <Setter Property="Text" Value="🤍"/>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
-                                                                        <Setter Property="Text" Value="❤️"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                </Border>
+                                        <!-- Hover animation -->
+                                        <Border.Triggers>
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="QuickAddButton" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <EventTrigger RoutedEvent="MouseLeave">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="QuickAddButton" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Border.Triggers>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-                                                <!-- Quick Add (aparece en hover) -->
-                                                <Border Background="{StaticResource BlackPrimaryBrush}"
-                                                        Height="45"
-                                                        VerticalAlignment="Bottom"
-                                                        Cursor="Hand"
-                                                        Opacity="0"
-                                                        x:Name="QuickAddButton">
-                                                    <Border.InputBindings>
-                                                        <MouseBinding MouseAction="LeftClick"
-                                                                      Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                      CommandParameter="{Binding}"/>
-                                                    </Border.InputBindings>
-                                                    <TextBlock Text="QUICK ADD +"
-                                                               Foreground="White"
-                                                               FontSize="12"
-                                                               FontWeight="Bold"
-                                                               HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center"/>
-                                                </Border>
-                                            </Grid>
-                                        </Border>
-
-                                        <!-- INFO DEL PRODUCTO -->
-                                        <Border Grid.Row="1" Padding="18,16,18,20">
-                                            <Border.InputBindings>
-                                                <MouseBinding MouseAction="LeftClick" 
-                                                              Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                              CommandParameter="{Binding}"/>
-                                            </Border.InputBindings>
-                                            <StackPanel>
-                                                <!-- Categoría -->
-                                                <TextBlock Text="{Binding Category.Name}" 
-                                                           FontSize="11"
-                                                           Foreground="{StaticResource Gray500Brush}"
-                                                           Margin="0,0,0,4"
-                                                           Typography.Capitals="AllSmallCaps"/>
-
-                                                <!-- Nombre -->
-                                                <TextBlock Text="{Binding Name}" 
-                                                           FontSize="14"
-                                                           FontWeight="SemiBold"
-                                                           Foreground="{StaticResource BlackPrimaryBrush}"
-                                                           TextTrimming="CharacterEllipsis"
-                                                           Margin="0,0,0,8"/>
-
-                                                <!-- Precios -->
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Price, StringFormat='€{0:N2}'}" 
-                                                               FontSize="15"
-                                                               FontWeight="Bold"
-                                                               Foreground="{StaticResource BlackPrimaryBrush}"/>
-
-                                                    <!-- Precio original (si hay descuento) -->
-                                                    <TextBlock Text="{Binding OriginalPrice, StringFormat='€{0:N2}'}"
-                                                               FontSize="13"
-                                                               Foreground="{StaticResource Gray400Brush}"
-                                                               TextDecorations="Strikethrough"
-                                                               Margin="10,0,0,0"
-                                                               VerticalAlignment="Center"
-                                                               Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                                                </StackPanel>
-
-                                                <!-- Rating (opcional) -->
-                                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                                    <TextBlock Text="⭐" FontSize="12"/>
-                                                    <TextBlock Text="{Binding AverageRating, StringFormat='{}{0:N1}'}" 
-                                                               FontSize="12"
-                                                               Foreground="{StaticResource Gray600Brush}"
-                                                               Margin="4,0,0,0"/>
-                                                    <TextBlock FontSize="12"
-                                                               Foreground="{StaticResource Gray400Brush}"
-                                                               Margin="6,0,0,0">
-                                                        <Run Text="("/>
-                                                        <Run Text="{Binding ReviewCount, Mode=OneWay}"/>
-                                                        <Run Text=")"/>
-                                                    </TextBlock>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </Border>
-                                    </Grid>
-
-                                    <!-- Trigger para mostrar Quick Add en hover -->
-                                    <Border.Triggers>
-                                        <EventTrigger RoutedEvent="MouseEnter">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetName="QuickAddButton"
-                                                                     Storyboard.TargetProperty="Opacity"
-                                                                     To="1" Duration="0:0:0.2"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                        <EventTrigger RoutedEvent="MouseLeave">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetName="QuickAddButton"
-                                                                     Storyboard.TargetProperty="Opacity"
-                                                                     To="0" Duration="0:0:0.2"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                    </Border.Triggers>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
-                    <!-- Empty state -->
-                    <StackPanel HorizontalAlignment="Center" 
-                                VerticalAlignment="Center"
-                                Visibility="{Binding FilteredProducts.Count, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
-                        <TextBlock Text="🔍" FontSize="64" HorizontalAlignment="Center" Opacity="0.3"/>
-                        <TextBlock Text="No products found" 
-                                   FontSize="18"
-                                   FontWeight="SemiBold"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,20,0,8"/>
-                        <TextBlock Text="Try adjusting your filters"
-                                   FontSize="14"
-                                   Foreground="{StaticResource Gray500Brush}"
-                                   HorizontalAlignment="Center"/>
-                        <Button Content="Clear Filters"
-                                Style="{StaticResource OutlineButton}"
-                                Padding="24,12"
-                                Margin="0,20,0,0"
-                                Command="{Binding ClearFiltersCommand}"/>
-                    </StackPanel>
-
-                    <!-- Loading overlay -->
-                    <Border Background="#80FFFFFF"
-                            Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock Text="⏳" FontSize="48" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Loading products..." 
-                                       FontSize="14" 
-                                       Margin="0,15,0,0"
-                                       Foreground="{StaticResource Gray600Brush}"/>
+                        <!-- Empty state -->
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Visibility="{Binding FilteredProducts.Count, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
+                            <TextBlock Text="🔍" FontSize="64" HorizontalAlignment="Center" Opacity="0.3"/>
+                            <TextBlock Text="No products found" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,20,0,8"/>
+                            <TextBlock Text="Try adjusting your filters" FontSize="14" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center"/>
+                            <Button Content="Clear Filters" Style="{StaticResource OutlineButton}" Padding="24,12" Margin="0,20,0,0" Command="{Binding ClearFiltersCommand}"/>
                         </StackPanel>
-                    </Border>
-                </Grid>
-            </ScrollViewer>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- ════════════════════════════════════════════════════════════════════
+                 REFRESHING OVERLAY
+            ════════════════════════════════════════════════════════════════════ -->
+            <Border Background="#80FFFFFF"
+                    Visibility="{Binding IsRefreshing, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="⟳" FontSize="36" TextAlignment="Center" Foreground="{StaticResource BlackPrimaryBrush}">
+                        <TextBlock.RenderTransform>
+                            <RotateTransform CenterX="18" CenterY="18"/>
+                        </TextBlock.RenderTransform>
+                        <TextBlock.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimation Storyboard.TargetProperty="(TextBlock.RenderTransform).(RotateTransform.Angle)"
+                                                         From="0" To="360" Duration="0:0:0.8"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </TextBlock.Triggers>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
         </Grid>
     </Grid>
-
 </UserControl>
