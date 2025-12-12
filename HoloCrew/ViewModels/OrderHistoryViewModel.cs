@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
@@ -7,13 +8,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace HoloCrew.ViewModels
 {
-    /// <summary>
-    /// ViewModel para el historial de pedidos del usuario
-    /// </summary>
     public partial class OrderHistoryViewModel : ViewModelBase
     {
         private readonly IOrderService _orderService;
@@ -30,9 +27,6 @@ namespace HoloCrew.ViewModels
         private OrderStatus? _selectedStatusFilter;
 
         [ObservableProperty]
-        private bool _isLoading;
-
-        [ObservableProperty]
         private bool _hasOrders;
 
         public List<OrderStatus> AvailableStatuses { get; } = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().ToList();
@@ -46,7 +40,10 @@ namespace HoloCrew.ViewModels
             _authenticationService = authenticationService;
             _navigationService = navigationService;
 
-            Title = "Mis Pedidos";
+            Title = AppConstants.Orders.Title;
+            EmptyTitle = AppConstants.Empty.OrdersTitle;
+            EmptySubtitle = AppConstants.Empty.OrdersSubtitle;
+            EmptyActionText = AppConstants.Empty.OrdersAction;
         }
 
         public override async void OnNavigatedTo(object parameter)
@@ -58,12 +55,8 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private async Task LoadOrdersAsync()
         {
-            if (IsLoading) return;
-
-            try
+            await ExecuteAsync(async () =>
             {
-                IsLoading = true;
-
                 var currentUser = _authenticationService.GetCurrentUser();
                 if (currentUser != null)
                 {
@@ -71,16 +64,17 @@ namespace HoloCrew.ViewModels
                     Orders = new ObservableCollection<Order>(orders.OrderByDescending(o => o.OrderDate));
                     FilteredOrders = new ObservableCollection<Order>(Orders);
                     HasOrders = Orders.Any();
+
+                    if (HasOrders)
+                        SetSuccess();
+                    else
+                        SetEmpty();
                 }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"❌ Error loading orders: {ex.Message}");
-            }
-            finally
-            {
-                IsLoading = false;
-            }
+                else
+                {
+                    SetEmpty();
+                }
+            });
         }
 
         [RelayCommand]
@@ -97,17 +91,12 @@ namespace HoloCrew.ViewModels
 
             try
             {
-                // TODO: Implementar reorden (agregar items al carrito)
-                // foreach (var item in order.Items)
-                // {
-                //     await _cartService.AddToCartAsync(item.Product, item.Quantity);
-                // }
-
+                // TODO: Add items to cart
                 _navigationService.NavigateTo<CartViewModel>();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error reordering: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -133,15 +122,15 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private async Task RefreshAsync()
-        {
-            await LoadOrdersAsync();
-        }
-
-        [RelayCommand]
         private void BrowseProducts()
         {
             _navigationService.NavigateTo<ProductCatalogViewModel>();
+        }
+
+        [RelayCommand]
+        private void EmptyAction()
+        {
+            BrowseProducts();
         }
     }
 }

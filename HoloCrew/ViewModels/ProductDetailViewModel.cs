@@ -1,9 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
 {
@@ -46,7 +49,7 @@ namespace HoloCrew.ViewModels
             _wishlistService = wishlistService;
             _navigationService = navigationService;
 
-            Title = "Detalle del Producto";
+            Title = "Product Detail";
         }
 
         public override async void OnNavigatedTo(object parameter)
@@ -61,10 +64,8 @@ namespace HoloCrew.ViewModels
 
         private async Task LoadProductAsync(int productId)
         {
-            try
+            await ExecuteAsync(async () =>
             {
-                IsBusy = true;
-
                 Product = await _productService.GetProductByIdAsync(productId);
 
                 if (Product != null)
@@ -72,20 +73,18 @@ namespace HoloCrew.ViewModels
                     Images = new ObservableCollection<string>(Product.ImageUrls ?? new List<string>());
                     SelectedImage = Product.MainImageUrl;
 
-                    // Cargar productos relacionados
                     var related = await _productService.GetRelatedProductsAsync(productId);
                     RelatedProducts = new ObservableCollection<Product>(related);
 
-                    // Verificar si está en wishlist
                     IsInWishlist = await _wishlistService.IsInWishlistAsync(productId);
 
-                    System.Diagnostics.Debug.WriteLine($"🔍 Product {productId} IsInWishlist: {IsInWishlist}");
+                    SetSuccess();
                 }
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+                else
+                {
+                    SetError(AppConstants.Errors.ProductNotAvailable);
+                }
+            });
         }
 
         [RelayCommand]
@@ -96,11 +95,10 @@ namespace HoloCrew.ViewModels
             try
             {
                 await _cartService.AddToCartAsync(Product, Quantity);
-                // TODO: Mostrar notificación
             }
             catch (Exception ex)
             {
-                // TODO: Manejar error
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -118,28 +116,20 @@ namespace HoloCrew.ViewModels
 
             try
             {
-                System.Diagnostics.Debug.WriteLine($"🔍 ToggleWishlist called. Current state: {IsInWishlist}");
-
                 if (IsInWishlist)
                 {
-                    // Quitar de wishlist
-                    System.Diagnostics.Debug.WriteLine($"❌ Removing product {Product.Id} from wishlist");
                     await _wishlistService.RemoveFromWishlistAsync(Product.Id);
                     IsInWishlist = false;
                 }
                 else
                 {
-                    // Agregar a wishlist
-                    System.Diagnostics.Debug.WriteLine($"✅ Adding product {Product.Id} to wishlist");
                     await _wishlistService.AddToWishlistAsync(Product.Id);
                     IsInWishlist = true;
                 }
-
-                System.Diagnostics.Debug.WriteLine($"🔍 New state: {IsInWishlist}");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error toggling wishlist: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 

@@ -1,16 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
 {
-    /// <summary>
-    /// ViewModel para el proceso de checkout (pago)
-    /// Maneja un wizard de 3 pasos: Dirección, Pago, Confirmación
-    /// </summary>
     public partial class CheckoutViewModel : ViewModelBase
     {
         private readonly IOrderService _orderService;
@@ -19,7 +19,7 @@ namespace HoloCrew.ViewModels
         private readonly INavigationService _navigationService;
 
         [ObservableProperty]
-        private int _currentStep = 1; // 1: Dirección, 2: Pago, 3: Confirmación
+        private int _currentStep = 1;
 
         [ObservableProperty]
         private Address _shippingAddress = new();
@@ -78,7 +78,7 @@ namespace HoloCrew.ViewModels
             _authenticationService = authenticationService;
             _navigationService = navigationService;
 
-            Title = "Checkout";
+            Title = AppConstants.Checkout.Title;
         }
 
         public override async void OnNavigatedTo(object parameter)
@@ -89,46 +89,34 @@ namespace HoloCrew.ViewModels
 
         private async Task LoadCheckoutDataAsync()
         {
-            try
+            await ExecuteAsync(async () =>
             {
-                IsBusy = true;
-
-                // Cargar items del carrito
                 var cartItems = await _cartService.GetCartItemsAsync();
                 OrderItems = new ObservableCollection<CartItem>(cartItems);
                 OrderTotal = await _cartService.GetCartTotalAsync();
 
-                // Cargar direcciones guardadas del usuario
                 var currentUser = _authenticationService.GetCurrentUser();
                 if (currentUser != null)
                 {
                     SavedAddresses = new ObservableCollection<Address>(currentUser.Addresses ?? new List<Address>());
                     SavedPaymentMethods = new ObservableCollection<PaymentMethod>(currentUser.PaymentMethods ?? new List<PaymentMethod>());
                 }
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+
+                SetSuccess();
+            });
         }
 
         [RelayCommand]
         private void NextStep()
         {
-            if (CurrentStep < 3)
+            if (CurrentStep < 3 && ValidateCurrentStep())
             {
-                if (ValidateCurrentStep())
-                {
-                    CurrentStep++;
-                    OnPropertyChanged(nameof(IsStep1));
-                    OnPropertyChanged(nameof(IsStep2));
-                    OnPropertyChanged(nameof(IsStep3));
+                CurrentStep++;
+                OnPropertyChanged(nameof(IsStep1));
+                OnPropertyChanged(nameof(IsStep2));
+                OnPropertyChanged(nameof(IsStep3));
 
-                    if (CurrentStep == 3)
-                    {
-                        PrepareOrderSummary();
-                    }
-                }
+                if (CurrentStep == 3) PrepareOrderSummary();
             }
         }
 
@@ -160,7 +148,6 @@ namespace HoloCrew.ViewModels
                 PostalCode = address.PostalCode,
                 Country = address.Country
             };
-
             SelectedSavedAddress = address;
         }
 
@@ -209,16 +196,13 @@ namespace HoloCrew.ViewModels
 
                 if (createdOrder != null)
                 {
-                    // Limpiar carrito
                     await _cartService.ClearCartAsync();
-
-                    // Navegar a confirmación del pedido
                     _navigationService.NavigateTo<OrderDetailViewModel>(createdOrder.Id);
                 }
             }
             catch (Exception ex)
             {
-                // TODO: Mostrar error
+                SetError(AppConstants.Errors.PaymentFailed);
                 CanCompleteOrder = true;
             }
             finally
@@ -235,24 +219,16 @@ namespace HoloCrew.ViewModels
 
         private bool ValidateCurrentStep()
         {
-            switch (CurrentStep)
+            return CurrentStep switch
             {
-                case 1: // Validar dirección
-                    return !string.IsNullOrWhiteSpace(ShippingAddress?.AddressLine1) &&
-                           !string.IsNullOrWhiteSpace(ShippingAddress?.City) &&
-                           !string.IsNullOrWhiteSpace(ShippingAddress?.PostalCode);
-
-                case 2: // Validar método de pago
-                    return SelectedPaymentMethod != null ||
-                           (!string.IsNullOrWhiteSpace(CardNumber) &&
-                            !string.IsNullOrWhiteSpace(CardholderName));
-
-                case 3: // Paso de confirmación, siempre válido
-                    return true;
-
-                default:
-                    return false;
-            }
+                1 => !string.IsNullOrWhiteSpace(ShippingAddress?.AddressLine1) &&
+                     !string.IsNullOrWhiteSpace(ShippingAddress?.City) &&
+                     !string.IsNullOrWhiteSpace(ShippingAddress?.PostalCode),
+                2 => SelectedPaymentMethod != null ||
+                     (!string.IsNullOrWhiteSpace(CardNumber) && !string.IsNullOrWhiteSpace(CardholderName)),
+                3 => true,
+                _ => false
+            };
         }
 
         private void PrepareOrderSummary()

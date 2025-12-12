@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
 using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
@@ -25,9 +27,6 @@ namespace HoloCrew.ViewModels
         private string _confirmPassword = string.Empty;
 
         [ObservableProperty]
-        private string _errorMessage = string.Empty;
-
-        [ObservableProperty]
         private bool _acceptTerms;
 
         public RegisterViewModel(
@@ -37,63 +36,58 @@ namespace HoloCrew.ViewModels
             _authenticationService = authenticationService;
             _navigationService = navigationService;
 
-            Title = "Crear Cuenta";
+            Title = AppConstants.Auth.Register;
         }
 
         [RelayCommand]
         private async Task RegisterAsync()
         {
-            // Limpiar error previo
             ErrorMessage = string.Empty;
 
-            // Validar campos
             if (string.IsNullOrWhiteSpace(FullName))
             {
-                ErrorMessage = "Por favor, ingresa tu nombre completo.";
+                ErrorMessage = AppConstants.Errors.RequiredField;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(Email))
             {
-                ErrorMessage = "Por favor, ingresa tu email.";
+                ErrorMessage = AppConstants.Errors.RequiredField;
                 return;
             }
 
             if (!IsValidEmail(Email))
             {
-                ErrorMessage = "El formato del email no es válido.";
+                ErrorMessage = AppConstants.Errors.InvalidEmail;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(Password))
             {
-                ErrorMessage = "Por favor, ingresa una contraseña.";
+                ErrorMessage = AppConstants.Errors.RequiredField;
                 return;
             }
 
             if (Password.Length < 6)
             {
-                ErrorMessage = "La contraseña debe tener al menos 6 caracteres.";
+                ErrorMessage = AppConstants.Errors.PasswordTooShort;
                 return;
             }
 
             if (Password != ConfirmPassword)
             {
-                ErrorMessage = "Las contraseñas no coinciden.";
+                ErrorMessage = AppConstants.Errors.PasswordMismatch;
                 return;
             }
 
             if (!AcceptTerms)
             {
-                ErrorMessage = "Debes aceptar los términos y condiciones.";
+                ErrorMessage = "You must accept the terms and conditions.";
                 return;
             }
 
-            try
+            await ExecuteAsync(async () =>
             {
-                IsBusy = true;
-
-                // Crear usuario
                 var user = new User
                 {
                     Email = Email,
@@ -101,37 +95,18 @@ namespace HoloCrew.ViewModels
                     CreatedAt = DateTime.Now
                 };
 
-                // ⭐ ARREGLADO: AuthenticationService devuelve User, no bool
                 var registeredUser = await _authenticationService.RegisterAsync(user, Password);
-                var success = registeredUser != null;
 
-                if (success)
+                if (registeredUser != null)
                 {
-                    // Registro exitoso
-                    System.Diagnostics.Debug.WriteLine($"✅ Registro exitoso: {Email}");
-
-                    // Auto-login después del registro
                     await _authenticationService.LoginAsync(Email, Password);
-
-                    // Navegar a Home
                     _navigationService.NavigateTo<HomeViewModel>();
                 }
                 else
                 {
-                    // El email ya existe
-                    ErrorMessage = "Este email ya está registrado. Intenta iniciar sesión.";
-                    System.Diagnostics.Debug.WriteLine($"❌ Registro fallido: Email duplicado {Email}");
+                    SetError(AppConstants.Errors.EmailInUse);
                 }
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = "Error al crear la cuenta. Por favor, inténtalo más tarde.";
-                System.Diagnostics.Debug.WriteLine($"❌ Error en registro: {ex.Message}");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            });
         }
 
         [RelayCommand]
@@ -143,21 +118,18 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private void RegisterWithGoogle()
         {
-            // TODO: Implementar OAuth con Google
-            ErrorMessage = "Registro con Google próximamente disponible.";
+            ErrorMessage = "Google registration coming soon.";
         }
 
         [RelayCommand]
         private void RegisterWithFacebook()
         {
-            // TODO: Implementar OAuth con Facebook
-            ErrorMessage = "Registro con Facebook próximamente disponible.";
+            ErrorMessage = "Facebook registration coming soon.";
         }
 
         private bool IsValidEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                return false;
+            if (string.IsNullOrWhiteSpace(email)) return false;
 
             try
             {
@@ -170,7 +142,6 @@ namespace HoloCrew.ViewModels
             }
         }
 
-        // Limpiar campos al navegar
         public override void OnNavigatedTo(object parameter)
         {
             base.OnNavigatedTo(parameter);

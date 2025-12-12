@@ -119,6 +119,7 @@
 
                 <!-- 6. ⭐ NUEVO: Estilos del Mega Menu -->
                 <ResourceDictionary Source="Resources/Styles/MegaMenuStyles.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/LoadingStates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>

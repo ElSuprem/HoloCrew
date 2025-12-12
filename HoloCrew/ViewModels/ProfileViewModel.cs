@@ -1,16 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
 {
-    /// <summary>
-    /// ViewModel para el perfil del usuario
-    /// Permite ver y editar información personal
-    /// </summary>
     public partial class ProfileViewModel : ViewModelBase
     {
         private readonly IAuthenticationService _authenticationService;
@@ -43,9 +42,6 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private string _successMessage;
 
-        [ObservableProperty]
-        private string _errorMessage;
-
         public ProfileViewModel(
             IAuthenticationService authenticationService,
             INavigationService navigationService)
@@ -53,7 +49,7 @@ namespace HoloCrew.ViewModels
             _authenticationService = authenticationService;
             _navigationService = navigationService;
 
-            Title = "Mi Perfil";
+            Title = AppConstants.Profile.Title;
         }
 
         public override void OnNavigatedTo(object parameter)
@@ -71,6 +67,11 @@ namespace HoloCrew.ViewModels
                 SavedAddresses = new ObservableCollection<Address>(User.Addresses ?? new List<Address>());
                 SavedPaymentMethods = new ObservableCollection<PaymentMethod>(User.PaymentMethods ?? new List<PaymentMethod>());
                 NotificationPreferences = User.NotificationPreferences ?? new NotificationSettings();
+                SetSuccess();
+            }
+            else
+            {
+                SetEmpty();
             }
         }
 
@@ -78,8 +79,8 @@ namespace HoloCrew.ViewModels
         private void EditProfile()
         {
             IsEditing = true;
-            ErrorMessage = null;
-            SuccessMessage = null;
+            ErrorMessage = string.Empty;
+            SuccessMessage = string.Empty;
         }
 
         [RelayCommand]
@@ -87,89 +88,66 @@ namespace HoloCrew.ViewModels
         {
             if (User == null) return;
 
-            try
+            await ExecuteAsync(async () =>
             {
-                IsBusy = true;
-                ErrorMessage = null;
+                // TODO: Call service to update profile
+                await Task.Delay(500); // Simulate API call
 
-                // TODO: Llamar al servicio para actualizar el perfil
-                // await _userService.UpdateProfileAsync(User);
-
-                SuccessMessage = "Perfil actualizado correctamente.";
+                SuccessMessage = AppConstants.Success.ProfileUpdated;
                 IsEditing = false;
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = "Error al guardar el perfil. Intente nuevamente.";
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+                SetSuccess();
+            }, isRefresh: true);
         }
 
         [RelayCommand]
         private void CancelEdit()
         {
             IsEditing = false;
-            LoadUserProfile(); // Recargar datos originales
-            ErrorMessage = null;
-            SuccessMessage = null;
+            LoadUserProfile();
+            ErrorMessage = string.Empty;
+            SuccessMessage = string.Empty;
         }
 
         [RelayCommand]
         private async Task ChangePasswordAsync()
         {
-            // Validar campos
             if (string.IsNullOrWhiteSpace(CurrentPassword) ||
                 string.IsNullOrWhiteSpace(NewPassword) ||
                 string.IsNullOrWhiteSpace(ConfirmNewPassword))
             {
-                ErrorMessage = "Complete todos los campos de contraseña.";
+                ErrorMessage = AppConstants.Errors.RequiredField;
                 return;
             }
 
             if (NewPassword != ConfirmNewPassword)
             {
-                ErrorMessage = "Las contraseñas nuevas no coinciden.";
+                ErrorMessage = AppConstants.Errors.PasswordMismatch;
                 return;
             }
 
             if (NewPassword.Length < 6)
             {
-                ErrorMessage = "La nueva contraseña debe tener al menos 6 caracteres.";
+                ErrorMessage = AppConstants.Errors.PasswordTooShort;
                 return;
             }
 
-            try
+            await ExecuteAsync(async () =>
             {
-                IsBusy = true;
-                ErrorMessage = null;
+                // TODO: Call service to change password
+                await Task.Delay(500);
 
-                // TODO: Implementar cambio de contraseña
-                // await _authenticationService.ChangePasswordAsync(CurrentPassword, NewPassword);
-
-                SuccessMessage = "Contraseña actualizada correctamente.";
-
-                // Limpiar campos
-                CurrentPassword = null;
-                NewPassword = null;
-                ConfirmNewPassword = null;
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = "Error al cambiar la contraseña. Verifique su contraseña actual.";
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+                SuccessMessage = AppConstants.Success.PasswordChanged;
+                CurrentPassword = string.Empty;
+                NewPassword = string.Empty;
+                ConfirmNewPassword = string.Empty;
+                SetSuccess();
+            }, isRefresh: true);
         }
 
         [RelayCommand]
         private void AddAddress()
         {
-            var newAddress = new Address { Label = "Nueva dirección" };
+            var newAddress = new Address { Label = "New Address" };
             SavedAddresses.Add(newAddress);
         }
 
@@ -201,23 +179,14 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private async Task UpdateNotificationPreferencesAsync()
         {
-            try
+            await ExecuteAsync(async () =>
             {
-                IsBusy = true;
+                // TODO: Save preferences
+                await Task.Delay(500);
 
-                // TODO: Guardar preferencias
-                // await _userService.UpdateNotificationPreferencesAsync(NotificationPreferences);
-
-                SuccessMessage = "Preferencias actualizadas correctamente.";
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = "Error al actualizar preferencias.";
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+                SuccessMessage = AppConstants.Success.PreferencesSaved;
+                SetSuccess();
+            }, isRefresh: true);
         }
 
         [RelayCommand]

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
@@ -18,9 +19,6 @@ namespace HoloCrew.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<Product> _wishlistItems = new();
-
-        [ObservableProperty]
-        private bool _isEmpty = true;
 
         [ObservableProperty]
         private int _itemCount;
@@ -47,10 +45,10 @@ namespace HoloCrew.ViewModels
             _authenticationService = authenticationService;
             _navigationService = navigationService;
 
-            Title = "Mi Lista de Deseos";
-
-            // ⭐ CORREGIDO: Suscribirse al evento WishlistUpdated
-            _wishlistService.WishlistUpdated += OnWishlistUpdated;
+            Title = AppConstants.UI.Wishlist;
+            EmptyTitle = AppConstants.Empty.WishlistTitle;
+            EmptySubtitle = AppConstants.Empty.WishlistSubtitle;
+            EmptyActionText = AppConstants.Empty.WishlistAction;
         }
 
         public override async void OnNavigatedTo(object parameter)
@@ -60,45 +58,28 @@ namespace HoloCrew.ViewModels
             LoadRecommendedProducts();
         }
 
-        /// <summary>
-        /// Evento que se dispara cuando la wishlist cambia desde otro lugar
-        /// </summary>
-        private async void OnWishlistUpdated(object sender, EventArgs e)
-        {
-            await LoadWishlistAsync();
-        }
-
         [RelayCommand]
         private async Task LoadWishlistAsync()
         {
-            try
+            await ExecuteAsync(async () =>
             {
-                IsBusy = true;
-
-                var items = await _wishlistService.GetWishlistAsync(1); // userId = 1 por defecto
+                var items = await _wishlistService.GetWishlistAsync(1);
 
                 WishlistItems = new ObservableCollection<Product>(items);
                 ItemCount = WishlistItems.Count;
                 WishlistItemCount = WishlistItems.Count;
-                IsEmpty = ItemCount == 0;
                 IsWishlistEmpty = ItemCount == 0;
                 OnPropertyChanged(nameof(HasItems));
 
-                System.Diagnostics.Debug.WriteLine($"✅ Wishlist loaded: {ItemCount} items");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"❌ Error loading wishlist: {ex.Message}");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+                if (IsWishlistEmpty)
+                    SetEmpty();
+                else
+                    SetSuccess();
+            });
         }
 
         private void LoadRecommendedProducts()
         {
-            // Productos recomendados (mock data)
             RecommendedProducts = new ObservableCollection<Product>
             {
                 new Product { Id = 1, Name = "Recommended Item 1", Price = 49.99m },
@@ -115,11 +96,10 @@ namespace HoloCrew.ViewModels
             try
             {
                 await _cartService.AddToCartAsync(product, 1);
-                System.Diagnostics.Debug.WriteLine($"✅ Added to cart: {product.Name}");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error adding to cart: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -134,15 +114,14 @@ namespace HoloCrew.ViewModels
                 WishlistItems.Remove(product);
                 ItemCount = WishlistItems.Count;
                 WishlistItemCount = WishlistItems.Count;
-                IsEmpty = ItemCount == 0;
                 IsWishlistEmpty = ItemCount == 0;
                 OnPropertyChanged(nameof(HasItems));
 
-                System.Diagnostics.Debug.WriteLine($"✅ Removed from wishlist: {product.Name}");
+                if (IsWishlistEmpty) SetEmpty();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error removing from wishlist: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -156,26 +135,14 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private async Task AddAllToCartAsync()
         {
-            try
+            await ExecuteAsync(async () =>
             {
-                IsBusy = true;
-
                 foreach (var product in WishlistItems)
                 {
                     await _cartService.AddToCartAsync(product, 1);
                 }
-
-                System.Diagnostics.Debug.WriteLine($"✅ Added all {WishlistItems.Count} items to cart");
                 _navigationService.NavigateTo<CartViewModel>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"❌ Error adding all to cart: {ex.Message}");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            }, isRefresh: true);
         }
 
         [RelayCommand]
@@ -187,22 +154,20 @@ namespace HoloCrew.ViewModels
                 WishlistItems.Clear();
                 ItemCount = 0;
                 WishlistItemCount = 0;
-                IsEmpty = true;
                 IsWishlistEmpty = true;
                 OnPropertyChanged(nameof(HasItems));
-
-                System.Diagnostics.Debug.WriteLine("✅ Wishlist cleared");
+                SetEmpty();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error clearing wishlist: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
         [RelayCommand]
         private void ShareWishlist()
         {
-            System.Diagnostics.Debug.WriteLine("📤 Share wishlist (not implemented yet)");
+            // TODO: Share wishlist
         }
 
         [RelayCommand]
@@ -215,6 +180,12 @@ namespace HoloCrew.ViewModels
         private void ContinueShopping()
         {
             _navigationService.NavigateTo<ProductCatalogViewModel>();
+        }
+
+        [RelayCommand]
+        private void EmptyAction()
+        {
+            BrowseProducts();
         }
     }
 }

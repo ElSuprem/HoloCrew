@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
@@ -42,12 +43,6 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _canCheckout = true;
 
-        [ObservableProperty]
-        private string _couponMessage;
-
-        [ObservableProperty]
-        private bool _isCouponApplied;
-
         public CartViewModel(
             ICartService cartService,
             INavigationService navigationService)
@@ -55,7 +50,10 @@ namespace HoloCrew.ViewModels
             _cartService = cartService;
             _navigationService = navigationService;
 
-            Title = "Carrito de Compras";
+            Title = AppConstants.UI.Cart;
+            EmptyTitle = AppConstants.Empty.CartTitle;
+            EmptySubtitle = AppConstants.Empty.CartSubtitle;
+            EmptyActionText = AppConstants.Empty.CartAction;
         }
 
         public override async void OnNavigatedTo(object parameter)
@@ -67,25 +65,19 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private async Task LoadCartAsync()
         {
-            try
+            await ExecuteAsync(async () =>
             {
-                IsBusy = true;
-
                 var items = await _cartService.GetCartItemsAsync();
                 CartItems = new ObservableCollection<CartItem>(items);
                 IsCartEmpty = !CartItems.Any();
                 CanCheckout = !IsCartEmpty;
-
-                // ⭐ CORREGIDO: Cargar el descuento actual del servicio
-                Discount = _cartService.GetCurrentDiscount();
-                IsCouponApplied = Discount > 0;
-
                 CalculateTotals();
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+
+                if (IsCartEmpty)
+                    SetEmpty();
+                else
+                    SetSuccess();
+            });
         }
 
         [RelayCommand]
@@ -101,7 +93,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error decreasing quantity: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -118,7 +110,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error increasing quantity: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -134,10 +126,12 @@ namespace HoloCrew.ViewModels
                 IsCartEmpty = !CartItems.Any();
                 CanCheckout = !IsCartEmpty;
                 CalculateTotals();
+
+                if (IsCartEmpty) SetEmpty();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error removing from cart: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -150,51 +144,31 @@ namespace HoloCrew.ViewModels
                 CartItems.Clear();
                 IsCartEmpty = true;
                 CanCheckout = false;
-                Discount = 0;
-                IsCouponApplied = false;
-                CouponCode = string.Empty;
-                CouponMessage = string.Empty;
                 CalculateTotals();
+                SetEmpty();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error clearing cart: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
         [RelayCommand]
         private async Task ApplyCouponAsync()
         {
-            if (string.IsNullOrWhiteSpace(CouponCode))
-            {
-                CouponMessage = "Por favor, introduce un código de cupón.";
-                return;
-            }
+            if (string.IsNullOrWhiteSpace(CouponCode)) return;
 
             try
             {
                 var applied = await _cartService.ApplyCouponAsync(CouponCode);
-
                 if (applied)
                 {
-                    // ⭐ CORREGIDO: Actualizar el descuento desde el servicio
-                    Discount = _cartService.GetCurrentDiscount();
-                    IsCouponApplied = true;
-                    CouponMessage = $"¡Cupón aplicado! Descuento: €{Discount:N2}";
                     CalculateTotals();
-
-                    System.Diagnostics.Debug.WriteLine($"✅ Coupon applied: {CouponCode}, Discount: €{Discount}");
-                }
-                else
-                {
-                    CouponMessage = "Cupón inválido o expirado.";
-                    System.Diagnostics.Debug.WriteLine($"❌ Invalid coupon: {CouponCode}");
                 }
             }
             catch (Exception ex)
             {
-                CouponMessage = "Error al aplicar el cupón.";
-                System.Diagnostics.Debug.WriteLine($"❌ Error applying coupon: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -211,15 +185,18 @@ namespace HoloCrew.ViewModels
             _navigationService.NavigateTo<ProductCatalogViewModel>();
         }
 
+        [RelayCommand]
+        private void EmptyAction()
+        {
+            BrowseProducts();
+        }
+
         private void CalculateTotals()
         {
             Subtotal = CartItems.Sum(item => item.Subtotal);
-            ShippingCost = Subtotal > 50 ? 0 : 5.99m; // Envío gratis sobre 50€
-            Tax = Subtotal * 0.21m; // IVA 21%
+            ShippingCost = Subtotal > AppConstants.FreeShippingThreshold ? 0 : AppConstants.DefaultShippingCost;
+            Tax = Subtotal * AppConstants.TaxRate;
             Total = Subtotal + ShippingCost + Tax - Discount;
-
-            // Asegurar que el total no sea negativo
-            if (Total < 0) Total = 0;
         }
     }
 }
