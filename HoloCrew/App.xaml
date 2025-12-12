@@ -1,7 +1,6 @@
 ﻿<!-- ========================================
-     HOLOCREW - APP.XAML FINAL CORREGIDO
-     ✅ Todos los converters verificados
-     ✅ StatusToColourConverter corregido
+     HOLOCREW - APP.XAML
+     ✅ Incluye MegaMenuStyles para el nuevo header
      ======================================== -->
 
 <Application x:Class="HoloCrew.App"
@@ -117,6 +116,9 @@
                 <ResourceDictionary Source="Resources/Styles/Cards.xaml" />
                 <ResourceDictionary Source="Resources/Styles/ScrollViewers.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Animations.xaml" />
+
+                <!-- 6. ⭐ NUEVO: Estilos del Mega Menu -->
+                <ResourceDictionary Source="Resources/Styles/MegaMenuStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>

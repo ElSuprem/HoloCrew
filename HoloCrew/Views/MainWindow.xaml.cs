@@ -7,90 +7,131 @@ using System.Windows.Media.Media3D;
 namespace HoloCrew.Views
 {
     /// <summary>
-    /// Ventana principal de la aplicación con SCROLL INTELIGENTE
-    /// Permite que vistas internas tengan su propio scroll
+    /// Ventana principal con mega menú desplegable estilo HoloCrew
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool _isMenuOpen = false;
+
         public MainWindow()
         {
             InitializeComponent();
-            // El DataContext se establece por Dependency Injection en App.xaml.cs
         }
 
         /// <summary>
-        /// Evento de scroll inteligente para MainScrollViewer
-        /// Detecta si el ratón está sobre un ScrollViewer interno y NO captura el evento
+        /// Muestra el mega menú cuando el mouse entra en "SHOP"
+        /// </summary>
+        private void ShopMenu_MouseEnter(object sender, MouseEventArgs e)
+        {
+            MegaMenuDropdown.Visibility = Visibility.Visible;
+            _isMenuOpen = true;
+        }
+
+        /// <summary>
+        /// Oculta el mega menú cuando el mouse sale
+        /// </summary>
+        private void ShopMenu_MouseLeave(object sender, MouseEventArgs e)
+        {
+            // Pequeño delay para evitar cierre accidental
+            System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Tick += (s, args) =>
+            {
+                timer.Stop();
+
+                // Verificar si el mouse está sobre el menú o el trigger
+                if (!IsMouseOverElement(MegaMenuDropdown) && !IsMouseOverElement(ShopMenuTrigger))
+                {
+                    MegaMenuDropdown.Visibility = Visibility.Collapsed;
+                    _isMenuOpen = false;
+                }
+            };
+            timer.Start();
+        }
+
+        /// <summary>
+        /// Verifica si el mouse está sobre un elemento
+        /// </summary>
+        private bool IsMouseOverElement(UIElement element)
+        {
+            if (element == null) return false;
+
+            Point mousePos = Mouse.GetPosition(element);
+            return mousePos.X >= 0 && mousePos.Y >= 0 &&
+                   mousePos.X <= ((FrameworkElement)element).ActualWidth &&
+                   mousePos.Y <= ((FrameworkElement)element).ActualHeight;
+        }
+
+        /// <summary>
+        /// Cuando la barra de búsqueda se hace visible, poner el foco automáticamente
+        /// </summary>
+        private void SearchBar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is Border border && border.Visibility == Visibility.Visible)
+            {
+                // Usar Dispatcher para asegurar que el focus se aplica después del render
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    SearchTextBox.Focus();
+                    SearchTextBox.SelectAll();
+                }), System.Windows.Threading.DispatcherPriority.Input);
+            }
+        }
+
+        /// <summary>
+        /// Scroll inteligente para el contenido principal
         /// </summary>
         private void MainScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             var scrollViewer = sender as ScrollViewer;
             if (scrollViewer == null) return;
 
-            // Obtener el elemento bajo el ratón
             var mousePosition = e.GetPosition(scrollViewer);
             var elementUnderMouse = scrollViewer.InputHitTest(mousePosition) as DependencyObject;
 
-            // ⭐ ARREGLADO: Verificar que elementUnderMouse sea un Visual antes de buscar
             if (elementUnderMouse != null && (elementUnderMouse is Visual || elementUnderMouse is Visual3D))
             {
-                // Buscar si hay un ScrollViewer interno en la jerarquía
                 var innerScrollViewer = FindParentScrollViewer(elementUnderMouse, scrollViewer);
 
                 if (innerScrollViewer != null)
                 {
-                    // HAY un ScrollViewer interno
-                    // Verificar si puede hacer scroll
                     bool canScrollUp = innerScrollViewer.VerticalOffset > 0;
                     bool canScrollDown = innerScrollViewer.VerticalOffset < innerScrollViewer.ScrollableHeight;
 
                     if ((e.Delta > 0 && canScrollUp) || (e.Delta < 0 && canScrollDown))
                     {
-                        // El ScrollViewer interno PUEDE hacer scroll
-                        // NO capturamos el evento, dejamos que el interno lo maneje
                         return;
                     }
                 }
             }
 
-            // NO hay ScrollViewer interno O ya llegó al límite
-            // El MainScrollViewer maneja el evento normalmente
             if (e.Delta > 0)
             {
-                // Scroll hacia arriba
-                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - 120);
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - 100);
             }
             else
             {
-                // Scroll hacia abajo
-                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + 120);
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + 100);
             }
 
             e.Handled = true;
         }
 
-        /// <summary>
-        /// Busca un ScrollViewer padre en la jerarquía visual
-        /// Excluye el scrollViewerToExclude (MainScrollViewer)
-        /// </summary>
         private ScrollViewer FindParentScrollViewer(DependencyObject child, ScrollViewer scrollViewerToExclude)
         {
             if (child == null) return null;
 
-            // ⭐ ARREGLADO: Try-catch para manejar elementos no visuales
             try
             {
                 DependencyObject parent = VisualTreeHelper.GetParent(child);
 
                 while (parent != null)
                 {
-                    // Si encontramos el MainScrollViewer, paramos (no queremos encontrarnos a nosotros mismos)
                     if (parent == scrollViewerToExclude)
                     {
                         return null;
                     }
 
-                    // Si encontramos un ScrollViewer, lo devolvemos
                     if (parent is ScrollViewer scrollViewer)
                     {
                         return scrollViewer;
@@ -101,8 +142,6 @@ namespace HoloCrew.Views
             }
             catch (System.InvalidOperationException)
             {
-                // El elemento no está en el árbol visual (ej: Run, TextElement)
-                // Simplemente retornamos null
                 return null;
             }
 

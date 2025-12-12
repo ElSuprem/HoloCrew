@@ -3,7 +3,11 @@ using CommunityToolkit.Mvvm.Input;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
 {
@@ -20,6 +24,16 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private ObservableCollection<Product> _filteredProducts = new();
 
+        // Categoría/Subcategoría actual
+        [ObservableProperty]
+        private string _currentCategoryName = "All Products";
+
+        [ObservableProperty]
+        private string _currentSlug;
+
+        [ObservableProperty]
+        private int _totalProductCount;
+
         // BÚSQUEDA
         [ObservableProperty]
         private string _searchQuery;
@@ -29,7 +43,7 @@ namespace HoloCrew.ViewModels
         private decimal _minPrice = 0;
 
         [ObservableProperty]
-        private decimal _maxPrice = 1000;
+        private decimal _maxPrice = 500;
 
         // CATEGORÍA
         [ObservableProperty]
@@ -50,7 +64,7 @@ namespace HoloCrew.ViewModels
 
         public ObservableCollection<string> AvailableColors { get; } = new()
         {
-            "Black", "White", "Gray", "Blue", "Red", "Green"
+            "Black", "White", "Gray", "Navy", "Red", "Green"
         };
 
         // GÉNERO
@@ -73,6 +87,15 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _isFiltering;
 
+        // ORDENACIÓN
+        [ObservableProperty]
+        private string _sortBy = "Featured";
+
+        public ObservableCollection<string> SortOptions { get; } = new()
+        {
+            "Featured", "Newest", "Price: Low to High", "Price: High to Low", "Best Selling"
+        };
+
         public ProductCatalogViewModel(
             IProductService productService,
             INavigationService navigationService,
@@ -84,9 +107,9 @@ namespace HoloCrew.ViewModels
             _cartService = cartService;
             _wishlistService = wishlistService;
 
-            Title = "Catálogo de Productos";
+            Title = "Catálogo";
 
-            // ⭐ Suscribirse a cambios en wishlist
+            // Suscribirse a cambios en wishlist
             _wishlistService.WishlistUpdated += OnWishlistUpdated;
         }
 
@@ -96,17 +119,45 @@ namespace HoloCrew.ViewModels
 
             if (parameter is int categoryId)
             {
+                // Navegación por ID de categoría
                 await LoadProductsByCategoryAsync(categoryId);
             }
-            else if (parameter is string searchQuery)
+            else if (parameter is string param)
             {
-                SearchQuery = searchQuery;
-                await SearchAsync();
+                // Puede ser un slug o una búsqueda
+                if (IsSearchQuery(param))
+                {
+                    SearchQuery = param;
+                    await SearchAsync();
+                }
+                else
+                {
+                    // Es un slug de subcategoría
+                    await LoadProductsBySlugAsync(param);
+                }
             }
             else
             {
                 await LoadAllProductsAsync();
             }
+        }
+
+        /// <summary>
+        /// Determina si el parámetro es una búsqueda o un slug
+        /// </summary>
+        private bool IsSearchQuery(string param)
+        {
+            // Los slugs conocidos
+            var knownSlugs = new[]
+            {
+                "all", "new", "blackweek", "softs", "classic", "activewear", "tracksuits",
+                "tshirts", "hoodies", "trackjackets", "jerseys", "knitwear", "jackets",
+                "denim", "cargo", "joggers", "trackpants", "jorts", "shorts", "swimshorts", "underwear",
+                "armbo", "vortex", "venture", "vitoria", "vslides",
+                "caps", "bags", "beanies", "cardholder", "belts", "rings", "rugs"
+            };
+
+            return !knownSlugs.Contains(param.ToLower());
         }
 
         [RelayCommand]
@@ -117,11 +168,13 @@ namespace HoloCrew.ViewModels
             try
             {
                 IsBusy = true;
+                CurrentCategoryName = "All Products";
+                CurrentSlug = "all";
+
                 var products = await _productService.GetProductsByCategoryAsync(0);
                 Products = new ObservableCollection<Product>(products);
-                FilteredProducts = new ObservableCollection<Product>(products);
-
-                // ⭐ Cargar estado de wishlist para cada producto
+                TotalProductCount = products.Count;
+                ApplyAllFilters();
                 await LoadWishlistStates();
             }
             finally
@@ -135,17 +188,108 @@ namespace HoloCrew.ViewModels
             try
             {
                 IsBusy = true;
+
                 var products = await _productService.GetProductsByCategoryAsync(categoryId);
                 Products = new ObservableCollection<Product>(products);
-                FilteredProducts = new ObservableCollection<Product>(products);
+                TotalProductCount = products.Count;
 
-                // ⭐ Cargar estado de wishlist para cada producto
+                // Actualizar nombre de categoría
+                var categories = await _productService.GetCategoriesAsync();
+                var category = FindCategoryById(categories, categoryId);
+                CurrentCategoryName = category?.Name ?? "Products";
+
+                ApplyAllFilters();
                 await LoadWishlistStates();
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+
+        /// <summary>
+        /// Carga productos por slug de subcategoría (desde el mega menú)
+        /// </summary>
+        private async Task LoadProductsBySlugAsync(string slug)
+        {
+            try
+            {
+                IsBusy = true;
+                CurrentSlug = slug.ToLower();
+
+                var products = await _productService.GetProductsBySlugAsync(slug);
+                Products = new ObservableCollection<Product>(products);
+                TotalProductCount = products.Count;
+
+                // Actualizar nombre basado en slug
+                CurrentCategoryName = GetCategoryNameFromSlug(slug);
+                Title = CurrentCategoryName;
+
+                ApplyAllFilters();
+                await LoadWishlistStates();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el nombre legible de una categoría por su slug
+        /// </summary>
+        private string GetCategoryNameFromSlug(string slug)
+        {
+            return slug.ToLower() switch
+            {
+                "all" => "All Products",
+                "new" => "New Arrivals",
+                "blackweek" => "Black Week",
+                "softs" => "Softs Collection",
+                "classic" => "Classic Collection",
+                "activewear" => "Activewear",
+                "tracksuits" => "Tracksuits",
+                "tshirts" => "T-Shirts",
+                "hoodies" => "Hoodies",
+                "trackjackets" => "Track Jackets",
+                "jerseys" => "Jerseys",
+                "knitwear" => "Knitwear",
+                "jackets" => "Jackets",
+                "denim" => "Denim Pants",
+                "cargo" => "Cargo Pants",
+                "joggers" => "Joggers",
+                "trackpants" => "Track Pants",
+                "jorts" => "Jorts",
+                "shorts" => "Shorts",
+                "swimshorts" => "Swimshorts",
+                "underwear" => "Underwear",
+                "armbo" => "Armbo Lows",
+                "vortex" => "Vortex",
+                "venture" => "Venture",
+                "vitoria" => "Vitoria",
+                "vslides" => "V-Slides",
+                "caps" => "Caps",
+                "bags" => "Bags",
+                "beanies" => "Beanies",
+                "cardholder" => "Cardholder",
+                "belts" => "Belts",
+                "rings" => "Rings",
+                "rugs" => "Rugs",
+                _ => slug.ToUpper()
+            };
+        }
+
+        private Category FindCategoryById(System.Collections.Generic.List<Category> categories, int id)
+        {
+            foreach (var cat in categories)
+            {
+                if (cat.Id == id) return cat;
+                if (cat.SubCategories != null)
+                {
+                    var sub = cat.SubCategories.FirstOrDefault(s => s.Id == id);
+                    if (sub != null) return sub;
+                }
+            }
+            return null;
         }
 
         [RelayCommand]
@@ -160,11 +304,12 @@ namespace HoloCrew.ViewModels
             try
             {
                 IsFiltering = true;
+                CurrentCategoryName = $"Results for \"{SearchQuery}\"";
+
                 var results = await _productService.SearchProductsAsync(SearchQuery);
                 Products = new ObservableCollection<Product>(results);
+                TotalProductCount = results.Count;
                 ApplyAllFilters();
-
-                // ⭐ Cargar estado de wishlist para cada producto
                 await LoadWishlistStates();
             }
             finally
@@ -173,7 +318,6 @@ namespace HoloCrew.ViewModels
             }
         }
 
-        // ⭐ NUEVO: Cargar estado de wishlist para todos los productos
         private async Task LoadWishlistStates()
         {
             foreach (var product in FilteredProducts)
@@ -182,7 +326,6 @@ namespace HoloCrew.ViewModels
             }
         }
 
-        // ⭐ NUEVO: Evento que se dispara cuando cambia la wishlist
         private async void OnWishlistUpdated(object sender, EventArgs e)
         {
             await LoadWishlistStates();
@@ -199,26 +342,20 @@ namespace HoloCrew.ViewModels
         private void ToggleSize(string size)
         {
             if (SelectedSizes.Contains(size))
-            {
                 SelectedSizes.Remove(size);
-            }
             else
-            {
                 SelectedSizes.Add(size);
-            }
+            ApplyFilters();
         }
 
         [RelayCommand]
         private void ToggleColor(string color)
         {
             if (SelectedColors.Contains(color))
-            {
                 SelectedColors.Remove(color);
-            }
             else
-            {
                 SelectedColors.Add(color);
-            }
+            ApplyFilters();
         }
 
         [RelayCommand]
@@ -234,28 +371,20 @@ namespace HoloCrew.ViewModels
             // Filtro de PRECIO
             filtered = filtered.Where(p => p.Price >= MinPrice && p.Price <= MaxPrice);
 
-            // Filtro de CATEGORÍA
-            if (SelectedCategory != "All" && !string.IsNullOrEmpty(SelectedCategory))
-            {
-                filtered = filtered.Where(p => p.Category?.Name == SelectedCategory);
-            }
-
-            // Filtro de TALLAS (si hay alguna seleccionada)
+            // Filtro de TALLAS
             if (SelectedSizes.Any())
             {
-                // Asumiendo que Product tiene una propiedad AvailableSizes
-                // filtered = filtered.Where(p => p.AvailableSizes?.Any(s => SelectedSizes.Contains(s)) == true);
-
-                // Si no tienes esa propiedad aún, se omite este filtro por ahora
+                filtered = filtered.Where(p =>
+                    p.AvailableSizes != null &&
+                    p.AvailableSizes.Any(s => SelectedSizes.Contains(s)));
             }
 
-            // Filtro de COLORES (si hay alguno seleccionado)
+            // Filtro de COLORES
             if (SelectedColors.Any())
             {
-                // Asumiendo que Product tiene una propiedad AvailableColors
-                // filtered = filtered.Where(p => p.AvailableColors?.Any(c => SelectedColors.Contains(c)) == true);
-
-                // Si no tienes esa propiedad aún, se omite este filtro por ahora
+                filtered = filtered.Where(p =>
+                    p.AvailableColors != null &&
+                    p.AvailableColors.Any(c => SelectedColors.Contains(c)));
             }
 
             // Filtro de GÉNERO
@@ -281,6 +410,16 @@ namespace HoloCrew.ViewModels
                 filtered = filtered.Where(p => p.HasDiscount);
             }
 
+            // ORDENACIÓN
+            filtered = SortBy switch
+            {
+                "Newest" => filtered.OrderByDescending(p => p.CreatedAt),
+                "Price: Low to High" => filtered.OrderBy(p => p.Price),
+                "Price: High to Low" => filtered.OrderByDescending(p => p.Price),
+                "Best Selling" => filtered.OrderByDescending(p => p.ReviewCount),
+                _ => filtered.OrderByDescending(p => p.IsFeatured).ThenByDescending(p => p.CreatedAt)
+            };
+
             FilteredProducts = new ObservableCollection<Product>(filtered.ToList());
         }
 
@@ -289,7 +428,7 @@ namespace HoloCrew.ViewModels
         {
             SearchQuery = string.Empty;
             MinPrice = 0;
-            MaxPrice = 1000;
+            MaxPrice = 500;
             SelectedCategory = "All";
             SelectedSizes.Clear();
             SelectedColors.Clear();
@@ -298,6 +437,7 @@ namespace HoloCrew.ViewModels
             GenderUnisex = false;
             InStockOnly = false;
             OnSaleOnly = false;
+            SortBy = "Featured";
 
             FilteredProducts = new ObservableCollection<Product>(Products);
         }
@@ -316,7 +456,6 @@ namespace HoloCrew.ViewModels
             await _cartService.AddToCartAsync(product, 1);
         }
 
-        // ⭐ NUEVO: Toggle wishlist con actualización de estado
         [RelayCommand]
         private async Task ToggleWishlistAsync(Product product)
         {
@@ -337,7 +476,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error toggling wishlist: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error toggling wishlist: {ex.Message}");
             }
         }
 
@@ -349,5 +488,6 @@ namespace HoloCrew.ViewModels
         partial void OnGenderUnisexChanged(bool value) => ApplyFilters();
         partial void OnInStockOnlyChanged(bool value) => ApplyFilters();
         partial void OnOnSaleOnlyChanged(bool value) => ApplyFilters();
+        partial void OnSortByChanged(string value) => ApplyFilters();
     }
 }

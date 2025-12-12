@@ -10,12 +10,12 @@ namespace HoloCrew.Services
 {
     /// <summary>
     /// Servicio de productos con CATÁLOGO COMPLETO DE STREETWEAR
-    /// 70 productos realistas adaptados a HoloCrew
-    /// ⭐ CORREGIDO: Nombre del método GetStreetwearCatalog (antes GetStreetweaCatalog)
+    /// Organizado por subcategorías igual que la web de HoloCrew
     /// </summary>
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
+        private List<Product> _cachedProducts;
 
         public ProductService(IProductRepository productRepository)
         {
@@ -24,488 +24,517 @@ namespace HoloCrew.Services
 
         public async Task<List<Product>> GetFeaturedProductsAsync()
         {
-            var allProducts = await _productRepository.GetAllAsync();
-
-            if (allProducts == null || !allProducts.Any())
-            {
-                return GetStreetwearCatalog().Where(p => p.IsFeatured).ToList();
-            }
-
-            return allProducts.Where(p => p.IsFeatured).ToList();
+            var products = await GetAllProductsAsync();
+            return products.Where(p => p.IsFeatured).Take(8).ToList();
         }
 
         public async Task<List<Product>> GetProductsByCategoryAsync(int categoryId)
         {
-            if (categoryId == 0)
+            var products = await GetAllProductsAsync();
+
+            if (categoryId == 0) return products;
+
+            // Si es categoría principal (1-5), devolver todos los productos de esa categoría
+            if (categoryId >= 1 && categoryId <= 5)
             {
-                var allProducts = await _productRepository.GetAllAsync();
-
-                if (allProducts == null || !allProducts.Any())
-                {
-                    return GetStreetwearCatalog();
-                }
-
-                return allProducts;
+                return products.Where(p => p.CategoryId == categoryId).ToList();
             }
 
-            var products = await _productRepository.GetByCategoryAsync(categoryId);
+            // Si es subcategoría (10+), filtrar por SubCategoryId
+            return products.Where(p => p.SubCategoryId == categoryId).ToList();
+        }
 
-            if (products == null || !products.Any())
+        /// <summary>
+        /// Obtiene productos por slug de subcategoría (usado desde el mega menú)
+        /// </summary>
+        public async Task<List<Product>> GetProductsBySlugAsync(string slug)
+        {
+            var products = await GetAllProductsAsync();
+
+            if (string.IsNullOrEmpty(slug) || slug == "all")
+                return products;
+
+            slug = slug.ToLower();
+
+            // Casos especiales
+            switch (slug)
             {
-                return GetStreetwearCatalog().Where(p => p.CategoryId == categoryId).ToList();
+                case "new":
+                    return products.Where(p => p.IsNew).OrderByDescending(p => p.CreatedAt).ToList();
+                case "blackweek":
+                    return products.Where(p => p.IsBlackWeek || p.HasDiscount).ToList();
+                case "softs":
+                    return products.Where(p => p.IsSoftsCollection).ToList();
+                case "classic":
+                    return products.Where(p => p.IsClassicCollection).ToList();
+                case "activewear":
+                    return products.Where(p => p.SubCategorySlug == "joggers" || p.SubCategorySlug == "trackpants" || p.SubCategorySlug == "shorts").ToList();
+                case "tracksuits":
+                    return products.Where(p => p.SubCategorySlug == "trackjackets" || p.SubCategorySlug == "trackpants").ToList();
             }
 
-            return products;
+            // Filtrar por slug de subcategoría
+            return products.Where(p => p.SubCategorySlug == slug).ToList();
         }
 
         public async Task<Product> GetProductByIdAsync(int productId)
         {
-            var product = await _productRepository.GetByIdAsync(productId);
-
-            if (product == null)
-            {
-                return GetStreetwearCatalog().FirstOrDefault(p => p.Id == productId);
-            }
-
-            return product;
+            var products = await GetAllProductsAsync();
+            return products.FirstOrDefault(p => p.Id == productId);
         }
 
         public async Task<List<Product>> SearchProductsAsync(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
-            {
                 return new List<Product>();
-            }
 
-            var results = await _productRepository.SearchAsync(query);
+            var products = await GetAllProductsAsync();
+            query = query.ToLower();
 
-            if (results == null || !results.Any())
-            {
-                return GetStreetwearCatalog()
-                    .Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                               (p.Description != null && p.Description.Contains(query, StringComparison.OrdinalIgnoreCase)))
-                    .ToList();
-            }
-
-            return results;
+            return products.Where(p =>
+                p.Name.ToLower().Contains(query) ||
+                p.Description.ToLower().Contains(query) ||
+                p.SubCategorySlug?.ToLower().Contains(query) == true ||
+                p.Category?.Name?.ToLower().Contains(query) == true
+            ).ToList();
         }
 
         public async Task<List<Category>> GetCategoriesAsync()
         {
-            return await Task.FromResult(new List<Category>
-            {
-                new Category { Id = 1, Name = "Tops", IconUrl = "/Resources/Icons/tops.png" },
-                new Category { Id = 2, Name = "Bottoms", IconUrl = "/Resources/Icons/bottoms.png" },
-                new Category { Id = 3, Name = "Footwear", IconUrl = "/Resources/Icons/footwear.png" },
-                new Category { Id = 4, Name = "Accessories", IconUrl = "/Resources/Icons/accessories.png" }
-            });
+            return await Task.FromResult(HoloCrewCategories.GetAllCategories());
         }
 
         public async Task<List<Product>> GetRelatedProductsAsync(int productId)
         {
             var product = await GetProductByIdAsync(productId);
+            if (product == null) return new List<Product>();
 
-            if (product == null)
-            {
-                return new List<Product>();
-            }
+            var products = await GetAllProductsAsync();
 
-            var relatedProducts = await GetProductsByCategoryAsync(product.CategoryId);
-
-            return relatedProducts
-                .Where(p => p.Id != productId)
+            return products
+                .Where(p => p.Id != productId && p.SubCategoryId == product.SubCategoryId)
                 .Take(4)
                 .ToList();
         }
 
         public async Task<List<Product>> GetBestSellersAsync()
         {
-            var allProducts = await GetProductsByCategoryAsync(0);
-
-            return allProducts
-                .OrderByDescending(p => p.ReviewCount)
-                .Take(10)
-                .ToList();
+            var products = await GetAllProductsAsync();
+            return products.OrderByDescending(p => p.ReviewCount).Take(10).ToList();
         }
 
         public async Task<List<Product>> GetNewProductsAsync()
         {
-            var allProducts = await GetProductsByCategoryAsync(0);
-
-            return allProducts
-                .Where(p => p.IsNew)
-                .OrderByDescending(p => p.CreatedAt)
-                .Take(10)
-                .ToList();
+            var products = await GetAllProductsAsync();
+            return products.Where(p => p.IsNew).OrderByDescending(p => p.CreatedAt).Take(10).ToList();
         }
 
-        // ⭐ CATÁLOGO COMPLETO DE STREETWEAR
-        // ⭐ CORREGIDO: Nombre del método (antes GetStreetweaCatalog)
+        public async Task<List<Product>> GetBlackWeekProductsAsync()
+        {
+            var products = await GetAllProductsAsync();
+            return products.Where(p => p.IsBlackWeek || p.HasDiscount).ToList();
+        }
+
+        private async Task<List<Product>> GetAllProductsAsync()
+        {
+            if (_cachedProducts != null) return _cachedProducts;
+
+            var repoProducts = await _productRepository.GetAllAsync();
+
+            if (repoProducts != null && repoProducts.Any())
+            {
+                _cachedProducts = repoProducts;
+                return repoProducts;
+            }
+
+            _cachedProducts = GetStreetwearCatalog();
+            return _cachedProducts;
+        }
+
+        // ⭐⭐⭐ CATÁLOGO COMPLETO DE STREETWEAR HOLOCREW ⭐⭐⭐
         private List<Product> GetStreetwearCatalog()
         {
             var products = new List<Product>();
             int id = 1;
 
             // ============================================
-            // TOPS - 20 PRODUCTOS
+            // T-SHIRTS (SubCategoryId = 20)
             // ============================================
-
-            // T-SHIRTS (5)
-            products.Add(new Product
+            products.AddRange(new[]
             {
-                Id = id++,
-                Name = "CLASSIC LOGO TEE",
-                Description = "Essential cotton t-shirt",
-                LongDescription = "100% premium cotton t-shirt with embroidered logo",
-                Price = 34.99m,
-                OriginalPrice = 44.99m,
-                Stock = 150,
-                MainImageUrl = "/Resources/Images/tshirt1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 1,
-                Category = new Category { Id = 1, Name = "Tops" },
-                AverageRating = 4.5,
-                ReviewCount = 234,
-                IsFeatured = true,
-                IsNew = false,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-60),
-                UpdatedAt = DateTime.Now
-            });
-
-            products.Add(new Product
-            {
-                Id = id++,
-                Name = "VINTAGE WASH TEE",
-                Description = "Relaxed fit vintage style",
-                LongDescription = "Oversized t-shirt with vintage wash treatment",
-                Price = 39.99m,
-                Stock = 120,
-                MainImageUrl = "/Resources/Images/tshirt2.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 1,
-                Category = new Category { Id = 1, Name = "Tops" },
-                AverageRating = 4.7,
-                ReviewCount = 189,
-                IsFeatured = true,
-                IsNew = true,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-5),
-                UpdatedAt = DateTime.Now
-            });
-
-            products.Add(new Product
-            {
-                Id = id++,
-                Name = "GRAPHIC PRINT TEE",
-                Description = "Bold artwork design",
-                LongDescription = "Statement tee with exclusive graphic print",
-                Price = 44.99m,
-                OriginalPrice = 59.99m,
-                Stock = 90,
-                MainImageUrl = "/Resources/Images/tshirt3.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 1,
-                Category = new Category { Id = 1, Name = "Tops" },
-                AverageRating = 4.6,
-                ReviewCount = 156,
-                IsFeatured = false,
-                IsNew = false,
-                Gender = "Men",
-                CreatedAt = DateTime.Now.AddDays(-30),
-                UpdatedAt = DateTime.Now
-            });
-
-            // HOODIES (5)
-            products.Add(new Product
-            {
-                Id = id++,
-                Name = "OVERSIZED HOODIE BLACK",
-                Description = "Premium heavyweight hoodie",
-                LongDescription = "450GSM cotton blend hoodie with oversized fit",
-                Price = 79.99m,
-                Stock = 85,
-                MainImageUrl = "/Resources/Images/hoodie1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 1,
-                Category = new Category { Id = 1, Name = "Tops" },
-                AverageRating = 4.8,
-                ReviewCount = 312,
-                IsFeatured = true,
-                IsNew = false,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-90),
-                UpdatedAt = DateTime.Now
-            });
-
-            products.Add(new Product
-            {
-                Id = id++,
-                Name = "ZIP-UP HOODIE GREY",
-                Description = "Classic zip front hoodie",
-                LongDescription = "Comfortable zip-up hoodie with kangaroo pockets",
-                Price = 74.99m,
-                OriginalPrice = 89.99m,
-                Stock = 70,
-                MainImageUrl = "/Resources/Images/hoodie2.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 1,
-                Category = new Category { Id = 1, Name = "Tops" },
-                AverageRating = 4.6,
-                ReviewCount = 198,
-                IsFeatured = false,
-                IsNew = true,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-10),
-                UpdatedAt = DateTime.Now
+                CreateProduct(id++, "CLASSIC LOGO TEE", "Essential cotton t-shirt with embroidered logo", 34.99m, 44.99m,
+                    2, 20, "tshirts", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "VINTAGE WASH TEE", "Oversized t-shirt with vintage wash treatment", 39.99m, null,
+                    2, 20, "tshirts", isNew: true),
+                CreateProduct(id++, "GRAPHIC PRINT TEE", "Statement tee with exclusive HoloCrew artwork", 44.99m, 59.99m,
+                    2, 20, "tshirts", isBlackWeek: true),
+                CreateProduct(id++, "STRIPED LONG SLEEVE", "Premium striped long sleeve tee", 49.99m, null,
+                    2, 20, "tshirts", isSofts: true),
+                CreateProduct(id++, "OVERSIZED POCKET TEE", "Relaxed fit with chest pocket detail", 37.99m, null,
+                    2, 20, "tshirts", isNew: true),
+                CreateProduct(id++, "HEAVYWEIGHT TEE", "Premium 300gsm cotton, boxy fit", 54.99m, 69.99m,
+                    2, 20, "tshirts", isFeatured: true, isClassic: true),
             });
 
             // ============================================
-            // BOTTOMS - 15 PRODUCTOS
+            // HOODIES (SubCategoryId = 21)
             // ============================================
-
-            products.Add(new Product
+            products.AddRange(new[]
             {
-                Id = id++,
-                Name = "TACTICAL CARGO PANTS",
-                Description = "Military-inspired cargo pants",
-                LongDescription = "Durable cargo pants with multiple pockets and adjustable waist",
-                Price = 79.99m,
-                Stock = 65,
-                MainImageUrl = "/Resources/Images/cargo1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 2,
-                Category = new Category { Id = 2, Name = "Bottoms" },
-                AverageRating = 4.7,
-                ReviewCount = 267,
-                IsFeatured = true,
-                IsNew = false,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-45),
-                UpdatedAt = DateTime.Now
-            });
-
-            products.Add(new Product
-            {
-                Id = id++,
-                Name = "SLIM FIT JEANS BLACK",
-                Description = "Classic slim fit denim",
-                LongDescription = "Stretch denim jeans with slim fit silhouette",
-                Price = 69.99m,
-                Stock = 100,
-                MainImageUrl = "/Resources/Images/jeans1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 2,
-                Category = new Category { Id = 2, Name = "Bottoms" },
-                AverageRating = 4.5,
-                ReviewCount = 189,
-                IsFeatured = false,
-                IsNew = false,
-                Gender = "Men",
-                CreatedAt = DateTime.Now.AddDays(-75),
-                UpdatedAt = DateTime.Now
-            });
-
-            products.Add(new Product
-            {
-                Id = id++,
-                Name = "JOGGER PANTS",
-                Description = "Comfortable everyday joggers",
-                LongDescription = "Soft cotton joggers with elastic cuffs",
-                Price = 54.99m,
-                OriginalPrice = 64.99m,
-                Stock = 110,
-                MainImageUrl = "/Resources/Images/jogger1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 2,
-                Category = new Category { Id = 2, Name = "Bottoms" },
-                AverageRating = 4.6,
-                ReviewCount = 223,
-                IsFeatured = true,
-                IsNew = true,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-8),
-                UpdatedAt = DateTime.Now
+                CreateProduct(id++, "CLASSIC LOGO HOODIE", "Premium heavyweight hoodie with embroidered logo", 89.99m, 109.99m,
+                    2, 21, "hoodies", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "OVERSIZED ZIP HOODIE", "Relaxed fit zip-up hoodie", 99.99m, null,
+                    2, 21, "hoodies", isNew: true, isSofts: true),
+                CreateProduct(id++, "VINTAGE WASHED HOODIE", "Stone-washed hoodie with distressed look", 94.99m, null,
+                    2, 21, "hoodies", isClassic: true),
+                CreateProduct(id++, "CROPPED HOODIE", "Women's cropped hoodie", 79.99m, 99.99m,
+                    2, 21, "hoodies", gender: "Women", isBlackWeek: true),
+                CreateProduct(id++, "HEAVYWEIGHT HOODIE", "400gsm premium fleece hoodie", 119.99m, null,
+                    2, 21, "hoodies", isFeatured: true, isSofts: true),
+                CreateProduct(id++, "SLEEVELESS HOODIE", "Cut-off sleeve hoodie for training", 69.99m, null,
+                    2, 21, "hoodies"),
             });
 
             // ============================================
-            // FOOTWEAR - 15 PRODUCTOS
+            // TRACK JACKETS (SubCategoryId = 22)
             // ============================================
-
-            products.Add(new Product
+            products.AddRange(new[]
             {
-                Id = id++,
-                Name = "ARMBO LOW WHITE",
-                Description = "Clean minimal sneakers",
-                LongDescription = "Premium leather low-top sneakers with cushioned sole",
-                Price = 129.99m,
-                Stock = 55,
-                MainImageUrl = "/Resources/Images/armbo1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 3,
-                Category = new Category { Id = 3, Name = "Footwear" },
-                AverageRating = 4.8,
-                ReviewCount = 345,
-                IsFeatured = true,
-                IsNew = false,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-120),
-                UpdatedAt = DateTime.Now
-            });
-
-            products.Add(new Product
-            {
-                Id = id++,
-                Name = "HIGH-TOP SNEAKERS BLACK",
-                Description = "Classic high-top design",
-                LongDescription = "Canvas high-top sneakers with vulcanized sole",
-                Price = 99.99m,
-                OriginalPrice = 119.99m,
-                Stock = 70,
-                MainImageUrl = "/Resources/Images/hightop1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 3,
-                Category = new Category { Id = 3, Name = "Footwear" },
-                AverageRating = 4.6,
-                ReviewCount = 198,
-                IsFeatured = false,
-                IsNew = true,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-12),
-                UpdatedAt = DateTime.Now
-            });
-
-            products.Add(new Product
-            {
-                Id = id++,
-                Name = "CHUNKY RUNNER",
-                Description = "Dad shoe inspired sneakers",
-                LongDescription = "Retro chunky sneakers with multi-layer sole",
-                Price = 149.99m,
-                Stock = 40,
-                MainImageUrl = "/Resources/Images/chunky1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 3,
-                Category = new Category { Id = 3, Name = "Footwear" },
-                AverageRating = 4.5,
-                ReviewCount = 156,
-                IsFeatured = true,
-                IsNew = false,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-60),
-                UpdatedAt = DateTime.Now
+                CreateProduct(id++, "RETRO TRACK JACKET", "90s inspired track jacket with stripe detail", 109.99m, 139.99m,
+                    2, 22, "trackjackets", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "VELOUR TRACK TOP", "Luxury velour track jacket", 129.99m, null,
+                    2, 22, "trackjackets", isNew: true, isSofts: true),
+                CreateProduct(id++, "TECH TRACK JACKET", "Lightweight technical fabric", 99.99m, null,
+                    2, 22, "trackjackets"),
             });
 
             // ============================================
-            // ACCESSORIES - 20 PRODUCTOS
+            // JERSEYS (SubCategoryId = 23)
             // ============================================
-
-            products.Add(new Product
+            products.AddRange(new[]
             {
-                Id = id++,
-                Name = "BASEBALL CAP BLACK",
-                Description = "Classic 6-panel cap",
-                LongDescription = "Adjustable cotton baseball cap with embroidered logo",
-                Price = 29.99m,
-                Stock = 200,
-                MainImageUrl = "/Resources/Images/cap1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 4,
-                Category = new Category { Id = 4, Name = "Accessories" },
-                AverageRating = 4.7,
-                ReviewCount = 456,
-                IsFeatured = true,
-                IsNew = false,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-100),
-                UpdatedAt = DateTime.Now
+                CreateProduct(id++, "SOCCER JERSEY", "Premium mesh soccer jersey", 74.99m, 89.99m,
+                    2, 23, "jerseys", isBlackWeek: true),
+                CreateProduct(id++, "BASKETBALL JERSEY", "Breathable basketball jersey", 69.99m, null,
+                    2, 23, "jerseys", isNew: true),
+                CreateProduct(id++, "RACING JERSEY", "Motorsport inspired jersey", 79.99m, null,
+                    2, 23, "jerseys"),
             });
 
-            products.Add(new Product
+            // ============================================
+            // KNITWEAR (SubCategoryId = 24)
+            // ============================================
+            products.AddRange(new[]
             {
-                Id = id++,
-                Name = "CROSSBODY BAG",
-                Description = "Compact everyday bag",
-                LongDescription = "Nylon crossbody bag with adjustable strap",
-                Price = 49.99m,
-                Stock = 80,
-                MainImageUrl = "/Resources/Images/bag1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 4,
-                Category = new Category { Id = 4, Name = "Accessories" },
-                AverageRating = 4.6,
-                ReviewCount = 234,
-                IsFeatured = false,
-                IsNew = true,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-15),
-                UpdatedAt = DateTime.Now
+                CreateProduct(id++, "CABLE KNIT SWEATER", "Classic cable knit in premium wool blend", 99.99m, 129.99m,
+                    2, 24, "knitwear", isFeatured: true, isBlackWeek: true, isClassic: true),
+                CreateProduct(id++, "RIBBED TURTLENECK", "Slim fit ribbed turtleneck", 84.99m, null,
+                    2, 24, "knitwear", isNew: true),
+                CreateProduct(id++, "OVERSIZED CARDIGAN", "Chunky knit open cardigan", 119.99m, null,
+                    2, 24, "knitwear", isSofts: true),
             });
 
-            products.Add(new Product
+            // ============================================
+            // JACKETS (SubCategoryId = 25)
+            // ============================================
+            products.AddRange(new[]
             {
-                Id = id++,
-                Name = "RIBBED BEANIE",
-                Description = "Classic knit beanie",
-                LongDescription = "Warm ribbed beanie in soft acrylic",
-                Price = 24.99m,
-                Stock = 180,
-                MainImageUrl = "/Resources/Images/beanie1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 4,
-                Category = new Category { Id = 4, Name = "Accessories" },
-                AverageRating = 4.6,
-                ReviewCount = 478,
-                IsFeatured = false,
-                IsNew = false,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-130),
-                UpdatedAt = DateTime.Now
+                CreateProduct(id++, "PUFFER JACKET", "Premium down-filled puffer jacket", 179.99m, 229.99m,
+                    2, 25, "jackets", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "BOMBER JACKET", "Classic MA-1 style bomber", 149.99m, null,
+                    2, 25, "jackets", isClassic: true),
+                CreateProduct(id++, "DENIM JACKET", "Washed denim trucker jacket", 129.99m, 159.99m,
+                    2, 25, "jackets", isBlackWeek: true),
+                CreateProduct(id++, "COACH JACKET", "Lightweight nylon coach jacket", 99.99m, null,
+                    2, 25, "jackets", isNew: true),
+                CreateProduct(id++, "LEATHER JACKET", "Premium faux leather biker jacket", 199.99m, null,
+                    2, 25, "jackets", isFeatured: true),
             });
 
-            products.Add(new Product
+            // ============================================
+            // DENIM PANTS (SubCategoryId = 30)
+            // ============================================
+            products.AddRange(new[]
             {
-                Id = id++,
-                Name = "LEATHER CARDHOLDER",
-                Description = "Minimalist wallet",
-                LongDescription = "Slim leather cardholder with 6 slots",
-                Price = 39.99m,
-                Stock = 100,
-                MainImageUrl = "/Resources/Images/cardholder1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 4,
-                Category = new Category { Id = 4, Name = "Accessories" },
-                AverageRating = 4.7,
-                ReviewCount = 298,
-                IsFeatured = true,
-                IsNew = false,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-80),
-                UpdatedAt = DateTime.Now
+                CreateProduct(id++, "STRAIGHT FIT JEANS", "Classic straight leg denim", 89.99m, 109.99m,
+                    3, 30, "denim", isFeatured: true, isBlackWeek: true, isClassic: true),
+                CreateProduct(id++, "BAGGY JEANS", "Relaxed baggy fit jeans", 99.99m, null,
+                    3, 30, "denim", isNew: true),
+                CreateProduct(id++, "DISTRESSED JEANS", "Heavy distressed with rips", 109.99m, null,
+                    3, 30, "denim"),
+                CreateProduct(id++, "CARPENTER JEANS", "Utility style with hammer loop", 94.99m, null,
+                    3, 30, "denim"),
             });
 
-            products.Add(new Product
+            // ============================================
+            // CARGO PANTS (SubCategoryId = 31)
+            // ============================================
+            products.AddRange(new[]
             {
-                Id = id++,
-                Name = "CANVAS WEB BELT",
-                Description = "Military-style webbing",
-                LongDescription = "Adjustable canvas belt with metal buckle",
-                Price = 34.99m,
-                Stock = 140,
-                MainImageUrl = "/Resources/Images/belt1.jpg",
-                ImageUrls = new List<string>(),
-                CategoryId = 4,
-                Category = new Category { Id = 4, Name = "Accessories" },
-                AverageRating = 4.6,
-                ReviewCount = 234,
-                IsFeatured = false,
-                IsNew = false,
-                Gender = "Unisex",
-                CreatedAt = DateTime.Now.AddDays(-105),
-                UpdatedAt = DateTime.Now
+                CreateProduct(id++, "UTILITY CARGO PANTS", "6-pocket utility cargo pants", 99.99m, 129.99m,
+                    3, 31, "cargo", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "WIDE LEG CARGO", "Relaxed wide leg cargo pants", 109.99m, null,
+                    3, 31, "cargo", isNew: true),
+                CreateProduct(id++, "RIPSTOP CARGO", "Military-grade ripstop fabric", 119.99m, null,
+                    3, 31, "cargo"),
+                CreateProduct(id++, "PARACHUTE PANTS", "Lightweight parachute cargo", 89.99m, 109.99m,
+                    3, 31, "cargo", isBlackWeek: true),
+            });
+
+            // ============================================
+            // JOGGERS (SubCategoryId = 32)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "CLASSIC JOGGERS", "Essential cotton blend joggers", 69.99m, 89.99m,
+                    3, 32, "joggers", isFeatured: true, isBlackWeek: true, isSofts: true),
+                CreateProduct(id++, "TECH FLEECE JOGGERS", "Premium tech fleece fabric", 84.99m, null,
+                    3, 32, "joggers", isNew: true),
+                CreateProduct(id++, "HEAVYWEIGHT JOGGERS", "400gsm premium cotton joggers", 79.99m, null,
+                    3, 32, "joggers", isSofts: true),
+                CreateProduct(id++, "SLIM FIT JOGGERS", "Tapered slim fit joggers", 74.99m, null,
+                    3, 32, "joggers"),
+            });
+
+            // ============================================
+            // TRACK PANTS (SubCategoryId = 33)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "RETRO TRACK PANTS", "90s inspired with side stripe", 89.99m, 109.99m,
+                    3, 33, "trackpants", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "VELOUR TRACK PANTS", "Luxury velour matching pants", 99.99m, null,
+                    3, 33, "trackpants", isSofts: true),
+                CreateProduct(id++, "WIDE LEG TRACK PANTS", "Relaxed wide leg track pants", 84.99m, null,
+                    3, 33, "trackpants", isNew: true),
+            });
+
+            // ============================================
+            // SHORTS (SubCategoryId = 35)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "MESH SHORTS", "Breathable mesh basketball shorts", 49.99m, 64.99m,
+                    3, 35, "shorts", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "TERRY SHORTS", "Soft terry cloth shorts", 54.99m, null,
+                    3, 35, "shorts", isSofts: true),
+                CreateProduct(id++, "NYLON SHORTS", "Quick-dry nylon shorts", 44.99m, null,
+                    3, 35, "shorts", isNew: true),
+                CreateProduct(id++, "CARGO SHORTS", "Utility cargo shorts", 59.99m, null,
+                    3, 35, "shorts"),
+            });
+
+            // ============================================
+            // SWIMSHORTS (SubCategoryId = 36)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "CLASSIC SWIM TRUNKS", "Quick-dry swim trunks with logo", 49.99m, 64.99m,
+                    3, 36, "swimshorts", isBlackWeek: true),
+                CreateProduct(id++, "LONG SWIM SHORTS", "Extended length swim shorts", 54.99m, null,
+                    3, 36, "swimshorts"),
+            });
+
+            // ============================================
+            // ARMBO LOWS (SubCategoryId = 40)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "ARMBO LOW WHITE", "Classic low-top sneaker in white", 139.99m, 169.99m,
+                    4, 40, "armbo", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "ARMBO LOW BLACK", "Classic low-top sneaker in black", 139.99m, null,
+                    4, 40, "armbo", isFeatured: true),
+                CreateProduct(id++, "ARMBO LOW CREAM", "Vintage cream colorway", 149.99m, null,
+                    4, 40, "armbo", isNew: true),
+            });
+
+            // ============================================
+            // VORTEX (SubCategoryId = 41)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "VORTEX RUNNER", "Technical running-inspired sneaker", 159.99m, 189.99m,
+                    4, 41, "vortex", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "VORTEX TRAIL", "All-terrain trail sneaker", 169.99m, null,
+                    4, 41, "vortex", isNew: true),
+            });
+
+            // ============================================
+            // VENTURE (SubCategoryId = 42)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "VENTURE MID", "Mid-top basketball-inspired sneaker", 149.99m, 179.99m,
+                    4, 42, "venture", isBlackWeek: true),
+                CreateProduct(id++, "VENTURE HIGH", "High-top premium leather", 179.99m, null,
+                    4, 42, "venture"),
+            });
+
+            // ============================================
+            // VITORIA (SubCategoryId = 43)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "VITORIA LOAFER", "Premium leather loafer", 199.99m, 249.99m,
+                    4, 43, "vitoria", isFeatured: true, isBlackWeek: true, isClassic: true),
+                CreateProduct(id++, "VITORIA DERBY", "Classic derby shoe", 219.99m, null,
+                    4, 43, "vitoria"),
+            });
+
+            // ============================================
+            // V-SLIDES (SubCategoryId = 44)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "V-SLIDES CLASSIC", "Comfortable everyday slides", 39.99m, 49.99m,
+                    4, 44, "vslides", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "V-SLIDES FOAM", "Extra cushion foam slides", 44.99m, null,
+                    4, 44, "vslides", isNew: true),
+            });
+
+            // ============================================
+            // CAPS (SubCategoryId = 50)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "CLASSIC CAP", "6-panel structured cap with logo", 34.99m, 44.99m,
+                    5, 50, "caps", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "DAD CAP", "Unstructured relaxed fit cap", 29.99m, null,
+                    5, 50, "caps"),
+                CreateProduct(id++, "TRUCKER CAP", "Mesh back trucker cap", 32.99m, null,
+                    5, 50, "caps", isNew: true),
+                CreateProduct(id++, "SNAPBACK CAP", "Flat brim snapback cap", 37.99m, null,
+                    5, 50, "caps"),
+            });
+
+            // ============================================
+            // BAGS (SubCategoryId = 51)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "MESSENGER BAG", "Classic messenger bag with logo", 79.99m, 99.99m,
+                    5, 51, "bags", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "BACKPACK", "Premium backpack with laptop sleeve", 99.99m, null,
+                    5, 51, "bags"),
+                CreateProduct(id++, "CROSSBODY BAG", "Compact crossbody bag", 59.99m, null,
+                    5, 51, "bags", isNew: true),
+                CreateProduct(id++, "TOTE BAG", "Oversized canvas tote bag", 49.99m, null,
+                    5, 51, "bags"),
+                CreateProduct(id++, "DUFFLE BAG", "Weekend duffle bag", 119.99m, 149.99m,
+                    5, 51, "bags", isBlackWeek: true),
+            });
+
+            // ============================================
+            // BEANIES (SubCategoryId = 52)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "RIBBED BEANIE", "Classic ribbed knit beanie", 24.99m, 34.99m,
+                    5, 52, "beanies", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "CUFFED BEANIE", "Double-fold cuffed beanie", 27.99m, null,
+                    5, 52, "beanies"),
+                CreateProduct(id++, "SLOUCHY BEANIE", "Relaxed oversized beanie", 29.99m, null,
+                    5, 52, "beanies", isNew: true, isSofts: true),
+            });
+
+            // ============================================
+            // CARDHOLDER (SubCategoryId = 53)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "LEATHER CARDHOLDER", "Slim leather cardholder with 6 slots", 39.99m, 49.99m,
+                    5, 53, "cardholder", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "CANVAS CARDHOLDER", "Durable canvas cardholder", 29.99m, null,
+                    5, 53, "cardholder"),
+            });
+
+            // ============================================
+            // BELTS (SubCategoryId = 54)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "CANVAS WEB BELT", "Military-style canvas belt", 34.99m, 44.99m,
+                    5, 54, "belts", isBlackWeek: true),
+                CreateProduct(id++, "LEATHER BELT", "Premium leather belt with brass buckle", 49.99m, null,
+                    5, 54, "belts", isFeatured: true, isClassic: true),
+            });
+
+            // ============================================
+            // RINGS (SubCategoryId = 55)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "SILVER BAND RING", "Sterling silver band ring", 44.99m, 54.99m,
+                    5, 55, "rings", isBlackWeek: true),
+                CreateProduct(id++, "SIGNET RING", "Classic signet ring with logo", 49.99m, null,
+                    5, 55, "rings", isNew: true),
+            });
+
+            // ============================================
+            // RUGS (SubCategoryId = 56)
+            // ============================================
+            products.AddRange(new[]
+            {
+                CreateProduct(id++, "LOGO RUG", "Premium floor rug with embroidered logo", 79.99m, 99.99m,
+                    5, 56, "rugs", isFeatured: true, isBlackWeek: true),
+                CreateProduct(id++, "MINI RUG", "Small accent rug", 49.99m, null,
+                    5, 56, "rugs"),
             });
 
             return products;
+        }
+
+        /// <summary>
+        /// Helper para crear productos de forma consistente
+        /// </summary>
+        private Product CreateProduct(
+            int id, string name, string description,
+            decimal price, decimal? originalPrice,
+            int categoryId, int subCategoryId, string subCategorySlug,
+            bool isFeatured = false, bool isNew = false, bool isBlackWeek = false,
+            bool isSofts = false, bool isClassic = false, string gender = "Unisex")
+        {
+            var categoryName = categoryId switch
+            {
+                2 => "Tops",
+                3 => "Bottoms",
+                4 => "Footwear",
+                5 => "Accessories",
+                _ => "Shop All"
+            };
+
+            return new Product
+            {
+                Id = id,
+                Name = name,
+                Description = description,
+                LongDescription = $"{description}. Premium quality, designed for comfort and style.",
+                Price = price,
+                OriginalPrice = originalPrice,
+                Stock = new Random(id).Next(20, 200),
+                MainImageUrl = $"/Resources/Images/{subCategorySlug}{id % 3 + 1}.jpg",
+                ImageUrls = new List<string>
+                {
+                    $"/Resources/Images/{subCategorySlug}{id % 3 + 1}.jpg",
+                    $"/Resources/Images/{subCategorySlug}{id % 3 + 1}_2.jpg",
+                },
+                CategoryId = categoryId,
+                SubCategoryId = subCategoryId,
+                SubCategorySlug = subCategorySlug,
+                Category = new Category { Id = categoryId, Name = categoryName },
+                AverageRating = 4.0 + (id % 10) * 0.1,
+                ReviewCount = 50 + (id * 17) % 500,
+                IsFeatured = isFeatured,
+                IsNew = isNew,
+                IsBlackWeek = isBlackWeek,
+                IsSoftsCollection = isSofts,
+                IsClassicCollection = isClassic,
+                Gender = gender,
+                AvailableSizes = new List<string> { "XS", "S", "M", "L", "XL", "XXL" },
+                AvailableColors = new List<string> { "Black", "White", "Gray", "Navy" },
+                CreatedAt = DateTime.Now.AddDays(-new Random(id).Next(1, 120)),
+                UpdatedAt = DateTime.Now
+            };
         }
     }
 }

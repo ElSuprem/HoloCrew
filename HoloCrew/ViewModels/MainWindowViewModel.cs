@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
 using System;
+using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
 {
@@ -32,9 +33,12 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private string _currentUserName;
 
-        // ⭐ NUEVO: Contador de notificaciones no leídas para la campanita
         [ObservableProperty]
         private int _unreadNotificationCount;
+
+        // ⭐ NUEVO: Control de visibilidad de la barra de búsqueda
+        [ObservableProperty]
+        private bool _isSearchVisible;
 
         public MainWindowViewModel(
             INavigationService navigationService,
@@ -51,25 +55,15 @@ namespace HoloCrew.ViewModels
 
             Title = "HoloCrew";
 
-            // Suscribirse a cambios en el carrito
+            // Suscribirse a eventos
             _cartService.CartUpdated += OnCartUpdated;
-
-            // Suscribirse a cambios en wishlist
             _wishlistService.WishlistUpdated += OnWishlistUpdated;
-
-            // ⭐ NUEVO: Suscribirse a nuevas notificaciones
             _notificationService.NotificationReceived += OnNotificationReceived;
 
-            // Actualizar estado de autenticación
+            // Inicializar estados
             UpdateAuthenticationState();
-
-            // Actualizar contador del carrito
             CartItemCount = _cartService.GetCartItemCount();
-
-            // Actualizar contador de wishlist
             UpdateWishlistCount();
-
-            // ⭐ NUEVO: Actualizar contador de notificaciones
             UpdateNotificationCount();
         }
 
@@ -81,12 +75,22 @@ namespace HoloCrew.ViewModels
         private void NavigateToHome()
         {
             _navigationService.NavigateTo<HomeViewModel>();
+            CloseSearch();
         }
 
         [RelayCommand]
-        private void NavigateToCatalog()
+        private void NavigateToCatalog(object parameter = null)
         {
-            _navigationService.NavigateTo<ProductCatalogViewModel>();
+            // Si viene un parámetro de categoría, pasarlo al catálogo
+            if (parameter != null && parameter is string category)
+            {
+                _navigationService.NavigateTo<ProductCatalogViewModel>(category);
+            }
+            else
+            {
+                _navigationService.NavigateTo<ProductCatalogViewModel>();
+            }
+            CloseSearch();
         }
 
         [RelayCommand]
@@ -97,12 +101,27 @@ namespace HoloCrew.ViewModels
 
             _navigationService.NavigateTo<ProductCatalogViewModel>(SearchQuery);
             SearchQuery = string.Empty;
+            IsSearchVisible = false;
+        }
+
+        // ⭐ NUEVO: Toggle de la barra de búsqueda
+        [RelayCommand]
+        private void ToggleSearch()
+        {
+            IsSearchVisible = !IsSearchVisible;
+        }
+
+        private void CloseSearch()
+        {
+            IsSearchVisible = false;
+            SearchQuery = string.Empty;
         }
 
         [RelayCommand]
         private void NavigateToCart()
         {
             _navigationService.NavigateTo<CartViewModel>();
+            CloseSearch();
         }
 
         [RelayCommand]
@@ -110,9 +129,9 @@ namespace HoloCrew.ViewModels
         {
             _navigationService.NavigateTo<WishlistViewModel>();
             UpdateWishlistCount();
+            CloseSearch();
         }
 
-        // ⭐ NAVEGACIÓN INTELIGENTE AL PERFIL
         [RelayCommand]
         private void NavigateToProfile()
         {
@@ -124,44 +143,50 @@ namespace HoloCrew.ViewModels
             {
                 _navigationService.NavigateTo<LoginViewModel>();
             }
+            CloseSearch();
         }
 
         [RelayCommand]
         private void NavigateToSettings()
         {
             _navigationService.NavigateTo<SettingsViewModel>();
+            CloseSearch();
         }
 
         [RelayCommand]
         private void NavigateToNotifications()
         {
             _navigationService.NavigateTo<NotificationsViewModel>();
-            // Actualizar el contador después de navegar (el usuario verá las notificaciones)
             UpdateNotificationCount();
+            CloseSearch();
         }
 
         [RelayCommand]
         private void NavigateToOrders()
         {
             _navigationService.NavigateTo<OrderHistoryViewModel>();
+            CloseSearch();
         }
 
         [RelayCommand]
         private void NavigateToFlashSale()
         {
             _navigationService.NavigateTo<FlashSaleViewModel>();
+            CloseSearch();
         }
 
         [RelayCommand]
         private void NavigateToBlackWeek()
         {
             _navigationService.NavigateTo<BlackWeekViewModel>();
+            CloseSearch();
         }
 
         [RelayCommand]
         private void NavigateToMembersClub()
         {
             _navigationService.NavigateTo<MembersClubViewModel>();
+            CloseSearch();
         }
 
         // ============================
@@ -190,7 +215,6 @@ namespace HoloCrew.ViewModels
             UpdateWishlistCount();
         }
 
-        // ⭐ NUEVO: Handler para nuevas notificaciones
         private void OnNotificationReceived(object sender, Models.Notification notification)
         {
             UpdateNotificationCount();
@@ -220,7 +244,6 @@ namespace HoloCrew.ViewModels
             WishlistItemCount = await _wishlistService.GetWishlistCountAsync(1);
         }
 
-        // ⭐ NUEVO: Actualizar contador de notificaciones no leídas
         private void UpdateNotificationCount()
         {
             UnreadNotificationCount = _notificationService.GetUnreadCount();

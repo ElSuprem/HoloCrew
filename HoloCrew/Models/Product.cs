@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace HoloCrew.Models
 {
+    /// <summary>
+    /// Modelo de producto con soporte para subcategorías
+    /// </summary>
     public partial class Product : ObservableObject
     {
         public int Id { get; set; }
@@ -14,14 +17,32 @@ namespace HoloCrew.Models
         public decimal? OriginalPrice { get; set; }
         public int Stock { get; set; }
         public string MainImageUrl { get; set; }
-        public List<string> ImageUrls { get; set; }
-        public int CategoryId { get; set; }
+        public List<string> ImageUrls { get; set; } = new List<string>();
+
+        // Categorías
+        public int CategoryId { get; set; }           // ID de categoría principal (1-5)
+        public int SubCategoryId { get; set; }        // ID de subcategoría (10-59)
+        public string SubCategorySlug { get; set; }   // Slug para filtrado rápido
         public Category Category { get; set; }
+
+        // Reviews y rating
         public double AverageRating { get; set; }
         public int ReviewCount { get; set; }
+
+        // Flags
         public bool IsFeatured { get; set; }
         public bool IsNew { get; set; }
-        public string? Gender { get; set; } // "Men", "Women", "Unisex"
+        public bool IsBlackWeek { get; set; }         // Nuevo: para ofertas Black Week
+        public bool IsSoftsCollection { get; set; }   // Nuevo: para colección Softs
+        public bool IsClassicCollection { get; set; } // Nuevo: para colección Classic
+
+        // Variantes
+        public string Gender { get; set; } // "Men", "Women", "Unisex"
+        public List<string> AvailableSizes { get; set; } = new List<string> { "S", "M", "L", "XL" };
+        public List<string> AvailableColors { get; set; } = new List<string> { "Black", "White" };
+        public string Color { get; set; } // Color principal
+
+        // Fechas
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
@@ -31,8 +52,9 @@ namespace HoloCrew.Models
             ? Math.Round(((OriginalPrice.Value - Price) / OriginalPrice.Value) * 100, 0)
             : 0;
         public bool IsInStock => Stock > 0;
+        public bool IsLowStock => Stock > 0 && Stock <= 10;
 
-        // ⭐ NUEVA: Estado de wishlist para UI reactiva
+        // Estado de wishlist para UI reactiva
         [ObservableProperty]
         private bool _isInWishlist;
     }

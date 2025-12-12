@@ -1,4 +1,6 @@
 ﻿using HoloCrew.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HoloCrew.Services.Interfaces
 {
@@ -13,9 +15,14 @@ namespace HoloCrew.Services.Interfaces
         Task<List<Product>> GetFeaturedProductsAsync();
 
         /// <summary>
-        /// Obtiene productos por categoría
+        /// Obtiene productos por categoría (ID numérico)
         /// </summary>
         Task<List<Product>> GetProductsByCategoryAsync(int categoryId);
+
+        /// <summary>
+        /// Obtiene productos por slug de subcategoría (desde el mega menú)
+        /// </summary>
+        Task<List<Product>> GetProductsBySlugAsync(string slug);
 
         /// <summary>
         /// Obtiene un producto por su ID
@@ -28,7 +35,7 @@ namespace HoloCrew.Services.Interfaces
         Task<List<Product>> SearchProductsAsync(string query);
 
         /// <summary>
-        /// Obtiene todas las categorías
+        /// Obtiene todas las categorías con subcategorías
         /// </summary>
         Task<List<Category>> GetCategoriesAsync();
 
@@ -46,5 +53,10 @@ namespace HoloCrew.Services.Interfaces
         /// Obtiene productos nuevos
         /// </summary>
         Task<List<Product>> GetNewProductsAsync();
+
+        /// <summary>
+        /// Obtiene productos de Black Week
+        /// </summary>
+        Task<List<Product>> GetBlackWeekProductsAsync();
     }
 }
