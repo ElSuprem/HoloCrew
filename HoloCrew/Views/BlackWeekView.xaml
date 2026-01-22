@@ -1,215 +1,718 @@
-﻿<UserControl x:Class="HoloCrew.Views.BlackWeekView"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="HoloCrew.Views.BlackWeekView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="1000" d:DesignWidth="1400"
-             Background="{StaticResource BlackPrimaryBrush}">
+             d:DesignHeight="1400" d:DesignWidth="1400"
+             Background="#0A0A0A">
 
-    <StackPanel>
+    <UserControl.Resources>
+        <!-- Gold gradient brush -->
+        <LinearGradientBrush x:Key="GoldGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#D4AF37" Offset="0"/>
+            <GradientStop Color="#F4E4BC" Offset="0.5"/>
+            <GradientStop Color="#D4AF37" Offset="1"/>
+        </LinearGradientBrush>
 
-        <!-- HERO BANNER -->
-        <Border Background="{StaticResource BlackPrimaryBrush}" 
-                Height="450"
-                BorderBrush="{StaticResource RedAccentBrush}"
-                BorderThickness="0,0,0,4">
-            <Grid>
-                <Rectangle Fill="{StaticResource RedAccentBrush}" Opacity="0.05"/>
+        <LinearGradientBrush x:Key="GoldGradientVertical" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#D4AF37" Offset="0"/>
+            <GradientStop Color="#AA8C2C" Offset="1"/>
+        </LinearGradientBrush>
+    </UserControl.Resources>
 
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="BLACK WEEK" 
-                               FontSize="70" 
-                               FontWeight="Black" 
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,10"/>
-
-                    <Border Height="4" 
-                            Width="300" 
-                            Background="{StaticResource RedAccentBrush}"
-                            Margin="0,0,0,30"/>
-
-                    <TextBlock Text="HASTA 70% DE DESCUENTO" 
-                               FontSize="24" 
-                               FontWeight="Bold" 
-                               Foreground="{StaticResource WhitePrimaryBrush}"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,15"/>
-
-                    <TextBlock Text="EN TODA LA COLECCIÓN" 
-                               FontSize="16" 
-                               FontWeight="SemiBold" 
-                               Foreground="{StaticResource Gray400Brush}"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,40"/>
-
-                    <Button Content="COMPRAR AHORA" 
-                            Style="{StaticResource AccentButton}"
-                            FontSize="16"
-                            Padding="50,18"
-                            Cursor="Hand"/>
-                </StackPanel>
-            </Grid>
-        </Border>
-
-        <!-- CATEGORÍAS EN OFERTA -->
-        <Border Background="{StaticResource BackgroundPrimary}" Padding="60,60">
-            <StackPanel>
-                <TextBlock Text="CATEGORÍAS DESTACADAS" 
-                           Style="{StaticResource HeadingLarge}"
-                           Margin="0,0,0,40"/>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- STREETWEAR -->
-                    <Border Grid.Column="0"
-                            Background="{StaticResource BlackPrimaryBrush}"
-                            Height="350"
-                            Cursor="Hand">
-                        <Grid>
-                            <Rectangle Fill="{StaticResource Gray800Brush}"/>
-
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="STREETWEAR" 
-                                           FontSize="32" 
-                                           FontWeight="Black" 
-                                           Foreground="{StaticResource WhitePrimaryBrush}"
-                                           HorizontalAlignment="Center"
-                                           Margin="0,0,0,10"/>
-
-                                <TextBlock Text="HASTA 60% OFF" 
-                                           FontSize="18" 
-                                           FontWeight="Bold" 
-                                           Foreground="{StaticResource RedAccentBrush}"
-                                           HorizontalAlignment="Center"
-                                           Margin="0,0,0,20"/>
-
-                                <Border BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                        BorderThickness="2"
-                                        Padding="20,10">
-                                    <TextBlock Text="VER OFERTAS" 
-                                               FontSize="14" 
-                                               FontWeight="Bold" 
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               HorizontalAlignment="Center"/>
-                                </Border>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- ACCESORIOS -->
-                    <Border Grid.Column="2"
-                            Background="{StaticResource BlackPrimaryBrush}"
-                            Height="350"
-                            Cursor="Hand">
-                        <Grid>
-                            <Rectangle Fill="{StaticResource Gray800Brush}"/>
-
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="ACCESORIOS" 
-                                           FontSize="32" 
-                                           FontWeight="Black" 
-                                           Foreground="{StaticResource WhitePrimaryBrush}"
-                                           HorizontalAlignment="Center"
-                                           Margin="0,0,0,10"/>
-
-                                <TextBlock Text="HASTA 50% OFF" 
-                                           FontSize="18" 
-                                           FontWeight="Bold" 
-                                           Foreground="{StaticResource RedAccentBrush}"
-                                           HorizontalAlignment="Center"
-                                           Margin="0,0,0,20"/>
-
-                                <Border BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                        BorderThickness="2"
-                                        Padding="20,10">
-                                    <TextBlock Text="VER OFERTAS" 
-                                               FontSize="14" 
-                                               FontWeight="Bold" 
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               HorizontalAlignment="Center"/>
-                                </Border>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- ZAPATILLAS -->
-                    <Border Grid.Column="4"
-                            Background="{StaticResource BlackPrimaryBrush}"
-                            Height="350"
-                            Cursor="Hand">
-                        <Grid>
-                            <Rectangle Fill="{StaticResource Gray800Brush}"/>
-
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="ZAPATILLAS" 
-                                           FontSize="32" 
-                                           FontWeight="Black" 
-                                           Foreground="{StaticResource WhitePrimaryBrush}"
-                                           HorizontalAlignment="Center"
-                                           Margin="0,0,0,10"/>
-
-                                <TextBlock Text="HASTA 70% OFF" 
-                                           FontSize="18" 
-                                           FontWeight="Bold" 
-                                           Foreground="{StaticResource RedAccentBrush}"
-                                           HorizontalAlignment="Center"
-                                           Margin="0,0,0,20"/>
-
-                                <Border BorderBrush="{StaticResource WhitePrimaryBrush}"
-                                        BorderThickness="2"
-                                        Padding="20,10">
-                                    <TextBlock Text="VER OFERTAS" 
-                                               FontSize="14" 
-                                               FontWeight="Bold" 
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
-                                               HorizontalAlignment="Center"/>
-                                </Border>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </Grid>
-
-                <!-- Call to Action -->
-                <Border Background="{StaticResource RedAccentBrush}"
-                        Padding="60,40"
-                        Margin="0,60,0,0">
-                    <StackPanel>
-                        <TextBlock Text="¿NO ENCUENTRAS LO QUE BUSCAS?" 
-                                   FontSize="24" 
-                                   FontWeight="Black" 
-                                   Foreground="{StaticResource WhitePrimaryBrush}"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,10"/>
-
-                        <TextBlock Text="Explora toda nuestra colección con descuentos especiales" 
-                                   FontSize="16" 
-                                   Foreground="{StaticResource WhitePrimaryBrush}"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,30"/>
-
-                        <Button Content="VER TODOS LOS PRODUCTOS" 
-                                Background="{StaticResource WhitePrimaryBrush}"
-                                Foreground="{StaticResource BlackPrimaryBrush}"
-                                FontSize="14"
-                                FontWeight="Bold"
-                                Padding="40,15"
-                                BorderThickness="0"
-                                Cursor="Hand"
-                                HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
+    <Grid>
+        <!-- ============================================ -->
+        <!-- LOADING STATE -->
+        <!-- ============================================ -->
+        <Border Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                Background="#0A0A0A">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="🏷️" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                <TextBlock Text="{Binding LoadingMessage}" 
+                           FontSize="16"
+                           Foreground="#888888"/>
             </StackPanel>
         </Border>
 
-    </StackPanel>
+        <!-- ============================================ -->
+        <!-- EMPTY STATE -->
+        <!-- ============================================ -->
+        <Border Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
+                Background="#0A0A0A">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="400">
+                <TextBlock Text="🖤" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                <TextBlock Text="{Binding EmptyTitle}" 
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           TextAlignment="Center"
+                           Margin="0,0,0,10"/>
+                <TextBlock Text="{Binding EmptySubtitle}" 
+                           FontSize="16"
+                           Foreground="#888888"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,30"/>
+                <Button Content="{Binding EmptyActionText}"
+                        Command="{Binding EmptyActionCommand}"
+                        Padding="40,15"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Background="{StaticResource GoldGradientVertical}"
+                        Foreground="#0A0A0A"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
 
+        <!-- ============================================ -->
+        <!-- MAIN CONTENT -->
+        <!-- ============================================ -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Visibility="{Binding IsSuccess, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel>
+
+                <!-- ============================================ -->
+                <!-- HERO BANNER -->
+                <!-- ============================================ -->
+                <Border Background="#0A0A0A" Padding="80,80">
+                    <Grid>
+                        <!-- Decorative elements -->
+                        <Border Opacity="0.05" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-20,-20,0">
+                            <TextBlock Text="%" FontSize="300" FontWeight="Black" Foreground="White"/>
+                        </Border>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Left: Title and info -->
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <!-- Badge -->
+                                <Border Background="{StaticResource GoldGradientVertical}" 
+                                        Padding="15,8"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,0,0,25">
+                                    <TextBlock Text="⭐  T H E   B I G G E S T   S A L E   O F   T H E   Y E A R" 
+                                               FontSize="10" 
+                                               FontWeight="Bold"
+                                               Foreground="#0A0A0A"/>
+                                </Border>
+
+                                <!-- Main title -->
+                                <TextBlock Text="BLACK" 
+                                           FontSize="90"
+                                           FontWeight="Black"
+                                           Foreground="White"
+                                           Margin="0,0,0,-15"/>
+                                <TextBlock Text="WEEK" 
+                                           FontSize="90"
+                                           FontWeight="Black"
+                                           Foreground="{StaticResource GoldGradient}"
+                                           Margin="0,0,0,25"/>
+
+                                <TextBlock Text="{Binding SaleSubtitle}"
+                                           FontSize="18"
+                                           Foreground="#AAAAAA"
+                                           Margin="0,0,0,30"/>
+
+                                <!-- Stats row -->
+                                <StackPanel Orientation="Horizontal">
+                                    <Border BorderBrush="#333333" BorderThickness="0,0,1,0" Padding="0,0,30,0">
+                                        <StackPanel>
+                                            <TextBlock FontSize="32" FontWeight="Bold" Foreground="{StaticResource GoldGradient}">
+                                                <Run Text="UP TO "/>
+                                                <Run Text="{Binding MaxDiscountPercent, StringFormat={}{0:0}}"/>
+                                                <Run Text="%"/>
+                                            </TextBlock>
+                                            <TextBlock Text="D I S C O U N T" FontSize="10" Foreground="#666666"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Padding="30,0">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding TotalProductCount}" 
+                                                       FontSize="32" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="White"/>
+                                            <TextBlock Text="P R O D U C T S" FontSize="10" Foreground="#666666"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Right: Countdown -->
+                            <Border Grid.Column="1" 
+                                    Background="#111111"
+                                    BorderBrush="#222222"
+                                    BorderThickness="1"
+                                    Padding="50,40"
+                                    VerticalAlignment="Center">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="S A L E   E N D S   I N"
+                                               FontSize="10"
+                                               FontWeight="Bold"
+                                               Foreground="#666666"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,0,0,25"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <!-- Days -->
+                                        <StackPanel Margin="0,0,15,0">
+                                            <Border Background="#1A1A1A" 
+                                                    BorderBrush="#333333"
+                                                    BorderThickness="1"
+                                                    Padding="18,12"
+                                                    MinWidth="65">
+                                                <TextBlock Text="{Binding DaysRemaining, StringFormat={}{0:D2}}"
+                                                           FontSize="32"
+                                                           FontWeight="Black"
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock Text="DAYS"
+                                                       FontSize="9"
+                                                       Foreground="#555555"
+                                                       HorizontalAlignment="Center"
+                                                       Margin="0,8,0,0"/>
+                                        </StackPanel>
+
+                                        <TextBlock Text=":"
+                                                   FontSize="28"
+                                                   FontWeight="Bold"
+                                                   Foreground="#333333"
+                                                   VerticalAlignment="Top"
+                                                   Margin="0,12,0,0"/>
+
+                                        <!-- Hours -->
+                                        <StackPanel Margin="15,0">
+                                            <Border Background="#1A1A1A" 
+                                                    BorderBrush="#333333"
+                                                    BorderThickness="1"
+                                                    Padding="18,12"
+                                                    MinWidth="65">
+                                                <TextBlock Text="{Binding HoursRemaining, StringFormat={}{0:D2}}"
+                                                           FontSize="32"
+                                                           FontWeight="Black"
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock Text="HRS"
+                                                       FontSize="9"
+                                                       Foreground="#555555"
+                                                       HorizontalAlignment="Center"
+                                                       Margin="0,8,0,0"/>
+                                        </StackPanel>
+
+                                        <TextBlock Text=":"
+                                                   FontSize="28"
+                                                   FontWeight="Bold"
+                                                   Foreground="#333333"
+                                                   VerticalAlignment="Top"
+                                                   Margin="0,12,0,0"/>
+
+                                        <!-- Minutes -->
+                                        <StackPanel Margin="15,0">
+                                            <Border Background="#1A1A1A" 
+                                                    BorderBrush="#333333"
+                                                    BorderThickness="1"
+                                                    Padding="18,12"
+                                                    MinWidth="65">
+                                                <TextBlock Text="{Binding MinutesRemaining, StringFormat={}{0:D2}}"
+                                                           FontSize="32"
+                                                           FontWeight="Black"
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock Text="MIN"
+                                                       FontSize="9"
+                                                       Foreground="#555555"
+                                                       HorizontalAlignment="Center"
+                                                       Margin="0,8,0,0"/>
+                                        </StackPanel>
+
+                                        <TextBlock Text=":"
+                                                   FontSize="28"
+                                                   FontWeight="Bold"
+                                                   Foreground="#333333"
+                                                   VerticalAlignment="Top"
+                                                   Margin="0,12,0,0"/>
+
+                                        <!-- Seconds -->
+                                        <StackPanel Margin="15,0,0,0">
+                                            <Border Background="#1A1A1A" 
+                                                    BorderBrush="#D4AF37"
+                                                    BorderThickness="1"
+                                                    Padding="18,12"
+                                                    MinWidth="65">
+                                                <TextBlock Text="{Binding SecondsRemaining, StringFormat={}{0:D2}}"
+                                                           FontSize="32"
+                                                           FontWeight="Black"
+                                                           Foreground="{StaticResource GoldGradient}"
+                                                           HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock Text="SEC"
+                                                       FontSize="9"
+                                                       Foreground="#555555"
+                                                       HorizontalAlignment="Center"
+                                                       Margin="0,8,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!-- Urgency message -->
+                                    <Border Background="#1A1A1A" 
+                                            Padding="20,10" 
+                                            Margin="0,25,0,0"
+                                            HorizontalAlignment="Center">
+                                        <TextBlock Text="⏰ Don't miss out!"
+                                                   FontSize="12"
+                                                   Foreground="#D4AF37"
+                                                   FontWeight="SemiBold"/>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- ============================================ -->
+                <!-- TOP DEALS SECTION -->
+                <!-- ============================================ -->
+                <Border Background="#111111" Padding="80,60">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,35">
+                            <TextBlock Text="🔥" FontSize="24" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <TextBlock Text="TOP DEALS" 
+                                       FontSize="24" 
+                                       FontWeight="Bold" 
+                                       Foreground="White"
+                                       VerticalAlignment="Center"/>
+                            <Border Background="{StaticResource GoldGradientVertical}" 
+                                    Padding="12,5" 
+                                    Margin="15,0,0,0"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="BEST DISCOUNTS" 
+                                           FontSize="10" 
+                                           FontWeight="Bold"
+                                           Foreground="#0A0A0A"/>
+                            </Border>
+                        </StackPanel>
+
+                        <ItemsControl ItemsSource="{Binding TopDeals}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="4"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#1A1A1A"
+                                            BorderBrush="#2A2A2A"
+                                            BorderThickness="1"
+                                            Margin="8"
+                                            Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="280"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Image area -->
+                                            <Border Grid.Row="0" Background="#222222">
+                                                <Grid>
+                                                    <!-- Discount badge - prominent gold -->
+                                                    <Border Background="{StaticResource GoldGradientVertical}"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Top"
+                                                            Padding="14,8">
+                                                        <TextBlock Foreground="#0A0A0A" FontSize="14" FontWeight="Black">
+                                                            <Run Text="-"/>
+                                                            <Run Text="{Binding DiscountPercentage, Mode=OneWay}"/>
+                                                            <Run Text="%"/>
+                                                        </TextBlock>
+                                                    </Border>
+
+                                                    <!-- Wishlist -->
+                                                    <Border Width="38" Height="38"
+                                                            Background="#2A2A2A"
+                                                            CornerRadius="19"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Top"
+                                                            Margin="12"
+                                                            Cursor="Hand">
+                                                        <Border.InputBindings>
+                                                            <MouseBinding MouseAction="LeftClick"
+                                                                          Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                          CommandParameter="{Binding}"/>
+                                                        </Border.InputBindings>
+                                                        <TextBlock FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value="🤍"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
+                                                                            <Setter Property="Text" Value="❤️"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </Border>
+
+                                                    <!-- Quick add on hover -->
+                                                    <Border Background="{StaticResource GoldGradientVertical}"
+                                                            Height="45"
+                                                            VerticalAlignment="Bottom"
+                                                            Opacity="0"
+                                                            x:Name="QuickAddTop"
+                                                            Cursor="Hand">
+                                                        <Border.InputBindings>
+                                                            <MouseBinding MouseAction="LeftClick"
+                                                                          Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                          CommandParameter="{Binding}"/>
+                                                        </Border.InputBindings>
+                                                        <TextBlock Text="🛒 ADD TO CART"
+                                                                   Foreground="#0A0A0A"
+                                                                   FontSize="12"
+                                                                   FontWeight="Bold"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- Info -->
+                                            <StackPanel Grid.Row="1" Margin="15,15,15,18">
+                                                <TextBlock Text="{Binding Name}" 
+                                                           FontSize="14"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="White"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Margin="0,0,0,10"/>
+
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                                    <TextBlock Text="{Binding Price, StringFormat=€{0:N2}}" 
+                                                               FontSize="20"
+                                                               FontWeight="Bold"
+                                                               Foreground="{StaticResource GoldGradient}"/>
+                                                    <TextBlock Text="{Binding OriginalPrice, StringFormat=€{0:N2}}"
+                                                               FontSize="14"
+                                                               Foreground="#555555"
+                                                               TextDecorations="Strikethrough"
+                                                               Margin="12,4,0,0"/>
+                                                </StackPanel>
+
+                                                <TextBlock Foreground="#4ADE80" FontSize="12" FontWeight="SemiBold">
+                                                    <Run Text="Save €"/>
+                                                    <Run Text="{Binding Savings, Mode=OneWay, StringFormat={}{0:N2}}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <Border.Triggers>
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="QuickAddTop"
+                                                                         Storyboard.TargetProperty="Opacity"
+                                                                         To="1" Duration="0:0:0.15"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <EventTrigger RoutedEvent="MouseLeave">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="QuickAddTop"
+                                                                         Storyboard.TargetProperty="Opacity"
+                                                                         To="0" Duration="0:0:0.15"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Border.Triggers>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <!-- ============================================ -->
+                <!-- FILTERS BAR -->
+                <!-- ============================================ -->
+                <Border Background="#0A0A0A"
+                        BorderBrush="#222222"
+                        BorderThickness="0,1"
+                        Padding="80,20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Category filters -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <TextBlock Text="Category:"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#888888"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,15,0"/>
+                            <ItemsControl ItemsSource="{Binding Categories}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="15,8"
+                                                Margin="0,0,8,0"
+                                                Cursor="Hand"
+                                                BorderThickness="1"
+                                                BorderBrush="#333333"
+                                                Background="Transparent">
+                                            <TextBlock Text="{Binding}" 
+                                                       FontSize="12" 
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#AAAAAA"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+
+                        <!-- Sort dropdown -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <TextBlock Text="Sort by:"
+                                       FontSize="13"
+                                       Foreground="#888888"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                            <ComboBox ItemsSource="{Binding SortOptions}"
+                                      SelectedItem="{Binding SortBy}"
+                                      Width="180"
+                                      Height="36"
+                                      Padding="12,0"
+                                      FontSize="13"
+                                      Background="#1A1A1A"
+                                      Foreground="White"
+                                      BorderBrush="#333333"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ============================================ -->
+                <!-- ALL PRODUCTS GRID -->
+                <!-- ============================================ -->
+                <Border Padding="80,50" Background="#0A0A0A">
+                    <StackPanel>
+                        <TextBlock Text="ALL BLACK WEEK DEALS" 
+                                   FontSize="20" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"
+                                   Margin="0,0,0,30"/>
+
+                        <ItemsControl ItemsSource="{Binding BlackWeekProducts}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="4"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#151515"
+                                            BorderBrush="#252525"
+                                            BorderThickness="1"
+                                            Margin="8"
+                                            Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="260"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Image -->
+                                            <Border Grid.Row="0" Background="#1A1A1A">
+                                                <Grid>
+                                                    <!-- Discount Badge -->
+                                                    <Border Background="#DC2626"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Top"
+                                                            Padding="12,6">
+                                                        <TextBlock Foreground="White" FontSize="12" FontWeight="Bold">
+                                                            <Run Text="-"/>
+                                                            <Run Text="{Binding DiscountPercentage, Mode=OneWay}"/>
+                                                            <Run Text="%"/>
+                                                        </TextBlock>
+                                                    </Border>
+
+                                                    <!-- Low stock warning -->
+                                                    <Border Background="#422006"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Top"
+                                                            Padding="10,5"
+                                                            Margin="0,38,0,0"
+                                                            Visibility="{Binding IsLowStock, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                        <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#FBBF24">
+                                                            <Run Text="Only "/>
+                                                            <Run Text="{Binding Stock, Mode=OneWay}"/>
+                                                            <Run Text=" left"/>
+                                                        </TextBlock>
+                                                    </Border>
+
+                                                    <!-- Wishlist button -->
+                                                    <Border Width="34" Height="34"
+                                                            Background="#252525"
+                                                            CornerRadius="17"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Top"
+                                                            Margin="10"
+                                                            Cursor="Hand">
+                                                        <Border.InputBindings>
+                                                            <MouseBinding MouseAction="LeftClick"
+                                                                          Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                          CommandParameter="{Binding}"/>
+                                                        </Border.InputBindings>
+                                                        <TextBlock FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value="🤍"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
+                                                                            <Setter Property="Text" Value="❤️"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </Border>
+
+                                                    <!-- Quick Add -->
+                                                    <Border Background="White"
+                                                            Height="42"
+                                                            VerticalAlignment="Bottom"
+                                                            Opacity="0"
+                                                            x:Name="QuickAdd"
+                                                            Cursor="Hand">
+                                                        <Border.InputBindings>
+                                                            <MouseBinding MouseAction="LeftClick"
+                                                                          Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                          CommandParameter="{Binding}"/>
+                                                        </Border.InputBindings>
+                                                        <TextBlock Text="🛒 ADD TO CART"
+                                                                   Foreground="#0A0A0A"
+                                                                   FontSize="11"
+                                                                   FontWeight="Bold"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- Info -->
+                                            <StackPanel Grid.Row="1" Margin="14">
+                                                <TextBlock Text="{Binding Name}" 
+                                                           FontSize="13"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="White"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Margin="0,0,0,8"/>
+
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Price, StringFormat=€{0:N2}}" 
+                                                               FontSize="16"
+                                                               FontWeight="Bold"
+                                                               Foreground="#DC2626"/>
+                                                    <TextBlock Text="{Binding OriginalPrice, StringFormat=€{0:N2}}"
+                                                               FontSize="12"
+                                                               Foreground="#555555"
+                                                               TextDecorations="Strikethrough"
+                                                               Margin="10,3,0,0"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <Border.Triggers>
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="QuickAdd"
+                                                                         Storyboard.TargetProperty="Opacity"
+                                                                         To="1" Duration="0:0:0.15"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <EventTrigger RoutedEvent="MouseLeave">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="QuickAdd"
+                                                                         Storyboard.TargetProperty="Opacity"
+                                                                         To="0" Duration="0:0:0.15"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Border.Triggers>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <!-- ============================================ -->
+                <!-- BOTTOM CTA -->
+                <!-- ============================================ -->
+                <Border Background="#111111" Padding="80,60">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Can't find what you're looking for?"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="Explore our full catalog with thousands of products"
+                                       FontSize="14"
+                                       Foreground="#888888"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                Content="BROWSE ALL PRODUCTS →"
+                                Command="{Binding BrowseAllProductsCommand}"
+                                Padding="35,15"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Background="Transparent"
+                                Foreground="{StaticResource GoldGradient}"
+                                BorderBrush="{StaticResource GoldGradient}"
+                                BorderThickness="2"
+                                Cursor="Hand"
+                                VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

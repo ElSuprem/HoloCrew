@@ -1,18 +1,504 @@
-﻿using HoloCrew.ViewModels.Base;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using HoloCrew.Models;
+using HoloCrew.Services.Interfaces;
+using HoloCrew.ViewModels.Base;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace HoloCrew.ViewModels
 {
-    public class BlackWeekViewModel : ViewModelBase
+    public partial class BlackWeekViewModel : ViewModelBase
     {
-        public BlackWeekViewModel()
+        private readonly IProductService _productService;
+        private readonly ICartService _cartService;
+        private readonly IWishlistService _wishlistService;
+        private readonly INavigationService _navigationService;
+        private DispatcherTimer? _countdownTimer;
+
+        #region Properties
+
+        [ObservableProperty]
+        private ObservableCollection<Product> _blackWeekProducts = new();
+
+        [ObservableProperty]
+        private ObservableCollection<Product> _topDeals = new();
+
+        [ObservableProperty]
+        private string _saleTitle = "BLACK WEEK";
+
+        [ObservableProperty]
+        private string _saleSubtitle = "The biggest sale of the year is here";
+
+        // Countdown properties
+        [ObservableProperty]
+        private int _daysRemaining;
+
+        [ObservableProperty]
+        private int _hoursRemaining;
+
+        [ObservableProperty]
+        private int _minutesRemaining;
+
+        [ObservableProperty]
+        private int _secondsRemaining;
+
+        [ObservableProperty]
+        private string _countdownText = string.Empty;
+
+        [ObservableProperty]
+        private DateTime _saleEndTime;
+
+        [ObservableProperty]
+        private bool _isSaleActive = true;
+
+        [ObservableProperty]
+        private int _totalProductCount;
+
+        [ObservableProperty]
+        private decimal _maxDiscountPercent = 80;
+
+        // Filtros
+        [ObservableProperty]
+        private string _selectedCategory = "All";
+
+        [ObservableProperty]
+        private string _selectedDiscount = "All Discounts";
+
+        [ObservableProperty]
+        private string _sortBy = "Biggest Discount";
+
+        public ObservableCollection<string> Categories { get; } = new()
         {
-            // TODO: Inicializar categorías con ofertas
+            "All",
+            "Tops",
+            "Bottoms",
+            "Footwear",
+            "Accessories"
+        };
+
+        public ObservableCollection<string> DiscountFilters { get; } = new()
+        {
+            "All Discounts",
+            "50% or more",
+            "40% or more",
+            "30% or more"
+        };
+
+        public ObservableCollection<string> SortOptions { get; } = new()
+        {
+            "Biggest Discount",
+            "Price: Low to High",
+            "Price: High to Low",
+            "Newest",
+            "Best Selling"
+        };
+
+        #endregion
+
+        public BlackWeekViewModel(
+            IProductService productService,
+            ICartService cartService,
+            IWishlistService wishlistService,
+            INavigationService navigationService)
+        {
+            _productService = productService;
+            _cartService = cartService;
+            _wishlistService = wishlistService;
+            _navigationService = navigationService;
+
+            Title = "Black Week";
+            EmptyTitle = "Black Week Coming Soon";
+            EmptySubtitle = "Stay tuned for our biggest sale of the year!";
+            EmptyActionText = "Browse All Products";
+
+            // Black Week dura 7 días (simulado)
+            SaleEndTime = DateTime.Now.Date.AddDays(7).AddHours(23).AddMinutes(59).AddSeconds(59);
         }
 
-        public override void OnNavigatedTo(object parameter)
+        public override async void OnNavigatedTo(object? parameter)
         {
             base.OnNavigatedTo(parameter);
-            // TODO: Cargar ofertas de Black Week
+            await LoadBlackWeekProductsAsync();
+            StartCountdownTimer();
         }
+
+        public override void OnNavigatedFrom()
+        {
+            base.OnNavigatedFrom();
+            StopCountdownTimer();
+        }
+
+        #region Data Loading
+
+        [RelayCommand]
+        private async Task LoadBlackWeekProductsAsync()
+        {
+            await ExecuteAsync(async () =>
+            {
+                LoadingMessage = "Loading Black Week deals...";
+
+                // Intentar cargar productos de Black Week del servicio
+                var blackWeekProducts = await _productService.GetBlackWeekProductsAsync();
+
+                // Si no hay productos, crear mock data
+                if (blackWeekProducts == null || blackWeekProducts.Count == 0)
+                {
+                    blackWeekProducts = CreateMockBlackWeekProducts().ToList();
+                }
+
+                // Asignar descuentos aleatorios si no tienen
+                var random = new Random();
+                foreach (var product in blackWeekProducts)
+                {
+                    if (!product.HasDiscount)
+                    {
+                        var discountPercent = random.Next(30, 81); // 30-80% descuento
+                        product.OriginalPrice = product.Price;
+                        product.Price = Math.Round(product.OriginalPrice.Value * (100 - discountPercent) / 100, 2);
+                    }
+                    product.IsBlackWeek = true;
+                }
+
+                BlackWeekProducts = new ObservableCollection<Product>(blackWeekProducts);
+                TotalProductCount = BlackWeekProducts.Count;
+
+                // Top Deals: los 4 con mayor descuento
+                TopDeals = new ObservableCollection<Product>(
+                    blackWeekProducts
+                        .OrderByDescending(p => p.DiscountPercentage)
+                        .Take(4)
+                );
+
+                if (TotalProductCount == 0)
+                    SetEmpty();
+                else
+                    SetSuccess();
+            });
+        }
+
+        private ObservableCollection<Product> CreateMockBlackWeekProducts()
+        {
+            return new ObservableCollection<Product>
+            {
+                // TOP DEALS - Descuentos más altos
+                new Product
+                {
+                    Id = 201,
+                    Name = "Premium Leather Jacket",
+                    Price = 89.99m,
+                    OriginalPrice = 249.99m,
+                    Stock = 3,
+                    IsNew = false,
+                    IsFeatured = true,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/jacket_leather.jpg",
+                    CategoryId = 1,
+                    AverageRating = 4.8,
+                    ReviewCount = 124
+                },
+                new Product
+                {
+                    Id = 202,
+                    Name = "Designer Sneakers - Limited",
+                    Price = 79.99m,
+                    OriginalPrice = 199.99m,
+                    Stock = 5,
+                    IsNew = false,
+                    IsFeatured = true,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/sneaker_designer.jpg",
+                    CategoryId = 3,
+                    AverageRating = 4.9,
+                    ReviewCount = 89
+                },
+                new Product
+                {
+                    Id = 203,
+                    Name = "Cashmere Hoodie",
+                    Price = 59.99m,
+                    OriginalPrice = 149.99m,
+                    Stock = 8,
+                    IsNew = true,
+                    IsFeatured = true,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/hoodie_cashmere.jpg",
+                    CategoryId = 1,
+                    AverageRating = 4.7,
+                    ReviewCount = 56
+                },
+                new Product
+                {
+                    Id = 204,
+                    Name = "Luxury Watch Cap",
+                    Price = 19.99m,
+                    OriginalPrice = 59.99m,
+                    Stock = 15,
+                    IsNew = false,
+                    IsFeatured = true,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/cap_luxury.jpg",
+                    CategoryId = 4,
+                    AverageRating = 4.5,
+                    ReviewCount = 203
+                },
+                // Más productos
+                new Product
+                {
+                    Id = 205,
+                    Name = "Cargo Joggers - Tech Fabric",
+                    Price = 34.99m,
+                    OriginalPrice = 79.99m,
+                    Stock = 12,
+                    IsNew = false,
+                    IsFeatured = true,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/joggers_tech.jpg",
+                    CategoryId = 2,
+                    AverageRating = 4.6,
+                    ReviewCount = 78
+                },
+                new Product
+                {
+                    Id = 206,
+                    Name = "Oversized Graphic Tee",
+                    Price = 19.99m,
+                    OriginalPrice = 44.99m,
+                    Stock = 25,
+                    IsNew = true,
+                    IsFeatured = false,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/tee_graphic.jpg",
+                    CategoryId = 1,
+                    AverageRating = 4.4,
+                    ReviewCount = 167
+                },
+                new Product
+                {
+                    Id = 207,
+                    Name = "Tactical Backpack",
+                    Price = 44.99m,
+                    OriginalPrice = 99.99m,
+                    Stock = 7,
+                    IsNew = false,
+                    IsFeatured = true,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/backpack_tactical.jpg",
+                    CategoryId = 4,
+                    AverageRating = 4.8,
+                    ReviewCount = 92
+                },
+                new Product
+                {
+                    Id = 208,
+                    Name = "Slim Fit Chinos",
+                    Price = 29.99m,
+                    OriginalPrice = 69.99m,
+                    Stock = 18,
+                    IsNew = false,
+                    IsFeatured = false,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/chinos_slim.jpg",
+                    CategoryId = 2,
+                    AverageRating = 4.3,
+                    ReviewCount = 145
+                },
+                new Product
+                {
+                    Id = 209,
+                    Name = "Puffer Jacket - Winter Edition",
+                    Price = 69.99m,
+                    OriginalPrice = 159.99m,
+                    Stock = 4,
+                    IsNew = true,
+                    IsFeatured = true,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/puffer_winter.jpg",
+                    CategoryId = 1,
+                    AverageRating = 4.9,
+                    ReviewCount = 34
+                },
+                new Product
+                {
+                    Id = 210,
+                    Name = "Canvas Belt",
+                    Price = 12.99m,
+                    OriginalPrice = 29.99m,
+                    Stock = 30,
+                    IsNew = false,
+                    IsFeatured = false,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/belt_canvas.jpg",
+                    CategoryId = 4,
+                    AverageRating = 4.2,
+                    ReviewCount = 256
+                },
+                new Product
+                {
+                    Id = 211,
+                    Name = "High-Top Boots",
+                    Price = 64.99m,
+                    OriginalPrice = 139.99m,
+                    Stock = 6,
+                    IsNew = false,
+                    IsFeatured = true,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/boots_hightop.jpg",
+                    CategoryId = 3,
+                    AverageRating = 4.7,
+                    ReviewCount = 67
+                },
+                new Product
+                {
+                    Id = 212,
+                    Name = "Fleece Sweatpants",
+                    Price = 24.99m,
+                    OriginalPrice = 54.99m,
+                    Stock = 20,
+                    IsNew = false,
+                    IsFeatured = false,
+                    IsBlackWeek = true,
+                    MainImageUrl = "/Resources/Images/sweatpants_fleece.jpg",
+                    CategoryId = 2,
+                    AverageRating = 4.5,
+                    ReviewCount = 189
+                }
+            };
+        }
+
+        #endregion
+
+        #region Countdown Timer
+
+        private void StartCountdownTimer()
+        {
+            _countdownTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            _countdownTimer.Tick += CountdownTimer_Tick;
+            _countdownTimer.Start();
+
+            UpdateCountdown();
+        }
+
+        private void StopCountdownTimer()
+        {
+            if (_countdownTimer != null)
+            {
+                _countdownTimer.Stop();
+                _countdownTimer.Tick -= CountdownTimer_Tick;
+                _countdownTimer = null;
+            }
+        }
+
+        private void CountdownTimer_Tick(object? sender, EventArgs e)
+        {
+            UpdateCountdown();
+        }
+
+        private void UpdateCountdown()
+        {
+            var timeRemaining = SaleEndTime - DateTime.Now;
+
+            if (timeRemaining.TotalSeconds <= 0)
+            {
+                IsSaleActive = false;
+                DaysRemaining = 0;
+                HoursRemaining = 0;
+                MinutesRemaining = 0;
+                SecondsRemaining = 0;
+                CountdownText = "SALE ENDED";
+                StopCountdownTimer();
+                return;
+            }
+
+            DaysRemaining = timeRemaining.Days;
+            HoursRemaining = timeRemaining.Hours;
+            MinutesRemaining = timeRemaining.Minutes;
+            SecondsRemaining = timeRemaining.Seconds;
+            CountdownText = $"{DaysRemaining}d {HoursRemaining:D2}:{MinutesRemaining:D2}:{SecondsRemaining:D2}";
+        }
+
+        #endregion
+
+        #region Commands
+
+        [RelayCommand]
+        private void ViewProductDetail(Product product)
+        {
+            if (product == null) return;
+            _navigationService.NavigateTo<ProductDetailViewModel>(product.Id);
+        }
+
+        [RelayCommand]
+        private async Task AddToCartAsync(Product product)
+        {
+            if (product == null) return;
+
+            try
+            {
+                await _cartService.AddToCartAsync(product, 1);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error adding to cart: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private async Task ToggleWishlistAsync(Product product)
+        {
+            if (product == null) return;
+
+            try
+            {
+                if (product.IsInWishlist)
+                {
+                    await _wishlistService.RemoveFromWishlistAsync(product.Id);
+                    product.IsInWishlist = false;
+                }
+                else
+                {
+                    await _wishlistService.AddToWishlistAsync(product.Id);
+                    product.IsInWishlist = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error toggling wishlist: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private void ApplyFilter()
+        {
+            // TODO: Implementar filtrado
+            System.Diagnostics.Debug.WriteLine($"Filter - Category: {SelectedCategory}, Discount: {SelectedDiscount}");
+        }
+
+        [RelayCommand]
+        private void ApplySort()
+        {
+            // TODO: Implementar ordenación
+            System.Diagnostics.Debug.WriteLine($"Sort by: {SortBy}");
+        }
+
+        [RelayCommand]
+        private void BrowseAllProducts()
+        {
+            _navigationService.NavigateTo<ProductCatalogViewModel>();
+        }
+
+        [RelayCommand]
+        private void EmptyAction()
+        {
+            BrowseAllProducts();
+        }
+
+        #endregion
     }
 }
