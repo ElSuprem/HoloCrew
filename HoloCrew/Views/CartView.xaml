@@ -84,10 +84,12 @@
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Imagen producto -->
-                                        <Rectangle Grid.Column="0" 
-                                                   Fill="{StaticResource Gray200Brush}" 
-                                                   Width="120" 
-                                                   Height="120"/>
+                                        <Border Grid.Column="0" 
+                                                Background="{StaticResource Gray200Brush}" 
+                                                Width="120" 
+                                                Height="120">
+                                            <Image Source="{Binding ImageUrl}" Stretch="UniformToFill"/>
+                                        </Border>
 
                                         <!-- Info del producto -->
                                         <StackPanel Grid.Column="1" Margin="25,0,0,0" VerticalAlignment="Center">
@@ -164,7 +166,7 @@
             </Border>
         </ScrollViewer>
 
-        <!-- ⭐ RESUMEN DEL PEDIDO - AHORA CON SCROLLVIEWER -->
+        <!-- ⭐ RESUMEN DEL PEDIDO -->
         <Border Grid.Column="1" 
                 Background="{StaticResource Gray50Brush}">
             <ScrollViewer VerticalScrollBarVisibility="Auto"
@@ -188,9 +190,20 @@
                         <Grid Margin="0,0,0,15">
                             <TextBlock Text="Shipping" 
                                        Style="{StaticResource BodyLarge}"/>
-                            <TextBlock Text="{Binding ShippingCost, StringFormat={}{0:C}}" 
-                                       Style="{StaticResource BodyLarge}"
-                                       HorizontalAlignment="Right"/>
+                            <TextBlock HorizontalAlignment="Right">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource BodyLarge}">
+                                        <Setter Property="Text" Value="{Binding ShippingCost, StringFormat={}{0:C}}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ShippingCost}" Value="0">
+                                                <Setter Property="Text" Value="FREE"/>
+                                                <Setter Property="Foreground" Value="#10B981"/>
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Grid>
 
                         <!-- Tax -->
@@ -202,14 +215,15 @@
                                        HorizontalAlignment="Right"/>
                         </Grid>
 
-                        <!-- Descuento -->
-                        <Grid Margin="0,0,0,15">
+                        <!-- Descuento (solo visible si hay descuento) -->
+                        <Grid Margin="0,0,0,15"
+                              Visibility="{Binding Discount, Converter={StaticResource CountToVisibilityConverter}}">
                             <TextBlock Text="Discount" 
                                        Style="{StaticResource BodyLarge}"
-                                       Foreground="{StaticResource RedAccentBrush}"/>
-                            <TextBlock Text="{Binding Discount, StringFormat=-{0:C}}" 
+                                       Foreground="#10B981"/>
+                            <TextBlock Text="{Binding Discount, StringFormat=-€{0:N2}}" 
                                        Style="{StaticResource BodyLarge}"
-                                       Foreground="{StaticResource RedAccentBrush}"
+                                       Foreground="#10B981"
                                        HorizontalAlignment="Right"/>
                         </Grid>
 
@@ -269,7 +283,7 @@
                                     Command="{Binding ApplyCouponCommand}"/>
                         </Grid>
 
-                        <!-- ⭐ Mensaje de feedback del cupón -->
+                        <!-- Mensaje de feedback del cupón -->
                         <TextBlock Text="{Binding CouponMessage}"
                                    FontSize="13"
                                    Margin="0,0,0,25"
@@ -292,7 +306,30 @@
                             </TextBlock.Style>
                         </TextBlock>
 
-                        <!-- ⭐ Botones con separación mejorada -->
+                        <!-- Envío gratis info -->
+                        <Border Background="#ECFDF5"
+                                BorderBrush="#10B981"
+                                BorderThickness="1"
+                                Padding="15"
+                                Margin="0,0,0,25">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShippingCost}" Value="0">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="🎉 You qualify for FREE shipping!"
+                                       FontSize="13"
+                                       Foreground="#059669"
+                                       FontWeight="SemiBold"
+                                       TextAlignment="Center"/>
+                        </Border>
+
+                        <!-- Botones -->
                         <Button Content="PROCEED TO CHECKOUT" 
                                 Style="{StaticResource AccentButton}"
                                 Padding="0,18"
@@ -303,6 +340,29 @@
                                 Style="{StaticResource OutlineButton}"
                                 Padding="0,18"
                                 Command="{Binding BrowseProductsCommand}"/>
+
+                        <!-- Métodos de pago -->
+                        <StackPanel Margin="0,30,0,0" HorizontalAlignment="Center">
+                            <TextBlock Text="Secure checkout with"
+                                       FontSize="11"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Border Background="{StaticResource Gray100Brush}" Padding="10,5" Margin="0,0,5,0">
+                                    <TextBlock Text="VISA" FontSize="10" FontWeight="Bold"/>
+                                </Border>
+                                <Border Background="{StaticResource Gray100Brush}" Padding="10,5" Margin="0,0,5,0">
+                                    <TextBlock Text="MASTERCARD" FontSize="10" FontWeight="Bold"/>
+                                </Border>
+                                <Border Background="{StaticResource Gray100Brush}" Padding="10,5" Margin="0,0,5,0">
+                                    <TextBlock Text="PAYPAL" FontSize="10" FontWeight="Bold"/>
+                                </Border>
+                                <Border Background="{StaticResource Gray100Brush}" Padding="10,5">
+                                    <TextBlock Text="AMEX" FontSize="10" FontWeight="Bold"/>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </ScrollViewer>

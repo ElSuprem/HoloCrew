@@ -21,7 +21,9 @@
             <Border Padding="80,50,40,80">
                 <StackPanel>
 
-                    <!-- ⭐ HEADER CON INDICADOR DE PASOS -->
+                    <!-- ============================================ -->
+                    <!-- HEADER CON STEPPER DINÁMICO -->
+                    <!-- ============================================ -->
                     <Grid Margin="0,0,0,40">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -32,69 +34,136 @@
                                    Text="CHECKOUT" 
                                    Style="{StaticResource HeadingLarge}"/>
 
-                        <!-- Stepper -->
+                        <!-- Stepper dinámico -->
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center">
-                            <Border Background="{StaticResource AccentBrush}"
-                                    Width="32" Height="32"
-                                    CornerRadius="16"
-                                    Margin="0,0,10,0">
-                                <TextBlock Text="1"
-                                           Foreground="White"
-                                           FontSize="14"
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-                            </Border>
-                            <TextBlock Text="Envío"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,20,0"/>
 
-                            <Border Background="{StaticResource Gray300Brush}"
-                                    Width="32" Height="32"
-                                    CornerRadius="16"
-                                    Margin="0,0,10,0">
-                                <TextBlock Text="2"
-                                           Foreground="White"
-                                           FontSize="14"
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
+                            <!-- Step 1 -->
+                            <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock Text="1" Foreground="White" FontSize="14" FontWeight="Bold"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <TextBlock Text="Pago"
-                                       FontSize="14"
-                                       Foreground="{StaticResource TextSecondary}"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,20,0"/>
+                            <TextBlock Text="Envío" FontSize="14" VerticalAlignment="Center" Margin="0,0,20,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontWeight" Value="Normal"/>
+                                        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStep1}" Value="True">
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
 
-                            <Border Background="{StaticResource Gray300Brush}"
-                                    Width="32" Height="32"
-                                    CornerRadius="16"
-                                    Margin="0,0,10,0">
-                                <TextBlock Text="3"
-                                           Foreground="White"
-                                           FontSize="14"
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
+                            <!-- Línea conectora -->
+                            <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource Gray300Brush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStep1}" Value="False">
+                                                <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
                             </Border>
-                            <TextBlock Text="Confirmar"
-                                       FontSize="14"
-                                       Foreground="{StaticResource TextSecondary}"
-                                       VerticalAlignment="Center"/>
+
+                            <!-- Step 2 -->
+                            <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource Gray300Brush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStep1}" Value="False">
+                                                <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock Text="2" Foreground="White" FontSize="14" FontWeight="Bold"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Pago" FontSize="14" VerticalAlignment="Center" Margin="0,0,20,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontWeight" Value="Normal"/>
+                                        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStep2}" Value="True">
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                            <!-- Línea conectora -->
+                            <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource Gray300Brush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStep3}" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+
+                            <!-- Step 3 -->
+                            <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource Gray300Brush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStep3}" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock Text="3" Foreground="White" FontSize="14" FontWeight="Bold"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Confirmar" FontSize="14" VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontWeight" Value="Normal"/>
+                                        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStep3}" Value="True">
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </StackPanel>
                     </Grid>
 
-                    <!-- ⭐ SECCIÓN 1: INFORMACIÓN DE ENVÍO -->
+                    <!-- ============================================ -->
+                    <!-- STEP 1: INFORMACIÓN DE ENVÍO -->
+                    <!-- ============================================ -->
                     <Border Background="{StaticResource WhitePrimaryBrush}"
                             BorderBrush="{StaticResource BorderDefault}"
                             BorderThickness="1"
                             Padding="35,30"
-                            Margin="0,0,0,25">
+                            Margin="0,0,0,25"
+                            Visibility="{Binding IsStep1, Converter={StaticResource BoolToVisibilityConverter}}">
                         <Border.Effect>
                             <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
                         </Border.Effect>
@@ -103,7 +172,55 @@
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- Nombre y Apellidos -->
+                            <!-- Direcciones guardadas -->
+                            <StackPanel Visibility="{Binding SavedAddresses.Count, Converter={StaticResource CountToVisibilityConverter}}"
+                                        Margin="0,0,0,25">
+                                <TextBlock Text="Direcciones guardadas" 
+                                           Style="{StaticResource SubtitleMedium}"
+                                           Margin="0,0,0,15"/>
+                                <ItemsControl ItemsSource="{Binding SavedAddresses}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                                    BorderThickness="1"
+                                                    Padding="15"
+                                                    Margin="0,0,0,10"
+                                                    Cursor="Hand">
+                                                <Border.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick"
+                                                                  Command="{Binding DataContext.SelectSavedAddressCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  CommandParameter="{Binding}"/>
+                                                </Border.InputBindings>
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                                                <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                                                <Setter Property="BorderThickness" Value="2"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Label}" FontWeight="SemiBold" FontSize="14"/>
+                                                    <TextBlock FontSize="13" Foreground="{StaticResource TextSecondary}" Margin="0,5,0,0">
+                                                        <Run Text="{Binding FullName}"/>
+                                                        <Run Text=" - "/>
+                                                        <Run Text="{Binding AddressLine1}"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <Button Content="+ Añadir nueva dirección"
+                                        Style="{StaticResource TextButton}"
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding AddNewAddressCommand}"
+                                        Margin="0,5,0,0"/>
+                            </StackPanel>
+
+                            <!-- Formulario de dirección -->
                             <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -112,10 +229,11 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Nombre" 
+                                    <TextBlock Text="Nombre completo *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <TextBox Height="50"
+                                    <TextBox Text="{Binding ShippingAddress.FullName, UpdateSourceTrigger=PropertyChanged}"
+                                             Height="50"
                                              Padding="15,0"
                                              FontSize="14"
                                              BorderBrush="{StaticResource BorderDefault}"
@@ -123,10 +241,11 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Apellidos" 
+                                    <TextBlock Text="Teléfono *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <TextBox Height="50"
+                                    <TextBox Text="{Binding ShippingAddress.PhoneNumber, UpdateSourceTrigger=PropertyChanged}"
+                                             Height="50"
                                              Padding="15,0"
                                              FontSize="14"
                                              BorderBrush="{StaticResource BorderDefault}"
@@ -134,12 +253,26 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Dirección -->
+                            <!-- Dirección línea 1 -->
                             <StackPanel Margin="0,0,0,20">
-                                <TextBlock Text="Dirección" 
+                                <TextBlock Text="Dirección *" 
                                            Style="{StaticResource BodyMedium}"
                                            Margin="0,0,0,8"/>
-                                <TextBox Height="50"
+                                <TextBox Text="{Binding ShippingAddress.AddressLine1, UpdateSourceTrigger=PropertyChanged}"
+                                         Height="50"
+                                         Padding="15,0"
+                                         FontSize="14"
+                                         BorderBrush="{StaticResource BorderDefault}"
+                                         BorderThickness="1"/>
+                            </StackPanel>
+
+                            <!-- Dirección línea 2 -->
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="Apartamento, piso, etc. (opcional)" 
+                                           Style="{StaticResource BodyMedium}"
+                                           Margin="0,0,0,8"/>
+                                <TextBox Text="{Binding ShippingAddress.AddressLine2, UpdateSourceTrigger=PropertyChanged}"
+                                         Height="50"
                                          Padding="15,0"
                                          FontSize="14"
                                          BorderBrush="{StaticResource BorderDefault}"
@@ -155,10 +288,11 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Ciudad" 
+                                    <TextBlock Text="Ciudad *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <TextBox Height="50"
+                                    <TextBox Text="{Binding ShippingAddress.City, UpdateSourceTrigger=PropertyChanged}"
+                                             Height="50"
                                              Padding="15,0"
                                              FontSize="14"
                                              BorderBrush="{StaticResource BorderDefault}"
@@ -166,10 +300,11 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Código Postal" 
+                                    <TextBlock Text="Código Postal *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <TextBox Height="50"
+                                    <TextBox Text="{Binding ShippingAddress.PostalCode, UpdateSourceTrigger=PropertyChanged}"
+                                             Height="50"
                                              Padding="15,0"
                                              FontSize="14"
                                              BorderBrush="{StaticResource BorderDefault}"
@@ -177,7 +312,7 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- País y Teléfono -->
+                            <!-- País y Provincia -->
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -186,26 +321,30 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="País" 
+                                    <TextBlock Text="País *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
                                     <ComboBox Height="50"
                                               Padding="15,0"
                                               FontSize="14"
                                               BorderBrush="{StaticResource BorderDefault}"
-                                              BorderThickness="1">
+                                              BorderThickness="1"
+                                              SelectedValue="{Binding ShippingAddress.Country}"
+                                              SelectedValuePath="Content">
                                         <ComboBoxItem Content="España" IsSelected="True"/>
                                         <ComboBoxItem Content="Portugal"/>
                                         <ComboBoxItem Content="Francia"/>
                                         <ComboBoxItem Content="Italia"/>
+                                        <ComboBoxItem Content="Alemania"/>
                                     </ComboBox>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Teléfono" 
+                                    <TextBlock Text="Provincia" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <TextBox Height="50"
+                                    <TextBox Text="{Binding ShippingAddress.State, UpdateSourceTrigger=PropertyChanged}"
+                                             Height="50"
                                              Padding="15,0"
                                              FontSize="14"
                                              BorderBrush="{StaticResource BorderDefault}"
@@ -215,98 +354,15 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- ⭐ SECCIÓN 2: MÉTODO DE ENVÍO -->
+                    <!-- ============================================ -->
+                    <!-- STEP 2: MÉTODO DE PAGO -->
+                    <!-- ============================================ -->
                     <Border Background="{StaticResource WhitePrimaryBrush}"
                             BorderBrush="{StaticResource BorderDefault}"
                             BorderThickness="1"
                             Padding="35,30"
-                            Margin="0,0,0,25">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
-                        </Border.Effect>
-                        <StackPanel>
-                            <TextBlock Text="🚚 MÉTODO DE ENVÍO" 
-                                       Style="{StaticResource HeadingMedium}"
-                                       Margin="0,0,0,25"/>
-
-                            <!-- Standard Shipping -->
-                            <RadioButton GroupName="Shipping"
-                                         IsChecked="True"
-                                         Margin="0,0,0,15">
-                                <RadioButton.Content>
-                                    <Grid Width="620">
-                                        <StackPanel>
-                                            <TextBlock Text="Envío estándar (3-5 días)" 
-                                                       FontSize="15"
-                                                       FontWeight="SemiBold"/>
-                                            <TextBlock Text="Entrega en días laborables" 
-                                                       FontSize="13"
-                                                       Foreground="{StaticResource TextSecondary}"
-                                                       Margin="0,5,0,0"/>
-                                        </StackPanel>
-                                        <TextBlock Text="€4.99" 
-                                                   FontSize="16"
-                                                   FontWeight="Bold"
-                                                   HorizontalAlignment="Right"
-                                                   VerticalAlignment="Center"/>
-                                    </Grid>
-                                </RadioButton.Content>
-                            </RadioButton>
-
-                            <!-- Express Shipping -->
-                            <RadioButton GroupName="Shipping"
-                                         Margin="0,0,0,15">
-                                <RadioButton.Content>
-                                    <Grid Width="620">
-                                        <StackPanel>
-                                            <TextBlock Text="Envío express (1-2 días)" 
-                                                       FontSize="15"
-                                                       FontWeight="SemiBold"/>
-                                            <TextBlock Text="Entrega urgente" 
-                                                       FontSize="13"
-                                                       Foreground="{StaticResource TextSecondary}"
-                                                       Margin="0,5,0,0"/>
-                                        </StackPanel>
-                                        <TextBlock Text="€9.99" 
-                                                   FontSize="16"
-                                                   FontWeight="Bold"
-                                                   HorizontalAlignment="Right"
-                                                   VerticalAlignment="Center"/>
-                                    </Grid>
-                                </RadioButton.Content>
-                            </RadioButton>
-
-                            <!-- Free Shipping -->
-                            <RadioButton GroupName="Shipping">
-                                <RadioButton.Content>
-                                    <Grid Width="620">
-                                        <StackPanel>
-                                            <TextBlock Text="Envío gratis (7-10 días)" 
-                                                       FontSize="15"
-                                                       FontWeight="SemiBold"/>
-                                            <TextBlock Text="Para pedidos superiores a €50" 
-                                                       FontSize="13"
-                                                       Foreground="{StaticResource TextSecondary}"
-                                                       Margin="0,5,0,0"/>
-                                        </StackPanel>
-                                        <TextBlock Text="GRATIS" 
-                                                   FontSize="16"
-                                                   FontWeight="Bold"
-                                                   Foreground="#10B981"
-                                                   HorizontalAlignment="Right"
-                                                   VerticalAlignment="Center"/>
-                                    </Grid>
-                                </RadioButton.Content>
-                            </RadioButton>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- ⭐ SECCIÓN 3: MÉTODO DE PAGO -->
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
-                            BorderThickness="1"
-                            Padding="35,30"
-                            Margin="0,0,0,30">
+                            Margin="0,0,0,25"
+                            Visibility="{Binding IsStep2, Converter={StaticResource BoolToVisibilityConverter}}">
                         <Border.Effect>
                             <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
                         </Border.Effect>
@@ -315,86 +371,462 @@
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- Credit Card -->
-                            <RadioButton GroupName="Payment"
-                                         IsChecked="True"
-                                         Margin="0,0,0,20">
-                                <RadioButton.Content>
-                                    <StackPanel>
-                                        <TextBlock Text="Tarjeta de crédito/débito" 
-                                                   FontSize="15"
-                                                   FontWeight="SemiBold"
-                                                   Margin="0,0,0,5"/>
-                                        <TextBlock Text="Visa, Mastercard, American Express" 
-                                                   FontSize="13"
-                                                   Foreground="{StaticResource TextSecondary}"/>
-                                    </StackPanel>
-                                </RadioButton.Content>
-                            </RadioButton>
+                            <!-- Métodos de pago guardados -->
+                            <StackPanel Visibility="{Binding SavedPaymentMethods.Count, Converter={StaticResource CountToVisibilityConverter}}"
+                                        Margin="0,0,0,25">
+                                <TextBlock Text="Métodos guardados" 
+                                           Style="{StaticResource SubtitleMedium}"
+                                           Margin="0,0,0,15"/>
+                                <ItemsControl ItemsSource="{Binding SavedPaymentMethods}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                                    BorderThickness="1"
+                                                    Padding="15"
+                                                    Margin="0,0,0,10"
+                                                    Cursor="Hand">
+                                                <Border.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick"
+                                                                  Command="{Binding DataContext.SelectPaymentMethodCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  CommandParameter="{Binding}"/>
+                                                </Border.InputBindings>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="💳" FontSize="20" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding CardNumberMasked}" FontWeight="SemiBold" FontSize="14"/>
+                                                        <TextBlock Text="{Binding ExpirationDate}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
 
-                            <!-- PayPal -->
-                            <RadioButton GroupName="Payment"
-                                         Margin="0,0,0,20">
-                                <RadioButton.Content>
-                                    <StackPanel>
-                                        <TextBlock Text="PayPal" 
-                                                   FontSize="15"
-                                                   FontWeight="SemiBold"
-                                                   Margin="0,0,0,5"/>
-                                        <TextBlock Text="Pago seguro con PayPal" 
-                                                   FontSize="13"
-                                                   Foreground="{StaticResource TextSecondary}"/>
-                                    </StackPanel>
-                                </RadioButton.Content>
-                            </RadioButton>
+                            <!-- Formulario de tarjeta nueva -->
+                            <TextBlock Text="O añade una nueva tarjeta" 
+                                       Style="{StaticResource SubtitleMedium}"
+                                       Margin="0,0,0,20"/>
 
-                            <!-- Bank Transfer -->
-                            <RadioButton GroupName="Payment">
-                                <RadioButton.Content>
-                                    <StackPanel>
-                                        <TextBlock Text="Transferencia bancaria" 
-                                                   FontSize="15"
-                                                   FontWeight="SemiBold"
-                                                   Margin="0,0,0,5"/>
-                                        <TextBlock Text="Procesamiento en 1-2 días laborables" 
-                                                   FontSize="13"
-                                                   Foreground="{StaticResource TextSecondary}"/>
-                                    </StackPanel>
-                                </RadioButton.Content>
-                            </RadioButton>
+                            <!-- Número de tarjeta -->
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="Número de tarjeta *" 
+                                           Style="{StaticResource BodyMedium}"
+                                           Margin="0,0,0,8"/>
+                                <TextBox Text="{Binding CardNumber, UpdateSourceTrigger=PropertyChanged}"
+                                         Height="50"
+                                         Padding="15,0"
+                                         FontSize="14"
+                                         BorderBrush="{StaticResource BorderDefault}"
+                                         BorderThickness="1"
+                                         MaxLength="19"/>
+                            </StackPanel>
+
+                            <!-- Nombre del titular -->
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="Nombre del titular *" 
+                                           Style="{StaticResource BodyMedium}"
+                                           Margin="0,0,0,8"/>
+                                <TextBox Text="{Binding CardholderName, UpdateSourceTrigger=PropertyChanged}"
+                                         Height="50"
+                                         Padding="15,0"
+                                         FontSize="14"
+                                         BorderBrush="{StaticResource BorderDefault}"
+                                         BorderThickness="1"/>
+                            </StackPanel>
+
+                            <!-- Fecha y CVV -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Fecha de expiración *" 
+                                               Style="{StaticResource BodyMedium}"
+                                               Margin="0,0,0,8"/>
+                                    <TextBox Text="{Binding ExpirationDate, UpdateSourceTrigger=PropertyChanged}"
+                                             Height="50"
+                                             Padding="15,0"
+                                             FontSize="14"
+                                             BorderBrush="{StaticResource BorderDefault}"
+                                             BorderThickness="1"
+                                             MaxLength="5"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="CVV *" 
+                                               Style="{StaticResource BodyMedium}"
+                                               Margin="0,0,0,8"/>
+                                    <PasswordBox x:Name="CvvBox"
+                                                 Height="50"
+                                                 Padding="15,0"
+                                                 FontSize="14"
+                                                 BorderBrush="{StaticResource BorderDefault}"
+                                                 BorderThickness="1"
+                                                 MaxLength="4"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Iconos de tarjetas aceptadas -->
+                            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                <TextBlock Text="Aceptamos:" FontSize="12" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Border Background="{StaticResource Gray100Brush}" Padding="8,4" Margin="0,0,5,0">
+                                    <TextBlock Text="VISA" FontSize="11" FontWeight="Bold"/>
+                                </Border>
+                                <Border Background="{StaticResource Gray100Brush}" Padding="8,4" Margin="0,0,5,0">
+                                    <TextBlock Text="MASTERCARD" FontSize="11" FontWeight="Bold"/>
+                                </Border>
+                                <Border Background="{StaticResource Gray100Brush}" Padding="8,4">
+                                    <TextBlock Text="AMEX" FontSize="11" FontWeight="Bold"/>
+                                </Border>
+                            </StackPanel>
                         </StackPanel>
                     </Border>
 
-                    <!-- ⭐ BOTÓN FINAL CON ESPACIO -->
-                    <Button Content="PLACE ORDER"
-                            Style="{StaticResource AccentButton}"
-                            Height="60"
-                            FontSize="18"
-                            FontWeight="Bold"
-                            Margin="0,10,0,0"/>
+                    <!-- ============================================ -->
+                    <!-- STEP 3: CONFIRMACIÓN -->
+                    <!-- ============================================ -->
+                    <Border Background="{StaticResource WhitePrimaryBrush}"
+                            BorderBrush="{StaticResource BorderDefault}"
+                            BorderThickness="1"
+                            Padding="35,30"
+                            Margin="0,0,0,25"
+                            Visibility="{Binding IsStep3, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="✅ CONFIRMAR PEDIDO" 
+                                       Style="{StaticResource HeadingMedium}"
+                                       Margin="0,0,0,25"/>
+
+                            <!-- Resumen de envío -->
+                            <Border Background="{StaticResource Gray50Brush}"
+                                    Padding="20"
+                                    Margin="0,0,0,20">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,10">
+                                        <TextBlock Text="DIRECCIÓN DE ENVÍO" FontWeight="Bold" FontSize="12"/>
+                                        <TextBlock Text="Editar" 
+                                                   FontSize="12" 
+                                                   Foreground="{StaticResource AccentBrush}"
+                                                   HorizontalAlignment="Right"
+                                                   Cursor="Hand"
+                                                   TextDecorations="Underline">
+                                            <TextBlock.InputBindings>
+                                                <MouseBinding MouseAction="LeftClick" Command="{Binding PreviousStepCommand}"/>
+                                            </TextBlock.InputBindings>
+                                        </TextBlock>
+                                    </Grid>
+                                    <TextBlock Text="{Binding ShippingAddress.FullName}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding ShippingAddress.AddressLine1}" Foreground="{StaticResource TextSecondary}"/>
+                                    <TextBlock Foreground="{StaticResource TextSecondary}">
+                                        <Run Text="{Binding ShippingAddress.PostalCode}"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding ShippingAddress.City}"/>
+                                        <Run Text=", "/>
+                                        <Run Text="{Binding ShippingAddress.Country}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding ShippingAddress.PhoneNumber}" Foreground="{StaticResource TextSecondary}" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Resumen de pago -->
+                            <Border Background="{StaticResource Gray50Brush}"
+                                    Padding="20"
+                                    Margin="0,0,0,20">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,10">
+                                        <TextBlock Text="MÉTODO DE PAGO" FontWeight="Bold" FontSize="12"/>
+                                        <TextBlock Text="Editar" 
+                                                   FontSize="12" 
+                                                   Foreground="{StaticResource AccentBrush}"
+                                                   HorizontalAlignment="Right"
+                                                   Cursor="Hand"
+                                                   TextDecorations="Underline">
+                                            <TextBlock.InputBindings>
+                                                <MouseBinding MouseAction="LeftClick" Command="{Binding PreviousStepCommand}"/>
+                                            </TextBlock.InputBindings>
+                                        </TextBlock>
+                                    </Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="💳" FontSize="18" Margin="0,0,10,0"/>
+                                        <StackPanel>
+                                            <TextBlock Text="Tarjeta de crédito" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding CardNumber}" 
+                                                       Foreground="{StaticResource TextSecondary}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Productos -->
+                            <TextBlock Text="PRODUCTOS" FontWeight="Bold" FontSize="12" Margin="0,0,0,15"/>
+                            <ItemsControl ItemsSource="{Binding OrderItems}" Margin="0,0,0,20">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,15">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="60"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Grid.Column="0" Background="{StaticResource Gray200Brush}" Width="60" Height="60"/>
+
+                                            <StackPanel Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding ProductName}" FontWeight="SemiBold" FontSize="14"/>
+                                                <TextBlock FontSize="12" Foreground="{StaticResource TextSecondary}">
+                                                    <Run Text="Qty: "/>
+                                                    <Run Text="{Binding Quantity}"/>
+                                                    <Run Text=" | "/>
+                                                    <Run Text="{Binding Size}"/>
+                                                    <Run Text=" | "/>
+                                                    <Run Text="{Binding Color}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <TextBlock Grid.Column="2" 
+                                                       Text="{Binding Subtotal, StringFormat={}{0:C}}"
+                                                       FontWeight="SemiBold"
+                                                       VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ============================================ -->
+                    <!-- BOTONES DE NAVEGACIÓN -->
+                    <!-- ============================================ -->
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Botón Atrás -->
+                        <Button Grid.Column="0"
+                                Content="← VOLVER"
+                                Style="{StaticResource OutlineButton}"
+                                Padding="30,15"
+                                Command="{Binding PreviousStepCommand}"
+                                Visibility="{Binding IsStep1, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+                        <!-- Botón Cancelar (solo en paso 1) -->
+                        <Button Grid.Column="0"
+                                Content="CANCELAR"
+                                Style="{StaticResource OutlineButton}"
+                                Padding="30,15"
+                                Command="{Binding CancelCheckoutCommand}"
+                                Visibility="{Binding IsStep1, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <!-- Botón Siguiente / Confirmar -->
+                        <Button Grid.Column="2"
+                                Style="{StaticResource AccentButton}"
+                                Padding="40,15"
+                                FontSize="14"
+                                Command="{Binding NextStepCommand}"
+                                Visibility="{Binding IsStep3, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="CONTINUAR"/>
+                                    <TextBlock Text=" →"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <!-- Botón Confirmar Pedido (solo paso 3) -->
+                        <Button Grid.Column="2"
+                                Style="{StaticResource AccentButton}"
+                                Padding="40,15"
+                                FontSize="14"
+                                Command="{Binding CompleteOrderCommand}"
+                                IsEnabled="{Binding CanCompleteOrder}"
+                                Visibility="{Binding IsStep3, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🔒 CONFIRMAR PEDIDO"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+
+                    <!-- Indicador de procesamiento -->
+                    <Border Background="{StaticResource BlackPrimaryBrush}"
+                            Padding="20"
+                            Margin="0,20,0,0"
+                            Visibility="{Binding IsProcessing, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="⏳" FontSize="18" Margin="0,0,10,0"/>
+                            <TextBlock Text="Procesando tu pedido..." Foreground="White" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Mensaje de error -->
+                    <Border Background="#FEE2E2"
+                            BorderBrush="#F87171"
+                            BorderThickness="1"
+                            Padding="15"
+                            Margin="0,20,0,0">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ErrorMessage}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ErrorMessage}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="{Binding ErrorMessage}" Foreground="#B91C1C"/>
+                    </Border>
 
                 </StackPanel>
             </Border>
         </ScrollViewer>
 
-        <!-- ORDER SUMMARY SIDEBAR (sin cambios) -->
+        <!-- ============================================ -->
+        <!-- ORDER SUMMARY SIDEBAR -->
+        <!-- ============================================ -->
         <Border Grid.Column="1" 
                 Background="{StaticResource Gray50Brush}">
             <ScrollViewer VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled">
                 <Border Padding="40,50,40,80">
                     <StackPanel>
-                        <TextBlock Text="ORDER SUMMARY" 
+                        <TextBlock Text="RESUMEN DEL PEDIDO" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,30"/>
 
-                        <!-- Order items... (mantener existente) -->
-                        <TextBlock Text="[Aquí van los items del pedido]"
-                                   FontSize="14"
-                                   Foreground="{StaticResource TextSecondary}"
-                                   TextAlignment="Center"
-                                   Margin="0,20"/>
+                        <!-- Items del pedido -->
+                        <ItemsControl ItemsSource="{Binding OrderItems}" Margin="0,0,0,30">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,20">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
 
+                                        <!-- Imagen con badge de cantidad -->
+                                        <Grid Grid.Column="0">
+                                            <Border Background="{StaticResource Gray200Brush}" Width="70" Height="70"/>
+                                            <Border Background="{StaticResource BlackPrimaryBrush}"
+                                                    CornerRadius="10"
+                                                    Width="20" Height="20"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Top"
+                                                    Margin="0,-5,-5,0">
+                                                <TextBlock Text="{Binding Quantity}"
+                                                           Foreground="White"
+                                                           FontSize="11"
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Grid>
+
+                                        <!-- Info -->
+                                        <StackPanel Grid.Column="1" Margin="15,0,0,0">
+                                            <TextBlock Text="{Binding ProductName}" 
+                                                       FontWeight="SemiBold"
+                                                       FontSize="14"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,3,0,0">
+                                                <Run Text="{Binding Size}"/>
+                                                <Run Text=" / "/>
+                                                <Run Text="{Binding Color}"/>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding Subtotal, StringFormat={}{0:C}}"
+                                                       FontWeight="SemiBold"
+                                                       Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- Separador -->
+                        <Border BorderBrush="{StaticResource BorderDefault}"
+                                BorderThickness="0,1,0,0"
+                                Margin="0,0,0,20"/>
+
+                        <!-- Subtotal -->
+                        <Grid Margin="0,0,0,12">
+                            <TextBlock Text="Subtotal" Style="{StaticResource BodyLarge}"/>
+                            <TextBlock Text="{Binding OrderTotal, StringFormat={}{0:C}}" 
+                                       Style="{StaticResource BodyLarge}"
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- Envío -->
+                        <Grid Margin="0,0,0,12">
+                            <TextBlock Text="Envío" Style="{StaticResource BodyLarge}"/>
+                            <TextBlock Text="GRATIS" 
+                                       Style="{StaticResource BodyLarge}"
+                                       Foreground="#10B981"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- Impuestos -->
+                        <Grid Margin="0,0,0,20">
+                            <TextBlock Text="IVA (21%)" Style="{StaticResource BodyLarge}"/>
+                            <TextBlock Text="{Binding OrderTotal, StringFormat=€{0:N2}}" 
+                                       Style="{StaticResource BodyLarge}" 
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- Total -->
+                        <Border BorderBrush="{StaticResource BorderDefault}"
+                                BorderThickness="0,1,0,0"
+                                Padding="0,20,0,0">
+                            <Grid>
+                                <TextBlock Text="TOTAL" 
+                                           Style="{StaticResource HeadingMedium}"
+                                           FontSize="20"/>
+                                <TextBlock Text="{Binding OrderTotal, StringFormat=€{0:N2}}"
+                                           Style="{StaticResource HeadingMedium}"
+                                           FontSize="20"
+                                           HorizontalAlignment="Right"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Info de seguridad -->
+                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                                Padding="15"
+                                Margin="0,30,0,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="🔒" FontSize="16" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Pago 100% seguro" FontWeight="SemiBold" FontSize="13"/>
+                                </StackPanel>
+                                <TextBlock Text="Tus datos están protegidos con encriptación SSL de 256 bits."
+                                           FontSize="12"
+                                           Foreground="{StaticResource TextSecondary}"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Políticas -->
+                        <StackPanel Margin="0,20,0,0">
+                            <TextBlock Text="📦 Envío gratis en pedidos +€50" 
+                                       FontSize="12" 
+                                       Foreground="{StaticResource TextSecondary}"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="↩️ Devoluciones gratis en 14 días" 
+                                       FontSize="12" 
+                                       Foreground="{StaticResource TextSecondary}"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </ScrollViewer>
