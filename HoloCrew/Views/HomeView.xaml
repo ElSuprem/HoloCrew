@@ -619,42 +619,78 @@
                                MaxWidth="450"
                                TextWrapping="Wrap"/>
                 </StackPanel>
+                <!-- SECCIÓN: NEWSLETTER (Grid.Column="1")       -->
+                <!-- ============================================ -->
 
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <!-- Email Input con placeholder -->
                     <Border Background="White" Height="50" Margin="0,0,0,12">
-                        <TextBox Text="{Binding NewsletterEmail, UpdateSourceTrigger=PropertyChanged}"
-                                 Background="Transparent" 
-                                 BorderThickness="0" 
-                                 VerticalAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Padding="18,0"
-                                 FontSize="14">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox">
-                                    <Setter Property="Tag" Value="Enter your email"/>
-                                </Style>
-                            </TextBox.Style>
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding SubscribeNewsletterCommand}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
+                        <Grid>
+                            <TextBox Text="{Binding NewsletterEmail, UpdateSourceTrigger=PropertyChanged}"
+                     Background="Transparent" 
+                     BorderThickness="0" 
+                     VerticalAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     Padding="18,0"
+                     FontSize="14">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding SubscribeNewsletterCommand}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+                            <!-- Placeholder que desaparece cuando escribes -->
+                            <TextBlock Text="Enter your email"
+                       Foreground="{StaticResource Gray400Brush}"
+                       FontSize="14"
+                       VerticalAlignment="Center"
+                       Margin="18,0,0,0"
+                       IsHitTestVisible="False">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding NewsletterEmail}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding NewsletterEmail}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
                     </Border>
-                    <Button Content="SUBSCRIBE" 
-                            Style="{StaticResource PrimaryButton}"
-                            Background="{StaticResource RedAccentBrush}"
-                            Padding="0,16"
-                            FontSize="13"
-                            Command="{Binding SubscribeNewsletterCommand}"
-                            IsEnabled="{Binding IsSubscribing, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+                    <!-- Botón Subscribe -->
+                    <Button Background="{StaticResource RedAccentBrush}"
+        Padding="0,16"
+        FontSize="13"
+        Command="{Binding SubscribeNewsletterCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+                                <Setter Property="Content" Value="SUBSCRIBE"/>
+                                <Setter Property="IsEnabled" Value="True"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSubscribing}" Value="True">
+                                        <Setter Property="Content" Value="SUBSCRIBING..."/>
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Mensaje de resultado -->
                     <TextBlock Text="{Binding SubscriptionMessage}"
-                               FontSize="12"
-                               Foreground="{StaticResource Gray400Brush}"
-                               Margin="0,10,0,0"/>
+               FontSize="12"
+               Foreground="{StaticResource Gray400Brush}"
+               Margin="0,10,0,0"/>
+
+                    <!-- Texto legal -->
                     <TextBlock Text="By subscribing, you agree to our Privacy Policy"
-                               FontSize="11"
-                               Foreground="{StaticResource Gray500Brush}"
-                               Margin="0,5,0,0"
-                               Visibility="{Binding SubscriptionMessage, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+               FontSize="11"
+               Foreground="{StaticResource Gray500Brush}"
+               Margin="0,5,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>
