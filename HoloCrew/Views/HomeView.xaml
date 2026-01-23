@@ -82,7 +82,8 @@
                                     Foreground="White"
                                     Padding="35,16"
                                     FontSize="13"
-                                    Margin="15,0,0,0"/>
+                                    Margin="15,0,0,0"
+                                    Command="{Binding ViewLookbookCommand}"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
@@ -298,10 +299,7 @@
         <!-- ============================================ -->
         <!-- BLACK WEEK BANNER -->
         <!-- ============================================ -->
-        <Border Background="{StaticResource BlackPrimaryBrush}" Padding="80,50" Cursor="Hand">
-            <Border.InputBindings>
-                <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToBlackWeekCommand}"/>
-            </Border.InputBindings>
+        <Border Background="{StaticResource BlackPrimaryBrush}" Padding="80,50">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -374,11 +372,6 @@
                             <Border Background="{StaticResource WhitePrimaryBrush}"
                                     Margin="10"
                                     Cursor="Hand">
-                                <Border.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick" 
-                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                  CommandParameter="{Binding}"/>
-                                </Border.InputBindings>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="320"/>
@@ -387,6 +380,11 @@
 
                                     <!-- Image -->
                                     <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
                                         <Grid>
                                             <!-- Badges -->
                                             <StackPanel Orientation="Horizontal" 
@@ -410,60 +408,65 @@
                                                 </Border>
                                             </StackPanel>
 
-                                            <!-- Wishlist button -->
+                                            <!-- Wishlist button - SEPARADO del click del producto -->
                                             <Border Width="36" Height="36"
                                                     Background="White"
                                                     CornerRadius="18"
                                                     HorizontalAlignment="Right"
                                                     VerticalAlignment="Top"
                                                     Margin="12"
-                                                    Cursor="Hand">
+                                                    Cursor="Hand"
+                                                    Panel.ZIndex="10">
                                                 <Border.Effect>
                                                     <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="5" ShadowDepth="1"/>
                                                 </Border.Effect>
-                                                <Border.InputBindings>
-                                                    <MouseBinding MouseAction="LeftClick"
-                                                                  Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                  CommandParameter="{Binding}"/>
-                                                </Border.InputBindings>
-                                                <TextBlock FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Setter Property="Text" Value="🤍"/>
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
-                                                                    <Setter Property="Text" Value="❤️"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Cursor="Hand">
+                                                    <TextBlock FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Text" Value="🤍"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
+                                                                        <Setter Property="Text" Value="❤️"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Button>
                                             </Border>
 
                                             <!-- Quick Add -->
-                                            <Border Background="{StaticResource BlackPrimaryBrush}"
+                                            <Button Background="{StaticResource BlackPrimaryBrush}"
+                                                    BorderThickness="0"
                                                     Height="42"
                                                     VerticalAlignment="Bottom"
                                                     Opacity="0"
                                                     x:Name="QuickAdd"
-                                                    Cursor="Hand">
-                                                <Border.InputBindings>
-                                                    <MouseBinding MouseAction="LeftClick"
-                                                                  Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                  CommandParameter="{Binding}"/>
-                                                </Border.InputBindings>
+                                                    Cursor="Hand"
+                                                    Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}">
                                                 <TextBlock Text="QUICK ADD +"
                                                            Foreground="White"
                                                            FontSize="12"
                                                            FontWeight="Bold"
                                                            HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"/>
-                                            </Border>
+                                            </Button>
                                         </Grid>
                                     </Border>
 
                                     <!-- Info -->
                                     <StackPanel Grid.Row="1" Margin="0,15,0,0">
+                                        <StackPanel.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          CommandParameter="{Binding}"/>
+                                        </StackPanel.InputBindings>
                                         <TextBlock Text="{Binding Name}" 
                                                    FontSize="14"
                                                    FontWeight="SemiBold"
@@ -542,6 +545,11 @@
                                        Foreground="{StaticResource Gray300Brush}"
                                        Margin="0,10,0,20"/>
                             <Border Background="White" HorizontalAlignment="Left" Padding="20,12" Cursor="Hand">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" 
+                                                  Command="{Binding NavigateToCategoryCommand}" 
+                                                  CommandParameter="softs"/>
+                                </Border.InputBindings>
                                 <TextBlock Text="SHOP NOW" FontSize="12" FontWeight="Bold"/>
                             </Border>
                         </StackPanel>
@@ -575,6 +583,11 @@
                                        Foreground="{StaticResource Gray300Brush}"
                                        Margin="0,10,0,20"/>
                             <Border Background="White" HorizontalAlignment="Left" Padding="20,12" Cursor="Hand">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" 
+                                                  Command="{Binding NavigateToCategoryCommand}" 
+                                                  CommandParameter="classic"/>
+                                </Border.InputBindings>
                                 <TextBlock Text="SHOP NOW" FontSize="12" FontWeight="Bold"/>
                             </Border>
                         </StackPanel>
@@ -609,35 +622,45 @@
 
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                     <Border Background="White" Height="50" Margin="0,0,0,12">
-                        <Grid>
-                            <TextBox Background="Transparent" 
-                                     BorderThickness="0" 
-                                     VerticalAlignment="Center"
-                                     Padding="18,0"
-                                     FontSize="14"/>
-                            <TextBlock Text="Enter your email"
-                                       Foreground="{StaticResource Gray400Brush}"
-                                       FontSize="14"
-                                       VerticalAlignment="Center"
-                                       Margin="18,0,0,0"
-                                       IsHitTestVisible="False"/>
-                        </Grid>
+                        <TextBox Text="{Binding NewsletterEmail, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="Transparent" 
+                                 BorderThickness="0" 
+                                 VerticalAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Padding="18,0"
+                                 FontSize="14">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Tag" Value="Enter your email"/>
+                                </Style>
+                            </TextBox.Style>
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding SubscribeNewsletterCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
                     </Border>
                     <Button Content="SUBSCRIBE" 
                             Style="{StaticResource PrimaryButton}"
                             Background="{StaticResource RedAccentBrush}"
                             Padding="0,16"
-                            FontSize="13"/>
+                            FontSize="13"
+                            Command="{Binding SubscribeNewsletterCommand}"
+                            IsEnabled="{Binding IsSubscribing, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                    <TextBlock Text="{Binding SubscriptionMessage}"
+                               FontSize="12"
+                               Foreground="{StaticResource Gray400Brush}"
+                               Margin="0,10,0,0"/>
                     <TextBlock Text="By subscribing, you agree to our Privacy Policy"
                                FontSize="11"
                                Foreground="{StaticResource Gray500Brush}"
-                               Margin="0,12,0,0"/>
+                               Margin="0,5,0,0"
+                               Visibility="{Binding SubscriptionMessage, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
                 </StackPanel>
             </Grid>
         </Border>
 
         <!-- ============================================ -->
-        <!-- INSTAGRAM FEED PLACEHOLDER -->
+        <!-- INSTAGRAM / IMAGE CAROUSEL -->
         <!-- ============================================ -->
         <Border Padding="80,70" Background="{StaticResource WhitePrimaryBrush}">
             <StackPanel>
@@ -652,13 +675,44 @@
                            HorizontalAlignment="Center"
                            Margin="0,0,0,40"/>
 
+                <!-- Image Carousel - 6 placeholders para imágenes -->
                 <UniformGrid Columns="6" Rows="1">
-                    <Border Background="{StaticResource Gray200Brush}" Height="180" Margin="5"/>
-                    <Border Background="{StaticResource Gray300Brush}" Height="180" Margin="5"/>
-                    <Border Background="{StaticResource Gray200Brush}" Height="180" Margin="5"/>
-                    <Border Background="{StaticResource Gray300Brush}" Height="180" Margin="5"/>
-                    <Border Background="{StaticResource Gray200Brush}" Height="180" Margin="5"/>
-                    <Border Background="{StaticResource Gray300Brush}" Height="180" Margin="5"/>
+                    <Border Background="{StaticResource Gray200Brush}" Height="180" Margin="5" Cursor="Hand">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
+                    </Border>
+                    <Border Background="{StaticResource Gray300Brush}" Height="180" Margin="5" Cursor="Hand">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
+                    </Border>
+                    <Border Background="{StaticResource Gray200Brush}" Height="180" Margin="5" Cursor="Hand">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
+                    </Border>
+                    <Border Background="{StaticResource Gray300Brush}" Height="180" Margin="5" Cursor="Hand">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
+                    </Border>
+                    <Border Background="{StaticResource Gray200Brush}" Height="180" Margin="5" Cursor="Hand">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
+                    </Border>
+                    <Border Background="{StaticResource Gray300Brush}" Height="180" Margin="5" Cursor="Hand">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
+                    </Border>
                 </UniformGrid>
             </StackPanel>
         </Border>

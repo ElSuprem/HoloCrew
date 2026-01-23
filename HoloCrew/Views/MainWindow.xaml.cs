@@ -1,8 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using System.ComponentModel;
 
 namespace HoloCrew.Views
 {
@@ -16,6 +18,40 @@ namespace HoloCrew.Views
         public MainWindow()
         {
             InitializeComponent();
+
+            // Suscribirse al cambio de vista para resetear scroll
+            DataContextChanged += MainWindow_DataContextChanged;
+        }
+
+        /// <summary>
+        /// Cuando cambia el DataContext, suscribirse a cambios de CurrentView
+        /// </summary>
+        private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue is INotifyPropertyChanged oldVm)
+            {
+                oldVm.PropertyChanged -= ViewModel_PropertyChanged;
+            }
+
+            if (e.NewValue is INotifyPropertyChanged newVm)
+            {
+                newVm.PropertyChanged += ViewModel_PropertyChanged;
+            }
+        }
+
+        /// <summary>
+        /// Cuando cambia CurrentView, resetear el scroll a la parte superior
+        /// </summary>
+        private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "CurrentView")
+            {
+                // Resetear scroll al inicio cuando cambia la vista
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    MainScrollViewer.ScrollToTop();
+                }), System.Windows.Threading.DispatcherPriority.Loaded);
+            }
         }
 
         /// <summary>
@@ -117,7 +153,7 @@ namespace HoloCrew.Views
             e.Handled = true;
         }
 
-        private ScrollViewer FindParentScrollViewer(DependencyObject child, ScrollViewer scrollViewerToExclude)
+        private ScrollViewer? FindParentScrollViewer(DependencyObject child, ScrollViewer scrollViewerToExclude)
         {
             if (child == null) return null;
 
@@ -146,6 +182,18 @@ namespace HoloCrew.Views
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Limpiar suscripciones al cerrar
+        /// </summary>
+        protected override void OnClosed(EventArgs e)
+        {
+            if (DataContext is INotifyPropertyChanged vm)
+            {
+                vm.PropertyChanged -= ViewModel_PropertyChanged;
+            }
+            base.OnClosed(e);
         }
     }
 }

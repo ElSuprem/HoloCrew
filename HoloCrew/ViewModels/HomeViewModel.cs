@@ -15,6 +15,7 @@ namespace HoloCrew.ViewModels
         private readonly IProductService _productService;
         private readonly INavigationService _navigationService;
         private readonly ICartService _cartService;
+        private readonly IWishlistService _wishlistService;
 
         [ObservableProperty]
         private ObservableCollection<Product> _featuredProducts = new();
@@ -26,21 +27,32 @@ namespace HoloCrew.ViewModels
         private ObservableCollection<Category> _categories = new();
 
         [ObservableProperty]
-        private string _bannerImageUrl;
+        private string _bannerImageUrl = string.Empty;
+
+        [ObservableProperty]
+        private string _newsletterEmail = string.Empty;
+
+        [ObservableProperty]
+        private bool _isSubscribing;
+
+        [ObservableProperty]
+        private string _subscriptionMessage = string.Empty;
 
         public HomeViewModel(
             IProductService productService,
             INavigationService navigationService,
-            ICartService cartService)
+            ICartService cartService,
+            IWishlistService wishlistService)
         {
             _productService = productService;
             _navigationService = navigationService;
             _cartService = cartService;
+            _wishlistService = wishlistService;
 
             Title = AppConstants.UI.Home;
         }
 
-        public override async void OnNavigatedTo(object parameter)
+        public override async void OnNavigatedTo(object? parameter)
         {
             base.OnNavigatedTo(parameter);
             await LoadDataAsync();
@@ -58,11 +70,19 @@ namespace HoloCrew.ViewModels
 
                 FeaturedProducts = new ObservableCollection<Product>(await featuredTask);
                 Categories = new ObservableCollection<Category>(await categoriesTask);
+
                 BannerImageUrl = "/Resources/Images/banner.jpg";
 
-                if (FeaturedProducts.Count == 0) SetEmpty(); else SetSuccess();
+                if (FeaturedProducts.Count == 0)
+                    SetEmpty();
+                else
+                    SetSuccess();
             });
         }
+
+        // ============================
+        // NAVEGACIÓN
+        // ============================
 
         [RelayCommand]
         private void ViewProductDetail(Product product)
@@ -72,24 +92,129 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
+        private void NavigateToCatalog()
+        {
+            _navigationService.NavigateTo<ProductCatalogViewModel>();
+        }
+
+        [RelayCommand]
+        private void NavigateToCategory(string category)
+        {
+            if (string.IsNullOrEmpty(category)) return;
+            _navigationService.NavigateTo<ProductCatalogViewModel>(category);
+        }
+
+        [RelayCommand]
+        private void NavigateToBlackWeek()
+        {
+            _navigationService.NavigateTo<BlackWeekViewModel>();
+        }
+
+        [RelayCommand]
+        private void NavigateToFlashSale()
+        {
+            _navigationService.NavigateTo<FlashSaleViewModel>();
+        }
+
+        [RelayCommand]
+        private void NavigateToMembers()
+        {
+            _navigationService.NavigateTo<MembersClubViewModel>();
+        }
+
+        [RelayCommand]
+        private void ViewLookbook()
+        {
+            // Por ahora navega al catálogo con filtro de colección
+            _navigationService.NavigateTo<ProductCatalogViewModel>("softs");
+        }
+
+        // ============================
+        // CARRITO
+        // ============================
+
+        [RelayCommand]
         private async Task AddToCartAsync(Product product)
         {
             if (product == null) return;
-            try { await _cartService.AddToCartAsync(product, 1); }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}"); }
+
+            try
+            {
+                await _cartService.AddToCartAsync(product, 1);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error adding to cart: {ex.Message}");
+            }
         }
 
+        // ============================
+        // WISHLIST
+        // ============================
+
         [RelayCommand]
-        private void NavigateToCategory(Category category)
+        private async Task ToggleWishlistAsync(Product product)
         {
-            if (category == null) return;
-            _navigationService.NavigateTo<ProductCatalogViewModel>(category.Id);
+            if (product == null) return;
+
+            try
+            {
+                if (product.IsInWishlist)
+                {
+                    await _wishlistService.RemoveFromWishlistAsync(product.Id);
+                    product.IsInWishlist = false;
+                }
+                else
+                {
+                    await _wishlistService.AddToWishlistAsync(product.Id);
+                    product.IsInWishlist = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error toggling wishlist: {ex.Message}");
+            }
         }
 
-        [RelayCommand]
-        private void NavigateToCatalog() => _navigationService.NavigateTo<ProductCatalogViewModel>();
+        // ============================
+        // NEWSLETTER
+        // ============================
 
         [RelayCommand]
-        private void NavigateToMembers() => _navigationService.NavigateTo<MembersClubViewModel>();
+        private async Task SubscribeNewsletterAsync()
+        {
+            if (string.IsNullOrWhiteSpace(NewsletterEmail))
+            {
+                SubscriptionMessage = "Please enter a valid email";
+                return;
+            }
+
+            if (!NewsletterEmail.Contains("@"))
+            {
+                SubscriptionMessage = "Please enter a valid email";
+                return;
+            }
+
+            IsSubscribing = true;
+            SubscriptionMessage = string.Empty;
+
+            try
+            {
+                // Simular llamada a API
+                await Task.Delay(1000);
+
+                SubscriptionMessage = "Thanks for subscribing!";
+                NewsletterEmail = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                SubscriptionMessage = "Error subscribing. Please try again.";
+                System.Diagnostics.Debug.WriteLine($"Error subscribing: {ex.Message}");
+            }
+            finally
+            {
+                IsSubscribing = false;
+            }
+        }
     }
 }
