@@ -5,6 +5,7 @@ using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -17,6 +18,9 @@ namespace HoloCrew.ViewModels
         private readonly IWishlistService _wishlistService;
         private readonly INavigationService _navigationService;
         private DispatcherTimer? _countdownTimer;
+
+        // Lista completa de productos (sin filtrar)
+        private ObservableCollection<Product> _allFlashSaleProducts = new();
 
         #region Properties
 
@@ -137,7 +141,7 @@ namespace HoloCrew.ViewModels
 
                     product.OriginalPrice = product.Price;
                     product.Price = Math.Round(product.OriginalPrice.Value * (100 - discountPercent) / 100, 2);
-                    product.IsBlackWeek = true; // Reusar para indicar flash sale
+                    product.IsBlackWeek = true;
 
                     flashProducts.Add(product);
                 }
@@ -148,8 +152,11 @@ namespace HoloCrew.ViewModels
                     flashProducts = CreateMockFlashSaleProducts();
                 }
 
-                FlashSaleProducts = flashProducts;
-                TotalProductCount = FlashSaleProducts.Count;
+                // Guardar todos los productos
+                _allFlashSaleProducts = flashProducts;
+
+                // Aplicar filtros iniciales
+                ApplyFiltersAndSort();
 
                 if (TotalProductCount == 0)
                     SetEmpty();
@@ -172,7 +179,8 @@ namespace HoloCrew.ViewModels
                     IsNew = false,
                     IsFeatured = true,
                     MainImageUrl = "/Resources/Images/hoodie1.jpg",
-                    CategoryId = 1
+                    CategoryId = 1,
+                    Category = new Category { Name = "Tops" }
                 },
                 new Product
                 {
@@ -184,7 +192,8 @@ namespace HoloCrew.ViewModels
                     IsNew = false,
                     IsFeatured = true,
                     MainImageUrl = "/Resources/Images/cargo1.jpg",
-                    CategoryId = 2
+                    CategoryId = 2,
+                    Category = new Category { Name = "Bottoms" }
                 },
                 new Product
                 {
@@ -196,7 +205,8 @@ namespace HoloCrew.ViewModels
                     IsNew = false,
                     IsFeatured = true,
                     MainImageUrl = "/Resources/Images/tee1.jpg",
-                    CategoryId = 1
+                    CategoryId = 1,
+                    Category = new Category { Name = "Tops" }
                 },
                 new Product
                 {
@@ -208,7 +218,8 @@ namespace HoloCrew.ViewModels
                     IsNew = false,
                     IsFeatured = true,
                     MainImageUrl = "/Resources/Images/sneaker1.jpg",
-                    CategoryId = 3
+                    CategoryId = 3,
+                    Category = new Category { Name = "Footwear" }
                 },
                 new Product
                 {
@@ -220,7 +231,8 @@ namespace HoloCrew.ViewModels
                     IsNew = true,
                     IsFeatured = true,
                     MainImageUrl = "/Resources/Images/jacket1.jpg",
-                    CategoryId = 1
+                    CategoryId = 1,
+                    Category = new Category { Name = "Tops" }
                 },
                 new Product
                 {
@@ -232,7 +244,8 @@ namespace HoloCrew.ViewModels
                     IsNew = false,
                     IsFeatured = true,
                     MainImageUrl = "/Resources/Images/beanie1.jpg",
-                    CategoryId = 4
+                    CategoryId = 4,
+                    Category = new Category { Name = "Accessories" }
                 },
                 new Product
                 {
@@ -244,7 +257,8 @@ namespace HoloCrew.ViewModels
                     IsNew = false,
                     IsFeatured = true,
                     MainImageUrl = "/Resources/Images/joggers1.jpg",
-                    CategoryId = 2
+                    CategoryId = 2,
+                    Category = new Category { Name = "Bottoms" }
                 },
                 new Product
                 {
@@ -256,9 +270,63 @@ namespace HoloCrew.ViewModels
                     IsNew = true,
                     IsFeatured = true,
                     MainImageUrl = "/Resources/Images/bag1.jpg",
-                    CategoryId = 4
+                    CategoryId = 4,
+                    Category = new Category { Name = "Accessories" }
                 }
             };
+        }
+
+        #endregion
+
+        #region Filtering and Sorting
+
+        private void ApplyFiltersAndSort()
+        {
+            var filtered = _allFlashSaleProducts.AsEnumerable();
+
+            // Filtrar por categoría
+            if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
+            {
+                filtered = filtered.Where(p =>
+                    p.Category?.Name?.Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase) == true ||
+                    GetCategoryNameById(p.CategoryId).Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Ordenar
+            filtered = SortBy switch
+            {
+                "Price: Low to High" => filtered.OrderBy(p => p.Price),
+                "Price: High to Low" => filtered.OrderByDescending(p => p.Price),
+                "Newest" => filtered.OrderByDescending(p => p.IsNew).ThenByDescending(p => p.Id),
+                "Best Selling" => filtered.OrderByDescending(p => p.IsFeatured),
+                "Biggest Discount" => filtered.OrderByDescending(p => p.DiscountPercentage),
+                _ => filtered.OrderByDescending(p => p.DiscountPercentage)
+            };
+
+            FlashSaleProducts = new ObservableCollection<Product>(filtered);
+            TotalProductCount = FlashSaleProducts.Count;
+        }
+
+        private string GetCategoryNameById(int categoryId)
+        {
+            return categoryId switch
+            {
+                1 => "Tops",
+                2 => "Bottoms",
+                3 => "Footwear",
+                4 => "Accessories",
+                _ => "Other"
+            };
+        }
+
+        partial void OnSelectedCategoryChanged(string value)
+        {
+            ApplyFiltersAndSort();
+        }
+
+        partial void OnSortByChanged(string value)
+        {
+            ApplyFiltersAndSort();
         }
 
         #endregion
@@ -319,6 +387,13 @@ namespace HoloCrew.ViewModels
         #region Commands
 
         [RelayCommand]
+        private void SelectCategory(string category)
+        {
+            if (string.IsNullOrEmpty(category)) return;
+            SelectedCategory = category;
+        }
+
+        [RelayCommand]
         private void ViewProductDetail(Product product)
         {
             if (product == null) return;
@@ -362,20 +437,6 @@ namespace HoloCrew.ViewModels
             {
                 System.Diagnostics.Debug.WriteLine($"Error toggling wishlist: {ex.Message}");
             }
-        }
-
-        [RelayCommand]
-        private void ApplyFilter()
-        {
-            // TODO: Implementar filtrado por categoría
-            System.Diagnostics.Debug.WriteLine($"Filter by: {SelectedCategory}");
-        }
-
-        [RelayCommand]
-        private void ApplySort()
-        {
-            // TODO: Implementar ordenación
-            System.Diagnostics.Debug.WriteLine($"Sort by: {SortBy}");
         }
 
         [RelayCommand]

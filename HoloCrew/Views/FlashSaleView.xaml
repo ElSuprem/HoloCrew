@@ -17,8 +17,8 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Text="⏳" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,20"/>
                 <TextBlock Text="{Binding LoadingMessage}" 
-                           Style="{StaticResource BodyLarge}"
-                           Foreground="{StaticResource TextSecondary}"/>
+                           FontSize="16"
+                           Foreground="{StaticResource Gray500Brush}"/>
             </StackPanel>
         </Border>
 
@@ -30,17 +30,18 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="400">
                 <TextBlock Text="🔥" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,20"/>
                 <TextBlock Text="{Binding EmptyTitle}" 
-                           Style="{StaticResource HeadingMedium}"
+                           FontSize="24"
+                           FontWeight="Bold"
                            TextAlignment="Center"
                            Margin="0,0,0,10"/>
                 <TextBlock Text="{Binding EmptySubtitle}" 
-                           Style="{StaticResource BodyLarge}"
-                           Foreground="{StaticResource TextSecondary}"
+                           FontSize="16"
+                           Foreground="{StaticResource Gray500Brush}"
                            TextAlignment="Center"
                            TextWrapping="Wrap"
                            Margin="0,0,0,30"/>
                 <Button Content="{Binding EmptyActionText}"
-                        Style="{StaticResource AccentButton}"
+                        Style="{StaticResource PrimaryButton}"
                         Command="{Binding EmptyActionCommand}"
                         Padding="40,15"
                         HorizontalAlignment="Center"/>
@@ -205,24 +206,14 @@
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <!-- Sale ended message -->
+                                    <!-- Hurry up message -->
                                     <TextBlock Text="🔥 HURRY UP!"
                                                FontSize="12"
                                                FontWeight="SemiBold"
                                                Foreground="#FF6B00"
                                                HorizontalAlignment="Center"
-                                               Margin="0,15,0,0">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsSaleActive}" Value="False">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
+                                               Margin="0,15,0,0"
+                                               Visibility="{Binding IsSaleActive, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -247,7 +238,7 @@
                 <!-- FILTERS BAR -->
                 <!-- ============================================ -->
                 <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
+                        BorderBrush="{StaticResource Gray200Brush}"
                         BorderThickness="0,0,0,1"
                         Padding="80,20">
                     <Grid>
@@ -264,6 +255,7 @@
                                        FontWeight="SemiBold"
                                        VerticalAlignment="Center"
                                        Margin="0,0,15,0"/>
+
                             <ItemsControl ItemsSource="{Binding Categories}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -272,38 +264,40 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Padding="15,8"
+                                        <Button Content="{Binding}"
+                                                Command="{Binding DataContext.SelectCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
                                                 Margin="0,0,8,0"
-                                                Cursor="Hand"
-                                                BorderThickness="1">
-                                            <Border.Style>
-                                                <Style TargetType="Border">
+                                                Padding="15,8"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Cursor="Hand">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
                                                     <Setter Property="Background" Value="Transparent"/>
-                                                    <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                                        Padding="{TemplateBinding Padding}">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding}" Value="{Binding DataContext.SelectedCategory, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                        </DataTrigger>
                                                         <Trigger Property="IsMouseOver" Value="True">
                                                             <Setter Property="Background" Value="{StaticResource Gray100Brush}"/>
                                                         </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </Border.Style>
-                                            <TextBlock Text="{Binding}" FontSize="12" FontWeight="SemiBold">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding}" Value="{Binding DataContext.SelectedCategory, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                                                                <Setter Property="Foreground" Value="White"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </Border>
+                                            </Button.Style>
+                                        </Button>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -321,7 +315,7 @@
                                       Height="36"
                                       Padding="12,0"
                                       FontSize="13"
-                                      BorderBrush="{StaticResource BorderDefault}"/>
+                                      BorderBrush="{StaticResource Gray300Brush}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -345,11 +339,6 @@
                                     <Border.Effect>
                                         <DropShadowEffect Color="Black" Opacity="0.08" BlurRadius="10" ShadowDepth="2"/>
                                     </Border.Effect>
-                                    <Border.InputBindings>
-                                        <MouseBinding MouseAction="LeftClick" 
-                                                      Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                      CommandParameter="{Binding}"/>
-                                    </Border.InputBindings>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="300"/>
@@ -358,6 +347,11 @@
 
                                         <!-- Image -->
                                         <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
+                                            <Border.InputBindings>
+                                                <MouseBinding MouseAction="LeftClick" 
+                                                              Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                              CommandParameter="{Binding}"/>
+                                            </Border.InputBindings>
                                             <Grid>
                                                 <!-- Discount Badge -->
                                                 <Border Background="{StaticResource RedAccentBrush}"
@@ -372,13 +366,13 @@
                                                     </TextBlock>
                                                 </Border>
 
-                                                <!-- Stock warning - shows when stock <= 5 -->
+                                                <!-- Stock warning -->
                                                 <Border Background="#FEF3C7"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Top"
                                                         Padding="10,5"
                                                         Margin="0,40,0,0"
-                                                        Visibility="{Binding Stock, Converter={StaticResource CountToVisibilityConverter}}">
+                                                        Visibility="{Binding IsLowStock, Converter={StaticResource BoolToVisibilityConverter}}">
                                                     <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#92400E">
                                                         <Run Text="Only "/>
                                                         <Run Text="{Binding Stock, Mode=OneWay}"/>
@@ -393,53 +387,58 @@
                                                         HorizontalAlignment="Right"
                                                         VerticalAlignment="Top"
                                                         Margin="12"
-                                                        Cursor="Hand">
+                                                        Cursor="Hand"
+                                                        Panel.ZIndex="10">
                                                     <Border.Effect>
                                                         <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="5" ShadowDepth="1"/>
                                                     </Border.Effect>
-                                                    <Border.InputBindings>
-                                                        <MouseBinding MouseAction="LeftClick"
-                                                                      Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                      CommandParameter="{Binding}"/>
-                                                    </Border.InputBindings>
-                                                    <TextBlock FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="TextBlock">
-                                                                <Setter Property="Text" Value="🤍"/>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
-                                                                        <Setter Property="Text" Value="❤️"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
+                                                    <Button Background="Transparent"
+                                                            BorderThickness="0"
+                                                            Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"
+                                                            Cursor="Hand">
+                                                        <TextBlock FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value="🤍"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
+                                                                            <Setter Property="Text" Value="❤️"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </Button>
                                                 </Border>
 
                                                 <!-- Quick Add -->
-                                                <Border Background="{StaticResource BlackPrimaryBrush}"
+                                                <Button Background="{StaticResource BlackPrimaryBrush}"
+                                                        BorderThickness="0"
                                                         Height="45"
                                                         VerticalAlignment="Bottom"
                                                         Opacity="0"
                                                         x:Name="QuickAdd"
-                                                        Cursor="Hand">
-                                                    <Border.InputBindings>
-                                                        <MouseBinding MouseAction="LeftClick"
-                                                                      Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                      CommandParameter="{Binding}"/>
-                                                    </Border.InputBindings>
+                                                        Cursor="Hand"
+                                                        Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}">
                                                     <TextBlock Text="🛒 ADD TO CART"
                                                                Foreground="White"
                                                                FontSize="12"
                                                                FontWeight="Bold"
                                                                HorizontalAlignment="Center"
                                                                VerticalAlignment="Center"/>
-                                                </Border>
+                                                </Button>
                                             </Grid>
                                         </Border>
 
                                         <!-- Info -->
                                         <StackPanel Grid.Row="1" Margin="15">
+                                            <StackPanel.InputBindings>
+                                                <MouseBinding MouseAction="LeftClick" 
+                                                              Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                              CommandParameter="{Binding}"/>
+                                            </StackPanel.InputBindings>
                                             <TextBlock Text="{Binding Name}" 
                                                        FontSize="14"
                                                        FontWeight="SemiBold"
