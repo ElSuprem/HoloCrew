@@ -58,8 +58,19 @@ namespace HoloCrew.Models
         public bool IsInStock => Stock > 0;
         public bool IsLowStock => Stock > 0 && Stock <= 10;
 
-        // Estado de wishlist para UI reactiva
-        [ObservableProperty]
+        // Estado de wishlist - PROPIEDAD MANUAL para garantizar notificación
         private bool _isInWishlist;
+        public bool IsInWishlist
+        {
+            get => _isInWishlist;
+            set
+            {
+                if (_isInWishlist != value)
+                {
+                    _isInWishlist = value;
+                    OnPropertyChanged(nameof(IsInWishlist));
+                }
+            }
+        }
     }
 }

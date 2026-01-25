@@ -24,7 +24,7 @@ namespace HoloCrew.Services
 
         private void InitializeMockWishlist()
         {
-            // ⭐ WISHLIST VACÍA - Los productos se agregan desde la app
+            // WISHLIST VACÍA - Los productos se agregan desde la app
             _wishlistItems = new ObservableCollection<Product>();
         }
 
@@ -33,6 +33,38 @@ namespace HoloCrew.Services
             return await Task.FromResult(_wishlistItems.ToList());
         }
 
+        /// <summary>
+        /// Agrega producto usando el MISMO objeto (mantiene referencia para UI)
+        /// </summary>
+        public async Task AddToWishlistAsync(Product product)
+        {
+            if (product == null) return;
+
+            try
+            {
+                // Verificar si ya está
+                if (_wishlistItems.Any(p => p.Id == product.Id))
+                {
+                    System.Diagnostics.Debug.WriteLine($"⚠️ Product {product.Id} already in wishlist");
+                    return;
+                }
+
+                // Usar el MISMO objeto que viene de la UI
+                _wishlistItems.Add(product);
+                System.Diagnostics.Debug.WriteLine($"✅ Added product {product.Id} ({product.Name}) to wishlist. Total: {_wishlistItems.Count}");
+                OnWishlistUpdated();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ Error adding to wishlist: {ex.Message}");
+            }
+
+            await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Agrega producto por ID (carga nuevo producto - NO mantiene referencia UI)
+        /// </summary>
         public async Task AddToWishlistAsync(int productId)
         {
             try
@@ -46,7 +78,7 @@ namespace HoloCrew.Services
                     return;
                 }
 
-                // Cargar producto
+                // Cargar producto (NOTA: esto crea nueva instancia)
                 var product = await _productService.GetProductByIdAsync(productId);
 
                 if (product != null)

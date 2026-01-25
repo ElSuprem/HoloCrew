@@ -251,21 +251,20 @@ namespace HoloCrew.ViewModels
         {
             if (Product == null) return;
 
+            // Cambio inmediato
+            IsInWishlist = !IsInWishlist;
+
             try
             {
                 if (IsInWishlist)
-                {
-                    await _wishlistService.RemoveFromWishlistAsync(Product.Id);
-                    IsInWishlist = false;
-                }
+                    await _wishlistService.AddToWishlistAsync(Product);
                 else
-                {
-                    await _wishlistService.AddToWishlistAsync(Product.Id);
-                    IsInWishlist = true;
-                }
+                    await _wishlistService.RemoveFromWishlistAsync(Product.Id);
             }
             catch (Exception ex)
             {
+                // Revertir si falla
+                IsInWishlist = !IsInWishlist;
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }

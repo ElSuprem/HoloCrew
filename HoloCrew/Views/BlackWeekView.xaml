@@ -20,6 +20,96 @@
             <GradientStop Color="#D4AF37" Offset="0"/>
             <GradientStop Color="#AA8C2C" Offset="1"/>
         </LinearGradientBrush>
+
+        <!-- ComboBox oscuro estilizado para tema negro -->
+        <Style x:Key="DarkComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="#1A1A1A"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#444444"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentPresenter Grid.Column="0"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      Margin="12,0,0,0"/>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="▼"
+                                               FontSize="10"
+                                               Foreground="#888888"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <Popup x:Name="Popup"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   PopupAnimation="Slide"
+                                   AllowsTransparency="True">
+                                <Border Background="#1A1A1A"
+                                        BorderBrush="#444444"
+                                        BorderThickness="1"
+                                        MaxHeight="200"
+                                        MinWidth="{TemplateBinding ActualWidth}">
+                                    <ScrollViewer>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#D4AF37"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DarkComboBoxItemStyle" TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#2A2A2A"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#333333"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -303,96 +393,90 @@
                             </Border>
                         </StackPanel>
 
+                        <!-- Top Deals Grid (4 productos) -->
                         <ItemsControl ItemsSource="{Binding TopDeals}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <UniformGrid Columns="4"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
+
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Background="#1A1A1A"
-                                            BorderBrush="#2A2A2A"
-                                            BorderThickness="1"
+                                            BorderBrush="#D4AF37"
+                                            BorderThickness="2"
                                             Margin="8"
                                             Cursor="Hand">
-                                        <Border.InputBindings>
-                                            <MouseBinding MouseAction="LeftClick" 
-                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                          CommandParameter="{Binding}"/>
-                                        </Border.InputBindings>
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="280"/>
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
 
-                                            <!-- Image area -->
-                                            <Border Grid.Row="0" Background="#222222">
+                                            <!-- Image con overlay -->
+                                            <Border Grid.Row="0" Background="#252525">
+                                                <Border.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick" 
+                                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  CommandParameter="{Binding}"/>
+                                                </Border.InputBindings>
                                                 <Grid>
-                                                    <!-- Discount badge - prominent gold -->
+                                                    <Image Source="{Binding MainImageUrl}" 
+                                                           Stretch="UniformToFill"/>
+
+                                                    <!-- Discount badge grande -->
                                                     <Border Background="{StaticResource GoldGradientVertical}"
+                                                            Padding="15,8"
                                                             HorizontalAlignment="Left"
                                                             VerticalAlignment="Top"
-                                                            Padding="14,8">
+                                                            Margin="0">
                                                         <TextBlock Foreground="#0A0A0A" FontSize="14" FontWeight="Black">
                                                             <Run Text="-"/>
-                                                            <Run Text="{Binding DiscountPercentage, Mode=OneWay}"/>
+                                                            <Run Text="{Binding DiscountPercentage, Mode=OneWay, StringFormat={}{0:0}}"/>
                                                             <Run Text="%"/>
                                                         </TextBlock>
                                                     </Border>
 
-                                                    <!-- Wishlist -->
-                                                    <Border Width="38" Height="38"
-                                                            Background="#2A2A2A"
-                                                            CornerRadius="19"
+                                                    <!-- Top Deal badge -->
+                                                    <Border Background="#DC2626"
+                                                            Padding="10,5"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Top"
-                                                            Margin="12"
-                                                            Cursor="Hand">
-                                                        <Border.InputBindings>
-                                                            <MouseBinding MouseAction="LeftClick"
-                                                                          Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                          CommandParameter="{Binding}"/>
-                                                        </Border.InputBindings>
-                                                        <TextBlock FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                            <TextBlock.Style>
-                                                                <Style TargetType="TextBlock">
-                                                                    <Setter Property="Text" Value="🤍"/>
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
-                                                                            <Setter Property="Text" Value="❤️"/>
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </TextBlock.Style>
-                                                        </TextBlock>
+                                                            Margin="0">
+                                                        <TextBlock Text="🔥 TOP DEAL" 
+                                                                   Foreground="White" 
+                                                                   FontSize="10" 
+                                                                   FontWeight="Bold"/>
                                                     </Border>
 
-                                                    <!-- Quick add on hover -->
-                                                    <Border Background="{StaticResource GoldGradientVertical}"
+                                                    <!-- Quick Add - CORREGIDO CON BUTTON -->
+                                                    <Button Background="{StaticResource GoldGradientVertical}"
                                                             Height="45"
                                                             VerticalAlignment="Bottom"
                                                             Opacity="0"
                                                             x:Name="QuickAddTop"
-                                                            Cursor="Hand">
-                                                        <Border.InputBindings>
-                                                            <MouseBinding MouseAction="LeftClick"
-                                                                          Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                          CommandParameter="{Binding}"/>
-                                                        </Border.InputBindings>
+                                                            Cursor="Hand"
+                                                            BorderThickness="0"
+                                                            Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}" Height="45">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
                                                         <TextBlock Text="🛒 ADD TO CART"
                                                                    Foreground="#0A0A0A"
                                                                    FontSize="12"
-                                                                   FontWeight="Bold"
-                                                                   HorizontalAlignment="Center"
-                                                                   VerticalAlignment="Center"/>
-                                                    </Border>
+                                                                   FontWeight="Bold"/>
+                                                    </Button>
                                                 </Grid>
                                             </Border>
 
                                             <!-- Info -->
-                                            <StackPanel Grid.Row="1" Margin="15,15,15,18">
+                                            <StackPanel Grid.Row="1" Margin="18">
                                                 <TextBlock Text="{Binding Name}" 
                                                            FontSize="14"
                                                            FontWeight="SemiBold"
@@ -447,7 +531,7 @@
                 </Border>
 
                 <!-- ============================================ -->
-                <!-- FILTERS BAR -->
+                <!-- FILTERS BAR - CORREGIDO CON COMBOBOX OSCURO -->
                 <!-- ============================================ -->
                 <Border Background="#0A0A0A"
                         BorderBrush="#222222"
@@ -460,7 +544,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Category filters -->
+                        <!-- Category filters - CORREGIDO CON BUTTON -->
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
                             <TextBlock Text="Category:"
                                        FontSize="13"
@@ -476,23 +560,49 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Padding="15,8"
+                                        <Button Content="{Binding}"
+                                                Command="{Binding DataContext.SelectCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
                                                 Margin="0,0,8,0"
-                                                Cursor="Hand"
-                                                BorderThickness="1"
-                                                BorderBrush="#333333"
-                                                Background="Transparent">
-                                            <TextBlock Text="{Binding}" 
-                                                       FontSize="12" 
-                                                       FontWeight="SemiBold"
-                                                       Foreground="#AAAAAA"/>
-                                        </Border>
+                                                Padding="15,8"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Cursor="Hand">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Foreground" Value="#AAAAAA"/>
+                                                    <Setter Property="BorderBrush" Value="#333333"/>
+                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border x:Name="border"
+                                                                        Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                                        Padding="{TemplateBinding Padding}">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="border" Property="Background" Value="#1A1A1A"/>
+                                                                        <Setter TargetName="border" Property="BorderBrush" Value="#D4AF37"/>
+                                                                        <Setter Property="Foreground" Value="White"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
 
-                        <!-- Sort dropdown -->
+                        <!-- Sort dropdown - CORREGIDO CON ESTILO OSCURO LEGIBLE -->
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
                             <TextBlock Text="Sort by:"
                                        FontSize="13"
@@ -502,12 +612,8 @@
                             <ComboBox ItemsSource="{Binding SortOptions}"
                                       SelectedItem="{Binding SortBy}"
                                       Width="180"
-                                      Height="36"
-                                      Padding="12,0"
-                                      FontSize="13"
-                                      Background="#1A1A1A"
-                                      Foreground="White"
-                                      BorderBrush="#333333"/>
+                                      Style="{StaticResource DarkComboBoxStyle}"
+                                      ItemContainerStyle="{StaticResource DarkComboBoxItemStyle}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -537,11 +643,6 @@
                                             BorderThickness="1"
                                             Margin="8"
                                             Cursor="Hand">
-                                        <Border.InputBindings>
-                                            <MouseBinding MouseAction="LeftClick" 
-                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                          CommandParameter="{Binding}"/>
-                                        </Border.InputBindings>
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="260"/>
@@ -550,79 +651,82 @@
 
                                             <!-- Image -->
                                             <Border Grid.Row="0" Background="#1A1A1A">
+                                                <Border.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick" 
+                                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  CommandParameter="{Binding}"/>
+                                                </Border.InputBindings>
                                                 <Grid>
-                                                    <!-- Discount Badge -->
+                                                    <Image Source="{Binding MainImageUrl}" Stretch="UniformToFill"/>
+
+                                                    <!-- Discount badge -->
                                                     <Border Background="#DC2626"
+                                                            Padding="10,5"
                                                             HorizontalAlignment="Left"
                                                             VerticalAlignment="Top"
-                                                            Padding="12,6">
+                                                            Margin="10,10,0,0">
                                                         <TextBlock Foreground="White" FontSize="12" FontWeight="Bold">
                                                             <Run Text="-"/>
-                                                            <Run Text="{Binding DiscountPercentage, Mode=OneWay}"/>
+                                                            <Run Text="{Binding DiscountPercentage, Mode=OneWay, StringFormat={}{0:0}}"/>
                                                             <Run Text="%"/>
                                                         </TextBlock>
                                                     </Border>
 
-                                                    <!-- Low stock warning -->
-                                                    <Border Background="#422006"
-                                                            HorizontalAlignment="Left"
-                                                            VerticalAlignment="Top"
-                                                            Padding="10,5"
-                                                            Margin="0,38,0,0"
-                                                            Visibility="{Binding IsLowStock, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                        <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#FBBF24">
-                                                            <Run Text="Only "/>
-                                                            <Run Text="{Binding Stock, Mode=OneWay}"/>
-                                                            <Run Text=" left"/>
-                                                        </TextBlock>
-                                                    </Border>
-
                                                     <!-- Wishlist button -->
-                                                    <Border Width="34" Height="34"
-                                                            Background="#252525"
-                                                            CornerRadius="17"
+                                                    <Button Width="36" Height="36"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Top"
-                                                            Margin="10"
-                                                            Cursor="Hand">
-                                                        <Border.InputBindings>
-                                                            <MouseBinding MouseAction="LeftClick"
-                                                                          Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                          CommandParameter="{Binding}"/>
-                                                        </Border.InputBindings>
-                                                        <TextBlock FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                            <TextBlock.Style>
-                                                                <Style TargetType="TextBlock">
-                                                                    <Setter Property="Text" Value="🤍"/>
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsInWishlist}" Value="True">
-                                                                            <Setter Property="Text" Value="❤️"/>
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </TextBlock.Style>
-                                                        </TextBlock>
-                                                    </Border>
+                                                            Margin="0,10,10,0"
+                                                            Cursor="Hand"
+                                                            Panel.ZIndex="100"
+                                                            Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Width="36" Height="36"
+                                                                        Background="#2A2A2A"
+                                                                        CornerRadius="18">
+                                                                    <Grid>
+                                                                        <!-- Corazón vacío -->
+                                                                        <Viewbox Width="20" Height="20" Margin="0,1,0,0"
+                                                                                 Visibility="{Binding IsInWishlist, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                                                            <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                                                  Fill="Transparent" Stroke="#FFFFFF" StrokeThickness="1.5"/>
+                                                                        </Viewbox>
+                                                                        <!-- Corazón relleno -->
+                                                                        <Viewbox Width="20" Height="20" Margin="0,1,0,0"
+                                                                                 Visibility="{Binding IsInWishlist, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                                            <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                                                  Fill="#EF4444" Stroke="#EF4444" StrokeThickness="1.5"/>
+                                                                        </Viewbox>
+                                                                    </Grid>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                    </Button>
 
-                                                    <!-- Quick Add -->
-                                                    <Border Background="White"
+                                                    <!-- Quick Add - CORREGIDO CON BUTTON -->
+                                                    <Button Background="White"
                                                             Height="42"
                                                             VerticalAlignment="Bottom"
                                                             Opacity="0"
                                                             x:Name="QuickAdd"
-                                                            Cursor="Hand">
-                                                        <Border.InputBindings>
-                                                            <MouseBinding MouseAction="LeftClick"
-                                                                          Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                          CommandParameter="{Binding}"/>
-                                                        </Border.InputBindings>
+                                                            Cursor="Hand"
+                                                            BorderThickness="0"
+                                                            Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}" Height="42">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
                                                         <TextBlock Text="🛒 ADD TO CART"
                                                                    Foreground="#0A0A0A"
                                                                    FontSize="11"
-                                                                   FontWeight="Bold"
-                                                                   HorizontalAlignment="Center"
-                                                                   VerticalAlignment="Center"/>
-                                                    </Border>
+                                                                   FontWeight="Bold"/>
+                                                    </Button>
                                                 </Grid>
                                             </Border>
 

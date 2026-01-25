@@ -243,22 +243,22 @@ namespace HoloCrew.ViewModels
         private async Task ToggleWishlistAsync(Product product)
         {
             if (product == null) return;
+
+            // Cambio inmediato
+            product.IsInWishlist = !product.IsInWishlist;
+
             try
             {
                 if (product.IsInWishlist)
-                {
-                    await _wishlistService.RemoveFromWishlistAsync(product.Id);
-                    product.IsInWishlist = false;
-                }
+                    await _wishlistService.AddToWishlistAsync(product);
                 else
-                {
-                    await _wishlistService.AddToWishlistAsync(product.Id);
-                    product.IsInWishlist = true;
-                }
+                    await _wishlistService.RemoveFromWishlistAsync(product.Id);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error toggling wishlist: {ex.Message}");
+                // Revertir si falla
+                product.IsInWishlist = !product.IsInWishlist;
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
 

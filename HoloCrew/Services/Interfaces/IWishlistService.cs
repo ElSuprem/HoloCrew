@@ -13,9 +13,14 @@ namespace HoloCrew.Services.Interfaces
         event EventHandler WishlistUpdated;
 
         /// <summary>
-        /// Agrega un producto a la wishlist
+        /// Agrega un producto a la wishlist (por ID - carga nuevo producto)
         /// </summary>
         Task AddToWishlistAsync(int productId);
+
+        /// <summary>
+        /// Agrega un producto a la wishlist (usa el mismo objeto)
+        /// </summary>
+        Task AddToWishlistAsync(Product product);
 
         /// <summary>
         /// Elimina un producto de la wishlist

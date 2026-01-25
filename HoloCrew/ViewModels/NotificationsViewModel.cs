@@ -176,10 +176,47 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private void MarkAllAsRead()
         {
+            // ⭐ CORREGIDO: Crear nuevas instancias para forzar actualización de UI
+            var updatedNotifications = new ObservableCollection<Notification>();
+
             foreach (var notification in _allNotifications)
             {
-                notification.IsRead = true;
+                // Crear nueva instancia con IsRead = true
+                updatedNotifications.Add(new Notification
+                {
+                    Id = notification.Id,
+                    Title = notification.Title,
+                    Message = notification.Message,
+                    Type = notification.Type,
+                    Icon = notification.Icon,
+                    CreatedAt = notification.CreatedAt,
+                    IsRead = true // ⭐ Marcar como leído
+                });
             }
+
+            // Reemplazar la lista completa
+            _allNotifications = updatedNotifications;
+
+            // Actualizar la vista según el filtro actual
+            switch (CurrentFilter)
+            {
+                case "Unread":
+                    Notifications = new ObservableCollection<Notification>(
+                        _allNotifications.Where(n => !n.IsRead));
+                    break;
+                case "Orders":
+                    Notifications = new ObservableCollection<Notification>(
+                        _allNotifications.Where(n => n.Type == "Order"));
+                    break;
+                case "Promotions":
+                    Notifications = new ObservableCollection<Notification>(
+                        _allNotifications.Where(n => n.Type == "Promotion"));
+                    break;
+                default:
+                    Notifications = new ObservableCollection<Notification>(_allNotifications);
+                    break;
+            }
+
             UpdateCounts();
         }
 
@@ -194,22 +231,68 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private void MarkAsRead(Notification notification)
         {
-            if (notification != null)
+            if (notification == null) return;
+
+            // Encontrar y actualizar en la lista principal
+            var index = _allNotifications.ToList().FindIndex(n => n.Id == notification.Id);
+            if (index >= 0)
             {
-                notification.IsRead = true;
-                UpdateCounts();
+                var updatedNotification = new Notification
+                {
+                    Id = notification.Id,
+                    Title = notification.Title,
+                    Message = notification.Message,
+                    Type = notification.Type,
+                    Icon = notification.Icon,
+                    CreatedAt = notification.CreatedAt,
+                    IsRead = true
+                };
+
+                _allNotifications[index] = updatedNotification;
+
+                // Actualizar en la vista actual
+                var viewIndex = Notifications.ToList().FindIndex(n => n.Id == notification.Id);
+                if (viewIndex >= 0)
+                {
+                    Notifications[viewIndex] = updatedNotification;
+                }
             }
+
+            UpdateCounts();
         }
 
         [RelayCommand]
         private void DeleteNotification(Notification notification)
         {
-            if (notification != null)
+            if (notification == null) return;
+
+            // Remover de ambas listas
+            var toRemoveFromAll = _allNotifications.FirstOrDefault(n => n.Id == notification.Id);
+            if (toRemoveFromAll != null)
             {
-                _allNotifications.Remove(notification);
-                Notifications.Remove(notification);
-                UpdateCounts();
+                _allNotifications.Remove(toRemoveFromAll);
             }
+
+            var toRemoveFromView = Notifications.FirstOrDefault(n => n.Id == notification.Id);
+            if (toRemoveFromView != null)
+            {
+                Notifications.Remove(toRemoveFromView);
+            }
+
+            UpdateCounts();
+        }
+
+        [RelayCommand]
+        private void OpenNotification(Notification notification)
+        {
+            if (notification == null) return;
+
+            // Marcar como leído
+            MarkAsRead(notification);
+
+            // Aquí podrías navegar según el tipo de notificación
+            // Por ejemplo, si es una orden, navegar al detalle de la orden
+            System.Diagnostics.Debug.WriteLine($"Opened notification: {notification.Title}");
         }
 
         [RelayCommand]
@@ -223,7 +306,9 @@ namespace HoloCrew.ViewModels
                 // Aquí guardarías las preferencias
                 // await _notificationService.SaveSettingsAsync(...)
 
-                // TODO: Mostrar mensaje de éxito
+                System.Diagnostics.Debug.WriteLine("Notification settings saved!");
+                System.Diagnostics.Debug.WriteLine($"Email: {EmailNotifications}, Push: {PushNotifications}");
+                System.Diagnostics.Debug.WriteLine($"Orders: {OrderUpdates}, Price: {PriceAlerts}, Promos: {Promotions}");
             }
             finally
             {

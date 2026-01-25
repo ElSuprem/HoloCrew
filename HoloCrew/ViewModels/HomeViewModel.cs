@@ -80,10 +80,6 @@ namespace HoloCrew.ViewModels
             });
         }
 
-        // ============================
-        // NAVEGACIÓN
-        // ============================
-
         [RelayCommand]
         private void ViewProductDetail(Product product)
         {
@@ -125,13 +121,8 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private void ViewLookbook()
         {
-            // Por ahora navega al catálogo con filtro de colección
             _navigationService.NavigateTo<ProductCatalogViewModel>("softs");
         }
-
-        // ============================
-        // CARRITO
-        // ============================
 
         [RelayCommand]
         private async Task AddToCartAsync(Product product)
@@ -148,37 +139,28 @@ namespace HoloCrew.ViewModels
             }
         }
 
-        // ============================
-        // WISHLIST
-        // ============================
-
         [RelayCommand]
         private async Task ToggleWishlistAsync(Product product)
         {
             if (product == null) return;
 
+            // Cambio inmediato
+            product.IsInWishlist = !product.IsInWishlist;
+
             try
             {
                 if (product.IsInWishlist)
-                {
-                    await _wishlistService.RemoveFromWishlistAsync(product.Id);
-                    product.IsInWishlist = false;
-                }
+                    await _wishlistService.AddToWishlistAsync(product);
                 else
-                {
-                    await _wishlistService.AddToWishlistAsync(product.Id);
-                    product.IsInWishlist = true;
-                }
+                    await _wishlistService.RemoveFromWishlistAsync(product.Id);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error toggling wishlist: {ex.Message}");
+                // Revertir si falla
+                product.IsInWishlist = !product.IsInWishlist;
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }
-
-        // ============================
-        // NEWSLETTER
-        // ============================
 
         [RelayCommand]
         private async Task SubscribeNewsletterAsync()
@@ -200,7 +182,6 @@ namespace HoloCrew.ViewModels
 
             try
             {
-                // Simular llamada a API
                 await Task.Delay(1000);
 
                 SubscriptionMessage = "Thanks for subscribing!";

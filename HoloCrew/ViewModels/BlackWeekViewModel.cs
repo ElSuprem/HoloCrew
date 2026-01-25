@@ -19,6 +19,9 @@ namespace HoloCrew.ViewModels
         private readonly INavigationService _navigationService;
         private DispatcherTimer? _countdownTimer;
 
+        // Lista completa sin filtrar
+        private ObservableCollection<Product> _allBlackWeekProducts = new();
+
         #region Properties
 
         [ObservableProperty]
@@ -163,12 +166,15 @@ namespace HoloCrew.ViewModels
                     product.IsBlackWeek = true;
                 }
 
-                BlackWeekProducts = new ObservableCollection<Product>(blackWeekProducts);
-                TotalProductCount = BlackWeekProducts.Count;
+                // Guardar lista completa
+                _allBlackWeekProducts = new ObservableCollection<Product>(blackWeekProducts);
+
+                // Aplicar filtros
+                ApplyFiltersAndSort();
 
                 // Top Deals: los 4 con mayor descuento
                 TopDeals = new ObservableCollection<Product>(
-                    blackWeekProducts
+                    _allBlackWeekProducts
                         .OrderByDescending(p => p.DiscountPercentage)
                         .Take(4)
                 );
@@ -197,6 +203,7 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/jacket_leather.jpg",
                     CategoryId = 1,
+                    Category = new Category { Name = "Tops" },
                     AverageRating = 4.8,
                     ReviewCount = 124
                 },
@@ -212,6 +219,7 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/sneaker_designer.jpg",
                     CategoryId = 3,
+                    Category = new Category { Name = "Footwear" },
                     AverageRating = 4.9,
                     ReviewCount = 89
                 },
@@ -227,6 +235,7 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/hoodie_cashmere.jpg",
                     CategoryId = 1,
+                    Category = new Category { Name = "Tops" },
                     AverageRating = 4.7,
                     ReviewCount = 56
                 },
@@ -242,24 +251,25 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/cap_luxury.jpg",
                     CategoryId = 4,
+                    Category = new Category { Name = "Accessories" },
                     AverageRating = 4.5,
-                    ReviewCount = 203
+                    ReviewCount = 78
                 },
-                // Más productos
                 new Product
                 {
                     Id = 205,
-                    Name = "Cargo Joggers - Tech Fabric",
+                    Name = "Cargo Pants - Military Edition",
                     Price = 34.99m,
-                    OriginalPrice = 79.99m,
+                    OriginalPrice = 89.99m,
                     Stock = 12,
                     IsNew = false,
                     IsFeatured = true,
                     IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/joggers_tech.jpg",
+                    MainImageUrl = "/Resources/Images/cargo_military.jpg",
                     CategoryId = 2,
+                    Category = new Category { Name = "Bottoms" },
                     AverageRating = 4.6,
-                    ReviewCount = 78
+                    ReviewCount = 203
                 },
                 new Product
                 {
@@ -273,6 +283,7 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/tee_graphic.jpg",
                     CategoryId = 1,
+                    Category = new Category { Name = "Tops" },
                     AverageRating = 4.4,
                     ReviewCount = 167
                 },
@@ -288,6 +299,7 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/backpack_tactical.jpg",
                     CategoryId = 4,
+                    Category = new Category { Name = "Accessories" },
                     AverageRating = 4.8,
                     ReviewCount = 92
                 },
@@ -303,6 +315,7 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/chinos_slim.jpg",
                     CategoryId = 2,
+                    Category = new Category { Name = "Bottoms" },
                     AverageRating = 4.3,
                     ReviewCount = 145
                 },
@@ -318,6 +331,7 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/puffer_winter.jpg",
                     CategoryId = 1,
+                    Category = new Category { Name = "Tops" },
                     AverageRating = 4.9,
                     ReviewCount = 34
                 },
@@ -333,6 +347,7 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/belt_canvas.jpg",
                     CategoryId = 4,
+                    Category = new Category { Name = "Accessories" },
                     AverageRating = 4.2,
                     ReviewCount = 256
                 },
@@ -348,6 +363,7 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/boots_hightop.jpg",
                     CategoryId = 3,
+                    Category = new Category { Name = "Footwear" },
                     AverageRating = 4.7,
                     ReviewCount = 67
                 },
@@ -363,10 +379,64 @@ namespace HoloCrew.ViewModels
                     IsBlackWeek = true,
                     MainImageUrl = "/Resources/Images/sweatpants_fleece.jpg",
                     CategoryId = 2,
+                    Category = new Category { Name = "Bottoms" },
                     AverageRating = 4.5,
                     ReviewCount = 189
                 }
             };
+        }
+
+        #endregion
+
+        #region Filtering and Sorting
+
+        private void ApplyFiltersAndSort()
+        {
+            var filtered = _allBlackWeekProducts.AsEnumerable();
+
+            // Filtrar por categoría
+            if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
+            {
+                filtered = filtered.Where(p =>
+                    p.Category?.Name?.Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase) == true ||
+                    GetCategoryNameById(p.CategoryId).Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Ordenar
+            filtered = SortBy switch
+            {
+                "Price: Low to High" => filtered.OrderBy(p => p.Price),
+                "Price: High to Low" => filtered.OrderByDescending(p => p.Price),
+                "Newest" => filtered.OrderByDescending(p => p.IsNew).ThenByDescending(p => p.Id),
+                "Best Selling" => filtered.OrderByDescending(p => p.IsFeatured),
+                "Biggest Discount" => filtered.OrderByDescending(p => p.DiscountPercentage),
+                _ => filtered.OrderByDescending(p => p.DiscountPercentage)
+            };
+
+            BlackWeekProducts = new ObservableCollection<Product>(filtered);
+            TotalProductCount = BlackWeekProducts.Count;
+        }
+
+        private string GetCategoryNameById(int categoryId)
+        {
+            return categoryId switch
+            {
+                1 => "Tops",
+                2 => "Bottoms",
+                3 => "Footwear",
+                4 => "Accessories",
+                _ => "Other"
+            };
+        }
+
+        partial void OnSelectedCategoryChanged(string value)
+        {
+            ApplyFiltersAndSort();
+        }
+
+        partial void OnSortByChanged(string value)
+        {
+            ApplyFiltersAndSort();
         }
 
         #endregion
@@ -428,6 +498,13 @@ namespace HoloCrew.ViewModels
         #region Commands
 
         [RelayCommand]
+        private void SelectCategory(string category)
+        {
+            if (string.IsNullOrEmpty(category)) return;
+            SelectedCategory = category;
+        }
+
+        [RelayCommand]
         private void ViewProductDetail(Product product)
         {
             if (product == null) return;
@@ -454,37 +531,22 @@ namespace HoloCrew.ViewModels
         {
             if (product == null) return;
 
+            // Cambio inmediato
+            product.IsInWishlist = !product.IsInWishlist;
+
             try
             {
                 if (product.IsInWishlist)
-                {
-                    await _wishlistService.RemoveFromWishlistAsync(product.Id);
-                    product.IsInWishlist = false;
-                }
+                    await _wishlistService.AddToWishlistAsync(product);
                 else
-                {
-                    await _wishlistService.AddToWishlistAsync(product.Id);
-                    product.IsInWishlist = true;
-                }
+                    await _wishlistService.RemoveFromWishlistAsync(product.Id);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error toggling wishlist: {ex.Message}");
+                // Revertir si falla
+                product.IsInWishlist = !product.IsInWishlist;
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
-        }
-
-        [RelayCommand]
-        private void ApplyFilter()
-        {
-            // TODO: Implementar filtrado
-            System.Diagnostics.Debug.WriteLine($"Filter - Category: {SelectedCategory}, Discount: {SelectedDiscount}");
-        }
-
-        [RelayCommand]
-        private void ApplySort()
-        {
-            // TODO: Implementar ordenación
-            System.Diagnostics.Debug.WriteLine($"Sort by: {SortBy}");
         }
 
         [RelayCommand]

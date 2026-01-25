@@ -4,6 +4,7 @@ using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace HoloCrew.ViewModels
 {
@@ -25,6 +26,15 @@ namespace HoloCrew.ViewModels
 
         [ObservableProperty]
         private MembershipTier _nextTier;
+
+        [ObservableProperty]
+        private string _statusMessage = string.Empty;
+
+        [ObservableProperty]
+        private bool _showStatusMessage = false;
+
+        [ObservableProperty]
+        private bool _isStatusSuccess = true;
 
         public MembersClubViewModel(INavigationService navigationService)
         {
@@ -174,7 +184,7 @@ namespace HoloCrew.ViewModels
                     Description = "Elige cualquier producto hasta €50",
                     Icon = "🎁",
                     PointsCost = 800,
-                    MinimumLevel = MembershipLevel.Gold
+                    MinimumLevel = MembershipLevel.Silver
                 },
                 new MembershipReward
                 {
@@ -183,7 +193,7 @@ namespace HoloCrew.ViewModels
                     Description = "Entrada a un evento exclusivo",
                     Icon = "🎟️",
                     PointsCost = 1000,
-                    MinimumLevel = MembershipLevel.Gold
+                    MinimumLevel = MembershipLevel.Silver
                 },
                 new MembershipReward
                 {
@@ -191,8 +201,8 @@ namespace HoloCrew.ViewModels
                     Title = "Producto Exclusivo",
                     Description = "Acceso a producto de edición limitada",
                     Icon = "⭐",
-                    PointsCost = 1500,
-                    MinimumLevel = MembershipLevel.Platinum
+                    PointsCost = 1200,
+                    MinimumLevel = MembershipLevel.Silver
                 }
             };
         }
@@ -227,42 +237,115 @@ namespace HoloCrew.ViewModels
             // Verificar si tiene suficientes puntos
             if (UserMembership.TotalPoints < reward.PointsCost)
             {
-                // TODO: Mostrar mensaje "No tienes suficientes puntos"
+                ShowStatus($"No tienes suficientes puntos. Necesitas {reward.PointsCost} puntos.", false);
                 return;
             }
 
-            // Verificar nivel mínimo
-            if (UserMembership.CurrentLevel < reward.MinimumLevel)
+            // Verificar nivel mínimo (comparar valores numéricos del enum)
+            if ((int)UserMembership.CurrentLevel < (int)reward.MinimumLevel)
             {
-                // TODO: Mostrar mensaje "Necesitas nivel X"
+                ShowStatus($"Necesitas nivel {reward.MinimumLevel} para canjear esta recompensa.", false);
                 return;
             }
 
-            // Canjear recompensa
-            UserMembership.TotalPoints -= reward.PointsCost;
+            // Verificar si ya fue canjeado
+            if (reward.IsRedeemed)
+            {
+                ShowStatus("Esta recompensa ya fue canjeada.", false);
+                return;
+            }
+
+            // ⭐ CANJEAR RECOMPENSA - Actualizar puntos
+            var newPoints = UserMembership.TotalPoints - reward.PointsCost;
+
+            // Crear nuevo objeto UserMembership para forzar actualización de UI
+            UserMembership = new UserMembership
+            {
+                UserId = UserMembership.UserId,
+                CurrentLevel = UserMembership.CurrentLevel,
+                TotalPoints = newPoints,
+                CurrentLevelPoints = UserMembership.CurrentLevelPoints,
+                PointsToNextLevel = UserMembership.PointsToNextLevel + reward.PointsCost,
+                TotalSpent = UserMembership.TotalSpent,
+                TotalOrders = UserMembership.TotalOrders,
+                MemberSince = UserMembership.MemberSince,
+                ProgressPercentage = CalculateProgressPercentage(newPoints),
+                NextLevel = UserMembership.NextLevel
+            };
+
+            // Marcar recompensa como canjeada
             reward.IsRedeemed = true;
             reward.RedeemedDate = DateTime.Now;
 
-            // TODO: Guardar en base de datos
-            // TODO: Mostrar mensaje "¡Recompensa canjeada!"
+            // Actualizar la lista de recompensas para refrescar UI
+            var index = AvailableRewards.IndexOf(reward);
+            if (index >= 0)
+            {
+                AvailableRewards.RemoveAt(index);
+                AvailableRewards.Insert(index, reward);
+            }
+
+            ShowStatus($"🎉 ¡{reward.Title} canjeado! Te quedan {newPoints} puntos.", true);
+        }
+
+        private double CalculateProgressPercentage(int currentPoints)
+        {
+            // Silver (500) -> Gold (1500) = 1000 puntos de diferencia
+            var pointsInCurrentLevel = currentPoints - 500; // Puntos desde Silver
+            var pointsNeeded = 1000; // De Silver a Gold
+            return Math.Min(100, (pointsInCurrentLevel / (double)pointsNeeded) * 100);
+        }
+
+        private async void ShowStatus(string message, bool isSuccess)
+        {
+            StatusMessage = message;
+            IsStatusSuccess = isSuccess;
+            ShowStatusMessage = true;
+
+            // Ocultar mensaje después de 3 segundos
+            await Task.Delay(3000);
+            ShowStatusMessage = false;
         }
 
         [RelayCommand]
         private void ViewAllBenefits()
         {
-            // TODO: Mostrar modal con todos los beneficios
+            MessageBox.Show(
+                "🥉 BRONZE: 5% descuento, 1x puntos\n" +
+                "🥈 SILVER: 10% descuento, 2x puntos, envío gratis\n" +
+                "🥇 GOLD: 15% descuento, 3x puntos, acceso anticipado\n" +
+                "💎 PLATINUM: 20% descuento, 4x puntos, productos exclusivos",
+                "Todos los Beneficios",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         [RelayCommand]
         private void ViewHistory()
         {
-            // TODO: Navegar a historial de puntos y recompensas
+            MessageBox.Show(
+                "📜 Historial de Puntos\n\n" +
+                "• +150 pts - Pedido #12345 (15/01/2025)\n" +
+                "• +200 pts - Pedido #12340 (10/01/2025)\n" +
+                "• -200 pts - Cupón €10 canjeado (05/01/2025)\n" +
+                "• +100 pts - Pedido #12335 (28/12/2024)\n" +
+                "• +500 pts - Bono bienvenida Silver (01/12/2024)",
+                "Historial de Puntos",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         [RelayCommand]
         private void ShareMembership()
         {
-            // TODO: Compartir código de referido
+            MessageBox.Show(
+                "🎁 ¡Comparte tu código de referido!\n\n" +
+                "Tu código: HOLOCREW-USER123\n\n" +
+                "Tus amigos obtienen 10% de descuento\n" +
+                "Tú ganas 100 puntos por cada referido",
+                "Programa de Referidos",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         [RelayCommand]
