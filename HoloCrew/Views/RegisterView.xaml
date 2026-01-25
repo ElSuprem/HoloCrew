@@ -132,9 +132,10 @@
                             <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"
                                      Height="50"
                                      FontSize="16"
+                                     VerticalContentAlignment="Center"
                                      Padding="15,0"
                                      BorderThickness="1"
-                                     BorderBrush="{StaticResource BorderDefault}"
+                                     BorderBrush="{StaticResource Gray300Brush}"
                                      Margin="0,0,0,20"/>
 
                             <!-- Email Field -->
@@ -145,9 +146,10 @@
                             <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                                      Height="50"
                                      FontSize="16"
+                                     VerticalContentAlignment="Center"
                                      Padding="15,0"
                                      BorderThickness="1"
-                                     BorderBrush="{StaticResource BorderDefault}"
+                                     BorderBrush="{StaticResource Gray300Brush}"
                                      Margin="0,0,0,20"/>
 
                             <!-- Password Field -->
@@ -155,14 +157,14 @@
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Margin="0,0,0,8"/>
-                            <PasswordBox x:Name="PasswordBox"
-                                         PasswordChanged="PasswordBox_PasswordChanged"
-                                         Height="50"
-                                         FontSize="16"
-                                         Padding="15,0"
-                                         BorderThickness="1"
-                                         BorderBrush="{StaticResource BorderDefault}"
-                                         Margin="0,0,0,10"/>
+                            <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="50" Margin="0,0,0,10">
+                                <PasswordBox x:Name="PasswordBox"
+                                             PasswordChanged="PasswordBox_PasswordChanged"
+                                             FontSize="16"
+                                             VerticalContentAlignment="Center"
+                                             Padding="15,0"
+                                             BorderThickness="0"/>
+                            </Border>
                             <TextBlock Text="Mínimo 6 caracteres"
                                        FontSize="12"
                                        Foreground="{StaticResource TextSecondary}"
@@ -173,23 +175,25 @@
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Margin="0,0,0,8"/>
-                            <PasswordBox x:Name="ConfirmPasswordBox"
-                                         PasswordChanged="ConfirmPasswordBox_PasswordChanged"
-                                         Height="50"
-                                         FontSize="16"
-                                         Padding="15,0"
-                                         BorderThickness="1"
-                                         BorderBrush="{StaticResource BorderDefault}"
-                                         Margin="0,0,0,20"/>
+                            <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="50" Margin="0,0,0,20">
+                                <PasswordBox x:Name="ConfirmPasswordBox"
+                                             PasswordChanged="ConfirmPasswordBox_PasswordChanged"
+                                             FontSize="16"
+                                             VerticalContentAlignment="Center"
+                                             Padding="15,0"
+                                             BorderThickness="0"/>
+                            </Border>
 
                             <!-- Terms Checkbox -->
                             <CheckBox IsChecked="{Binding AcceptTerms}"
                                       Margin="0,0,0,30">
                                 <TextBlock TextWrapping="Wrap">
-                                    <Run Text="Acepto los" FontSize="14"/>
-                                    <Hyperlink TextDecorations="None"
+                                    <Run Text="Acepto los " FontSize="14"/>
+                                    <Hyperlink TextDecorations="Underline"
                                                Foreground="{StaticResource AccentBrush}"
-                                               FontWeight="SemiBold">
+                                               FontWeight="SemiBold"
+                                               NavigateUri="https://holocrew.com/terms"
+                                               RequestNavigate="Hyperlink_RequestNavigate">
                                         <Run Text="términos y condiciones" FontSize="14"/>
                                     </Hyperlink>
                                 </TextBlock>
@@ -206,7 +210,7 @@
 
                             <!-- Divider -->
                             <Grid Margin="0,0,0,20">
-                                <Border BorderBrush="{StaticResource BorderDefault}"
+                                <Border BorderBrush="{StaticResource Gray300Brush}"
                                         BorderThickness="0,1,0,0"
                                         VerticalAlignment="Center"/>
                                 <TextBlock Text="O regístrate con"
@@ -218,24 +222,30 @@
                             </Grid>
 
                             <!-- OAuth Buttons -->
-                            <Grid>
+                            <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="15"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Button Grid.Column="0"
-                                        Content="Google"
-                                        Style="{StaticResource OutlineButton}"
-                                        Height="50"
-                                        FontSize="14"/>
+                                <Button Grid.Column="0" Height="50" Cursor="Hand"
+                                        Command="{Binding RegisterWithGoogleCommand}"
+                                        Background="White" BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="G" FontSize="18" FontWeight="Bold" Foreground="#DB4437" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Google" FontSize="14" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
 
-                                <Button Grid.Column="2"
-                                        Content="Facebook"
-                                        Style="{StaticResource OutlineButton}"
-                                        Height="50"
-                                        FontSize="14"/>
+                                <Button Grid.Column="2" Height="50" Cursor="Hand"
+                                        Command="{Binding RegisterWithFacebookCommand}"
+                                        Background="White" BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="f" FontSize="20" FontWeight="Bold" Foreground="#1877F2" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Facebook" FontSize="14" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
                             </Grid>
 
                             <!-- Login Link -->

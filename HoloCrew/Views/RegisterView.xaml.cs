@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace HoloCrew.Views
 {
@@ -26,6 +28,31 @@ namespace HoloCrew.Views
             {
                 viewModel.ConfirmPassword = ((PasswordBox)sender).Password;
             }
+        }
+
+        // Abrir términos y condiciones en navegador
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            // Mostrar términos en un MessageBox por ahora
+            MessageBox.Show(
+                "TÉRMINOS Y CONDICIONES DE HOLOCREW\n\n" +
+                "1. Aceptación de los términos\n" +
+                "Al registrarte en HoloCrew, aceptas estos términos de servicio.\n\n" +
+                "2. Uso del servicio\n" +
+                "Debes tener al menos 18 años para usar nuestro servicio.\n\n" +
+                "3. Privacidad\n" +
+                "Tus datos personales serán tratados según nuestra política de privacidad.\n\n" +
+                "4. Compras\n" +
+                "Todas las compras están sujetas a disponibilidad y confirmación del precio.\n\n" +
+                "5. Devoluciones\n" +
+                "Tienes 30 días para devolver productos en su estado original.\n\n" +
+                "6. Contacto\n" +
+                "Para cualquier consulta: soporte@holocrew.com",
+                "Términos y Condiciones",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            e.Handled = true;
         }
     }
 }
