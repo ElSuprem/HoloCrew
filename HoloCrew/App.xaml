@@ -20,6 +20,7 @@
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
             <converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollectionToVisibilityConverter" />
+            <converters:EqualityConverter x:Key="EqualityConverter" />
             <converters:PriceFormatConverter x:Key="PriceFormatConverter" />
             <converters:DateFormatConverter x:Key="DateFormatConverter" />
             <converters:StatusToColourConverter x:Key="StatusToColourConverter" />

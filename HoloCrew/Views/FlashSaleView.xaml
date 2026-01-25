@@ -303,7 +303,7 @@
                             </ItemsControl>
                         </StackPanel>
 
-                        <!-- Sort dropdown - CORREGIDO con VerticalContentAlignment -->
+                        <!-- Sort dropdown -->
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
                             <TextBlock Text="Sort by:"
                                        FontSize="13"
@@ -313,7 +313,6 @@
                                       SelectedItem="{Binding SortBy}"
                                       Width="180"
                                       Height="36"
-                                      VerticalContentAlignment="Center"
                                       Padding="12,0"
                                       FontSize="13"
                                       BorderBrush="{StaticResource Gray300Brush}"/>
@@ -354,33 +353,31 @@
                                                               CommandParameter="{Binding}"/>
                                             </Border.InputBindings>
                                             <Grid>
-                                                <Image Source="{Binding MainImageUrl}" 
-                                                       Stretch="UniformToFill"/>
-
-                                                <!-- Discount badge -->
+                                                <!-- Discount Badge -->
                                                 <Border Background="{StaticResource RedAccentBrush}"
-                                                        Padding="10,5"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Top"
-                                                        Margin="12,12,0,0">
+                                                        Padding="12,6"
+                                                        Margin="0">
                                                     <TextBlock Foreground="White" FontSize="12" FontWeight="Bold">
                                                         <Run Text="-"/>
-                                                        <Run Text="{Binding DiscountPercentage, Mode=OneWay, StringFormat={}{0:0}}"/>
+                                                        <Run Text="{Binding DiscountPercentage, Mode=OneWay}"/>
                                                         <Run Text="%"/>
                                                     </TextBlock>
                                                 </Border>
 
                                                 <!-- Stock warning -->
                                                 <Border Background="#FEF3C7"
-                                                        Padding="8,4"
                                                         HorizontalAlignment="Left"
-                                                        VerticalAlignment="Bottom"
-                                                        Margin="12,0,0,12"
+                                                        VerticalAlignment="Top"
+                                                        Padding="10,5"
+                                                        Margin="0,40,0,0"
                                                         Visibility="{Binding IsLowStock, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                    <TextBlock Text="⚠️ LOW STOCK" 
-                                                               FontSize="10" 
-                                                               FontWeight="Bold" 
-                                                               Foreground="#B45309"/>
+                                                    <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#92400E">
+                                                        <Run Text="Only "/>
+                                                        <Run Text="{Binding Stock, Mode=OneWay}"/>
+                                                        <Run Text=" left!"/>
+                                                    </TextBlock>
                                                 </Border>
 
                                                 <!-- Wishlist button -->
@@ -401,13 +398,11 @@
                                                                     <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="2"/>
                                                                 </Border.Effect>
                                                                 <Grid>
-                                                                    <!-- Corazón vacío -->
                                                                     <Viewbox Width="24" Height="24" Margin="0,1,0,0"
                                                                              Visibility="{Binding IsInWishlist, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                                                                         <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                                                               Fill="Transparent" Stroke="#1F2937" StrokeThickness="1.5"/>
                                                                     </Viewbox>
-                                                                    <!-- Corazón relleno -->
                                                                     <Viewbox Width="24" Height="24" Margin="0,1,0,0"
                                                                              Visibility="{Binding IsInWishlist, Converter={StaticResource BoolToVisibilityConverter}}">
                                                                         <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
@@ -419,7 +414,7 @@
                                                     </Button.Template>
                                                 </Button>
 
-                                                <!-- Quick Add - USANDO BUTTON EN VEZ DE MOUSEBINDING -->
+                                                <!-- Quick Add -->
                                                 <Button Background="{StaticResource BlackPrimaryBrush}"
                                                         BorderThickness="0"
                                                         Height="45"
@@ -429,13 +424,6 @@
                                                         Cursor="Hand"
                                                         Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                         CommandParameter="{Binding}">
-                                                    <Button.Template>
-                                                        <ControlTemplate TargetType="Button">
-                                                            <Border Background="{TemplateBinding Background}" Height="45">
-                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Button.Template>
                                                     <TextBlock Text="🛒 ADD TO CART"
                                                                Foreground="White"
                                                                FontSize="12"

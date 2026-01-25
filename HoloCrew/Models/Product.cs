@@ -20,9 +20,9 @@ namespace HoloCrew.Models
         public List<string> ImageUrls { get; set; } = new List<string>();
 
         // Categorías
-        public int CategoryId { get; set; }           // ID de categoría principal (1-5)
-        public int SubCategoryId { get; set; }        // ID de subcategoría (10-59)
-        public string SubCategorySlug { get; set; } = string.Empty;   // Slug para filtrado rápido
+        public int CategoryId { get; set; }
+        public int SubCategoryId { get; set; }
+        public string SubCategorySlug { get; set; } = string.Empty;
         public Category? Category { get; set; }
 
         // Reviews y rating
@@ -32,15 +32,15 @@ namespace HoloCrew.Models
         // Flags
         public bool IsFeatured { get; set; }
         public bool IsNew { get; set; }
-        public bool IsBlackWeek { get; set; }         // Para ofertas Black Week / Flash Sale
-        public bool IsSoftsCollection { get; set; }   // Para colección Softs
-        public bool IsClassicCollection { get; set; } // Para colección Classic
+        public bool IsBlackWeek { get; set; }
+        public bool IsSoftsCollection { get; set; }
+        public bool IsClassicCollection { get; set; }
 
         // Variantes
-        public string Gender { get; set; } = "Unisex"; // "Men", "Women", "Unisex"
+        public string Gender { get; set; } = "Unisex";
         public List<string> AvailableSizes { get; set; } = new List<string> { "S", "M", "L", "XL" };
         public List<string> AvailableColors { get; set; } = new List<string> { "Black", "White" };
-        public string Color { get; set; } = string.Empty; // Color principal
+        public string Color { get; set; } = string.Empty;
 
         // Fechas
         public DateTime CreatedAt { get; set; }

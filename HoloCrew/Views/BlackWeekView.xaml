@@ -568,6 +568,12 @@
                                                 FontSize="12"
                                                 FontWeight="SemiBold"
                                                 Cursor="Hand">
+                                            <Button.Tag>
+                                                <MultiBinding Converter="{StaticResource EqualityConverter}">
+                                                    <Binding Path="."/>
+                                                    <Binding Path="DataContext.SelectedCategory" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                                </MultiBinding>
+                                            </Button.Tag>
                                             <Button.Style>
                                                 <Style TargetType="Button">
                                                     <Setter Property="Background" Value="Transparent"/>
@@ -594,6 +600,13 @@
                                                             </ControlTemplate>
                                                         </Setter.Value>
                                                     </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="True">
+                                                            <Setter Property="Background" Value="#D4AF37"/>
+                                                            <Setter Property="Foreground" Value="#0A0A0A"/>
+                                                            <Setter Property="BorderBrush" Value="#D4AF37"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
                                                 </Style>
                                             </Button.Style>
                                         </Button>
@@ -602,7 +615,7 @@
                             </ItemsControl>
                         </StackPanel>
 
-                        <!-- Sort dropdown - CORREGIDO CON ESTILO OSCURO LEGIBLE -->
+                        <!-- Sort dropdown -->
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
                             <TextBlock Text="Sort by:"
                                        FontSize="13"
@@ -612,8 +625,8 @@
                             <ComboBox ItemsSource="{Binding SortOptions}"
                                       SelectedItem="{Binding SortBy}"
                                       Width="180"
-                                      Style="{StaticResource DarkComboBoxStyle}"
-                                      ItemContainerStyle="{StaticResource DarkComboBoxItemStyle}"/>
+                                      Style="{StaticResource DarkComboBox}"
+                                      ItemContainerStyle="{StaticResource DarkComboBoxItem}"/>
                         </StackPanel>
                     </Grid>
                 </Border>

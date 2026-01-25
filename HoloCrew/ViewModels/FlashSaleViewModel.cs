@@ -420,7 +420,6 @@ namespace HoloCrew.ViewModels
         {
             if (product == null) return;
 
-            // Cambio inmediato
             product.IsInWishlist = !product.IsInWishlist;
 
             try
@@ -432,9 +431,8 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                // Revertir si falla
                 product.IsInWishlist = !product.IsInWishlist;
-                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error toggling wishlist: {ex.Message}");
             }
         }
 
