@@ -1,19 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HoloCrew.ViewModels
 {
-    /// <summary>
-    /// ViewModel del catálogo de productos
-    /// </summary>
     public partial class ProductCatalogViewModel : ViewModelBase
     {
         private readonly IProductService _productService;
@@ -21,7 +18,11 @@ namespace HoloCrew.ViewModels
         private readonly ICartService _cartService;
         private readonly IWishlistService _wishlistService;
 
-        #region Properties
+        private List<Product> _allProducts = new();
+        private bool _isResetting = false;
+        private bool _isInitialized = false;
+
+        #region Observable Properties
 
         [ObservableProperty]
         private ObservableCollection<Product> _products = new();
@@ -39,33 +40,82 @@ namespace HoloCrew.ViewModels
         private string _searchQuery = string.Empty;
 
         [ObservableProperty]
-        private string _sortBy = AppConstants.UI.Featured;
+        private string _sortBy = "Featured";
 
         [ObservableProperty]
         private int _totalProductCount;
 
+        // Precio
         [ObservableProperty]
-        private decimal _minPrice;
+        private decimal _minPrice = 0;
 
         [ObservableProperty]
         private decimal _maxPrice = 500;
 
+        // Categorías (para RadioButtons)
+        [ObservableProperty]
+        private string _selectedCategory = "All";
+
+        [ObservableProperty]
+        private bool _categoryAll = true;
+        [ObservableProperty]
+        private bool _categoryTops = false;
+        [ObservableProperty]
+        private bool _categoryBottoms = false;
+        [ObservableProperty]
+        private bool _categoryFootwear = false;
+        [ObservableProperty]
+        private bool _categoryAccessories = false;
+
+        // Disponibilidad
         [ObservableProperty]
         private bool _inStockOnly;
 
         [ObservableProperty]
         private bool _onSaleOnly;
 
-        public ObservableCollection<string> SortOptions { get; } = new()
-        {
-            AppConstants.UI.Featured,
-            AppConstants.UI.Newest,
-            AppConstants.UI.PriceLowToHigh,
-            AppConstants.UI.PriceHighToLow,
-            AppConstants.UI.BestSelling
-        };
+        // Tallas
+        [ObservableProperty]
+        private bool _sizeXS;
+        [ObservableProperty]
+        private bool _sizeS;
+        [ObservableProperty]
+        private bool _sizeM;
+        [ObservableProperty]
+        private bool _sizeL;
+        [ObservableProperty]
+        private bool _sizeXL;
+        [ObservableProperty]
+        private bool _sizeXXL;
+
+        // Colores
+        [ObservableProperty]
+        private bool _colorBlack;
+        [ObservableProperty]
+        private bool _colorWhite;
+        [ObservableProperty]
+        private bool _colorGray;
+        [ObservableProperty]
+        private bool _colorNavy;
+        [ObservableProperty]
+        private bool _colorRed;
+        [ObservableProperty]
+        private bool _colorGreen;
+
+        // Género
+        [ObservableProperty]
+        private bool _genderMen;
+        [ObservableProperty]
+        private bool _genderWomen;
+        [ObservableProperty]
+        private bool _genderUnisex;
 
         #endregion
+
+        public ObservableCollection<string> SortOptions { get; } = new()
+        {
+            "Featured", "Newest", "Price: Low to High", "Price: High to Low", "Best Selling"
+        };
 
         public ProductCatalogViewModel(
             IProductService productService,
@@ -78,17 +128,14 @@ namespace HoloCrew.ViewModels
             _cartService = cartService;
             _wishlistService = wishlistService;
 
-            Title = AppConstants.UI.Shop;
-            EmptyTitle = AppConstants.Empty.ProductsTitle;
-            EmptySubtitle = AppConstants.Empty.ProductsSubtitle;
-            EmptyActionText = AppConstants.Empty.ProductsAction;
+            Title = "Shop";
         }
 
         public override async void OnNavigatedTo(object? parameter)
         {
             base.OnNavigatedTo(parameter);
 
-            if (parameter is string slug)
+            if (parameter is string slug && !string.IsNullOrEmpty(slug))
             {
                 CurrentSlug = slug;
                 CurrentCategoryName = GetCategoryNameFromSlug(slug);
@@ -100,18 +147,27 @@ namespace HoloCrew.ViewModels
             }
             else
             {
-                await LoadFeaturedProductsAsync();
+                CurrentCategoryName = "All Products";
+                await LoadAllProductsAsync();
             }
         }
 
         #region Data Loading
 
-        private async Task LoadFeaturedProductsAsync()
+        private async Task LoadAllProductsAsync()
         {
             await ExecuteAsync(async () =>
             {
-                LoadingMessage = AppConstants.UI.Loading;
+                LoadingMessage = "Loading products...";
                 var products = await _productService.GetFeaturedProductsAsync();
+
+                if (products.Count < 20)
+                {
+                    var allProducts = await _productService.SearchProductsAsync("");
+                    if (allProducts.Count > products.Count)
+                        products = allProducts;
+                }
+
                 SetProducts(products);
             });
         }
@@ -122,13 +178,13 @@ namespace HoloCrew.ViewModels
             {
                 LoadingMessage = $"Loading {GetCategoryNameFromSlug(slug)}...";
 
-                // Mapear slug a método apropiado
                 var products = slug.ToLower() switch
                 {
                     "new" => await _productService.GetNewProductsAsync(),
                     "bestsellers" or "best-sellers" => await _productService.GetBestSellersAsync(),
                     "featured" => await _productService.GetFeaturedProductsAsync(),
-                    _ => await _productService.SearchProductsAsync(slug)
+                    "blackweek" => await _productService.GetBlackWeekProductsAsync(),
+                    _ => await _productService.GetProductsBySlugAsync(slug)
                 };
 
                 SetProducts(products);
@@ -139,6 +195,7 @@ namespace HoloCrew.ViewModels
         {
             await ExecuteAsync(async () =>
             {
+                LoadingMessage = "Loading category...";
                 var products = await _productService.GetProductsByCategoryAsync(categoryId);
                 SetProducts(products);
             });
@@ -146,19 +203,16 @@ namespace HoloCrew.ViewModels
 
         private void SetProducts(List<Product> products)
         {
+            _allProducts = products;
             Products = new ObservableCollection<Product>(products);
-            FilteredProducts = new ObservableCollection<Product>(products);
-            TotalProductCount = products.Count;
-
-            if (products.Count == 0)
-                SetEmpty();
-            else
-                SetSuccess();
+            _isInitialized = true;
+            ApplyFiltersInternal();
+            SetSuccess();
         }
 
         #endregion
 
-        #region Commands
+        #region Commands - Navigation
 
         [RelayCommand]
         private void ViewProductDetail(Product product)
@@ -166,6 +220,10 @@ namespace HoloCrew.ViewModels
             if (product == null) return;
             _navigationService.NavigateTo<ProductDetailViewModel>(product.Id);
         }
+
+        #endregion
+
+        #region Commands - Cart & Wishlist
 
         [RelayCommand]
         private async Task AddToCartAsync(Product product)
@@ -177,7 +235,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error adding to cart: {ex.Message}");
             }
         }
 
@@ -200,77 +258,307 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error toggling wishlist: {ex.Message}");
             }
         }
 
+        #endregion
+
+        #region Commands - Filtering
+
         [RelayCommand]
-        private void Search() => ApplyFilters();
+        private void Search()
+        {
+            ApplyFiltersInternal();
+        }
+
+        [RelayCommand]
+        private void SelectCategory(string category)
+        {
+            if (_isResetting) return;
+
+            SelectedCategory = category ?? "All";
+            UpdateCategoryFlags();
+            ApplyFiltersInternal();
+        }
+
+        [RelayCommand]
+        private void ToggleSize(string size)
+        {
+            if (string.IsNullOrEmpty(size) || _isResetting) return;
+
+            // Toggle directo - cambio visual instantáneo
+            switch (size)
+            {
+                case "XS": _sizeXS = !_sizeXS; OnPropertyChanged(nameof(SizeXS)); break;
+                case "S": _sizeS = !_sizeS; OnPropertyChanged(nameof(SizeS)); break;
+                case "M": _sizeM = !_sizeM; OnPropertyChanged(nameof(SizeM)); break;
+                case "L": _sizeL = !_sizeL; OnPropertyChanged(nameof(SizeL)); break;
+                case "XL": _sizeXL = !_sizeXL; OnPropertyChanged(nameof(SizeXL)); break;
+                case "XXL": _sizeXXL = !_sizeXXL; OnPropertyChanged(nameof(SizeXXL)); break;
+            }
+
+            ApplyFiltersInternal();
+        }
+
+        [RelayCommand]
+        private void ToggleColor(string color)
+        {
+            if (string.IsNullOrEmpty(color) || _isResetting) return;
+
+            // Toggle directo - cambio visual instantáneo
+            switch (color)
+            {
+                case "Black": _colorBlack = !_colorBlack; OnPropertyChanged(nameof(ColorBlack)); break;
+                case "White": _colorWhite = !_colorWhite; OnPropertyChanged(nameof(ColorWhite)); break;
+                case "Gray": _colorGray = !_colorGray; OnPropertyChanged(nameof(ColorGray)); break;
+                case "Navy": _colorNavy = !_colorNavy; OnPropertyChanged(nameof(ColorNavy)); break;
+                case "Red": _colorRed = !_colorRed; OnPropertyChanged(nameof(ColorRed)); break;
+                case "Green": _colorGreen = !_colorGreen; OnPropertyChanged(nameof(ColorGreen)); break;
+            }
+
+            ApplyFiltersInternal();
+        }
 
         [RelayCommand]
         private void ClearFilters()
         {
+            _isResetting = true;
+
             SearchQuery = string.Empty;
+            SelectedCategory = "All";
+
+            _categoryAll = true;
+            _categoryTops = false;
+            _categoryBottoms = false;
+            _categoryFootwear = false;
+            _categoryAccessories = false;
+
             MinPrice = 0;
             MaxPrice = 500;
             InStockOnly = false;
             OnSaleOnly = false;
-            SortBy = AppConstants.UI.Featured;
-            FilteredProducts = new ObservableCollection<Product>(Products);
-            if (FilteredProducts.Count == 0) SetEmpty(); else SetSuccess();
-        }
 
-        [RelayCommand]
-        private void EmptyAction() => ClearFilters();
+            _sizeXS = _sizeS = _sizeM = _sizeL = _sizeXL = _sizeXXL = false;
+            _colorBlack = _colorWhite = _colorGray = _colorNavy = _colorRed = _colorGreen = false;
+            _genderMen = _genderWomen = _genderUnisex = false;
+
+            SortBy = "Featured";
+
+            // Notificar todos los cambios de una vez
+            OnPropertyChanged(nameof(CategoryAll));
+            OnPropertyChanged(nameof(CategoryTops));
+            OnPropertyChanged(nameof(CategoryBottoms));
+            OnPropertyChanged(nameof(CategoryFootwear));
+            OnPropertyChanged(nameof(CategoryAccessories));
+            OnPropertyChanged(nameof(SizeXS));
+            OnPropertyChanged(nameof(SizeS));
+            OnPropertyChanged(nameof(SizeM));
+            OnPropertyChanged(nameof(SizeL));
+            OnPropertyChanged(nameof(SizeXL));
+            OnPropertyChanged(nameof(SizeXXL));
+            OnPropertyChanged(nameof(ColorBlack));
+            OnPropertyChanged(nameof(ColorWhite));
+            OnPropertyChanged(nameof(ColorGray));
+            OnPropertyChanged(nameof(ColorNavy));
+            OnPropertyChanged(nameof(ColorRed));
+            OnPropertyChanged(nameof(ColorGreen));
+            OnPropertyChanged(nameof(GenderMen));
+            OnPropertyChanged(nameof(GenderWomen));
+            OnPropertyChanged(nameof(GenderUnisex));
+
+            _isResetting = false;
+            ApplyFiltersInternal();
+        }
 
         #endregion
 
-        #region Filtering
+        #region Filter Logic
 
-        private void ApplyFilters()
+        private void UpdateCategoryFlags()
         {
-            var filtered = Products.AsEnumerable();
+            _categoryAll = SelectedCategory == "All";
+            _categoryTops = SelectedCategory == "Tops";
+            _categoryBottoms = SelectedCategory == "Bottoms";
+            _categoryFootwear = SelectedCategory == "Footwear";
+            _categoryAccessories = SelectedCategory == "Accessories";
 
+            OnPropertyChanged(nameof(CategoryAll));
+            OnPropertyChanged(nameof(CategoryTops));
+            OnPropertyChanged(nameof(CategoryBottoms));
+            OnPropertyChanged(nameof(CategoryFootwear));
+            OnPropertyChanged(nameof(CategoryAccessories));
+        }
+
+        private void ApplyFiltersInternal()
+        {
+            if (!_isInitialized || _allProducts == null) return;
+
+            var filtered = _allProducts.AsEnumerable();
+
+            // 1. Búsqueda
             if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                var query = SearchQuery.ToLower();
                 filtered = filtered.Where(p =>
-                    p.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
+                    p.Name.ToLower().Contains(query) ||
+                    p.Description.ToLower().Contains(query) ||
+                    (p.Category?.Name?.ToLower().Contains(query) ?? false));
+            }
 
+            // 2. Categoría
+            if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
+            {
+                filtered = SelectedCategory switch
+                {
+                    "Tops" => filtered.Where(p => p.CategoryId == 2),
+                    "Bottoms" => filtered.Where(p => p.CategoryId == 3),
+                    "Footwear" => filtered.Where(p => p.CategoryId == 4),
+                    "Accessories" => filtered.Where(p => p.CategoryId == 5),
+                    _ => filtered
+                };
+            }
+
+            // 3. Precio
             filtered = filtered.Where(p => p.Price >= MinPrice && p.Price <= MaxPrice);
+
+            // 4. Disponibilidad
             if (InStockOnly) filtered = filtered.Where(p => p.Stock > 0);
             if (OnSaleOnly) filtered = filtered.Where(p => p.HasDiscount);
 
+            // 5. Tallas
+            var selectedSizes = new List<string>();
+            if (_sizeXS) selectedSizes.Add("XS");
+            if (_sizeS) selectedSizes.Add("S");
+            if (_sizeM) selectedSizes.Add("M");
+            if (_sizeL) selectedSizes.Add("L");
+            if (_sizeXL) selectedSizes.Add("XL");
+            if (_sizeXXL) selectedSizes.Add("XXL");
+
+            if (selectedSizes.Any())
+            {
+                filtered = filtered.Where(p =>
+                    p.AvailableSizes != null &&
+                    p.AvailableSizes.Any(s => selectedSizes.Contains(s)));
+            }
+
+            // 6. Colores
+            var selectedColors = new List<string>();
+            if (_colorBlack) selectedColors.Add("Black");
+            if (_colorWhite) selectedColors.Add("White");
+            if (_colorGray) selectedColors.Add("Gray");
+            if (_colorNavy) selectedColors.Add("Navy");
+            if (_colorRed) selectedColors.Add("Red");
+            if (_colorGreen) selectedColors.Add("Green");
+
+            if (selectedColors.Any())
+            {
+                filtered = filtered.Where(p =>
+                    p.AvailableColors != null &&
+                    p.AvailableColors.Any(c => selectedColors.Contains(c)));
+            }
+
+            // 7. Género
+            var selectedGenders = new List<string>();
+            if (_genderMen) selectedGenders.Add("Men");
+            if (_genderWomen) selectedGenders.Add("Women");
+            if (_genderUnisex) selectedGenders.Add("Unisex");
+
+            if (selectedGenders.Any())
+            {
+                filtered = filtered.Where(p => selectedGenders.Contains(p.Gender));
+            }
+
+            // 8. Ordenamiento
             filtered = SortBy switch
             {
-                var s when s == AppConstants.UI.Newest => filtered.OrderByDescending(p => p.CreatedAt),
-                var s when s == AppConstants.UI.PriceLowToHigh => filtered.OrderBy(p => p.Price),
-                var s when s == AppConstants.UI.PriceHighToLow => filtered.OrderByDescending(p => p.Price),
-                _ => filtered.OrderByDescending(p => p.IsFeatured)
+                "Newest" => filtered.OrderByDescending(p => p.CreatedAt),
+                "Price: Low to High" => filtered.OrderBy(p => p.Price),
+                "Price: High to Low" => filtered.OrderByDescending(p => p.Price),
+                "Best Selling" => filtered.OrderByDescending(p => p.ReviewCount),
+                _ => filtered.OrderByDescending(p => p.IsFeatured).ThenByDescending(p => p.CreatedAt)
             };
 
-            FilteredProducts = new ObservableCollection<Product>(filtered);
-            TotalProductCount = FilteredProducts.Count;
-            if (FilteredProducts.Count == 0)
-                SetEmpty(AppConstants.Empty.SearchTitle, AppConstants.Empty.SearchSubtitle);
-            else
-                SetSuccess();
+            // Actualizar UI
+            var resultList = filtered.ToList();
+            FilteredProducts = new ObservableCollection<Product>(resultList);
+            TotalProductCount = resultList.Count;
         }
+
+        #endregion
+
+        #region Helper Methods
 
         private string GetCategoryNameFromSlug(string slug) => slug.ToLower() switch
         {
             "new" => "New Arrivals",
             "blackweek" => "Black Week",
             "softs" => "Softs Collection",
+            "classic" => "Classic Collection",
             "hoodies" => "Hoodies",
             "tshirts" => "T-Shirts",
             "joggers" => "Joggers",
+            "shorts" => "Shorts",
+            "trackjackets" => "Track Jackets",
+            "trackpants" => "Track Pants",
+            "polos" => "Polos",
+            "tanks" => "Tank Tops",
+            "venture" => "Venture",
+            "vitoria" => "Vitoria",
+            "vslides" => "V-Slides",
+            "caps" => "Caps",
+            "bags" => "Bags",
+            "beanies" => "Beanies",
+            "cardholder" => "Cardholders",
+            "belts" => "Belts",
+            "rings" => "Rings",
+            "rugs" => "Rugs",
             "bestsellers" or "best-sellers" => "Best Sellers",
             "featured" => "Featured",
-            _ => slug.Replace("-", " ")
+            "all" => "All Products",
+            _ => slug.Replace("-", " ").ToUpper()
         };
 
-        partial void OnSortByChanged(string value) { if (State == LoadingState.Success) ApplyFilters(); }
-        partial void OnInStockOnlyChanged(bool value) { if (State == LoadingState.Success) ApplyFilters(); }
-        partial void OnOnSaleOnlyChanged(bool value) { if (State == LoadingState.Success) ApplyFilters(); }
+        // Property changed handlers
+        partial void OnSortByChanged(string value)
+        {
+            if (!_isResetting && _isInitialized) ApplyFiltersInternal();
+        }
+
+        partial void OnInStockOnlyChanged(bool value)
+        {
+            if (!_isResetting && _isInitialized) ApplyFiltersInternal();
+        }
+
+        partial void OnOnSaleOnlyChanged(bool value)
+        {
+            if (!_isResetting && _isInitialized) ApplyFiltersInternal();
+        }
+
+        partial void OnMinPriceChanged(decimal value)
+        {
+            if (!_isResetting && _isInitialized) ApplyFiltersInternal();
+        }
+
+        partial void OnMaxPriceChanged(decimal value)
+        {
+            if (!_isResetting && _isInitialized) ApplyFiltersInternal();
+        }
+
+        partial void OnGenderMenChanged(bool value)
+        {
+            if (!_isResetting && _isInitialized) ApplyFiltersInternal();
+        }
+
+        partial void OnGenderWomenChanged(bool value)
+        {
+            if (!_isResetting && _isInitialized) ApplyFiltersInternal();
+        }
+
+        partial void OnGenderUnisexChanged(bool value)
+        {
+            if (!_isResetting && _isInitialized) ApplyFiltersInternal();
+        }
 
         #endregion
     }
