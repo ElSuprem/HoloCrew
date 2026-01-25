@@ -5,39 +5,129 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="800" d:DesignWidth="1400"
+             d:DesignHeight="900" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                  HorizontalScrollBarVisibility="Disabled">
+    <UserControl.Resources>
+        <!-- Estilo para las tarjetas de sección -->
+        <Style x:Key="SettingsCard" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource WhitePrimaryBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="28,24"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="10" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para títulos de sección -->
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+
+        <!-- Estilo para botones de acción -->
+        <Style x:Key="SettingsButton" TargetType="Button">
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="16,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                <TextBlock Grid.Column="1" Text="›" FontSize="20" Foreground="{StaticResource Gray400Brush}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource Gray100Brush}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para botón de peligro -->
+        <Style x:Key="DangerButton" TargetType="Button">
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="Background" Value="#FEF2F2"/>
+            <Setter Property="BorderBrush" Value="#FECACA"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="16,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                <TextBlock Grid.Column="1" Text="›" FontSize="20" Foreground="#DC2626" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FEE2E2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid x:Name="RootGrid">
+        <!-- Contenido principal SIN ScrollViewer (MainWindow ya tiene uno) -->
         <Border Padding="60,40,60,80">
-            <StackPanel MaxWidth="900">
+            <StackPanel MaxWidth="700" HorizontalAlignment="Center">
 
                 <!-- HEADER -->
-                <TextBlock Text="CONFIGURACIÓN" 
-                           FontSize="42"
-                           FontWeight="Bold"
-                           Margin="0,0,0,10"/>
-
-                <TextBlock Text="Personaliza tu experiencia en HoloCrew" 
-                           FontSize="16"
-                           Foreground="{StaticResource TextSecondary}"
-                           Margin="0,0,0,40"/>
+                <StackPanel Margin="0,0,0,40">
+                    <TextBlock Text="⚙️" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                    <TextBlock Text="Configuración" 
+                                   FontSize="32"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,8"/>
+                    <TextBlock Text="Personaliza tu experiencia en HoloCrew" 
+                                   FontSize="15"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"/>
+                </StackPanel>
 
                 <!-- ========== SECCIÓN: PERFIL ========== -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="30"
-                        Margin="0,0,0,20">
+                <Border Style="{StaticResource SettingsCard}">
                     <StackPanel>
-                        <TextBlock Text="👤 PERFIL" 
-                                   FontSize="18"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,20"/>
+                        <TextBlock Text="👤 Perfil" Style="{StaticResource SectionTitle}"/>
 
-                        <!-- User Info -->
-                        <Grid Margin="0,0,0,20">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -46,389 +136,544 @@
 
                             <!-- Avatar -->
                             <Border Grid.Column="0"
-                                    Width="60" Height="60"
-                                    Background="{StaticResource Gray200Brush}"
-                                    CornerRadius="30"
-                                    Margin="0,0,20,0">
-                                <TextBlock Text="👨" 
-                                           FontSize="32"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
+                                        Width="56" Height="56"
+                                        CornerRadius="28"
+                                        Margin="0,0,16,0">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#667eea" Offset="0"/>
+                                        <GradientStop Color="#764ba2" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <TextBlock Text="👤" 
+                                               FontSize="24"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
                             </Border>
 
                             <!-- Info -->
                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding CurrentUserName}" 
-                                           FontSize="18"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Margin="0,0,0,3"/>
                                 <TextBlock Text="{Binding CurrentUserEmail}" 
-                                           FontSize="14"
-                                           Foreground="{StaticResource TextSecondary}"/>
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextSecondary}"/>
                             </StackPanel>
 
                             <!-- Button -->
                             <Button Grid.Column="2"
-                                    Content="Ver perfil"
-                                    Command="{Binding NavigateToProfileCommand}"
-                                    Style="{StaticResource OutlineButton}"
-                                    Height="40"
-                                    Padding="20,0"
-                                    VerticalAlignment="Center"/>
+                                        Content="Ver perfil"
+                                        Command="{Binding NavigateToProfileCommand}"
+                                        Style="{StaticResource OutlineButton}"
+                                        Height="38"
+                                        Padding="16,0"
+                                        FontSize="13"
+                                        VerticalAlignment="Center"/>
                         </Grid>
                     </StackPanel>
                 </Border>
 
                 <!-- ========== SECCIÓN: APARIENCIA ========== -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="30"
-                        Margin="0,0,0,20">
+                <Border Style="{StaticResource SettingsCard}">
                     <StackPanel>
-                        <TextBlock Text="🎨 APARIENCIA" 
-                                   FontSize="18"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,20"/>
+                        <TextBlock Text="🎨 Apariencia" Style="{StaticResource SectionTitle}"/>
 
-                        <!-- ⭐ Tema con Toggle Switch -->
+                        <!-- Tema oscuro -->
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Modo oscuro" 
-                                           FontSize="15"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                                <TextBlock Text="Reduce el brillo de la pantalla" 
-                                           FontSize="13"
-                                           Foreground="{StaticResource TextSecondary}"/>
+                            <Border Grid.Column="0" Width="44" Height="44" CornerRadius="10" Background="#F3F4F6" Margin="0,0,14,0">
+                                <TextBlock Text="🌙" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0">
+                                <TextBlock Text="Modo oscuro" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                                <TextBlock Text="Reduce el brillo de la pantalla" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
                             </StackPanel>
 
-                            <!-- ⭐ TOGGLE SWITCH -->
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding IsDarkMode}"
-                                      Style="{StaticResource ToggleSwitch}"
-                                      VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="2"
+                                          IsChecked="{Binding IsDarkMode}"
+                                          Style="{StaticResource ToggleSwitch}"
+                                          VerticalAlignment="Center"/>
                         </Grid>
 
                         <!-- Idioma -->
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="160"/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Idioma" 
-                                           FontSize="15"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                                <TextBlock Text="Selecciona tu idioma preferido" 
-                                           FontSize="13"
-                                           Foreground="{StaticResource TextSecondary}"/>
+                            <Border Grid.Column="0" Width="44" Height="44" CornerRadius="10" Background="#F3F4F6" Margin="0,0,14,0">
+                                <TextBlock Text="🌍" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,20,0">
+                                <TextBlock Text="Idioma" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                                <TextBlock Text="Selecciona tu idioma" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
                             </StackPanel>
 
-                            <ComboBox Grid.Column="1"
-                                      ItemsSource="{Binding AvailableLanguages}"
-                                      SelectedItem="{Binding SelectedLanguage}"
-                                      Style="{StaticResource StandardComboBox}"
-                                      Width="150"
-                                      VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="2"
+                                          ItemsSource="{Binding AvailableLanguages}"
+                                          SelectedItem="{Binding SelectedLanguage}"
+                                          Height="38"
+                                          Padding="12,0"
+                                          VerticalContentAlignment="Center"
+                                          HorizontalAlignment="Stretch"/>
                         </Grid>
                     </StackPanel>
                 </Border>
 
                 <!-- ========== SECCIÓN: NOTIFICACIONES ========== -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="30"
-                        Margin="0,0,0,20">
+                <Border Style="{StaticResource SettingsCard}">
                     <StackPanel>
-                        <TextBlock Text="🔔 NOTIFICACIONES" 
-                                   FontSize="18"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,20"/>
-
-                        <!-- ⭐ Todos los toggles ahora usan ToggleSwitch -->
+                        <TextBlock Text="🔔 Notificaciones" Style="{StaticResource SectionTitle}"/>
 
                         <!-- Notificaciones generales -->
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Activar notificaciones" 
-                                           FontSize="15"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                                <TextBlock Text="Recibe actualizaciones importantes" 
-                                           FontSize="13"
-                                           Foreground="{StaticResource TextSecondary}"/>
-                            </StackPanel>
-
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding NotificationsEnabled}"
-                                      Style="{StaticResource ToggleSwitch}"
-                                      VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,10,0,15"/>
-
-                        <!-- Email notifications -->
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0"
-                                       Text="Notificaciones por email"
-                                       FontSize="14"
-                                       VerticalAlignment="Center"/>
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding EmailNotifications}"
-                                      Style="{StaticResource ToggleSwitch}"
-                                      VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <!-- Push notifications -->
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0"
-                                       Text="Notificaciones push"
-                                       FontSize="14"
-                                       VerticalAlignment="Center"/>
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding PushNotifications}"
-                                      Style="{StaticResource ToggleSwitch}"
-                                      VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <!-- Order updates -->
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0"
-                                       Text="Actualizaciones de pedidos"
-                                       FontSize="14"
-                                       VerticalAlignment="Center"/>
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding OrderUpdates}"
-                                      Style="{StaticResource ToggleSwitch}"
-                                      VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <!-- Promotional emails -->
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0"
-                                       Text="Emails promocionales y ofertas"
-                                       FontSize="14"
-                                       VerticalAlignment="Center"/>
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding PromotionalEmails}"
-                                      Style="{StaticResource ToggleSwitch}"
-                                      VerticalAlignment="Center"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
-
-                <!-- ========== SECCIÓN: PRIVACIDAD ========== -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="30"
-                        Margin="0,0,0,20">
-                    <StackPanel>
-                        <TextBlock Text="🔒 PRIVACIDAD Y SEGURIDAD" 
-                                   FontSize="18"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,20"/>
-
-                        <!-- Data collection -->
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Recopilación de datos" 
-                                           FontSize="15"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,5"/>
-                                <TextBlock Text="Ayúdanos a mejorar tu experiencia" 
-                                           FontSize="13"
-                                           Foreground="{StaticResource TextSecondary}"/>
-                            </StackPanel>
-
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding DataCollectionEnabled}"
-                                      Style="{StaticResource ToggleSwitch}"
-                                      VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,10,0,15"/>
-
-                        <!-- Personalized ads -->
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0"
-                                       Text="Anuncios personalizados"
-                                       FontSize="14"
-                                       VerticalAlignment="Center"/>
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding PersonalizedAds}"
-                                      Style="{StaticResource ToggleSwitch}"
-                                      VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <!-- Share with partners -->
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
-                                       Text="Compartir datos con socios"
-                                       FontSize="14"
-                                       VerticalAlignment="Center"/>
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding ShareDataWithPartners}"
-                                      Style="{StaticResource ToggleSwitch}"
-                                      VerticalAlignment="Center"/>
+                            <Border Grid.Column="0" Width="44" Height="44" CornerRadius="10" Background="#FEF3C7" Margin="0,0,14,0">
+                                <TextBlock Text="🔔" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0">
+                                <TextBlock Text="Activar notificaciones" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                                <TextBlock Text="Recibe actualizaciones importantes" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+
+                            <CheckBox Grid.Column="2"
+                                          IsChecked="{Binding NotificationsEnabled}"
+                                          Style="{StaticResource ToggleSwitch}"
+                                          VerticalAlignment="Center"/>
                         </Grid>
 
-                        <!-- ⭐ Links con nuevo estilo -->
-                        <StackPanel>
-                            <TextBlock HorizontalAlignment="Left"
-                                       Margin="0,0,0,10">
-                                <Hyperlink Command="{Binding ViewPrivacyPolicyCommand}"
-                                           Style="{StaticResource ModernHyperlink}">
-                                    <Run Text="📄 Política de privacidad" FontSize="14"/>
-                                </Hyperlink>
-                            </TextBlock>
-                            <TextBlock HorizontalAlignment="Left">
-                                <Hyperlink Command="{Binding ViewTermsOfServiceCommand}"
-                                           Style="{StaticResource ModernHyperlink}">
-                                    <Run Text="📄 Términos de servicio" FontSize="14"/>
-                                </Hyperlink>
-                            </TextBlock>
+                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,0,0,16"/>
+
+                        <!-- Sub-opciones -->
+                        <StackPanel Margin="58,0,0,0">
+                            <Grid Margin="0,0,0,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Notificaciones por email" FontSize="14" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Column="1" IsChecked="{Binding EmailNotifications}" Style="{StaticResource ToggleSwitch}"/>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Notificaciones push" FontSize="14" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Column="1" IsChecked="{Binding PushNotifications}" Style="{StaticResource ToggleSwitch}"/>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Actualizaciones de pedidos" FontSize="14" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Column="1" IsChecked="{Binding OrderUpdates}" Style="{StaticResource ToggleSwitch}"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Emails promocionales" FontSize="14" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Column="1" IsChecked="{Binding PromotionalEmails}" Style="{StaticResource ToggleSwitch}"/>
+                            </Grid>
                         </StackPanel>
                     </StackPanel>
                 </Border>
 
-                <!-- ========== SECCIÓN: CUENTA ========== -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="30"
-                        Margin="0,0,0,20"
-                        Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <!-- ========== SECCIÓN: PRIVACIDAD ========== -->
+                <Border Style="{StaticResource SettingsCard}">
                     <StackPanel>
-                        <TextBlock Text="👤 CUENTA" 
-                                   FontSize="18"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,20"/>
+                        <TextBlock Text="🔒 Privacidad y Seguridad" Style="{StaticResource SectionTitle}"/>
 
-                        <!-- Change password -->
-                        <Button Content="🔒 Cambiar contraseña"
-                                Command="{Binding ChangePasswordCommand}"
-                                Style="{StaticResource OutlineButton}"
-                                Height="45"
-                                HorizontalAlignment="Stretch"
-                                Margin="0,0,0,10"/>
+                        <!-- Recopilación de datos -->
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- Export data -->
-                        <Button Content="📥 Exportar mis datos"
-                                Command="{Binding ExportDataCommand}"
-                                Style="{StaticResource OutlineButton}"
-                                Height="45"
-                                HorizontalAlignment="Stretch"
-                                Margin="0,0,0,10"/>
+                            <Border Grid.Column="0" Width="44" Height="44" CornerRadius="10" Background="#DBEAFE" Margin="0,0,14,0">
+                                <TextBlock Text="📊" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
 
-                        <!-- Logout -->
-                        <Button Content="👋 Cerrar sesión"
-                                Command="{Binding LogoutCommand}"
-                                Style="{StaticResource OutlineButton}"
-                                Height="45"
-                                HorizontalAlignment="Stretch"
-                                Margin="0,0,0,20"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0">
+                                <TextBlock Text="Recopilación de datos" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                                <TextBlock Text="Ayúdanos a mejorar tu experiencia" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
 
-                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,10,0,20"/>
+                            <CheckBox Grid.Column="2"
+                                          IsChecked="{Binding DataCollectionEnabled}"
+                                          Style="{StaticResource ToggleSwitch}"
+                                          VerticalAlignment="Center"/>
+                        </Grid>
 
-                        <!-- Delete account -->
-                        <Button Content="⚠️ Eliminar cuenta"
-                                Command="{Binding DeleteAccountCommand}"
-                                Height="45"
-                                HorizontalAlignment="Stretch"
-                                Background="#FEE"
-                                BorderBrush="#F88"
-                                BorderThickness="1"
-                                Foreground="#C00"
-                                FontWeight="SemiBold"/>
+                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,0,0,16"/>
+
+                        <StackPanel Margin="58,0,0,0">
+                            <Grid Margin="0,0,0,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Anuncios personalizados" FontSize="14" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Column="1" IsChecked="{Binding PersonalizedAds}" Style="{StaticResource ToggleSwitch}"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Compartir datos con socios" FontSize="14" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Column="1" IsChecked="{Binding ShareDataWithPartners}" Style="{StaticResource ToggleSwitch}"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,20,0,20"/>
+
+                        <!-- Botones de políticas -->
+                        <Button Style="{StaticResource SettingsButton}"
+                                    Command="{Binding ViewPrivacyPolicyCommand}"
+                                    Margin="0,0,0,10">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📄" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Política de privacidad" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource SettingsButton}"
+                                    Command="{Binding ViewTermsOfServiceCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📋" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Términos de servicio" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Border>
 
-                <!-- ========== SECCIÓN: OTROS ========== -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource BorderDefault}"
-                        BorderThickness="1"
-                        Padding="30">
+                <!-- ========== SECCIÓN: CUENTA (solo si logueado) ========== -->
+                <Border Style="{StaticResource SettingsCard}"
+                            Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel>
-                        <TextBlock Text="⚙️ OTROS" 
-                                   FontSize="18"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,20"/>
+                        <TextBlock Text="👤 Cuenta" Style="{StaticResource SectionTitle}"/>
 
-                        <!-- Clear cache -->
-                        <Button Content="🗑️ Limpiar caché"
-                                Command="{Binding ClearCacheCommand}"
-                                Style="{StaticResource OutlineButton}"
-                                Height="45"
-                                HorizontalAlignment="Stretch"
-                                Margin="0,0,0,10"/>
+                        <Button Style="{StaticResource SettingsButton}"
+                                    Command="{Binding ChangePasswordCommand}"
+                                    Margin="0,0,0,10">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🔒" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Cambiar contraseña" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
 
-                        <!-- Contact support -->
-                        <Button Content="💬 Contactar soporte"
-                                Command="{Binding ContactSupportCommand}"
-                                Style="{StaticResource OutlineButton}"
-                                Height="45"
-                                HorizontalAlignment="Stretch"/>
+                        <Button Style="{StaticResource SettingsButton}"
+                                    Command="{Binding ExportDataCommand}"
+                                    Margin="0,0,0,10">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📥" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Exportar mis datos" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource SettingsButton}"
+                                    Command="{Binding LogoutCommand}"
+                                    Margin="0,0,0,20">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="👋" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Cerrar sesión" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0,0,0,20"/>
+
+                        <Button Style="{StaticResource DangerButton}"
+                                    Command="{Binding DeleteAccountCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⚠️" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Eliminar cuenta permanentemente" FontSize="14" VerticalAlignment="Center" Foreground="#DC2626"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- ========== SECCIÓN: AYUDA ========== -->
+                <Border Style="{StaticResource SettingsCard}">
+                    <StackPanel>
+                        <TextBlock Text="💬 Ayuda" Style="{StaticResource SectionTitle}"/>
+
+                        <Button Style="{StaticResource SettingsButton}"
+                                    Command="{Binding ContactSupportCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📧" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Contactar con soporte" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Border>
 
                 <!-- VERSION -->
                 <TextBlock Text="HoloCrew v1.0.0"
-                           FontSize="13"
-                           Foreground="{StaticResource TextSecondary}"
-                           HorizontalAlignment="Center"
-                           Margin="0,30,0,0"/>
+                               FontSize="13"
+                               Foreground="{StaticResource TextSecondary}"
+                               HorizontalAlignment="Center"
+                               Margin="0,20,0,0"/>
 
             </StackPanel>
         </Border>
-    </ScrollViewer>
+
+        <!-- ========== CAPA DE MODALES (posición fija sobre el viewport) ========== -->
+
+        <!-- MODAL: POLÍTICA DE PRIVACIDAD -->
+        <Grid Visibility="{Binding ShowPrivacyPolicy, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+              Panel.ZIndex="1000">
+            <Border Background="#99000000"/>
+            <Border Background="White"
+                    CornerRadius="16"
+                    Width="550"
+                    MaxHeight="500"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Center"
+                    Margin="0,40,0,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="30" ShadowDepth="0"/>
+                </Border.Effect>
+                <StackPanel>
+                    <!-- Header -->
+                    <Border Padding="24,20" BorderBrush="{StaticResource BorderDefault}" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <TextBlock Text="📄 Política de Privacidad" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Button Content="✕" 
+                                    Command="{Binding ClosePrivacyPolicyCommand}"
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="18"
+                                    Foreground="{StaticResource TextSecondary}"
+                                    Cursor="Hand"
+                                    Padding="8,4"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Content -->
+                    <Border Padding="24" MaxHeight="400">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <TextBlock TextWrapping="Wrap" FontSize="14" LineHeight="22">
+                                <Run FontWeight="Bold" FontSize="15">1. Información que recopilamos</Run><LineBreak/>
+                                <Run>Recopilamos información que nos proporcionas directamente, como tu nombre, correo electrónico y datos de pago cuando realizas una compra.</Run><LineBreak/><LineBreak/>
+                                
+                                <Run FontWeight="Bold" FontSize="15">2. Uso de la información</Run><LineBreak/>
+                                <Run>Utilizamos tu información para procesar pedidos, mejorar nuestros servicios y enviarte comunicaciones relacionadas con tu cuenta.</Run><LineBreak/><LineBreak/>
+                                
+                                <Run FontWeight="Bold" FontSize="15">3. Protección de datos</Run><LineBreak/>
+                                <Run>Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales.</Run><LineBreak/><LineBreak/>
+                                
+                                <Run FontWeight="Bold" FontSize="15">4. Tus derechos</Run><LineBreak/>
+                                <Run>Tienes derecho a acceder, rectificar o eliminar tus datos personales en cualquier momento desde la configuración de tu cuenta.</Run><LineBreak/><LineBreak/>
+                                
+                                <Run FontWeight="Bold" FontSize="15">5. Contacto</Run><LineBreak/>
+                                <Run>Para cualquier consulta sobre privacidad, contáctanos en </Run><Run FontWeight="SemiBold">privacy@holocrew.com</Run>
+                            </TextBlock>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Footer -->
+                    <Border Padding="24,16" BorderBrush="{StaticResource BorderDefault}" BorderThickness="0,1,0,0">
+                        <Button Content="Entendido"
+                                Command="{Binding ClosePrivacyPolicyCommand}"
+                                Style="{StaticResource PrimaryButton}"
+                                HorizontalAlignment="Right"
+                                Padding="24,12"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- MODAL: TÉRMINOS DE SERVICIO -->
+        <Grid Visibility="{Binding ShowTermsOfService, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+              Panel.ZIndex="1000">
+            <Border Background="#99000000"/>
+            <Border Background="White"
+                    CornerRadius="16"
+                    Width="550"
+                    MaxHeight="500"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Center"
+                    Margin="0,40,0,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="30" ShadowDepth="0"/>
+                </Border.Effect>
+                <StackPanel>
+                    <!-- Header -->
+                    <Border Padding="24,20" BorderBrush="{StaticResource BorderDefault}" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <TextBlock Text="📋 Términos de Servicio" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Button Content="✕" 
+                                    Command="{Binding CloseTermsOfServiceCommand}"
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="18"
+                                    Foreground="{StaticResource TextSecondary}"
+                                    Cursor="Hand"
+                                    Padding="8,4"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Content -->
+                    <Border Padding="24" MaxHeight="400">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <TextBlock TextWrapping="Wrap" FontSize="14" LineHeight="22">
+                                <Run FontWeight="Bold" FontSize="15">1. Aceptación de términos</Run><LineBreak/>
+                                <Run>Al usar HoloCrew, aceptas estos términos de servicio. Si no estás de acuerdo, no utilices nuestros servicios.</Run><LineBreak/><LineBreak/>
+                                
+                                <Run FontWeight="Bold" FontSize="15">2. Uso del servicio</Run><LineBreak/>
+                                <Run>Te comprometes a usar nuestro servicio de manera legal y respetuosa. No está permitido el uso fraudulento.</Run><LineBreak/><LineBreak/>
+                                
+                                <Run FontWeight="Bold" FontSize="15">3. Compras y pagos</Run><LineBreak/>
+                                <Run>Todos los precios están en euros e incluyen impuestos aplicables. Los pagos se procesan de forma segura.</Run><LineBreak/><LineBreak/>
+                                
+                                <Run FontWeight="Bold" FontSize="15">4. Devoluciones</Run><LineBreak/>
+                                <Run>Aceptamos devoluciones dentro de los 30 días posteriores a la compra, siempre que el producto esté en su estado original.</Run><LineBreak/><LineBreak/>
+                                
+                                <Run FontWeight="Bold" FontSize="15">5. Propiedad intelectual</Run><LineBreak/>
+                                <Run>Todo el contenido de HoloCrew está protegido por derechos de autor.</Run><LineBreak/><LineBreak/>
+                                
+                                <Run FontWeight="Bold" FontSize="15">6. Contacto</Run><LineBreak/>
+                                <Run>Para consultas legales, escríbenos a </Run><Run FontWeight="SemiBold">legal@holocrew.com</Run>
+                            </TextBlock>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Footer -->
+                    <Border Padding="24,16" BorderBrush="{StaticResource BorderDefault}" BorderThickness="0,1,0,0">
+                        <Button Content="Entendido"
+                                Command="{Binding CloseTermsOfServiceCommand}"
+                                Style="{StaticResource PrimaryButton}"
+                                HorizontalAlignment="Right"
+                                Padding="24,12"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- MODAL: CONTACTAR SOPORTE -->
+        <Grid Visibility="{Binding ShowContactSupport, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+              Panel.ZIndex="1000">
+            <Border Background="#99000000"/>
+            <Border Background="White"
+                    CornerRadius="16"
+                    Width="450"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Center"
+                    Margin="0,40,0,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="30" ShadowDepth="0"/>
+                </Border.Effect>
+                <StackPanel>
+                    <!-- Header -->
+                    <Border Padding="24,20" BorderBrush="{StaticResource BorderDefault}" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <TextBlock Text="💬 Contactar Soporte" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Button Content="✕" 
+                                    Command="{Binding CloseContactSupportCommand}"
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="18"
+                                    Foreground="{StaticResource TextSecondary}"
+                                    Cursor="Hand"
+                                    Padding="8,4"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Content -->
+                    <Border Padding="24">
+                        <StackPanel>
+                            <TextBlock Text="¿Necesitas ayuda? Estamos aquí para ti." 
+                                       FontSize="14" 
+                                       Foreground="{StaticResource TextSecondary}"
+                                       Margin="0,0,0,24"/>
+
+                            <!-- Email -->
+                            <Border Background="#F9FAFB" CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="📧" FontSize="24" VerticalAlignment="Center" Margin="0,0,14,0"/>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="Email" FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,2"/>
+                                        <TextBlock Text="soporte@holocrew.com" FontSize="14" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Teléfono -->
+                            <Border Background="#F9FAFB" CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="📞" FontSize="24" VerticalAlignment="Center" Margin="0,0,14,0"/>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="Teléfono" FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,2"/>
+                                        <TextBlock Text="+34 900 123 456" FontSize="14" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Horario -->
+                            <Border Background="#F9FAFB" CornerRadius="8" Padding="16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="🕐" FontSize="24" VerticalAlignment="Center" Margin="0,0,14,0"/>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="Horario de atención" FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,2"/>
+                                        <TextBlock Text="Lunes a Viernes, 9:00 - 18:00" FontSize="14" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Footer -->
+                    <Border Padding="24,16" BorderBrush="{StaticResource BorderDefault}" BorderThickness="0,1,0,0">
+                        <Button Content="Cerrar"
+                                Command="{Binding CloseContactSupportCommand}"
+                                Style="{StaticResource PrimaryButton}"
+                                HorizontalAlignment="Right"
+                                Padding="24,12"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
 </UserControl>

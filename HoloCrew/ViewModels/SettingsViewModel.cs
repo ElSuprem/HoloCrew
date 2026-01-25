@@ -66,6 +66,19 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _shareDataWithPartners = false;
 
+        // MODALES
+        [ObservableProperty]
+        private bool _showPrivacyPolicy = false;
+
+        [ObservableProperty]
+        private bool _showTermsOfService = false;
+
+        [ObservableProperty]
+        private bool _showContactSupport = false;
+
+        // Evento para notificar a la vista que haga scroll arriba
+        public event EventHandler? ScrollToTopRequested;
+
         public SettingsViewModel(
             IAuthenticationService authenticationService,
             INavigationService navigationService,
@@ -77,20 +90,19 @@ namespace HoloCrew.ViewModels
 
             Title = "Configuración";
 
-            // Cargar configuración guardada
             LoadSettings();
-
-            // Actualizar estado de autenticación
             UpdateAuthenticationState();
 
-            // ⭐ Suscribirse a cambios de propiedades para guardar automáticamente
             PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName != nameof(IsUserLoggedIn) &&
                     e.PropertyName != nameof(CurrentUserName) &&
                     e.PropertyName != nameof(CurrentUserEmail) &&
                     e.PropertyName != nameof(Title) &&
-                    e.PropertyName != nameof(IsBusy))
+                    e.PropertyName != nameof(IsBusy) &&
+                    e.PropertyName != nameof(ShowPrivacyPolicy) &&
+                    e.PropertyName != nameof(ShowTermsOfService) &&
+                    e.PropertyName != nameof(ShowContactSupport))
                 {
                     SaveSettings();
                 }
@@ -102,28 +114,21 @@ namespace HoloCrew.ViewModels
         {
             SelectedLanguage = language;
             SaveSettings();
-
-            System.Diagnostics.Debug.WriteLine($"🌍 Idioma cambiado a: {language}");
         }
 
         [RelayCommand]
         private void ToggleNotifications()
         {
             SaveSettings();
-            System.Diagnostics.Debug.WriteLine($"🔔 Notificaciones: {(NotificationsEnabled ? "Activadas" : "Desactivadas")}");
         }
 
         [RelayCommand]
         private void NavigateToProfile()
         {
             if (IsUserLoggedIn)
-            {
                 _navigationService.NavigateTo<ProfileViewModel>();
-            }
             else
-            {
                 _navigationService.NavigateTo<LoginViewModel>();
-            }
         }
 
         [RelayCommand]
@@ -134,39 +139,23 @@ namespace HoloCrew.ViewModels
                 _navigationService.NavigateTo<LoginViewModel>();
                 return;
             }
-
             System.Diagnostics.Debug.WriteLine("🔒 Cambiar contraseña");
         }
 
         [RelayCommand]
         private async Task LogoutAsync()
         {
-            if (!IsUserLoggedIn)
-            {
-                return;
-            }
+            if (!IsUserLoggedIn) return;
 
             await _authenticationService.LogoutAsync();
             UpdateAuthenticationState();
-
-            System.Diagnostics.Debug.WriteLine("👋 Sesión cerrada");
         }
 
         [RelayCommand]
         private void DeleteAccount()
         {
-            if (!IsUserLoggedIn)
-            {
-                return;
-            }
-
+            if (!IsUserLoggedIn) return;
             System.Diagnostics.Debug.WriteLine("⚠️ Eliminar cuenta");
-        }
-
-        [RelayCommand]
-        private void ClearCache()
-        {
-            System.Diagnostics.Debug.WriteLine("🗑️ Caché limpiada");
         }
 
         [RelayCommand]
@@ -177,26 +166,49 @@ namespace HoloCrew.ViewModels
                 _navigationService.NavigateTo<LoginViewModel>();
                 return;
             }
-
             System.Diagnostics.Debug.WriteLine("📥 Exportar datos");
         }
 
+        // Política de Privacidad
         [RelayCommand]
         private void ViewPrivacyPolicy()
         {
-            System.Diagnostics.Debug.WriteLine("📄 Ver política de privacidad");
+            ScrollToTopRequested?.Invoke(this, EventArgs.Empty);
+            ShowPrivacyPolicy = true;
         }
 
+        [RelayCommand]
+        private void ClosePrivacyPolicy()
+        {
+            ShowPrivacyPolicy = false;
+        }
+
+        // Términos de Servicio
         [RelayCommand]
         private void ViewTermsOfService()
         {
-            System.Diagnostics.Debug.WriteLine("📄 Ver términos de servicio");
+            ScrollToTopRequested?.Invoke(this, EventArgs.Empty);
+            ShowTermsOfService = true;
         }
 
         [RelayCommand]
+        private void CloseTermsOfService()
+        {
+            ShowTermsOfService = false;
+        }
+
+        // Contactar Soporte
+        [RelayCommand]
         private void ContactSupport()
         {
-            System.Diagnostics.Debug.WriteLine("💬 Contactar soporte");
+            ScrollToTopRequested?.Invoke(this, EventArgs.Empty);
+            ShowContactSupport = true;
+        }
+
+        [RelayCommand]
+        private void CloseContactSupport()
+        {
+            ShowContactSupport = false;
         }
 
         private async void UpdateAuthenticationState()
@@ -220,7 +232,6 @@ namespace HoloCrew.ViewModels
         {
             var settings = _settingsService.LoadSettings();
 
-            // Cargar valores sin disparar PropertyChanged
             _isDarkMode = settings.IsDarkMode;
             _selectedLanguage = settings.SelectedLanguage;
             _notificationsEnabled = settings.NotificationsEnabled;
@@ -232,7 +243,6 @@ namespace HoloCrew.ViewModels
             _personalizedAds = settings.PersonalizedAds;
             _shareDataWithPartners = settings.ShareDataWithPartners;
 
-            // Notificar cambios
             OnPropertyChanged(nameof(IsDarkMode));
             OnPropertyChanged(nameof(SelectedLanguage));
             OnPropertyChanged(nameof(NotificationsEnabled));
@@ -244,10 +254,7 @@ namespace HoloCrew.ViewModels
             OnPropertyChanged(nameof(PersonalizedAds));
             OnPropertyChanged(nameof(ShareDataWithPartners));
 
-            // ⭐ Aplicar tema cargado usando ThemeManager
             ThemeManager.ApplyTheme(IsDarkMode);
-
-            System.Diagnostics.Debug.WriteLine("⚙️ Configuración cargada desde JSON");
         }
 
         private void SaveSettings()
@@ -267,8 +274,6 @@ namespace HoloCrew.ViewModels
             };
 
             _settingsService.SaveSettings(settings);
-
-            // ⭐ Aplicar tema cuando IsDarkMode cambia
             ThemeManager.ApplyTheme(IsDarkMode);
         }
 
