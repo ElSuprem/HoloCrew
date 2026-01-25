@@ -5,6 +5,7 @@ using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,6 +37,12 @@ namespace HoloCrew.ViewModels
 
         [ObservableProperty]
         private string _couponCode;
+
+        [ObservableProperty]
+        private string _couponMessage;
+
+        [ObservableProperty]
+        private bool? _isCouponValid;
 
         [ObservableProperty]
         private bool _isCartEmpty = true;
@@ -156,18 +163,42 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private async Task ApplyCouponAsync()
         {
-            if (string.IsNullOrWhiteSpace(CouponCode)) return;
+            if (string.IsNullOrWhiteSpace(CouponCode))
+            {
+                CouponMessage = "Please enter a coupon code";
+                IsCouponValid = false;
+                return;
+            }
 
             try
             {
-                var applied = await _cartService.ApplyCouponAsync(CouponCode);
-                if (applied)
+                // Cupones válidos de ejemplo
+                var validCoupons = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase)
                 {
+                    { "WELCOME10", 10 },
+                    { "SAVE20", 20 },
+                    { "HOLOCREW15", 15 }
+                };
+
+                if (validCoupons.TryGetValue(CouponCode.Trim(), out decimal discountPercent))
+                {
+                    Discount = Subtotal * (discountPercent / 100);
+                    CouponMessage = $"✓ Coupon applied! {discountPercent}% off";
+                    IsCouponValid = true;
+                    CalculateTotals();
+                }
+                else
+                {
+                    Discount = 0;
+                    CouponMessage = "✗ Invalid coupon code";
+                    IsCouponValid = false;
                     CalculateTotals();
                 }
             }
             catch (Exception ex)
             {
+                CouponMessage = "Error applying coupon";
+                IsCouponValid = false;
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }

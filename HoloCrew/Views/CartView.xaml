@@ -119,34 +119,49 @@
                                         <!-- Cantidad y eliminar -->
                                         <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
                                             <!-- Contador de cantidad -->
-                                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                            <Border BorderBrush="{StaticResource Gray300Brush}"
                                                     BorderThickness="1"
-                                                    Padding="5"
                                                     Margin="0,0,0,15">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Button Content="-" 
-                                                            Width="35" 
-                                                            Height="35"
-                                                            Style="{StaticResource OutlineButton}"
-                                                            FontSize="18"
-                                                            FontWeight="Bold"
+                                                    <Button Width="40" Height="40" Cursor="Hand"
                                                             Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                            CommandParameter="{Binding}"/>
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border x:Name="border" Background="Transparent" BorderThickness="0,0,1,0" BorderBrush="{StaticResource Gray300Brush}">
+                                                                    <TextBlock Text="−" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="border" Property="Background" Value="{StaticResource Gray100Brush}"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                    </Button>
                                                     <TextBlock Text="{Binding Quantity}" 
                                                                FontSize="18" 
                                                                FontWeight="SemiBold"
                                                                VerticalAlignment="Center"
                                                                HorizontalAlignment="Center"
-                                                               Width="45"
+                                                               Width="50"
                                                                TextAlignment="Center"/>
-                                                    <Button Content="+" 
-                                                            Width="35" 
-                                                            Height="35"
-                                                            Style="{StaticResource OutlineButton}"
-                                                            FontSize="18"
-                                                            FontWeight="Bold"
+                                                    <Button Width="40" Height="40" Cursor="Hand"
                                                             Command="{Binding DataContext.IncreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                            CommandParameter="{Binding}"/>
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border x:Name="border" Background="Transparent" BorderThickness="1,0,0,0" BorderBrush="{StaticResource Gray300Brush}">
+                                                                    <TextBlock Text="+" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="border" Property="Background" Value="{StaticResource Gray100Brush}"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                    </Button>
                                                 </StackPanel>
                                             </Border>
 
@@ -247,40 +262,45 @@
                                    Style="{StaticResource SubtitleMedium}"
                                    Margin="0,0,0,15"/>
                         <Grid Margin="0,0,0,10">
-                            <TextBox Text="{Binding CouponCode, UpdateSourceTrigger=PropertyChanged}"
-                                     Height="50"
-                                     Padding="15,0,100,0"
-                                     FontSize="14"
-                                     BorderBrush="{StaticResource BorderDefault}"
-                                     BorderThickness="1"/>
-                            <TextBlock Text="Enter code"
-                                       Foreground="{StaticResource Gray400Brush}"
-                                       FontSize="14"
-                                       VerticalAlignment="Center"
-                                       Margin="15,0,0,0"
-                                       IsHitTestVisible="False">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding CouponCode}" Value="">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding CouponCode}" Value="{x:Null}">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                            <Button Content="APPLY" 
-                                    Style="{StaticResource AccentButton}"
-                                    FontSize="12"
-                                    FontWeight="Bold"
-                                    Padding="20,0"
-                                    HorizontalAlignment="Right"
-                                    Margin="5"
-                                    Command="{Binding ApplyCouponCommand}"/>
+                            <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="50">
+                                <Grid>
+                                    <TextBox Text="{Binding CouponCode, UpdateSourceTrigger=PropertyChanged}"
+                                             BorderThickness="0"
+                                             Background="Transparent"
+                                             FontSize="14"
+                                             VerticalContentAlignment="Center"
+                                             Padding="15,0,100,0"/>
+                                    <TextBlock Text="Enter code"
+                                               Foreground="{StaticResource Gray400Brush}"
+                                               FontSize="14"
+                                               VerticalAlignment="Center"
+                                               Margin="15,0,0,0"
+                                               IsHitTestVisible="False">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CouponCode}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding CouponCode}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <Button Content="APPLY" 
+                                            Style="{StaticResource AccentButton}"
+                                            FontSize="12"
+                                            FontWeight="Bold"
+                                            Padding="20,0"
+                                            Height="40"
+                                            HorizontalAlignment="Right"
+                                            Margin="5"
+                                            Command="{Binding ApplyCouponCommand}"/>
+                                </Grid>
+                            </Border>
                         </Grid>
 
                         <!-- Mensaje de feedback del cupón -->
