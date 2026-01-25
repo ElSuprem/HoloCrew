@@ -234,9 +234,10 @@
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.FullName, UpdateSourceTrigger=PropertyChanged}"
                                              Height="50"
+                                             VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource BorderDefault}"
+                                             BorderBrush="{StaticResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
 
@@ -246,9 +247,10 @@
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.PhoneNumber, UpdateSourceTrigger=PropertyChanged}"
                                              Height="50"
+                                             VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource BorderDefault}"
+                                             BorderBrush="{StaticResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
                             </Grid>
@@ -260,9 +262,10 @@
                                            Margin="0,0,0,8"/>
                                 <TextBox Text="{Binding ShippingAddress.AddressLine1, UpdateSourceTrigger=PropertyChanged}"
                                          Height="50"
+                                         VerticalContentAlignment="Center"
                                          Padding="15,0"
                                          FontSize="14"
-                                         BorderBrush="{StaticResource BorderDefault}"
+                                         BorderBrush="{StaticResource Gray300Brush}"
                                          BorderThickness="1"/>
                             </StackPanel>
 
@@ -273,9 +276,10 @@
                                            Margin="0,0,0,8"/>
                                 <TextBox Text="{Binding ShippingAddress.AddressLine2, UpdateSourceTrigger=PropertyChanged}"
                                          Height="50"
+                                         VerticalContentAlignment="Center"
                                          Padding="15,0"
                                          FontSize="14"
-                                         BorderBrush="{StaticResource BorderDefault}"
+                                         BorderBrush="{StaticResource Gray300Brush}"
                                          BorderThickness="1"/>
                             </StackPanel>
 
@@ -293,9 +297,10 @@
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.City, UpdateSourceTrigger=PropertyChanged}"
                                              Height="50"
+                                             VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource BorderDefault}"
+                                             BorderBrush="{StaticResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
 
@@ -305,9 +310,10 @@
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.PostalCode, UpdateSourceTrigger=PropertyChanged}"
                                              Height="50"
+                                             VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource BorderDefault}"
+                                             BorderBrush="{StaticResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
                             </Grid>
@@ -325,9 +331,10 @@
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
                                     <ComboBox Height="50"
+                                              VerticalContentAlignment="Center"
                                               Padding="15,0"
                                               FontSize="14"
-                                              BorderBrush="{StaticResource BorderDefault}"
+                                              BorderBrush="{StaticResource Gray300Brush}"
                                               BorderThickness="1"
                                               SelectedValue="{Binding ShippingAddress.Country}"
                                               SelectedValuePath="Content">
@@ -345,9 +352,10 @@
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.State, UpdateSourceTrigger=PropertyChanged}"
                                              Height="50"
+                                             VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource BorderDefault}"
+                                             BorderBrush="{StaticResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
                             </Grid>
@@ -415,9 +423,10 @@
                                            Margin="0,0,0,8"/>
                                 <TextBox Text="{Binding CardNumber, UpdateSourceTrigger=PropertyChanged}"
                                          Height="50"
+                                         VerticalContentAlignment="Center"
                                          Padding="15,0"
                                          FontSize="14"
-                                         BorderBrush="{StaticResource BorderDefault}"
+                                         BorderBrush="{StaticResource Gray300Brush}"
                                          BorderThickness="1"
                                          MaxLength="19"/>
                             </StackPanel>
@@ -429,9 +438,10 @@
                                            Margin="0,0,0,8"/>
                                 <TextBox Text="{Binding CardholderName, UpdateSourceTrigger=PropertyChanged}"
                                          Height="50"
+                                         VerticalContentAlignment="Center"
                                          Padding="15,0"
                                          FontSize="14"
-                                         BorderBrush="{StaticResource BorderDefault}"
+                                         BorderBrush="{StaticResource Gray300Brush}"
                                          BorderThickness="1"/>
                             </StackPanel>
 
@@ -449,9 +459,10 @@
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ExpirationDate, UpdateSourceTrigger=PropertyChanged}"
                                              Height="50"
+                                             VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource BorderDefault}"
+                                             BorderBrush="{StaticResource Gray300Brush}"
                                              BorderThickness="1"
                                              MaxLength="5"/>
                                 </StackPanel>
@@ -460,13 +471,14 @@
                                     <TextBlock Text="CVV *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <PasswordBox x:Name="CvvBox"
-                                                 Height="50"
-                                                 Padding="15,0"
-                                                 FontSize="14"
-                                                 BorderBrush="{StaticResource BorderDefault}"
-                                                 BorderThickness="1"
-                                                 MaxLength="4"/>
+                                    <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="50">
+                                        <PasswordBox x:Name="CvvBox"
+                                                     BorderThickness="0"
+                                                     FontSize="14"
+                                                     VerticalContentAlignment="Center"
+                                                     Padding="15,0"
+                                                     MaxLength="4"/>
+                                    </Border>
                                 </StackPanel>
                             </Grid>
 
