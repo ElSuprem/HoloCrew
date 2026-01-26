@@ -8,6 +8,8 @@ namespace HoloCrew.Views
 {
     public partial class SettingsView : UserControl
     {
+        private ScrollViewer? _mainScrollViewer;
+
         public SettingsView()
         {
             InitializeComponent();
@@ -36,14 +38,25 @@ namespace HoloCrew.Views
                 if (DataContext is SettingsViewModel vm)
                 {
                     bool anyModalOpen = vm.ShowPrivacyPolicy || vm.ShowTermsOfService || vm.ShowContactSupport;
-
-                    if (anyModalOpen)
+                    
+                    // Buscar el MainScrollViewer si no lo tenemos
+                    if (_mainScrollViewer == null)
                     {
-                        // Buscar el MainScrollViewer en el MainWindow
-                        var mainScrollViewer = FindMainScrollViewer();
-                        if (mainScrollViewer != null)
+                        _mainScrollViewer = FindMainScrollViewer();
+                    }
+
+                    if (_mainScrollViewer != null)
+                    {
+                        if (anyModalOpen)
                         {
-                            mainScrollViewer.ScrollToTop();
+                            // Modal abierto: scroll arriba y bloquear
+                            _mainScrollViewer.ScrollToTop();
+                            _mainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                        }
+                        else
+                        {
+                            // Modal cerrado: desbloquear scroll
+                            _mainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
                         }
                     }
                 }
@@ -56,7 +69,7 @@ namespace HoloCrew.Views
         private ScrollViewer? FindMainScrollViewer()
         {
             DependencyObject? current = this;
-
+            
             // Subir hasta encontrar el Window
             while (current != null && !(current is Window))
             {
@@ -78,11 +91,11 @@ namespace HoloCrew.Views
         private T? FindChildByName<T>(DependencyObject parent, string name) where T : FrameworkElement
         {
             int childCount = VisualTreeHelper.GetChildrenCount(parent);
-
+            
             for (int i = 0; i < childCount; i++)
             {
                 var child = VisualTreeHelper.GetChild(parent, i);
-
+                
                 if (child is T element && element.Name == name)
                 {
                     return element;

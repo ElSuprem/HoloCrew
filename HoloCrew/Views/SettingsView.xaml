@@ -453,10 +453,10 @@
             <Border Background="White"
                     CornerRadius="16"
                     Width="550"
-                    MaxHeight="500"
+                    MaxHeight="650"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Center"
-                    Margin="0,40,0,0">
+                    Margin="0,20,0,0">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="30" ShadowDepth="0"/>
                 </Border.Effect>
@@ -518,10 +518,10 @@
             <Border Background="White"
                     CornerRadius="16"
                     Width="550"
-                    MaxHeight="500"
+                    MaxHeight="650"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Center"
-                    Margin="0,40,0,0">
+                    Margin="0,20,0,0">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="30" ShadowDepth="0"/>
                 </Border.Effect>
@@ -588,7 +588,7 @@
                     Width="450"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Center"
-                    Margin="0,40,0,0">
+                    Margin="0,20,0,0">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="30" ShadowDepth="0"/>
                 </Border.Effect>
