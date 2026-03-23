@@ -54,7 +54,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Contenido Izquierdo -->
+                            <!-- Left content -->
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="MEMBERS CLUB" 
                                        FontSize="48"
@@ -126,7 +126,7 @@
                                 </Grid>
                             </StackPanel>
 
-                            <!-- Progreso Derecha -->
+                            <!-- Progress right -->
                             <Border Grid.Column="1"
                                 Background="#1A1A1A"
                                 CornerRadius="15"
@@ -155,7 +155,7 @@
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <!-- ⭐ PROGRESS BAR SIMPLE (ancho fijo calculado manualmente) -->
+                                    <!-- PROGRESS BAR SIMPLE (fixed width calculated manually) -->
                                     <Grid Margin="0,0,0,10">
                                         <Border Background="#2A2A2A"
                                             Height="12"
@@ -205,7 +205,7 @@
                                 Padding="30"
                                 Margin="0,0,15,0">
                                 <StackPanel>
-                                    <TextBlock Text="💳" 
+                                    <TextBlock Text="%"  
                                            FontSize="48"
                                            Margin="0,0,0,15"/>
                                     <TextBlock FontSize="28" 
@@ -228,7 +228,7 @@
                                 Padding="30"
                                 Margin="0,0,15,0">
                                 <StackPanel>
-                                    <TextBlock Text="⭐" 
+                                    <TextBlock Text="×"  
                                            FontSize="48"
                                            Margin="0,0,0,15"/>
                                     <TextBlock FontSize="28" 
@@ -250,7 +250,7 @@
                                 BorderThickness="1"
                                 Padding="30">
                                 <StackPanel>
-                                    <TextBlock Text="🚚" 
+                                    <TextBlock Text="→"  
                                            FontSize="48"
                                            Margin="0,0,0,15"/>
                                     <TextBlock Text="Envío" 

@@ -90,7 +90,7 @@
                                VerticalAlignment="Center"
                                Margin="0,0,20,0"/>
 
-                    <!-- Filter buttons con indicador de selección -->
+                    <!-- Filter buttons with selection indicator -->
                     <Button Content="ALL" 
                             FontSize="13"
                             FontWeight="SemiBold"
@@ -252,7 +252,7 @@
                                 Margin="0,0,0,15"
                                 Cursor="Hand"
                                 BorderThickness="1">
-                            <!-- ⭐ ESTILO CONDICIONAL BASADO EN IsRead -->
+                            <!-- Conditional style based on IsRead -->
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Background" Value="{StaticResource WhitePrimaryBrush}"/>
@@ -369,7 +369,7 @@
                     Padding="60,80"
                     Visibility="{Binding HasNotifications, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="🔔" 
+                    <TextBlock Text="" 
                                FontSize="100"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,30"/>

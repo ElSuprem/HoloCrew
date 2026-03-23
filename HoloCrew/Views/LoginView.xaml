@@ -8,271 +8,280 @@
              d:DesignHeight="800" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Disabled">
-        <Grid MinHeight="800" Style="{StaticResource FadeIn}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.5*" MinWidth="400"/>
-                <ColumnDefinition Width="*" MinWidth="450" MaxWidth="550"/>
-            </Grid.ColumnDefinitions>
+    <!-- Centered card layout like the web -->
+    <Border Padding="0,40,0,60">
+        <Grid HorizontalAlignment="Center" MaxWidth="520">
+            <Border Background="{StaticResource WhitePrimaryBrush}"
+                    BorderBrush="{StaticResource Gray200Brush}"
+                    BorderThickness="1"
+                    Padding="60,50">
 
-            <!-- LEFT SIDE - HERO -->
-            <Border Grid.Column="0"
-                    Background="{StaticResource BlackPrimaryBrush}"
-                    Padding="60,80">
-                <StackPanel VerticalAlignment="Center"
-                            MaxWidth="500">
-                    <TextBlock Text="🛍️" 
-                               FontSize="100"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,30"/>
+                <StackPanel>
 
+                    <!-- Logo -->
                     <TextBlock Text="HOLOCREW" 
-                               FontSize="56"
-                               FontWeight="Bold"
-                               Foreground="{StaticResource WhitePrimaryBrush}"
+                               FontSize="24" 
+                               FontWeight="Black" 
+                               FontStyle="Italic"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,20"/>
+                               Margin="0,0,0,35"/>
 
-                    <TextBlock Text="Tu tienda online de confianza" 
-                               FontSize="20"
-                               Foreground="{StaticResource Gray400Brush}"
+                    <!-- Title -->
+                    <TextBlock Text="WELCOME BACK" 
+                               FontSize="28"
+                               FontWeight="Black"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,50"/>
+                               Margin="0,0,0,8"/>
 
-                    <!-- Benefits -->
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                            <TextBlock Text="✓" 
-                                       FontSize="24"
-                                       Foreground="{StaticResource AccentBrush}"
-                                       Margin="0,0,15,0"/>
-                            <TextBlock Text="Envío gratis en pedidos superiores a 50€" 
-                                       FontSize="16"
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       TextWrapping="Wrap"/>
-                        </StackPanel>
+                    <TextBlock Text="Access your account to manage orders" 
+                               FontSize="14"
+                               Foreground="{StaticResource Gray500Brush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,35"/>
 
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                            <TextBlock Text="✓" 
-                                       FontSize="24"
-                                       Foreground="{StaticResource AccentBrush}"
-                                       Margin="0,0,15,0"/>
-                            <TextBlock Text="Devoluciones gratis en 30 días" 
-                                       FontSize="16"
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       TextWrapping="Wrap"/>
-                        </StackPanel>
-
+                    <!-- Error Message -->
+                    <Border Background="#FEF2F2"
+                            BorderBrush="#FECACA"
+                            BorderThickness="1"
+                            Padding="15"
+                            Margin="0,0,0,20"
+                            Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Invert}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="✓" 
-                                       FontSize="24"
-                                       Foreground="{StaticResource AccentBrush}"
-                                       Margin="0,0,15,0"/>
-                            <TextBlock Text="Descuentos exclusivos para miembros" 
-                                       FontSize="16"
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
-                                       TextWrapping="Wrap"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-
-            <!-- RIGHT SIDE - FORM -->
-            <Border Grid.Column="1"
-                    Background="{StaticResource WhitePrimaryBrush}">
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled">
-                    <Border Padding="60,80"
-                            MaxWidth="450">
-                        <StackPanel>
-
-                            <!-- Header -->
-                            <TextBlock Text="Iniciar Sesión" 
-                                       FontSize="36"
-                                       FontWeight="Bold"
-                                       Margin="0,0,0,10"/>
-
-                            <TextBlock Text="Bienvenido de nuevo" 
-                                       FontSize="16"
-                                       Foreground="{StaticResource TextSecondary}"
-                                       Margin="0,0,0,40"/>
-
-                            <!-- ⭐ ERROR MESSAGE GENERAL -->
-                            <Border Background="#FFF3CD"
-                                    BorderBrush="#FF6B6B"
-                                    BorderThickness="1"
-                                    CornerRadius="8"
-                                    Padding="15"
-                                    Margin="0,0,0,20"
-                                    Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Invert}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="⚠️" 
-                                               FontSize="16"
-                                               Margin="0,0,10,0"
-                                               VerticalAlignment="Top"/>
-                                    <TextBlock Text="{Binding ErrorMessage}" 
-                                               Foreground="#721C24"
-                                               TextWrapping="Wrap"
-                                               FontSize="14"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- ⭐ EMAIL FIELD CON VALIDACIÓN COMPLETA -->
-                            <TextBlock Text="Email" 
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,8"/>
-                            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
-                                     Margin="0,0,0,5">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource StandardTextBox}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding HasEmailError}" Value="True">
-                                                <Setter Property="BorderBrush" Value="{StaticResource RedAccentBrush}"/>
-                                                <Setter Property="BorderThickness" Value="2"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                            <!-- ⭐ MENSAJE DE ERROR EMAIL -->
-                            <TextBlock Text="{Binding EmailErrorMessage}"
-                                       FontSize="12"
-                                       Foreground="{StaticResource RedAccentBrush}"
-                                       Margin="0,0,0,15"
-                                       Visibility="{Binding HasEmailError, Converter={StaticResource BoolToVisibilityConverter}}"/>
-
-                            <!-- ⭐ PASSWORD FIELD CON VALIDACIÓN COMPLETA -->
-                            <TextBlock Text="Contraseña" 
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,8"/>
-                            <PasswordBox x:Name="PasswordBox"
-                                         PasswordChanged="PasswordBox_PasswordChanged"
-                                         Margin="0,0,0,5">
-                                <PasswordBox.Style>
-                                    <Style TargetType="PasswordBox" BasedOn="{StaticResource StandardPasswordBox}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding HasPasswordError}" Value="True">
-                                                <Setter Property="BorderBrush" Value="{StaticResource RedAccentBrush}"/>
-                                                <Setter Property="BorderThickness" Value="2"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </PasswordBox.Style>
-                            </PasswordBox>
-                            <!-- ⭐ MENSAJE DE ERROR PASSWORD -->
-                            <TextBlock Text="{Binding PasswordErrorMessage}"
-                                       FontSize="12"
-                                       Foreground="{StaticResource RedAccentBrush}"
-                                       Margin="0,0,0,10"
-                                       Visibility="{Binding HasPasswordError, Converter={StaticResource BoolToVisibilityConverter}}"/>
-
-                            <!-- Remember Me & Forgot Password -->
-                            <Grid Margin="0,0,0,30">
-                                <CheckBox Content="Recordarme"
-                                          IsChecked="{Binding RememberMe}"
-                                          VerticalAlignment="Center"
-                                          FontSize="14"/>
-
-                                <TextBlock HorizontalAlignment="Right"
-                                           VerticalAlignment="Center">
-                                    <Hyperlink Command="{Binding ForgotPasswordCommand}"
-                                               Style="{StaticResource ModernHyperlink}">
-                                        <Run Text="¿Olvidaste tu contraseña?" FontSize="14"/>
-                                    </Hyperlink>
-                                </TextBlock>
-                            </Grid>
-
-                            <!-- ⭐ LOGIN BUTTON CON LOADING - CORREGIDO -->
-                            <Button Command="{Binding LoginCommand}"
-                                    Style="{StaticResource AccentButton}"
-                                    Height="50"
-                                    FontSize="16"
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,20">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <!-- ⭐ CORREGIDO: Loading spinner SIN Style duplicado -->
-                                        <TextBlock Text="⏳" 
-                                                   FontSize="16"
-                                                   Margin="0,0,10,0"
-                                                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock" BasedOn="{StaticResource Pulse}"/>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                        <TextBlock>
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="INICIAR SESIÓN"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
-                                                            <Setter Property="Text" Value="INICIANDO..."/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-
-                            <!-- Divider -->
-                            <Grid Margin="0,0,0,20">
-                                <Border BorderBrush="{StaticResource BorderDefault}"
-                                        BorderThickness="0,1,0,0"
-                                        VerticalAlignment="Center"/>
-                                <TextBlock Text="O continuar con"
-                                           Background="{StaticResource WhitePrimaryBrush}"
-                                           Padding="15,0"
-                                           HorizontalAlignment="Center"
-                                           FontSize="14"
-                                           Foreground="{StaticResource TextSecondary}"/>
-                            </Grid>
-
-                            <!-- OAuth Buttons -->
-                            <Grid Margin="0,0,0,20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="15"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Button Grid.Column="0" Height="50" Cursor="Hand"
-                                        Background="White" BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <TextBlock Text="G" FontSize="18" FontWeight="Bold" Foreground="#DB4437" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Google" FontSize="14" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-
-                                <Button Grid.Column="2" Height="50" Cursor="Hand"
-                                        Background="White" BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <TextBlock Text="f" FontSize="20" FontWeight="Bold" Foreground="#1877F2" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Facebook" FontSize="14" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                            </Grid>
-
-                            <!-- Register Link -->
-                            <TextBlock HorizontalAlignment="Center"
-                                       Margin="0,30,0,0"
-                                       FontSize="14">
-                                <Run Text="¿No tienes cuenta?" Foreground="{StaticResource TextSecondary}"/>
-                                <Hyperlink Command="{Binding NavigateToRegisterCommand}"
-                                           Style="{StaticResource ModernHyperlink}"
-                                           FontWeight="SemiBold">
-                                    <Run Text="Regístrate aquí"/>
-                                </Hyperlink>
-                            </TextBlock>
-
+                            <Viewbox Width="16" Height="16" Margin="0,0,10,0" VerticalAlignment="Top">
+                                <Path Data="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+                                      Stroke="#DC2626" StrokeThickness="2" Fill="Transparent"/>
+                            </Viewbox>
+                            <TextBlock Text="{Binding ErrorMessage}" 
+                                       Foreground="#DC2626"
+                                       TextWrapping="Wrap"
+                                       FontSize="13"/>
                         </StackPanel>
                     </Border>
-                </ScrollViewer>
+
+                    <!-- Email Field -->
+                    <TextBlock Text="Email or Username" 
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8"/>
+                    <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="48" Margin="0,0,0,20">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasEmailError}" Value="True">
+                                        <Setter Property="BorderBrush" Value="#DC2626"/>
+                                        <Setter Property="BorderThickness" Value="2"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid>
+                            <Viewbox Width="16" Height="16" HorizontalAlignment="Left" Margin="14,0,0,0">
+                                <Path Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6" 
+                                      Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                            </Viewbox>
+                            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Padding="42,0,15,0"
+                                     VerticalAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     FontSize="14"/>
+                            <TextBlock Text="john@example.com"
+                                       Foreground="{StaticResource Gray400Brush}"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"
+                                       Margin="42,0,0,0"
+                                       IsHitTestVisible="False">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Email}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Email}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                    <!-- Email error -->
+                    <TextBlock Text="{Binding EmailErrorMessage}"
+                               FontSize="12"
+                               Foreground="#DC2626"
+                               Margin="0,-15,0,5"
+                               Visibility="{Binding HasEmailError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                    <!-- Password Field -->
+                    <Grid Margin="0,0,0,8">
+                        <TextBlock Text="Password" 
+                                   FontSize="13"
+                                   FontWeight="SemiBold"/>
+                        <TextBlock Text="Forgot your password?" 
+                                   FontSize="13"
+                                   Foreground="{StaticResource BlackPrimaryBrush}"
+                                   HorizontalAlignment="Right"
+                                   Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding ForgotPasswordCommand}" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                    </Grid>
+                    <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="48" Margin="0,0,0,5">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasPasswordError}" Value="True">
+                                        <Setter Property="BorderBrush" Value="#DC2626"/>
+                                        <Setter Property="BorderThickness" Value="2"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid>
+                            <Viewbox Width="16" Height="16" HorizontalAlignment="Left" Margin="14,0,0,0">
+                                <Path Data="M19 11H5V21H19V11ZM17 11V7C17 4.24 14.76 2 12 2C9.24 2 7 4.24 7 7V11" 
+                                      Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                            </Viewbox>
+                            <PasswordBox x:Name="PasswordBox"
+                                         PasswordChanged="PasswordBox_PasswordChanged"
+                                         BorderThickness="0"
+                                         Padding="42,0,15,0"
+                                         VerticalAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                         FontSize="14"/>
+                        </Grid>
+                    </Border>
+                    <!-- Password error -->
+                    <TextBlock Text="{Binding PasswordErrorMessage}"
+                               FontSize="12"
+                               Foreground="#DC2626"
+                               Margin="0,0,0,10"
+                               Visibility="{Binding HasPasswordError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                    <!-- Remember Me -->
+                    <CheckBox Content="Remember me"
+                              IsChecked="{Binding RememberMe}"
+                              VerticalAlignment="Center"
+                              FontSize="14"
+                              Margin="0,10,0,25"
+                              Cursor="Hand"/>
+
+                    <!-- Sign In Button - Black like the web -->
+                    <Button Command="{Binding LoginCommand}"
+                            Height="52"
+                            Cursor="Hand"
+                            Margin="0,0,0,25">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Background" Value="{StaticResource BlackSecondaryBrush}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.6"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock FontSize="14" FontWeight="Bold" Foreground="White">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="SIGN IN  →"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                                    <Setter Property="Text" Value="SIGNING IN..."/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                    <!-- Divider -->
+                    <Grid Margin="0,0,0,25">
+                        <Border BorderBrush="{StaticResource Gray200Brush}"
+                                BorderThickness="0,1,0,0"
+                                VerticalAlignment="Center"/>
+                        <TextBlock Text="Or continue with"
+                                   Background="{StaticResource WhitePrimaryBrush}"
+                                   Padding="15,0"
+                                   HorizontalAlignment="Center"
+                                   FontSize="13"
+                                   Foreground="{StaticResource Gray500Brush}"/>
+                    </Grid>
+
+                    <!-- OAuth Buttons -->
+                    <Grid Margin="0,0,0,30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="15"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" Height="48" Cursor="Hand"
+                                Background="White" BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="G" FontSize="18" FontWeight="Bold" Foreground="#DB4437" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Google" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="2" Height="48" Cursor="Hand"
+                                Background="White" BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BlackPrimaryBrush}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Apple" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <!-- Separator -->
+                    <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,1,0,0" Margin="0,0,0,25"/>
+
+                    <!-- Register link -->
+                    <TextBlock HorizontalAlignment="Center"
+                               FontSize="14"
+                               Margin="0,0,0,5">
+                        <Run Text="Don't have an account?" Foreground="{StaticResource Gray500Brush}"/>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="0,0,0,5">
+                        <Hyperlink Command="{Binding NavigateToRegisterCommand}"
+                                   TextDecorations="None"
+                                   Foreground="{StaticResource BlackPrimaryBrush}"
+                                   FontWeight="Bold"
+                                   FontSize="14">
+                            <Run Text="Join the Members Club  →"/>
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center" FontSize="13">
+                        <Run Text="Get " Foreground="{StaticResource Gray500Brush}"/>
+                        <Run Text="200 FREE CREDITS" FontWeight="Bold" Foreground="{StaticResource BlackPrimaryBrush}"/>
+                        <Run Text=" when you register" Foreground="{StaticResource Gray500Brush}"/>
+                    </TextBlock>
+
+                </StackPanel>
             </Border>
         </Grid>
-    </ScrollViewer>
+    </Border>
+
 </UserControl>

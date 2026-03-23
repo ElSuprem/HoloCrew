@@ -11,76 +11,113 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="35"/>
+            <!-- Row 0: Top nav bar (black) - main links centered -->
+            <RowDefinition Height="45"/>
+            <!-- Row 1: Sub nav bar (white) - SHOP+MEMBER left, Logo center, icons right -->
+            <RowDefinition Height="55"/>
+            <!-- Row 2: Content area -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- TOP NAVIGATION BAR -->
+        <!-- ============================================ -->
+        <!-- ROW 0: TOP NAVIGATION BAR (BLACK)            -->
+        <!-- Centered links: SHOP / FLASH SALE / BLACK WEEK / MEMBERS CLUB -->
+        <!-- ============================================ -->
         <Border Grid.Row="0" Background="{StaticResource BlackPrimaryBrush}">
-            <Grid Margin="70,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="SHOP" Foreground="{StaticResource WhitePrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,50,0" Cursor="Hand">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Command="{Binding NavigateToCatalogCommand}" MouseAction="LeftClick"/>
+                    </TextBlock.InputBindings>
+                </TextBlock>
+
+                <TextBlock Text="FLASH SALE" Foreground="{StaticResource WhitePrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,50,0" Cursor="Hand">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Command="{Binding NavigateToFlashSaleCommand}" MouseAction="LeftClick"/>
+                    </TextBlock.InputBindings>
+                </TextBlock>
+
+                <TextBlock Text="BLACK WEEK" Foreground="{StaticResource WhitePrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,50,0" Cursor="Hand">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Command="{Binding NavigateToBlackWeekCommand}" MouseAction="LeftClick"/>
+                    </TextBlock.InputBindings>
+                </TextBlock>
+
+                <TextBlock Text="MEMBERS CLUB" Foreground="{StaticResource WhitePrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Cursor="Hand">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Command="{Binding NavigateToMembersClubCommand}" MouseAction="LeftClick"/>
+                    </TextBlock.InputBindings>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <!-- ============================================ -->
+        <!-- ROW 1: SUB NAVIGATION BAR (WHITE)            -->
+        <!-- Left: SHOP dropdown + MEMBER CLUB            -->
+        <!-- Center: HOLOCREW logo                        -->
+        <!-- Right: EUR € | SPAIN + Search/Wishlist/User/Cart -->
+        <!-- ============================================ -->
+        <Border Grid.Row="1" Background="{StaticResource WhitePrimaryBrush}"
+                BorderBrush="{StaticResource Gray200Brush}"
+                BorderThickness="0,0,0,1">
+            <Grid Margin="40,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
+                <!-- LEFT: SHOP dropdown + MEMBER CLUB -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <Border x:Name="ShopMenuTrigger" Background="Transparent" Padding="0,0,25,0" Cursor="Hand"
                             MouseEnter="ShopMenu_MouseEnter" MouseLeave="ShopMenu_MouseLeave">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="SHOP" Foreground="{StaticResource WhitePrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            <TextBlock Text="▼" Foreground="{StaticResource WhitePrimaryBrush}" FontSize="8" Margin="6,0,0,0" VerticalAlignment="Center" Opacity="0.7"/>
+                            <TextBlock Text="SHOP" Foreground="{StaticResource BlackPrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <TextBlock Text="▾" Foreground="{StaticResource BlackPrimaryBrush}" FontSize="10" Margin="6,1,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 
-                    <TextBlock Text="FLASH SALE" Foreground="{StaticResource WhitePrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,25,0" Cursor="Hand">
-                        <TextBlock.InputBindings>
-                            <MouseBinding Command="{Binding NavigateToFlashSaleCommand}" MouseAction="LeftClick"/>
-                        </TextBlock.InputBindings>
-                    </TextBlock>
-
-                    <TextBlock Text="BLACK WEEK" Foreground="{StaticResource WhitePrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,25,0" Cursor="Hand">
-                        <TextBlock.InputBindings>
-                            <MouseBinding Command="{Binding NavigateToBlackWeekCommand}" MouseAction="LeftClick"/>
-                        </TextBlock.InputBindings>
-                    </TextBlock>
-
-                    <TextBlock Text="MEMBERS CLUB" Foreground="{StaticResource WhitePrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Cursor="Hand">
+                    <TextBlock Text="MEMBER CLUB" Foreground="{StaticResource BlackPrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Cursor="Hand">
                         <TextBlock.InputBindings>
                             <MouseBinding Command="{Binding NavigateToMembersClubCommand}" MouseAction="LeftClick"/>
                         </TextBlock.InputBindings>
                     </TextBlock>
                 </StackPanel>
 
+                <!-- CENTER: Logo -->
                 <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand">
                     <Border.InputBindings>
                         <MouseBinding Command="{Binding NavigateToHomeCommand}" MouseAction="LeftClick"/>
                     </Border.InputBindings>
-                    <TextBlock Text="HOLOCREW" FontSize="24" FontWeight="Black" Foreground="{StaticResource WhitePrimaryBrush}" FontStyle="Italic"/>
+                    <TextBlock Text="HOLOCREW" FontSize="22" FontWeight="Black" Foreground="{StaticResource BlackPrimaryBrush}" FontStyle="Italic"/>
                 </Border>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="EUR €" Foreground="{StaticResource Gray400Brush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock Text="|" Foreground="{StaticResource Gray600Brush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock Text="SPAIN" Foreground="{StaticResource Gray400Brush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <!-- RIGHT: Currency + Icons -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <TextBlock Text="EUR €" Foreground="{StaticResource Gray500Brush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Text="|" Foreground="{StaticResource Gray300Brush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Text="SPAIN" Foreground="{StaticResource Gray500Brush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                    <!-- Down arrow for country -->
+                    <TextBlock Text="▾" Foreground="{StaticResource Gray400Brush}" FontSize="10" VerticalAlignment="Center" Margin="0,0,20,0"/>
 
-                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Buscar">
+                    <!-- Search -->
+                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Search">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding ToggleSearchCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
                         <Viewbox Width="20" Height="20">
-                            <Path Data="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" Stroke="{StaticResource WhitePrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+                            <Path Data="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" Stroke="{StaticResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
                         </Viewbox>
                     </Border>
 
-                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Lista de deseos">
+                    <!-- Wishlist -->
+                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Wishlist">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToWishlistCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
                         <Grid>
                             <Viewbox Width="20" Height="20">
-                                <Path Data="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z" Stroke="{StaticResource WhitePrimaryBrush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                <Path Data="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z" Stroke="{StaticResource BlackPrimaryBrush}" StrokeThickness="1.5" Fill="Transparent"/>
                             </Viewbox>
                             <Border Background="{StaticResource RedAccentBrush}" CornerRadius="7" Width="14" Height="14" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,3,0" Visibility="{Binding WishlistItemCount, Converter={StaticResource CountToVisibilityConverter}}">
                                 <TextBlock Text="{Binding WishlistItemCount}" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -88,22 +125,24 @@
                         </Grid>
                     </Border>
 
-                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Mi cuenta">
+                    <!-- User account -->
+                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="My Account">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToProfileCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
                         <Viewbox Width="20" Height="20">
-                            <Path Data="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" Stroke="{StaticResource WhitePrimaryBrush}" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round"/>
+                            <Path Data="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" Stroke="{StaticResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round"/>
                         </Viewbox>
                     </Border>
 
-                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Notificaciones">
+                    <!-- Notifications -->
+                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Notifications">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToNotificationsCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
                         <Grid>
                             <Viewbox Width="20" Height="20">
-                                <Path Data="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8ZM13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" Stroke="{StaticResource WhitePrimaryBrush}" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round"/>
+                                <Path Data="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8ZM13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" Stroke="{StaticResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round"/>
                             </Viewbox>
                             <Border Background="{StaticResource RedAccentBrush}" CornerRadius="7" Width="14" Height="14" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,3,0" Visibility="{Binding UnreadNotificationCount, Converter={StaticResource CountToVisibilityConverter}}">
                                 <TextBlock Text="{Binding UnreadNotificationCount}" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -111,44 +150,57 @@
                         </Grid>
                     </Border>
 
-                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Carrito">
+                    <!-- Settings -->
+                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Settings">
+                        <Border.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToSettingsCommand}" MouseAction="LeftClick"/>
+                        </Border.InputBindings>
+                        <Viewbox Width="18" Height="18">
+                            <Path Data="M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" Stroke="{StaticResource BlackPrimaryBrush}" StrokeThickness="1.5" Fill="Transparent"/>
+                        </Viewbox>
+                    </Border>
+
+                    <!-- Cart (bag icon like web) -->
+                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Cart">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCartCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
                         <Grid>
                             <Viewbox Width="20" Height="20">
-                                <Path Data="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6ZM3 6H21M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10" Stroke="{StaticResource WhitePrimaryBrush}" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round"/>
+                                <Path Data="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6ZM3 6H21M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10" Stroke="{StaticResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round"/>
                             </Viewbox>
                             <Border Background="{StaticResource RedAccentBrush}" CornerRadius="7" Width="14" Height="14" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,3,0" Visibility="{Binding CartItemCount, Converter={StaticResource CountToVisibilityConverter}}">
                                 <TextBlock Text="{Binding CartItemCount}" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
                     </Border>
-
-                    <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Configuración">
-                        <Border.InputBindings>
-                            <MouseBinding Command="{Binding NavigateToSettingsCommand}" MouseAction="LeftClick"/>
-                        </Border.InputBindings>
-                        <Viewbox Width="18" Height="18">
-                            <Path Data="M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" Stroke="{StaticResource WhitePrimaryBrush}" StrokeThickness="1.5" Fill="Transparent"/>
-                        </Viewbox>
-                    </Border>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- MEGA MENU DROPDOWN -->
-        <Border x:Name="MegaMenuDropdown" Grid.Row="1" Grid.RowSpan="2" Background="{StaticResource WhitePrimaryBrush}" VerticalAlignment="Top" Visibility="Collapsed" Panel.ZIndex="1000" MouseEnter="ShopMenu_MouseEnter" MouseLeave="ShopMenu_MouseLeave">
+        <!-- ============================================ -->
+        <!-- MEGA MENU DROPDOWN                           -->
+        <!-- Matches web: 6 columns + collection image    -->
+        <!-- ============================================ -->
+        <Border x:Name="MegaMenuDropdown" Grid.Row="1" Grid.RowSpan="2" 
+                Background="{StaticResource WhitePrimaryBrush}" 
+                VerticalAlignment="Top" 
+                Margin="0,55,0,0"
+                Visibility="Collapsed" 
+                Panel.ZIndex="1000" 
+                MouseEnter="ShopMenu_MouseEnter" 
+                MouseLeave="ShopMenu_MouseLeave">
             <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.15" BlurRadius="20" ShadowDepth="5" Direction="270"/>
+                <DropShadowEffect Color="Black" Opacity="0.12" BlurRadius="25" ShadowDepth="8" Direction="270"/>
             </Border.Effect>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="350"/>
+                    <ColumnDefinition Width="380"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" Margin="70,35,40,35">
+                <!-- Category columns -->
+                <Grid Grid.Column="0" Margin="50,35,30,35">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -157,6 +209,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
+                    <!-- SHOP ALL -->
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="SHOP ALL" FontWeight="Bold" FontSize="13" Margin="0,0,0,18"/>
                         <TextBlock Text="BLACK WEEK" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
@@ -179,8 +232,19 @@
                                 <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="classic" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
+                        <TextBlock Text="ACTIVEWEAR" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="activewear" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="TRACKSUITS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="tracksuits" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
                     </StackPanel>
 
+                    <!-- TOPS -->
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="TOPS" FontWeight="Bold" FontSize="13" Margin="0,0,0,18"/>
                         <TextBlock Text="T-SHIRTS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
@@ -193,9 +257,9 @@
                                 <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="hoodies" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
-                        <TextBlock Text="JACKETS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                        <TextBlock Text="TRACK JACKETS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
                             <TextBlock.InputBindings>
-                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="jackets" MouseAction="LeftClick"/>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="trackjackets" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
                         <TextBlock Text="JERSEYS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
@@ -203,10 +267,26 @@
                                 <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="jerseys" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
+                        <TextBlock Text="KNITWEAR" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="knitwear" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="JACKETS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="jackets" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
                     </StackPanel>
 
+                    <!-- BOTTOMS -->
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="BOTTOMS" FontWeight="Bold" FontSize="13" Margin="0,0,0,18"/>
+                        <TextBlock Text="DENIM PANTS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="denim" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
                         <TextBlock Text="CARGO PANTS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
                             <TextBlock.InputBindings>
                                 <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="cargo" MouseAction="LeftClick"/>
@@ -217,9 +297,14 @@
                                 <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="joggers" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
-                        <TextBlock Text="DENIM" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                        <TextBlock Text="TRACK PANTS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
                             <TextBlock.InputBindings>
-                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="denim" MouseAction="LeftClick"/>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="trackpants" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="JORTS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="jorts" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
                         <TextBlock Text="SHORTS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
@@ -227,8 +312,19 @@
                                 <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="shorts" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
+                        <TextBlock Text="SWIMSHORTS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="swimshorts" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="UNDERWEAR" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="underwear" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
                     </StackPanel>
 
+                    <!-- FOOTWEAR -->
                     <StackPanel Grid.Column="3">
                         <TextBlock Text="FOOTWEAR" FontWeight="Bold" FontSize="13" Margin="0,0,0,18"/>
                         <TextBlock Text="ARMBO LOWS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
@@ -236,18 +332,29 @@
                                 <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="armbo" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
-                        <TextBlock Text="SNEAKERS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                        <TextBlock Text="VORTEX" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
                             <TextBlock.InputBindings>
-                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="sneakers" MouseAction="LeftClick"/>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="vortex" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
-                        <TextBlock Text="SLIDES" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                        <TextBlock Text="VENTURE" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="venture" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="VITORIA" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="vitoria" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="V-SLIDES" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
                             <TextBlock.InputBindings>
                                 <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="slides" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
                     </StackPanel>
 
+                    <!-- ACCESSORIES -->
                     <StackPanel Grid.Column="4">
                         <TextBlock Text="ACCESSORIES" FontWeight="Bold" FontSize="13" Margin="0,0,0,18"/>
                         <TextBlock Text="CAPS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
@@ -265,88 +372,303 @@
                                 <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="beanies" MouseAction="LeftClick"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
+                        <TextBlock Text="CARDHOLDER" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="cardholder" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="BELTS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="belts" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="RINGS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="rings" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="RUGS" Style="{StaticResource MegaMenuLink}" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding NavigateToCatalogCommand}" CommandParameter="rugs" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
                     </StackPanel>
                 </Grid>
 
-                <Border Grid.Column="1" Background="#F5F5F5">
+                <!-- Collection promo panel (right side) -->
+                <Border Grid.Column="1" Background="{StaticResource Gray100Brush}">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="30">
                         <TextBlock Text="SOFTS COLLECTION" FontSize="28" FontWeight="Black" HorizontalAlignment="Center" TextAlignment="Center"/>
-                        <TextBlock Text="Premium comfort for everyday wear." FontSize="13" Foreground="{StaticResource Gray600Brush}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,12,0,20" MaxWidth="250"/>
+                        <TextBlock Text="Discover our premium soft collection designed for comfort." FontSize="13" Foreground="{StaticResource Gray600Brush}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,12,0,20" MaxWidth="280"/>
                         <Button Content="VIEW ALL" Style="{StaticResource OutlineButton}" Padding="25,12" FontSize="12" HorizontalAlignment="Center" Command="{Binding NavigateToCatalogCommand}" CommandParameter="softs"/>
                     </StackPanel>
                 </Border>
             </Grid>
         </Border>
 
-        <!-- SEARCH BAR -->
-        <Border x:Name="SearchBarExpanded" Grid.Row="1" Grid.RowSpan="2" Background="{StaticResource BlackPrimaryBrush}" Height="60" VerticalAlignment="Top" Visibility="{Binding IsSearchVisible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="SearchBar_IsVisibleChanged" Panel.ZIndex="999">
-            <Grid Margin="70,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
 
-                <Border Background="{StaticResource WhitePrimaryBrush}" VerticalAlignment="Center" Height="44" Margin="0,0,20,0">
-                    <Grid>
-                        <Viewbox Width="18" Height="18" HorizontalAlignment="Left" Margin="15,0,0,0">
-                            <Path Data="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" Stroke="{StaticResource Gray400Brush}" StrokeThickness="2" Fill="Transparent"/>
-                        </Viewbox>
-                        <TextBox x:Name="SearchTextBox" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="45,0,15,0" FontSize="15">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding ExecuteSearchCommand}"/>
-                                <KeyBinding Key="Escape" Command="{Binding ToggleSearchCommand}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
-                        <TextBlock Text="Search for products..." Foreground="{StaticResource Gray400Brush}" FontSize="15" VerticalAlignment="Center" Margin="45,0,0,0" IsHitTestVisible="False">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SearchQuery}" Value="">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding SearchQuery}" Value="{x:Null}">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </Grid>
-                </Border>
+        <!-- ============================================ -->
+        <!-- SEARCH BAR + LIVE RESULTS DROPDOWN           -->
+        <!-- ============================================ -->
+        <Border x:Name="SearchBarExpanded" Grid.Row="1" Grid.RowSpan="2"
+                Visibility="{Binding IsSearchVisible, Converter={StaticResource BoolToVisibilityConverter}}" 
+                IsVisibleChanged="SearchBar_IsVisibleChanged" 
+                Panel.ZIndex="2000"
+                VerticalAlignment="Top">
 
-                <Border Grid.Column="1" Width="44" Height="44" Background="Transparent" Cursor="Hand" ToolTip="Cerrar">
+            <Grid>
+                <!-- Dark backdrop (click to close) -->
+                <Border Background="#80000000" 
+                        VerticalAlignment="Stretch"
+                        MinHeight="800">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleSearchCommand}"/>
                     </Border.InputBindings>
-                    <Viewbox Width="16" Height="16">
-                        <Path Data="M18 6L6 18M6 6L18 18" Stroke="{StaticResource WhitePrimaryBrush}" StrokeThickness="2"/>
-                    </Viewbox>
+                </Border>
+
+                <!-- Search panel -->
+                <Border Background="{StaticResource WhitePrimaryBrush}" 
+                        VerticalAlignment="Top"
+                        BorderBrush="{StaticResource Gray200Brush}"
+                        BorderThickness="0,0,0,1">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" Opacity="0.15" BlurRadius="30" ShadowDepth="5" Direction="270"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <!-- Search input row -->
+                        <Border Padding="50,18">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Search icon -->
+                                <Viewbox Grid.Column="0" Width="22" Height="22" Margin="0,0,15,0" VerticalAlignment="Center">
+                                    <Path Data="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
+                                          Stroke="{StaticResource Gray400Brush}" StrokeThickness="2" Fill="Transparent"/>
+                                </Viewbox>
+
+                                <!-- Search input -->
+                                <Grid Grid.Column="1">
+                                    <TextBox x:Name="SearchTextBox" 
+                                             Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
+                                             Background="Transparent" 
+                                             BorderThickness="0" 
+                                             Foreground="{StaticResource BlackPrimaryBrush}"
+                                             CaretBrush="{StaticResource BlackPrimaryBrush}"
+                                             VerticalAlignment="Center" 
+                                             VerticalContentAlignment="Center" 
+                                             FontSize="18"
+                                             FontWeight="Light">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding ExecuteSearchCommand}"/>
+                                            <KeyBinding Key="Escape" Command="{Binding ToggleSearchCommand}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+
+                                    <!-- Placeholder -->
+                                    <TextBlock Text="Search for products, categories..." 
+                                               Foreground="{StaticResource Gray400Brush}" 
+                                               FontSize="18" 
+                                               FontWeight="Light"
+                                               VerticalAlignment="Center" 
+                                               IsHitTestVisible="False">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SearchQuery}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding SearchQuery}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+
+                                <!-- Loading indicator -->
+                                <TextBlock Grid.Column="2" Text="Searching..." 
+                                           FontSize="12" Foreground="{StaticResource Gray400Brush}" 
+                                           VerticalAlignment="Center" Margin="0,0,15,0"
+                                           Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                                <!-- Close button -->
+                                <Border Grid.Column="3" Width="36" Height="36" Cursor="Hand" VerticalAlignment="Center">
+                                    <Border.InputBindings>
+                                        <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleSearchCommand}"/>
+                                    </Border.InputBindings>
+                                    <Viewbox Width="14" Height="14">
+                                        <Path Data="M18 6L6 18M6 6L18 18" Stroke="{StaticResource Gray500Brush}" StrokeThickness="2.5"/>
+                                    </Viewbox>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Separator -->
+                        <Border Height="1" Background="{StaticResource Gray200Brush}"/>
+
+                        <!-- LIVE SEARCH RESULTS -->
+                        <Border Visibility="{Binding HasSearchResults, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Padding="50,10,50,20"
+                                MaxHeight="450">
+                            <StackPanel>
+                                <!-- Results count -->
+                                <TextBlock FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,8,0,12">
+                                    <Run Text="{Binding SearchResultCount, Mode=OneWay}"/>
+                                    <Run Text=" results found"/>
+                                </TextBlock>
+
+                                <!-- Product results -->
+                                <ItemsControl ItemsSource="{Binding SearchResults}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="10,12" Margin="0,0,0,2" Cursor="Hand">
+                                                <Border.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick" 
+                                                                  Command="{Binding DataContext.ViewSearchResultCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                  CommandParameter="{Binding}"/>
+                                                </Border.InputBindings>
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="{StaticResource Gray100Brush}"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="55"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- Product image placeholder -->
+                                                    <Border Grid.Column="0" Width="50" Height="50" 
+                                                            Background="{StaticResource Gray100Brush}"/>
+
+                                                    <!-- Product info -->
+                                                    <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Name}" 
+                                                                   FontSize="14" FontWeight="SemiBold" 
+                                                                   Foreground="{StaticResource BlackPrimaryBrush}"
+                                                                   TextTrimming="CharacterEllipsis"/>
+                                                        <TextBlock Text="{Binding Category.Name}" 
+                                                                   FontSize="12" Foreground="{StaticResource Gray500Brush}"
+                                                                   Margin="0,3,0,0"/>
+                                                    </StackPanel>
+
+                                                    <!-- Price -->
+                                                    <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                                        <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
+                                                                   FontSize="14" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                                        <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}" 
+                                                                   FontSize="12" Foreground="{StaticResource Gray400Brush}" 
+                                                                   TextDecorations="Strikethrough" HorizontalAlignment="Right"
+                                                                   Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <!-- View all results -->
+                                <Border Margin="0,10,0,5" Padding="12" Cursor="Hand" Background="{StaticResource BlackPrimaryBrush}">
+                                    <Border.InputBindings>
+                                        <MouseBinding MouseAction="LeftClick" Command="{Binding ExecuteSearchCommand}"/>
+                                    </Border.InputBindings>
+                                    <TextBlock HorizontalAlignment="Center" FontSize="13" FontWeight="Bold" Foreground="White">
+                                        <Run Text="VIEW ALL "/><Run Text="{Binding SearchResultCount, Mode=OneWay}"/><Run Text=" RESULTS"/>
+                                    </TextBlock>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Quick categories (when no query) -->
+                        <Border Padding="50,15,50,20">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasSearchResults}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsSearching}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel>
+                                <TextBlock Text="POPULAR" FontSize="11" FontWeight="Bold" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,12"/>
+                                <WrapPanel>
+                                    <Border Background="{StaticResource Gray100Brush}" Padding="14,8" Margin="0,0,8,8" Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCatalogCommand}" CommandParameter="hoodies"/>
+                                        </Border.InputBindings>
+                                        <TextBlock Text="Hoodies" FontSize="13" Foreground="{StaticResource Gray700Brush}"/>
+                                    </Border>
+                                    <Border Background="{StaticResource Gray100Brush}" Padding="14,8" Margin="0,0,8,8" Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCatalogCommand}" CommandParameter="tshirts"/>
+                                        </Border.InputBindings>
+                                        <TextBlock Text="T-Shirts" FontSize="13" Foreground="{StaticResource Gray700Brush}"/>
+                                    </Border>
+                                    <Border Background="{StaticResource Gray100Brush}" Padding="14,8" Margin="0,0,8,8" Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCatalogCommand}" CommandParameter="denim"/>
+                                        </Border.InputBindings>
+                                        <TextBlock Text="Denim" FontSize="13" Foreground="{StaticResource Gray700Brush}"/>
+                                    </Border>
+                                    <Border Background="{StaticResource Gray100Brush}" Padding="14,8" Margin="0,0,8,8" Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCatalogCommand}" CommandParameter="sneakers"/>
+                                        </Border.InputBindings>
+                                        <TextBlock Text="Sneakers" FontSize="13" Foreground="{StaticResource Gray700Brush}"/>
+                                    </Border>
+                                    <Border Background="{StaticResource Gray100Brush}" Padding="14,8" Margin="0,0,8,8" Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCatalogCommand}" CommandParameter="bags"/>
+                                        </Border.InputBindings>
+                                        <TextBlock Text="Bags" FontSize="13" Foreground="{StaticResource Gray700Brush}"/>
+                                    </Border>
+                                    <Border Background="{StaticResource Gray100Brush}" Padding="14,8" Margin="0,0,8,8" Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCatalogCommand}" CommandParameter="new"/>
+                                        </Border.InputBindings>
+                                        <TextBlock Text="New Arrivals" FontSize="13" Foreground="{StaticResource Gray700Brush}"/>
+                                    </Border>
+                                    <Border Background="{StaticResource Gray100Brush}" Padding="14,8" Margin="0,0,8,8" Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToBlackWeekCommand}"/>
+                                        </Border.InputBindings>
+                                        <TextBlock Text="Black Week" FontSize="13" Foreground="{StaticResource Gray700Brush}"/>
+                                    </Border>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
                 </Border>
             </Grid>
         </Border>
 
-        <!-- BANNER PROMO ANIMADO -->
-        <Border Grid.Row="1" Background="#FF6B00" Cursor="Hand" Visibility="{Binding IsSearchVisible, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-            <Border.InputBindings>
-                <MouseBinding Command="{Binding NavigateToBlackWeekCommand}" MouseAction="LeftClick"/>
-            </Border.InputBindings>
-            <Border.Triggers>
-                <EventTrigger RoutedEvent="Loaded">
-                    <BeginStoryboard>
-                        <Storyboard RepeatBehavior="Forever">
-                            <DoubleAnimation Storyboard.TargetName="BannerText" Storyboard.TargetProperty="(Canvas.Left)" From="1400" To="-1200" Duration="0:0:20"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Border.Triggers>
-            <Canvas ClipToBounds="True" Height="35">
-                <TextBlock x:Name="BannerText" Canvas.Top="8" Text="🔥 BLACK WEEK - UP TO 50% OFF    ⭐ FREE SHIPPING OVER €50    🎁 NEW ARRIVALS WEEKLY    🔥 BLACK WEEK - UP TO 50% OFF    ⭐ FREE SHIPPING OVER €50    🎁 NEW ARRIVALS WEEKLY" Foreground="White" FontSize="13" FontWeight="Bold"/>
-            </Canvas>
-        </Border>
-
-        <!-- CONTENT AREA (SIN FOOTER) -->
-        <ScrollViewer Grid.Row="2" x:Name="MainScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" PreviewMouseWheel="MainScrollViewer_PreviewMouseWheel">
+        <!-- ============================================ -->
+        <!-- CONTENT AREA                                 -->
+        <!-- ============================================ -->
+        <ScrollViewer Grid.Row="2" x:Name="MainScrollViewer" 
+                      VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled" 
+                      PreviewMouseWheel="MainScrollViewer_PreviewMouseWheel">
             <ContentControl Content="{Binding CurrentView}"/>
         </ScrollViewer>
     </Grid>

@@ -184,7 +184,7 @@ namespace HoloCrew.ViewModels
             HasDiscount = true;
             Total = Subtotal + ShippingCost - DiscountAmount;
 
-            ShippingAddress = "Antonio García\nCalle Principal 123, 2º B\nMadrid, 28001\nEspaña";
+            ShippingAddress = "John Smith\n123 Main Street, Apt 2B\nMadrid, 28001\nSpain";
             PaymentMethod = "Visa •••• 4242";
 
             StatusText = "SHIPPED";

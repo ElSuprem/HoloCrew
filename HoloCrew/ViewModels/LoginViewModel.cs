@@ -119,7 +119,7 @@ namespace HoloCrew.ViewModels
             if (!ValidationHelper.IsValidEmail(Email))
             {
                 HasEmailError = true;
-                EmailErrorMessage = "Por favor introduce un email válido";
+                EmailErrorMessage = "Please enter a valid email";
             }
             else
             {
@@ -140,7 +140,7 @@ namespace HoloCrew.ViewModels
             if (!ValidationHelper.IsValidPassword(Password))
             {
                 HasPasswordError = true;
-                PasswordErrorMessage = "La contraseña debe tener al menos 6 caracteres";
+                PasswordErrorMessage = "Password must be at least 6 characters";
             }
             else
             {
@@ -184,12 +184,12 @@ namespace HoloCrew.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Error al iniciar sesión. Por favor verifica tus credenciales.";
+                    ErrorMessage = "Login failed. Please check your credentials.";
                 }
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Ha ocurrido un error inesperado. Por favor intenta de nuevo.";
+                ErrorMessage = "An unexpected error occurred. Please try again.";
                 // Log error
                 System.Diagnostics.Debug.WriteLine($"Login error: {ex.Message}");
             }
@@ -206,7 +206,7 @@ namespace HoloCrew.ViewModels
             // _navigationService.NavigateTo<ForgotPasswordViewModel>();
 
             // O si solo quieres mostrar un mensaje:
-            ErrorMessage = "Función de recuperación de contraseña en desarrollo.";
+            ErrorMessage = "Password recovery feature coming soon.";
         }
 
         private void ExecuteNavigateToRegister()

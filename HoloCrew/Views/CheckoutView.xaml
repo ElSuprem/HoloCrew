@@ -34,7 +34,7 @@
                                    Text="CHECKOUT" 
                                    Style="{StaticResource HeadingLarge}"/>
 
-                        <!-- Stepper dinámico -->
+                        <!-- Step indicator -->
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right"
@@ -50,7 +50,7 @@
                                 <TextBlock Text="1" Foreground="White" FontSize="14" FontWeight="Bold"
                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <TextBlock Text="Envío" FontSize="14" VerticalAlignment="Center" Margin="0,0,20,0">
+                            <TextBlock Text="Shipping" FontSize="14" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="FontWeight" Value="Normal"/>
@@ -65,7 +65,7 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <!-- Línea conectora -->
+                            <!-- Connector line -->
                             <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -94,7 +94,7 @@
                                 <TextBlock Text="2" Foreground="White" FontSize="14" FontWeight="Bold"
                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <TextBlock Text="Pago" FontSize="14" VerticalAlignment="Center" Margin="0,0,20,0">
+                            <TextBlock Text="Payment" FontSize="14" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="FontWeight" Value="Normal"/>
@@ -109,7 +109,7 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <!-- Línea conectora -->
+                            <!-- Connector line -->
                             <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -138,7 +138,7 @@
                                 <TextBlock Text="3" Foreground="White" FontSize="14" FontWeight="Bold"
                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <TextBlock Text="Confirmar" FontSize="14" VerticalAlignment="Center">
+                            <TextBlock Text="Confirm" FontSize="14" VerticalAlignment="Center">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="FontWeight" Value="Normal"/>
@@ -168,14 +168,14 @@
                             <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
                         </Border.Effect>
                         <StackPanel>
-                            <TextBlock Text="📦 INFORMACIÓN DE ENVÍO" 
+                            <TextBlock Text="SHIPPING INFORMATION" 
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- Direcciones guardadas -->
+                            <!-- Saved addresses -->
                             <StackPanel Visibility="{Binding SavedAddresses.Count, Converter={StaticResource CountToVisibilityConverter}}"
                                         Margin="0,0,0,25">
-                                <TextBlock Text="Direcciones guardadas" 
+                                <TextBlock Text="Saved addresses" 
                                            Style="{StaticResource SubtitleMedium}"
                                            Margin="0,0,0,15"/>
                                 <ItemsControl ItemsSource="{Binding SavedAddresses}">
@@ -213,14 +213,14 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                <Button Content="+ Añadir nueva dirección"
+                                <Button Content="+ Add new address"
                                         Style="{StaticResource TextButton}"
                                         HorizontalAlignment="Left"
                                         Command="{Binding AddNewAddressCommand}"
                                         Margin="0,5,0,0"/>
                             </StackPanel>
 
-                            <!-- Formulario de dirección -->
+                            <!-- Address form -->
                             <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -229,7 +229,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Nombre completo *" 
+                                    <TextBlock Text="Full Name *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.FullName, UpdateSourceTrigger=PropertyChanged}"
@@ -242,7 +242,7 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Teléfono *" 
+                                    <TextBlock Text="Phone *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.PhoneNumber, UpdateSourceTrigger=PropertyChanged}"
@@ -255,9 +255,9 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Dirección línea 1 -->
+                            <!-- Address line 1 -->
                             <StackPanel Margin="0,0,0,20">
-                                <TextBlock Text="Dirección *" 
+                                <TextBlock Text="Address *" 
                                            Style="{StaticResource BodyMedium}"
                                            Margin="0,0,0,8"/>
                                 <TextBox Text="{Binding ShippingAddress.AddressLine1, UpdateSourceTrigger=PropertyChanged}"
@@ -269,9 +269,9 @@
                                          BorderThickness="1"/>
                             </StackPanel>
 
-                            <!-- Dirección línea 2 -->
+                            <!-- Address line 2 -->
                             <StackPanel Margin="0,0,0,20">
-                                <TextBlock Text="Apartamento, piso, etc. (opcional)" 
+                                <TextBlock Text="Apartment, floor, etc. (optional)" 
                                            Style="{StaticResource BodyMedium}"
                                            Margin="0,0,0,8"/>
                                 <TextBox Text="{Binding ShippingAddress.AddressLine2, UpdateSourceTrigger=PropertyChanged}"
@@ -283,7 +283,7 @@
                                          BorderThickness="1"/>
                             </StackPanel>
 
-                            <!-- Ciudad y Código Postal -->
+                            <!-- City and Postal Code -->
                             <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="2*"/>
@@ -292,7 +292,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Ciudad *" 
+                                    <TextBlock Text="City *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.City, UpdateSourceTrigger=PropertyChanged}"
@@ -305,7 +305,7 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Código Postal *" 
+                                    <TextBlock Text="Postal Code *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.PostalCode, UpdateSourceTrigger=PropertyChanged}"
@@ -318,7 +318,7 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- País y Provincia -->
+                            <!-- Country and State/Province -->
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -327,7 +327,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="País *" 
+                                    <TextBlock Text="Country *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
                                     <ComboBox Height="50"
@@ -338,16 +338,16 @@
                                               BorderThickness="1"
                                               SelectedValue="{Binding ShippingAddress.Country}"
                                               SelectedValuePath="Content">
-                                        <ComboBoxItem Content="España" IsSelected="True"/>
+                                        <ComboBoxItem Content="Spain" IsSelected="True"/>
                                         <ComboBoxItem Content="Portugal"/>
-                                        <ComboBoxItem Content="Francia"/>
-                                        <ComboBoxItem Content="Italia"/>
-                                        <ComboBoxItem Content="Alemania"/>
+                                        <ComboBoxItem Content="France"/>
+                                        <ComboBoxItem Content="Italy"/>
+                                        <ComboBoxItem Content="Germany"/>
                                     </ComboBox>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Provincia" 
+                                    <TextBlock Text="State/Province" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ShippingAddress.State, UpdateSourceTrigger=PropertyChanged}"
@@ -363,7 +363,7 @@
                     </Border>
 
                     <!-- ============================================ -->
-                    <!-- STEP 2: MÉTODO DE PAGO -->
+                    <!-- STEP 2: PAYMENT METHOD -->
                     <!-- ============================================ -->
                     <Border Background="{StaticResource WhitePrimaryBrush}"
                             BorderBrush="{StaticResource BorderDefault}"
@@ -375,14 +375,14 @@
                             <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
                         </Border.Effect>
                         <StackPanel>
-                            <TextBlock Text="💳 MÉTODO DE PAGO" 
+                            <TextBlock Text="PAYMENT METHOD" 
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- Métodos de pago guardados -->
+                            <!-- Saved payment methods -->
                             <StackPanel Visibility="{Binding SavedPaymentMethods.Count, Converter={StaticResource CountToVisibilityConverter}}"
                                         Margin="0,0,0,25">
-                                <TextBlock Text="Métodos guardados" 
+                                <TextBlock Text="Saved methods" 
                                            Style="{StaticResource SubtitleMedium}"
                                            Margin="0,0,0,15"/>
                                 <ItemsControl ItemsSource="{Binding SavedPaymentMethods}">
@@ -399,7 +399,7 @@
                                                                   CommandParameter="{Binding}"/>
                                                 </Border.InputBindings>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="💳" FontSize="20" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="" FontSize="20" Margin="0,0,15,0" VerticalAlignment="Center"/>
                                                     <StackPanel>
                                                         <TextBlock Text="{Binding CardNumberMasked}" FontWeight="SemiBold" FontSize="14"/>
                                                         <TextBlock Text="{Binding ExpirationDate}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
@@ -412,13 +412,13 @@
                             </StackPanel>
 
                             <!-- Formulario de tarjeta nueva -->
-                            <TextBlock Text="O añade una nueva tarjeta" 
+                            <TextBlock Text="Or add a new card" 
                                        Style="{StaticResource SubtitleMedium}"
                                        Margin="0,0,0,20"/>
 
-                            <!-- Número de tarjeta -->
+                            <!-- Card number -->
                             <StackPanel Margin="0,0,0,20">
-                                <TextBlock Text="Número de tarjeta *" 
+                                <TextBlock Text="Card Number *" 
                                            Style="{StaticResource BodyMedium}"
                                            Margin="0,0,0,8"/>
                                 <TextBox Text="{Binding CardNumber, UpdateSourceTrigger=PropertyChanged}"
@@ -433,7 +433,7 @@
 
                             <!-- Nombre del titular -->
                             <StackPanel Margin="0,0,0,20">
-                                <TextBlock Text="Nombre del titular *" 
+                                <TextBlock Text="Cardholder Name *" 
                                            Style="{StaticResource BodyMedium}"
                                            Margin="0,0,0,8"/>
                                 <TextBox Text="{Binding CardholderName, UpdateSourceTrigger=PropertyChanged}"
@@ -454,7 +454,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Fecha de expiración *" 
+                                    <TextBlock Text="Expiration Date *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding ExpirationDate, UpdateSourceTrigger=PropertyChanged}"
@@ -484,7 +484,7 @@
 
                             <!-- Iconos de tarjetas aceptadas -->
                             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                                <TextBlock Text="Aceptamos:" FontSize="12" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBlock Text="We accept:" FontSize="12" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <Border Background="{StaticResource Gray100Brush}" Padding="8,4" Margin="0,0,5,0">
                                     <TextBlock Text="VISA" FontSize="11" FontWeight="Bold"/>
                                 </Border>
@@ -511,18 +511,18 @@
                             <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2"/>
                         </Border.Effect>
                         <StackPanel>
-                            <TextBlock Text="✅ CONFIRMAR PEDIDO" 
+                            <TextBlock Text="CONFIRM ORDER" 
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- Resumen de envío -->
+                            <!-- Shipping summary -->
                             <Border Background="{StaticResource Gray50Brush}"
                                     Padding="20"
                                     Margin="0,0,0,20">
                                 <StackPanel>
                                     <Grid Margin="0,0,0,10">
-                                        <TextBlock Text="DIRECCIÓN DE ENVÍO" FontWeight="Bold" FontSize="12"/>
-                                        <TextBlock Text="Editar" 
+                                        <TextBlock Text="SHIPPING ADDRESS" FontWeight="Bold" FontSize="12"/>
+                                        <TextBlock Text="Edit" 
                                                    FontSize="12" 
                                                    Foreground="{StaticResource AccentBrush}"
                                                    HorizontalAlignment="Right"
@@ -546,14 +546,14 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Resumen de pago -->
+                            <!-- Payment summary -->
                             <Border Background="{StaticResource Gray50Brush}"
                                     Padding="20"
                                     Margin="0,0,0,20">
                                 <StackPanel>
                                     <Grid Margin="0,0,0,10">
-                                        <TextBlock Text="MÉTODO DE PAGO" FontWeight="Bold" FontSize="12"/>
-                                        <TextBlock Text="Editar" 
+                                        <TextBlock Text="PAYMENT METHOD" FontWeight="Bold" FontSize="12"/>
+                                        <TextBlock Text="Edit" 
                                                    FontSize="12" 
                                                    Foreground="{StaticResource AccentBrush}"
                                                    HorizontalAlignment="Right"
@@ -565,9 +565,9 @@
                                         </TextBlock>
                                     </Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="💳" FontSize="18" Margin="0,0,10,0"/>
+                                        <TextBlock Text="" FontSize="18" Margin="0,0,10,0"/>
                                         <StackPanel>
-                                            <TextBlock Text="Tarjeta de crédito" FontWeight="SemiBold"/>
+                                            <TextBlock Text="Credit Card" FontWeight="SemiBold"/>
                                             <TextBlock Text="{Binding CardNumber}" 
                                                        Foreground="{StaticResource TextSecondary}"/>
                                         </StackPanel>
@@ -576,7 +576,7 @@
                             </Border>
 
                             <!-- Productos -->
-                            <TextBlock Text="PRODUCTOS" FontWeight="Bold" FontSize="12" Margin="0,0,0,15"/>
+                            <TextBlock Text="PRODUCTS" FontWeight="Bold" FontSize="12" Margin="0,0,0,15"/>
                             <ItemsControl ItemsSource="{Binding OrderItems}" Margin="0,0,0,20">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -622,7 +622,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Botón Atrás -->
+                        <!-- Back button -->
                         <Button Grid.Column="0"
                                 Content="← VOLVER"
                                 Style="{StaticResource OutlineButton}"
@@ -630,7 +630,7 @@
                                 Command="{Binding PreviousStepCommand}"
                                 Visibility="{Binding IsStep1, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
 
-                        <!-- Botón Cancelar (solo en paso 1) -->
+                        <!-- Cancel button (step 1 only) -->
                         <Button Grid.Column="0"
                                 Content="CANCELAR"
                                 Style="{StaticResource OutlineButton}"
@@ -638,7 +638,7 @@
                                 Command="{Binding CancelCheckoutCommand}"
                                 Visibility="{Binding IsStep1, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                        <!-- Botón Siguiente / Confirmar -->
+                        <!-- Next button / Confirm -->
                         <Button Grid.Column="2"
                                 Style="{StaticResource AccentButton}"
                                 Padding="40,15"
@@ -653,7 +653,7 @@
                             </Button.Content>
                         </Button>
 
-                        <!-- Botón Confirmar Pedido (solo paso 3) -->
+                        <!-- Place order button (step 3 only) -->
                         <Button Grid.Column="2"
                                 Style="{StaticResource AccentButton}"
                                 Padding="40,15"
@@ -780,9 +780,9 @@
                                        HorizontalAlignment="Right"/>
                         </Grid>
 
-                        <!-- Envío -->
+                        <!-- Shipping -->
                         <Grid Margin="0,0,0,12">
-                            <TextBlock Text="Envío" Style="{StaticResource BodyLarge}"/>
+                            <TextBlock Text="Shipping" Style="{StaticResource BodyLarge}"/>
                             <TextBlock Text="GRATIS" 
                                        Style="{StaticResource BodyLarge}"
                                        Foreground="#10B981"
@@ -820,22 +820,22 @@
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                                     <TextBlock Text="🔒" FontSize="16" Margin="0,0,10,0"/>
-                                    <TextBlock Text="Pago 100% seguro" FontWeight="SemiBold" FontSize="13"/>
+                                    <TextBlock Text="Payment 100% seguro" FontWeight="SemiBold" FontSize="13"/>
                                 </StackPanel>
-                                <TextBlock Text="Tus datos están protegidos con encriptación SSL de 256 bits."
+                                <TextBlock Text="Your data is protected with 256-bit SSL encryption."
                                            FontSize="12"
                                            Foreground="{StaticResource TextSecondary}"
                                            TextWrapping="Wrap"/>
                             </StackPanel>
                         </Border>
 
-                        <!-- Políticas -->
+                        <!-- Policies -->
                         <StackPanel Margin="0,20,0,0">
-                            <TextBlock Text="📦 Envío gratis en pedidos +€50" 
+                            <TextBlock Text="📦 Shipping gratis en pedidos +€50" 
                                        FontSize="12" 
                                        Foreground="{StaticResource TextSecondary}"
                                        Margin="0,0,0,8"/>
-                            <TextBlock Text="↩️ Devoluciones gratis en 14 días" 
+                            <TextBlock Text="14 days free returns" 
                                        FontSize="12" 
                                        Foreground="{StaticResource TextSecondary}"/>
                         </StackPanel>

@@ -90,7 +90,7 @@
                         Padding="60,80"
                         Visibility="{Binding HasOrders, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="📦" 
+                    <TextBlock Text="" 
                                    FontSize="100"
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,30" />
@@ -157,7 +157,7 @@
 
                                     <!-- Total -->
                                     <TextBlock Grid.Column="1"
-                                                   Text="{Binding Total, StringFormat=€{0:N2}}"
+                                                   Text="{Binding Total, StringFormat='{}{0:N2}€'}"
                                                    Style="{StaticResource HeadingSmall}"
                                                    VerticalAlignment="Center"
                                                    Margin="0,0,30,0"/>
@@ -246,7 +246,7 @@
 
                     <!-- Total Spent -->
                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                        <TextBlock Text="{Binding TotalSpent, StringFormat=€{0:N2}}"
+                        <TextBlock Text="{Binding TotalSpent, StringFormat='{}{0:N2}€'}"
                                        Style="{StaticResource HeadingLarge}"
                                        HorizontalAlignment="Center"/>
                         <TextBlock Text="TOTAL SPENT" 
@@ -258,7 +258,7 @@
 
                     <!-- Avg Order Value -->
                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                        <TextBlock Text="{Binding AverageOrderValue, StringFormat=€{0:N2}}"
+                        <TextBlock Text="{Binding AverageOrderValue, StringFormat='{}{0:N2}€'}"
                                        Style="{StaticResource HeadingLarge}"
                                        HorizontalAlignment="Center"/>
                         <TextBlock Text="AVG ORDER VALUE" 

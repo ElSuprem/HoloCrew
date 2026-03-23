@@ -7,549 +7,452 @@
              d:DesignHeight="900" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
-    <UserControl.Resources>
-        <Style x:Key="FilterExpanderStyle" TargetType="Expander">
-            <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Margin" Value="0,0,0,5"/>
-            <Setter Property="IsExpanded" Value="True"/>
-        </Style>
-        <Style x:Key="FilterCheckBox" TargetType="CheckBox">
-            <Setter Property="Foreground" Value="{StaticResource Gray700Brush}"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Margin" Value="0,8,0,0"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-    </UserControl.Resources>
-
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="280"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <!-- Loading state -->
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="Loading products..." FontSize="16" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center"/>
+        </StackPanel>
 
-        <!-- SIDEBAR FILTROS -->
-        <Border Grid.Column="0" Background="{StaticResource WhitePrimaryBrush}" BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,1,0">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <StackPanel Margin="25,30,25,40">
+        <!-- Error state -->
+        <Border Visibility="{Binding IsError, Converter={StaticResource BoolToVisibilityConverter}}" Padding="60">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Viewbox Width="48" Height="48" Margin="0,0,0,20">
+                    <Path Data="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+                          Stroke="#DC2626" StrokeThickness="2" Fill="Transparent"/>
+                </Viewbox>
+                <TextBlock Text="Failed to load products" FontSize="20" FontWeight="SemiBold" TextAlignment="Center" Foreground="#DC2626" Margin="0,0,0,10"/>
+                <TextBlock Text="Please try again later" FontSize="14" Foreground="{StaticResource Gray500Brush}" TextAlignment="Center"/>
+            </StackPanel>
+        </Border>
 
-                    <!-- Header -->
-                    <Grid Margin="0,0,0,25">
-                        <TextBlock Text="Filters" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BlackPrimaryBrush}"/>
-                        <TextBlock Text="Clear all" HorizontalAlignment="Right" FontSize="13" Foreground="{StaticResource Gray500Brush}" Cursor="Hand" TextDecorations="Underline">
-                            <TextBlock.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" Command="{Binding ClearFiltersCommand}"/>
-                            </TextBlock.InputBindings>
-                        </TextBlock>
-                    </Grid>
+        <!-- Main content -->
+        <Grid Visibility="{Binding IsSuccess, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,0,0,20"/>
+            <!-- ============================================ -->
+            <!-- CATEGORY TITLE - Centered like web           -->
+            <!-- ============================================ -->
+            <Border Grid.Row="0" Background="{StaticResource WhitePrimaryBrush}" Padding="0,35,0,20">
+                <TextBlock Text="{Binding CurrentCategoryName}" 
+                           FontSize="32"
+                           FontWeight="Black"
+                           HorizontalAlignment="Center"/>
+            </Border>
 
-                    <!-- Search -->
-                    <TextBlock Text="Search" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                    <Border Background="{StaticResource Gray100Brush}" Height="42" Margin="0,0,0,25">
-                        <Grid>
-                            <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" Padding="12,0,40,0" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="13">
-                                <TextBox.InputBindings>
-                                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
-                                </TextBox.InputBindings>
-                            </TextBox>
-                            <TextBlock Text="Search products..." Foreground="{StaticResource Gray400Brush}" FontSize="13" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False">
+            <!-- ============================================ -->
+            <!-- HORIZONTAL FILTER BAR                        -->
+            <!-- Left: checkboxes | Center: category pills + sort -->
+            <!-- Right: product count                         -->
+            <!-- ============================================ -->
+            <Border Grid.Row="1" 
+                    Background="{StaticResource WhitePrimaryBrush}" 
+                    BorderBrush="{StaticResource Gray200Brush}"
+                    BorderThickness="0,1,0,1"
+                    Padding="60,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- LEFT: Checkboxes -->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <CheckBox Content="ONLY SHOW AVAILABLE PRODUCTS" 
+                                  IsChecked="{Binding InStockOnly}" 
+                                  FontSize="12" 
+                                  FontWeight="SemiBold"
+                                  Foreground="{StaticResource BlackPrimaryBrush}"
+                                  Cursor="Hand"
+                                  Margin="0,0,0,6"/>
+                        <CheckBox Content="ON SALE" 
+                                  IsChecked="{Binding OnSaleOnly}" 
+                                  FontSize="12" 
+                                  FontWeight="SemiBold"
+                                  Foreground="{StaticResource BlackPrimaryBrush}"
+                                  Cursor="Hand"/>
+                    </StackPanel>
+
+                    <!-- CENTER: Category pills + Sort -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <!-- ALL -->
+                        <Border Padding="12,8" Margin="0,0,6,0" Cursor="Hand">
+                            <Border.InputBindings>
+                                <MouseBinding Command="{Binding SelectCategoryCommand}" CommandParameter="All" MouseAction="LeftClick"/>
+                            </Border.InputBindings>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CategoryAll}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="ALL" FontSize="12" FontWeight="SemiBold">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding SearchQuery}" Value="">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding SearchQuery}" Value="{x:Null}">
-                                                <Setter Property="Visibility" Value="Visible"/>
+                                            <DataTrigger Binding="{Binding CategoryAll}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-                        </Grid>
-                    </Border>
+                        </Border>
 
-                    <!-- Categories -->
-                    <Expander Header="Category" Style="{StaticResource FilterExpanderStyle}">
-                        <StackPanel Margin="0,10,0,20">
-                            <RadioButton Content="All Products" GroupName="Category" IsChecked="{Binding CategoryAll}" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6" Command="{Binding SelectCategoryCommand}" CommandParameter="All"/>
-                            <RadioButton Content="Tops" GroupName="Category" IsChecked="{Binding CategoryTops}" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6" Command="{Binding SelectCategoryCommand}" CommandParameter="Tops"/>
-                            <RadioButton Content="Bottoms" GroupName="Category" IsChecked="{Binding CategoryBottoms}" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6" Command="{Binding SelectCategoryCommand}" CommandParameter="Bottoms"/>
-                            <RadioButton Content="Footwear" GroupName="Category" IsChecked="{Binding CategoryFootwear}" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6" Command="{Binding SelectCategoryCommand}" CommandParameter="Footwear"/>
-                            <RadioButton Content="Accessories" GroupName="Category" IsChecked="{Binding CategoryAccessories}" FontSize="13" Foreground="{StaticResource Gray700Brush}" Margin="0,6" Command="{Binding SelectCategoryCommand}" CommandParameter="Accessories"/>
-                        </StackPanel>
-                    </Expander>
-
-                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
-
-                    <!-- Price -->
-                    <Expander Header="Price" Style="{StaticResource FilterExpanderStyle}">
-                        <StackPanel Margin="0,10,0,20">
-                            <Grid Margin="0,0,0,15">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" Background="{StaticResource Gray100Brush}" Height="38">
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                                        <TextBlock Text="€" Foreground="{StaticResource Gray500Brush}" FontSize="13" VerticalAlignment="Center"/>
-                                        <TextBox Text="{Binding MinPrice, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" FontSize="13" Width="50" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
-                                    </StackPanel>
-                                </Border>
-                                <TextBlock Grid.Column="1" Text="—" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource Gray400Brush}"/>
-                                <Border Grid.Column="2" Background="{StaticResource Gray100Brush}" Height="38">
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                                        <TextBlock Text="€" Foreground="{StaticResource Gray500Brush}" FontSize="13" VerticalAlignment="Center"/>
-                                        <TextBox Text="{Binding MaxPrice, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" FontSize="13" Width="50" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-                            <Slider Minimum="0" Maximum="500" Value="{Binding MaxPrice}" TickFrequency="50" IsSnapToTickEnabled="True"/>
-                        </StackPanel>
-                    </Expander>
-
-                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
-
-                    <!-- Sizes -->
-                    <Expander Header="Size" Style="{StaticResource FilterExpanderStyle}">
-                        <WrapPanel Margin="0,10,0,20">
-                            <!-- XS -->
-                            <Button Command="{Binding ToggleSizeCommand}" CommandParameter="XS" Width="44" Height="44" Margin="0,0,8,8" Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" BorderThickness="2" BorderBrush="{StaticResource Gray300Brush}" Background="Transparent">
-                                            <TextBlock x:Name="txt" Text="XS" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource BlackPrimaryBrush}"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding SizeXS}" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="txt" Property="Foreground" Value="White"/>
+                        <!-- TOPS -->
+                        <Border Padding="12,8" Margin="0,0,6,0" Cursor="Hand">
+                            <Border.InputBindings>
+                                <MouseBinding Command="{Binding SelectCategoryCommand}" CommandParameter="Tops" MouseAction="LeftClick"/>
+                            </Border.InputBindings>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CategoryTops}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="TOPS" FontSize="12" FontWeight="SemiBold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CategoryTops}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
                                             </DataTrigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- S -->
-                            <Button Command="{Binding ToggleSizeCommand}" CommandParameter="S" Width="44" Height="44" Margin="0,0,8,8" Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" BorderThickness="2" BorderBrush="{StaticResource Gray300Brush}" Background="Transparent">
-                                            <TextBlock x:Name="txt" Text="S" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource BlackPrimaryBrush}"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding SizeS}" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="txt" Property="Foreground" Value="White"/>
-                                            </DataTrigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- M -->
-                            <Button Command="{Binding ToggleSizeCommand}" CommandParameter="M" Width="44" Height="44" Margin="0,0,8,8" Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" BorderThickness="2" BorderBrush="{StaticResource Gray300Brush}" Background="Transparent">
-                                            <TextBlock x:Name="txt" Text="M" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource BlackPrimaryBrush}"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding SizeM}" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="txt" Property="Foreground" Value="White"/>
-                                            </DataTrigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- L -->
-                            <Button Command="{Binding ToggleSizeCommand}" CommandParameter="L" Width="44" Height="44" Margin="0,0,8,8" Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" BorderThickness="2" BorderBrush="{StaticResource Gray300Brush}" Background="Transparent">
-                                            <TextBlock x:Name="txt" Text="L" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource BlackPrimaryBrush}"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding SizeL}" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="txt" Property="Foreground" Value="White"/>
-                                            </DataTrigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- XL -->
-                            <Button Command="{Binding ToggleSizeCommand}" CommandParameter="XL" Width="44" Height="44" Margin="0,0,8,8" Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" BorderThickness="2" BorderBrush="{StaticResource Gray300Brush}" Background="Transparent">
-                                            <TextBlock x:Name="txt" Text="XL" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource BlackPrimaryBrush}"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding SizeXL}" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="txt" Property="Foreground" Value="White"/>
-                                            </DataTrigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- XXL -->
-                            <Button Command="{Binding ToggleSizeCommand}" CommandParameter="XXL" Width="44" Height="44" Margin="0,0,8,8" Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" BorderThickness="2" BorderBrush="{StaticResource Gray300Brush}" Background="Transparent">
-                                            <TextBlock x:Name="txt" Text="XXL" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource BlackPrimaryBrush}"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding SizeXXL}" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="txt" Property="Foreground" Value="White"/>
-                                            </DataTrigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </WrapPanel>
-                    </Expander>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
 
-                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
-
-                    <!-- Colors -->
-                    <Expander Header="Color" Style="{StaticResource FilterExpanderStyle}">
-                        <WrapPanel Margin="0,10,0,20">
-                            <!-- Black -->
-                            <Button Command="{Binding ToggleColorCommand}" CommandParameter="Black" Width="32" Height="32" Margin="0,0,10,10" Cursor="Hand" ToolTip="Black">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" CornerRadius="16" Background="#0A0A0A" BorderThickness="0">
-                                            <TextBlock x:Name="check" Text="✓" Foreground="White" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding ColorBlack}" Value="True">
-                                                <Setter TargetName="border" Property="BorderThickness" Value="3"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="check" Property="Visibility" Value="Visible"/>
+                        <!-- BOTTOMS -->
+                        <Border Padding="12,8" Margin="0,0,6,0" Cursor="Hand">
+                            <Border.InputBindings>
+                                <MouseBinding Command="{Binding SelectCategoryCommand}" CommandParameter="Bottoms" MouseAction="LeftClick"/>
+                            </Border.InputBindings>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CategoryBottoms}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="BOTTOMS" FontSize="12" FontWeight="SemiBold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CategoryBottoms}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
                                             </DataTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- White -->
-                            <Button Command="{Binding ToggleColorCommand}" CommandParameter="White" Width="32" Height="32" Margin="0,0,10,10" Cursor="Hand" ToolTip="White">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" CornerRadius="16" Background="#FFFFFF" BorderThickness="1" BorderBrush="{StaticResource Gray300Brush}">
-                                            <TextBlock x:Name="check" Text="✓" Foreground="Black" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding ColorWhite}" Value="True">
-                                                <Setter TargetName="border" Property="BorderThickness" Value="3"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="check" Property="Visibility" Value="Visible"/>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
+
+                        <!-- FOOTWEAR -->
+                        <Border Padding="12,8" Margin="0,0,6,0" Cursor="Hand">
+                            <Border.InputBindings>
+                                <MouseBinding Command="{Binding SelectCategoryCommand}" CommandParameter="Footwear" MouseAction="LeftClick"/>
+                            </Border.InputBindings>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CategoryFootwear}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="FOOTWEAR" FontSize="12" FontWeight="SemiBold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CategoryFootwear}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
                                             </DataTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- Gray -->
-                            <Button Command="{Binding ToggleColorCommand}" CommandParameter="Gray" Width="32" Height="32" Margin="0,0,10,10" Cursor="Hand" ToolTip="Gray">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" CornerRadius="16" Background="#6B7280" BorderThickness="0">
-                                            <TextBlock x:Name="check" Text="✓" Foreground="White" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding ColorGray}" Value="True">
-                                                <Setter TargetName="border" Property="BorderThickness" Value="3"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="check" Property="Visibility" Value="Visible"/>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
+
+                        <!-- ACCESSORIES -->
+                        <Border Padding="12,8" Margin="0,0,20,0" Cursor="Hand">
+                            <Border.InputBindings>
+                                <MouseBinding Command="{Binding SelectCategoryCommand}" CommandParameter="Accessories" MouseAction="LeftClick"/>
+                            </Border.InputBindings>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CategoryAccessories}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="ACCESSORIES" FontSize="12" FontWeight="SemiBold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CategoryAccessories}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
                                             </DataTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- Navy -->
-                            <Button Command="{Binding ToggleColorCommand}" CommandParameter="Navy" Width="32" Height="32" Margin="0,0,10,10" Cursor="Hand" ToolTip="Navy">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" CornerRadius="16" Background="#1E3A5F" BorderThickness="0">
-                                            <TextBlock x:Name="check" Text="✓" Foreground="White" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding ColorNavy}" Value="True">
-                                                <Setter TargetName="border" Property="BorderThickness" Value="3"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="check" Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- Red -->
-                            <Button Command="{Binding ToggleColorCommand}" CommandParameter="Red" Width="32" Height="32" Margin="0,0,10,10" Cursor="Hand" ToolTip="Red">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" CornerRadius="16" Background="#DC2626" BorderThickness="0">
-                                            <TextBlock x:Name="check" Text="✓" Foreground="White" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding ColorRed}" Value="True">
-                                                <Setter TargetName="border" Property="BorderThickness" Value="3"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="check" Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <!-- Green -->
-                            <Button Command="{Binding ToggleColorCommand}" CommandParameter="Green" Width="32" Height="32" Margin="0,0,10,10" Cursor="Hand" ToolTip="Green">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border" CornerRadius="16" Background="#16A34A" BorderThickness="0">
-                                            <TextBlock x:Name="check" Text="✓" Foreground="White" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding ColorGreen}" Value="True">
-                                                <Setter TargetName="border" Property="BorderThickness" Value="3"/>
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                <Setter TargetName="check" Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </WrapPanel>
-                    </Expander>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
 
-                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
+                        <!-- Sort dropdown -->
+                        <TextBlock Text="SORT BY:" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <ComboBox ItemsSource="{Binding SortOptions}" 
+                                  SelectedItem="{Binding SortBy}"
+                                  Width="180" 
+                                  Height="36" 
+                                  FontSize="12"
+                                  VerticalContentAlignment="Center" 
+                                  Padding="12,0"
+                                  BorderBrush="{StaticResource Gray300Brush}"/>
+                    </StackPanel>
 
-                    <!-- Gender -->
-                    <Expander Header="Gender" Style="{StaticResource FilterExpanderStyle}">
-                        <StackPanel Margin="0,5,0,20">
-                            <CheckBox Content="Men" IsChecked="{Binding GenderMen}" Style="{StaticResource FilterCheckBox}"/>
-                            <CheckBox Content="Women" IsChecked="{Binding GenderWomen}" Style="{StaticResource FilterCheckBox}"/>
-                            <CheckBox Content="Unisex" IsChecked="{Binding GenderUnisex}" Style="{StaticResource FilterCheckBox}"/>
-                        </StackPanel>
-                    </Expander>
-
-                    <Border Height="1" Background="{StaticResource Gray200Brush}" Margin="0,5,0,15"/>
-
-                    <!-- Availability -->
-                    <Expander Header="Availability" Style="{StaticResource FilterExpanderStyle}">
-                        <StackPanel Margin="0,5,0,20">
-                            <CheckBox Content="In Stock Only" IsChecked="{Binding InStockOnly}" Style="{StaticResource FilterCheckBox}"/>
-                            <CheckBox Content="On Sale" IsChecked="{Binding OnSaleOnly}" Style="{StaticResource FilterCheckBox}"/>
-                        </StackPanel>
-                    </Expander>
-                </StackPanel>
-            </ScrollViewer>
-        </Border>
-
-        <!-- CONTENIDO PRINCIPAL -->
-        <Grid Grid.Column="1">
-            <!-- Loading -->
-            <Grid Visibility="{Binding ShowLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="Loading..." FontSize="16" Foreground="{StaticResource Gray500Brush}"/>
-                </StackPanel>
-            </Grid>
-
-            <!-- Error -->
-            <Border Visibility="{Binding ShowError, Converter={StaticResource BoolToVisibilityConverter}}" Background="#FEF2F2" Padding="60">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="⚠️" FontSize="64" TextAlignment="Center" Margin="0,0,0,25"/>
-                    <TextBlock Text="Failed to load products" FontSize="22" FontWeight="SemiBold" TextAlignment="Center" Foreground="#DC2626"/>
-                </StackPanel>
+                    <!-- RIGHT: Product count -->
+                    <TextBlock Grid.Column="2" 
+                               VerticalAlignment="Center"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BlackPrimaryBrush}">
+                        <Run Text="{Binding TotalProductCount, Mode=OneWay}"/>
+                        <Run Text=" PRODUCTS"/>
+                    </TextBlock>
+                </Grid>
             </Border>
 
-            <!-- Content -->
-            <Grid Visibility="{Binding ShowContent, Converter={StaticResource BoolToVisibilityConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <!-- ============================================ -->
+            <!-- PRODUCTS GRID - Full width                   -->
+            <!-- ============================================ -->
+            <Grid Grid.Row="2" Background="{StaticResource WhitePrimaryBrush}">
+                <!-- Products -->
+                <ItemsControl ItemsSource="{Binding FilteredProducts}" Margin="50,30,50,60">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <!-- Header -->
-                <Border Grid.Row="0" Background="{StaticResource WhitePrimaryBrush}" BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="40,25">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding CurrentCategoryName}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource BlackPrimaryBrush}"/>
-                            <TextBlock Foreground="{StaticResource Gray500Brush}" FontSize="13" Margin="0,5,0,0">
-                                <Run Text="{Binding TotalProductCount, Mode=OneWay}"/><Run Text=" products"/>
-                            </TextBlock>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Sort by:" Foreground="{StaticResource Gray600Brush}" FontSize="13" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                            <ComboBox ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SortBy}" Width="180" Height="40" FontSize="13" VerticalContentAlignment="Center" Padding="12,0"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource WhitePrimaryBrush}" 
+                                    Margin="10" 
+                                    Cursor="Hand">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="380"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                <!-- Products Grid -->
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="{StaticResource Gray100Brush}">
-                    <Grid>
-                        <ItemsControl ItemsSource="{Binding FilteredProducts}" Margin="30,30,30,50">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Columns="3"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10" Cursor="Hand">
-                                        <Border.Effect>
-                                            <DropShadowEffect Color="Black" Opacity="0.06" BlurRadius="10" ShadowDepth="2" Direction="270"/>
-                                        </Border.Effect>
+                                    <!-- Image area -->
+                                    <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                          CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
                                         <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="340"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
+                                            <!-- Badges -->
+                                            <StackPanel Orientation="Horizontal" 
+                                                        HorizontalAlignment="Left" 
+                                                        VerticalAlignment="Top" 
+                                                        Margin="12">
+                                                <Border Background="{StaticResource BlackPrimaryBrush}" 
+                                                        Padding="10,5" 
+                                                        Margin="0,0,6,0" 
+                                                        Visibility="{Binding IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                    <TextBlock Text="NEW" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                </Border>
+                                                <Border Background="{StaticResource RedAccentBrush}" 
+                                                        Padding="10,5" 
+                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                    <TextBlock Foreground="White" FontSize="10" FontWeight="Bold">
+                                                        <Run Text="-"/><Run Text="{Binding DiscountPercentage, Mode=OneWay}"/><Run Text="%"/>
+                                                    </TextBlock>
+                                                </Border>
+                                            </StackPanel>
 
-                                            <!-- Image -->
-                                            <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
-                                                <Border.InputBindings>
-                                                    <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
-                                                </Border.InputBindings>
-                                                <Grid>
-                                                    <TextBlock Text="📷" FontSize="48" Opacity="0.2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                    <!-- Badges -->
-                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12">
-                                                        <Border Background="{StaticResource BlackPrimaryBrush}" Padding="10,5" Margin="0,0,6,0" Visibility="{Binding IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                            <TextBlock Text="NEW" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                            <!-- Wishlist button -->
+                                            <Button Width="40" Height="40"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Top"
+                                                    Margin="12"
+                                                    Cursor="Hand"
+                                                    Panel.ZIndex="100"
+                                                    Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Width="40" Height="40"
+                                                                Background="{StaticResource WhitePrimaryBrush}"
+                                                                CornerRadius="20">
+                                                            <Border.Effect>
+                                                                <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="2"/>
+                                                            </Border.Effect>
+                                                            <Grid>
+                                                                <Viewbox Width="24" Height="24" Margin="0,1,0,0"
+                                                                         Visibility="{Binding IsInWishlist, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                                                    <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                                          Fill="Transparent" Stroke="#1F2937" StrokeThickness="1.5"/>
+                                                                </Viewbox>
+                                                                <Viewbox Width="24" Height="24" Margin="0,1,0,0"
+                                                                         Visibility="{Binding IsInWishlist, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                                    <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                                          Fill="#EF4444" Stroke="#EF4444" StrokeThickness="1.5"/>
+                                                                </Viewbox>
+                                                            </Grid>
                                                         </Border>
-                                                        <Border Background="{StaticResource RedAccentBrush}" Padding="10,5" Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                            <TextBlock Foreground="White" FontSize="10" FontWeight="Bold"><Run Text="-"/><Run Text="{Binding DiscountPercentage, Mode=OneWay}"/><Run Text="%"/></TextBlock>
-                                                        </Border>
-                                                    </StackPanel>
-                                                    <!-- Wishlist -->
-                                                    <Button Width="40" Height="40"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Top"
-                                                            Margin="12"
-                                                            Cursor="Hand"
-                                                            Panel.ZIndex="100"
-                                                            Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                            CommandParameter="{Binding}">
-                                                        <Button.Template>
-                                                            <ControlTemplate TargetType="Button">
-                                                                <Border Width="40" Height="40"
-                                                                        Background="{StaticResource WhitePrimaryBrush}"
-                                                                        CornerRadius="20">
-                                                                    <Border.Effect>
-                                                                        <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="2"/>
-                                                                    </Border.Effect>
-                                                                    <Grid>
-                                                                        <Viewbox Width="24" Height="24" Margin="0,1,0,0"
-                                                                                 Visibility="{Binding IsInWishlist, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                                                                            <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                                                                                  Fill="Transparent" Stroke="#1F2937" StrokeThickness="1.5"/>
-                                                                        </Viewbox>
-                                                                        <Viewbox Width="24" Height="24" Margin="0,1,0,0"
-                                                                                 Visibility="{Binding IsInWishlist, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                                            <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                                                                                  Fill="#EF4444" Stroke="#EF4444" StrokeThickness="1.5"/>
-                                                                        </Viewbox>
-                                                                    </Grid>
-                                                                </Border>
-                                                            </ControlTemplate>
-                                                        </Button.Template>
-                                                    </Button>
-                                                    <!-- Quick Add -->
-                                                    <Border Background="{StaticResource BlackPrimaryBrush}" Height="45" VerticalAlignment="Bottom" Cursor="Hand" Opacity="0" x:Name="QuickAddButton">
-                                                        <Border.InputBindings>
-                                                            <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
-                                                        </Border.InputBindings>
-                                                        <TextBlock Text="QUICK ADD +" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                    </Border>
-                                                </Grid>
-                                            </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
 
-                                            <!-- Info -->
-                                            <Border Grid.Row="1" Padding="18,16,18,20">
+                                            <!-- Quick Add on hover -->
+                                            <Border Background="{StaticResource BlackPrimaryBrush}" 
+                                                    Height="45" 
+                                                    VerticalAlignment="Bottom" 
+                                                    Cursor="Hand" 
+                                                    Opacity="0" 
+                                                    x:Name="QuickAddButton">
                                                 <Border.InputBindings>
-                                                    <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                                                    <MouseBinding MouseAction="LeftClick" 
+                                                                  Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                                  CommandParameter="{Binding}"/>
                                                 </Border.InputBindings>
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding Category.Name}" FontSize="11" Foreground="{StaticResource Gray500Brush}" Margin="0,0,0,4"/>
-                                                    <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource BlackPrimaryBrush}" TextTrimming="CharacterEllipsis" Margin="0,0,0,8"/>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding Price, StringFormat='€{0:N2}'}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource BlackPrimaryBrush}"/>
-                                                        <TextBlock Text="{Binding OriginalPrice, StringFormat='€{0:N2}'}" FontSize="13" Foreground="{StaticResource Gray400Brush}" TextDecorations="Strikethrough" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                                                    </StackPanel>
-                                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                                        <TextBlock Text="⭐" FontSize="12"/>
-                                                        <TextBlock Text="{Binding AverageRating, StringFormat='{}{0:N1}'}" FontSize="12" Foreground="{StaticResource Gray600Brush}" Margin="4,0,0,0"/>
-                                                        <TextBlock FontSize="12" Foreground="{StaticResource Gray400Brush}" Margin="6,0,0,0"><Run Text="("/><Run Text="{Binding ReviewCount, Mode=OneWay}"/><Run Text=")"/></TextBlock>
-                                                    </StackPanel>
-                                                </StackPanel>
+                                                <TextBlock Text="ADD TO CART" 
+                                                           Foreground="White" 
+                                                           FontSize="12" 
+                                                           FontWeight="Bold" 
+                                                           HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center"/>
                                             </Border>
                                         </Grid>
-                                        <Border.Triggers>
-                                            <EventTrigger RoutedEvent="MouseEnter">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetName="QuickAddButton" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger>
-                                            <EventTrigger RoutedEvent="MouseLeave">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetName="QuickAddButton" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger>
-                                        </Border.Triggers>
                                     </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
 
-                        <!-- Empty state -->
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,100,0,0" Visibility="{Binding FilteredProducts.Count, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
-                            <TextBlock Text="🔍" FontSize="64" HorizontalAlignment="Center" Opacity="0.3"/>
-                            <TextBlock Text="No products found" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,20,0,8"/>
-                            <TextBlock Text="Try adjusting your filters" FontSize="14" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center"/>
-                            <Button Content="Clear Filters" Style="{StaticResource OutlineButton}" Padding="24,12" Margin="0,20,0,0" Command="{Binding ClearFiltersCommand}"/>
-                        </StackPanel>
-                    </Grid>
-                </ScrollViewer>
+                                    <!-- Product info -->
+                                    <Border Grid.Row="1" Padding="5,16,5,20">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                          CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" 
+                                                       FontSize="13" 
+                                                       FontWeight="SemiBold" 
+                                                       Foreground="{StaticResource BlackPrimaryBrush}" 
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Margin="0,0,0,8"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
+                                                           FontSize="15" 
+                                                           FontWeight="Bold" 
+                                                           Foreground="{StaticResource BlackPrimaryBrush}"/>
+                                                <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}" 
+                                                           FontSize="13" 
+                                                           Foreground="{StaticResource Gray400Brush}" 
+                                                           TextDecorations="Strikethrough" 
+                                                           Margin="10,2,0,0" 
+                                                           Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <!-- Hover animations -->
+                                <Border.Triggers>
+                                    <EventTrigger RoutedEvent="MouseEnter">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="QuickAddButton" 
+                                                                 Storyboard.TargetProperty="Opacity" 
+                                                                 To="1" Duration="0:0:0.2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="MouseLeave">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="QuickAddButton" 
+                                                                 Storyboard.TargetProperty="Opacity" 
+                                                                 To="0" Duration="0:0:0.2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Border.Triggers>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Empty state -->
+                <StackPanel HorizontalAlignment="Center" 
+                            VerticalAlignment="Center" 
+                            Margin="0,100,0,0" 
+                            Visibility="{Binding FilteredProducts.Count, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
+                    <Viewbox Width="64" Height="64" Margin="0,0,0,20" Opacity="0.3">
+                        <Path Data="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
+                              Stroke="{StaticResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+                    </Viewbox>
+                    <TextBlock Text="No products found" 
+                               FontSize="20" 
+                               FontWeight="SemiBold" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,0,0,8"/>
+                    <TextBlock Text="Try adjusting your filters" 
+                               FontSize="14" 
+                               Foreground="{StaticResource Gray500Brush}" 
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,25"/>
+                    <Button Content="CLEAR FILTERS" 
+                            Style="{StaticResource OutlineButton}" 
+                            Padding="30,12" 
+                            Command="{Binding ClearFiltersCommand}"/>
+                </StackPanel>
             </Grid>
         </Grid>
     </Grid>
+
 </UserControl>

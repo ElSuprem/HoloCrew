@@ -194,5 +194,49 @@ namespace HoloCrew.ViewModels
         {
             _navigationService.NavigateTo<OrderHistoryViewModel>();
         }
+
+        // Sidebar navigation commands
+        [RelayCommand]
+        private void NavigateToPersonalInfo()
+        {
+            // Already showing personal info - no action needed
+        }
+
+        [RelayCommand]
+        private void NavigateToAddresses()
+        {
+            // TODO: Fase 2 - section switching for saved addresses
+        }
+
+        [RelayCommand]
+        private void NavigateToPaymentMethods()
+        {
+            // TODO: Fase 2 - section switching for payment methods
+        }
+
+        [RelayCommand]
+        private void NavigateToOrderHistory()
+        {
+            _navigationService.NavigateTo<OrderHistoryViewModel>();
+        }
+
+        [RelayCommand]
+        private void NavigateToSettings()
+        {
+            _navigationService.NavigateTo<SettingsViewModel>();
+        }
+
+        [RelayCommand]
+        private async Task LogoutAsync()
+        {
+            await _authenticationService.LogoutAsync();
+            _navigationService.NavigateTo<HomeViewModel>();
+        }
+
+        [RelayCommand]
+        private async Task SaveChangesAsync()
+        {
+            await SaveProfileAsync();
+        }
     }
 }

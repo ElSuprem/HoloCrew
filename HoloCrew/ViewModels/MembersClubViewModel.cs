@@ -70,10 +70,10 @@ namespace HoloCrew.ViewModels
                     PointsMultiplier = 1,
                     Benefits = new List<string>
                     {
-                        "5% de descuento en todos los productos",
-                        "Gana 1 punto por cada €1 gastado",
-                        "Acceso a ofertas exclusivas",
-                        "Newsletter mensual"
+                        "5% discount on all products",
+                        "Earn 1 point per €1 spent",
+                        "Access to exclusive offers",
+                        "Monthly newsletter"
                     }
                 },
                 new MembershipTier
@@ -91,11 +91,11 @@ namespace HoloCrew.ViewModels
                     PointsMultiplier = 2,
                     Benefits = new List<string>
                     {
-                        "10% de descuento en todos los productos",
-                        "Gana 2 puntos por cada €1 gastado",
-                        "Envío GRATIS en todos los pedidos",
-                        "Regalo de cumpleaños",
-                        "Devoluciones gratis extendidas (60 días)"
+                        "10% discount on all products",
+                        "Earn 2 points per €1 spent",
+                        "FREE shipping on all orders",
+                        "Birthday gift",
+                        "Extended free returns (60 days)"
                     }
                 },
                 new MembershipTier
@@ -113,12 +113,12 @@ namespace HoloCrew.ViewModels
                     PointsMultiplier = 3,
                     Benefits = new List<string>
                     {
-                        "15% de descuento en todos los productos",
-                        "Gana 3 puntos por cada €1 gastado",
-                        "Acceso anticipado a nuevos lanzamientos",
-                        "Envío express gratis",
-                        "Soporte prioritario 24/7",
-                        "Invitaciones a eventos exclusivos"
+                        "15% discount on all products",
+                        "Earn 3 points per €1 spent",
+                        "Early access to new launches",
+                        "Free express shipping",
+                        "Priority 24/7 support",
+                        "Invitations to exclusive events"
                     }
                 },
                 new MembershipTier
@@ -136,13 +136,13 @@ namespace HoloCrew.ViewModels
                     PointsMultiplier = 4,
                     Benefits = new List<string>
                     {
-                        "20% de descuento en TODOS los productos",
-                        "Gana 4 puntos por cada €1 gastado",
-                        "Productos exclusivos de edición limitada",
-                        "Servicio de styling personal gratuito",
-                        "Acceso VIP a eventos y lanzamientos",
-                        "Regalos sorpresa trimestrales",
-                        "Concierge personal para compras"
+                        "20% discount on ALL products",
+                        "Earn 4 points per €1 spent",
+                        "Exclusive limited edition products",
+                        "Free personal styling service",
+                        "VIP access to events and launches",
+                        "Quarterly surprise gifts",
+                        "Personal shopping concierge"
                     }
                 }
             };
@@ -153,8 +153,8 @@ namespace HoloCrew.ViewModels
                 new MembershipReward
                 {
                     Id = 1,
-                    Title = "Cupón €10",
-                    Description = "Descuento de €10 en tu próxima compra",
+                    Title = "€10 Coupon",
+                    Description = "€10 discount on your next purchase",
                     Icon = "💰",
                     PointsCost = 200,
                     MinimumLevel = MembershipLevel.Bronze
@@ -162,8 +162,8 @@ namespace HoloCrew.ViewModels
                 new MembershipReward
                 {
                     Id = 2,
-                    Title = "Envío Express Gratis",
-                    Description = "Un envío express gratuito",
+                    Title = "Free Express Shipping",
+                    Description = "One free express delivery",
                     Icon = "🚀",
                     PointsCost = 150,
                     MinimumLevel = MembershipLevel.Silver
@@ -171,8 +171,8 @@ namespace HoloCrew.ViewModels
                 new MembershipReward
                 {
                     Id = 3,
-                    Title = "Cupón €25",
-                    Description = "Descuento de €25 en tu próxima compra",
+                    Title = "€25 Coupon",
+                    Description = "€25 discount on your next purchase",
                     Icon = "💵",
                     PointsCost = 450,
                     MinimumLevel = MembershipLevel.Silver
@@ -180,8 +180,8 @@ namespace HoloCrew.ViewModels
                 new MembershipReward
                 {
                     Id = 4,
-                    Title = "Producto Gratis",
-                    Description = "Elige cualquier producto hasta €50",
+                    Title = "Free Product",
+                    Description = "Choose any product up to €50",
                     Icon = "🎁",
                     PointsCost = 800,
                     MinimumLevel = MembershipLevel.Silver
@@ -189,8 +189,8 @@ namespace HoloCrew.ViewModels
                 new MembershipReward
                 {
                     Id = 5,
-                    Title = "Evento VIP",
-                    Description = "Entrada a un evento exclusivo",
+                    Title = "VIP Event",
+                    Description = "Ticket to an exclusive event",
                     Icon = "🎟️",
                     PointsCost = 1000,
                     MinimumLevel = MembershipLevel.Silver
@@ -198,9 +198,9 @@ namespace HoloCrew.ViewModels
                 new MembershipReward
                 {
                     Id = 6,
-                    Title = "Producto Exclusivo",
-                    Description = "Acceso a producto de edición limitada",
-                    Icon = "⭐",
+                    Title = "Exclusive Product",
+                    Description = "Access to limited edition product",
+                    Icon = "★",
                     PointsCost = 1200,
                     MinimumLevel = MembershipLevel.Silver
                 }
@@ -215,8 +215,8 @@ namespace HoloCrew.ViewModels
                 UserId = 1,
                 CurrentLevel = MembershipLevel.Silver,
                 TotalPoints = 1250,
-                CurrentLevelPoints = 750, // Puntos desde que alcanzó Silver (500)
-                PointsToNextLevel = 250,  // Necesita 1500 para Gold (1250 actual)
+                CurrentLevelPoints = 750, // Points since reaching Silver (500)
+                PointsToNextLevel = 250,  // Needs 1500 for Gold (1250 actual)
                 TotalSpent = 1250.00m,
                 TotalOrders = 15,
                 MemberSince = DateTime.Now.AddMonths(-8),
@@ -237,21 +237,21 @@ namespace HoloCrew.ViewModels
             // Verificar si tiene suficientes puntos
             if (UserMembership.TotalPoints < reward.PointsCost)
             {
-                ShowStatus($"No tienes suficientes puntos. Necesitas {reward.PointsCost} puntos.", false);
+                ShowStatus($"Not enough points. You need {reward.PointsCost} points.", false);
                 return;
             }
 
             // Verificar nivel mínimo (comparar valores numéricos del enum)
             if ((int)UserMembership.CurrentLevel < (int)reward.MinimumLevel)
             {
-                ShowStatus($"Necesitas nivel {reward.MinimumLevel} para canjear esta recompensa.", false);
+                ShowStatus($"You need level {reward.MinimumLevel} to redeem this reward.", false);
                 return;
             }
 
             // Verificar si ya fue canjeado
             if (reward.IsRedeemed)
             {
-                ShowStatus("Esta recompensa ya fue canjeada.", false);
+                ShowStatus("This reward has already been redeemed.", false);
                 return;
             }
 
@@ -285,14 +285,14 @@ namespace HoloCrew.ViewModels
                 AvailableRewards.Insert(index, reward);
             }
 
-            ShowStatus($"🎉 ¡{reward.Title} canjeado! Te quedan {newPoints} puntos.", true);
+            ShowStatus($"{reward.Title} redeemed! You have {newPoints} points remaining.", true);
         }
 
         private double CalculateProgressPercentage(int currentPoints)
         {
             // Silver (500) -> Gold (1500) = 1000 puntos de diferencia
-            var pointsInCurrentLevel = currentPoints - 500; // Puntos desde Silver
-            var pointsNeeded = 1000; // De Silver a Gold
+            var pointsInCurrentLevel = currentPoints - 500; // Points since Silver
+            var pointsNeeded = 1000; // Silver to Gold
             return Math.Min(100, (pointsInCurrentLevel / (double)pointsNeeded) * 100);
         }
 
@@ -302,7 +302,7 @@ namespace HoloCrew.ViewModels
             IsStatusSuccess = isSuccess;
             ShowStatusMessage = true;
 
-            // Ocultar mensaje después de 3 segundos
+            // Hide message after 3 seconds
             await Task.Delay(3000);
             ShowStatusMessage = false;
         }
@@ -311,11 +311,11 @@ namespace HoloCrew.ViewModels
         private void ViewAllBenefits()
         {
             MessageBox.Show(
-                "🥉 BRONZE: 5% descuento, 1x puntos\n" +
-                "🥈 SILVER: 10% descuento, 2x puntos, envío gratis\n" +
-                "🥇 GOLD: 15% descuento, 3x puntos, acceso anticipado\n" +
-                "💎 PLATINUM: 20% descuento, 4x puntos, productos exclusivos",
-                "Todos los Beneficios",
+                "BRONZE: 5% discount, 1x points\n" +
+                "SILVER: 10% discount, 2x points, free shipping\n" +
+                "GOLD: 15% discount, 3x points, early access\n" +
+                "PLATINUM: 20% discount, 4x points, exclusive products",
+                "All Benefits",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
@@ -324,13 +324,13 @@ namespace HoloCrew.ViewModels
         private void ViewHistory()
         {
             MessageBox.Show(
-                "📜 Historial de Puntos\n\n" +
+                "Points History\n\n" +
                 "• +150 pts - Pedido #12345 (15/01/2025)\n" +
                 "• +200 pts - Pedido #12340 (10/01/2025)\n" +
-                "• -200 pts - Cupón €10 canjeado (05/01/2025)\n" +
+                "• -200 pts - €10 Coupon canjeado (05/01/2025)\n" +
                 "• +100 pts - Pedido #12335 (28/12/2024)\n" +
-                "• +500 pts - Bono bienvenida Silver (01/12/2024)",
-                "Historial de Puntos",
+                "• +500 pts - Silver welcome bonus (01/12/2024)",
+                "Points History",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
@@ -339,11 +339,11 @@ namespace HoloCrew.ViewModels
         private void ShareMembership()
         {
             MessageBox.Show(
-                "🎁 ¡Comparte tu código de referido!\n\n" +
-                "Tu código: HOLOCREW-USER123\n\n" +
-                "Tus amigos obtienen 10% de descuento\n" +
-                "Tú ganas 100 puntos por cada referido",
-                "Programa de Referidos",
+                "Share your referral code!\n\n" +
+                "Your code: HOLOCREW-USER123\n\n" +
+                "Your friends get 10% off\n" +
+                "You earn 100 points per referral",
+                "Referral Program",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }

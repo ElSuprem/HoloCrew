@@ -4,355 +4,350 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="2000" d:DesignWidth="1400"
+             d:DesignHeight="3500" d:DesignWidth="1400"
              Background="{StaticResource BackgroundPrimary}">
 
     <StackPanel>
 
         <!-- ============================================ -->
-        <!-- HERO BANNER - Full Width -->
+        <!-- HERO BANNER - Centered like web              -->
         <!-- ============================================ -->
-        <Border Height="600" Background="{StaticResource BlackPrimaryBrush}">
+        <Border Height="650" Background="{StaticResource BlackPrimaryBrush}">
             <Grid>
-                <!-- Background Image Placeholder -->
-                <Border Background="{StaticResource BlackSecondaryBrush}"/>
+                <!-- Background placeholder (will be image in Phase 2) -->
+                <Border Background="{StaticResource BlackSecondaryBrush}" Opacity="0.6"/>
 
-                <!-- Gradient Overlay -->
+                <!-- Gradient overlay for text readability -->
                 <Border>
                     <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                            <GradientStop Color="#E0000000" Offset="0"/>
-                            <GradientStop Color="#40000000" Offset="0.5"/>
-                            <GradientStop Color="#00000000" Offset="1"/>
-                        </LinearGradientBrush>
+                        <RadialGradientBrush Center="0.5,0.5" RadiusX="0.8" RadiusY="0.8">
+                            <GradientStop Color="#60000000" Offset="0"/>
+                            <GradientStop Color="#CC000000" Offset="1"/>
+                        </RadialGradientBrush>
                     </Border.Background>
                 </Border>
 
-                <!-- Hero Content -->
-                <Grid Margin="100,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <!-- Hero Content - CENTERED like the web -->
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="700">
+                    <TextBlock Text="RISE WITH THE CREW" 
+                               FontSize="64"
+                               FontWeight="Black"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               Margin="0,0,0,40"/>
 
-                    <StackPanel Grid.Column="0" VerticalAlignment="Center" MaxWidth="500">
-                        <!-- Badge -->
-                        <Border Background="{StaticResource RedAccentBrush}" 
-                                HorizontalAlignment="Left"
-                                Padding="12,6"
-                                Margin="0,0,0,20">
-                            <TextBlock Text="NEW COLLECTION" 
-                                       Foreground="White" 
-                                       FontSize="11" 
-                                       FontWeight="Bold"/>
-                        </Border>
-
-                        <!-- Title -->
-                        <TextBlock Text="SOFTS" 
-                                   FontSize="72"
-                                   FontWeight="Black"
-                                   Foreground="White"
-                                   Margin="0,0,0,0"/>
-                        <TextBlock Text="COLLECTION" 
-                                   FontSize="72"
-                                   FontWeight="Black"
-                                   Foreground="White"
-                                   Margin="0,-10,0,25"/>
-
-                        <!-- Subtitle -->
-                        <TextBlock Text="Discover our premium soft collection designed for ultimate comfort. Premium fabrics, relaxed fits, everyday luxury."
-                                   FontSize="16"
-                                   Foreground="{StaticResource Gray300Brush}"
-                                   LineHeight="26"
-                                   TextWrapping="Wrap"
-                                   Margin="0,0,0,35"/>
-
-                        <!-- CTA Buttons -->
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="SHOP NOW" 
-                                    Style="{StaticResource PrimaryButton}"
-                                    Background="White"
-                                    Foreground="Black"
-                                    Padding="35,16"
-                                    FontSize="13"
-                                    Command="{Binding NavigateToCatalogCommand}"/>
-                            <Button Content="VIEW LOOKBOOK" 
-                                    Style="{StaticResource OutlineButton}"
-                                    BorderBrush="White"
-                                    Foreground="White"
-                                    Padding="35,16"
-                                    FontSize="13"
-                                    Margin="15,0,0,0"
-                                    Command="{Binding ViewLookbookCommand}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
+                    <!-- CTA Button - White outline like the web -->
+                    <Border Background="White" 
+                            HorizontalAlignment="Center" 
+                            Padding="50,18" 
+                            Cursor="Hand">
+                        <Border.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToCatalogCommand}" MouseAction="LeftClick"/>
+                        </Border.InputBindings>
+                        <TextBlock Text="SHOP NOW" 
+                                   FontSize="15" 
+                                   FontWeight="Bold" 
+                                   Foreground="Black"
+                                   HorizontalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
             </Grid>
         </Border>
 
         <!-- ============================================ -->
-        <!-- BENEFITS BAR -->
+        <!-- BENEFITS BAR - 3 columns, centered icons     -->
+        <!-- Matching web: Return / Free Shipping / World -->
         <!-- ============================================ -->
         <Border Background="{StaticResource WhitePrimaryBrush}" 
                 BorderBrush="{StaticResource Gray200Brush}"
                 BorderThickness="0,0,0,1"
-                Padding="80,30">
-            <UniformGrid Columns="4">
-                <!-- Benefit 1 -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Viewbox Width="24" Height="24" Margin="0,0,12,0">
-                        <Path Data="M5 12H19M12 5L19 12L12 19" 
-                              Stroke="{StaticResource BlackPrimaryBrush}" 
-                              StrokeThickness="2"
-                              StrokeStartLineCap="Round"
-                              StrokeEndLineCap="Round"
-                              StrokeLineJoin="Round"/>
-                    </Viewbox>
-                    <StackPanel>
-                        <TextBlock Text="Free Shipping" FontWeight="SemiBold" FontSize="13"/>
-                        <TextBlock Text="On orders over €50" Foreground="{StaticResource Gray500Brush}" FontSize="12"/>
-                    </StackPanel>
-                </StackPanel>
-
-                <!-- Benefit 2 -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Viewbox Width="24" Height="24" Margin="0,0,12,0">
-                        <Path Data="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4ZM4 8V18H20V8H4ZM7 14H10V16H7V14Z" 
+                Padding="80,45">
+            <UniformGrid Columns="3">
+                <!-- 14 Days Return Policy -->
+                <StackPanel HorizontalAlignment="Center">
+                    <Viewbox Width="42" Height="42" Margin="0,0,0,16">
+                        <Path Data="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" 
                               Fill="{StaticResource BlackPrimaryBrush}"/>
                     </Viewbox>
-                    <StackPanel>
-                        <TextBlock Text="Secure Payment" FontWeight="SemiBold" FontSize="13"/>
-                        <TextBlock Text="100% secure checkout" Foreground="{StaticResource Gray500Brush}" FontSize="12"/>
-                    </StackPanel>
+                    <TextBlock Text="14 DAYS RETURN POLICY" 
+                               FontSize="14" 
+                               FontWeight="Bold" 
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,6"/>
+                    <TextBlock Text="Free returns within 14 days" 
+                               FontSize="13" 
+                               Foreground="{StaticResource Gray500Brush}" 
+                               HorizontalAlignment="Center"/>
                 </StackPanel>
 
-                <!-- Benefit 3 -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Viewbox Width="24" Height="24" Margin="0,0,12,0">
-                        <Path Data="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15" 
-                              Stroke="{StaticResource BlackPrimaryBrush}" 
-                              StrokeThickness="2"
-                              Fill="Transparent"
-                              StrokeStartLineCap="Round"
-                              StrokeEndLineCap="Round"
-                              StrokeLineJoin="Round"/>
+                <!-- Free Shipping -->
+                <StackPanel HorizontalAlignment="Center">
+                    <Viewbox Width="42" Height="42" Margin="0,0,0,16">
+                        <Path Data="M18 18.5a1.5 1.5 0 0 1-1.5-1.5 1.5 1.5 0 0 1 1.5-1.5 1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5zm1.5-9H17V12h4.46L19.5 9.5zM6 18.5A1.5 1.5 0 0 1 4.5 17 1.5 1.5 0 0 1 6 15.5 1.5 1.5 0 0 1 7.5 17 1.5 1.5 0 0 1 6 18.5zM20 8l3 4v5h-2a3 3 0 0 1-3 3 3 3 0 0 1-3-3H9a3 3 0 0 1-3 3 3 3 0 0 1-3-3H1V6c0-1.11.89-2 2-2h14v4h3z" 
+                              Fill="{StaticResource BlackPrimaryBrush}"/>
                     </Viewbox>
-                    <StackPanel>
-                        <TextBlock Text="14 Days Return" FontWeight="SemiBold" FontSize="13"/>
-                        <TextBlock Text="Easy returns policy" Foreground="{StaticResource Gray500Brush}" FontSize="12"/>
-                    </StackPanel>
+                    <TextBlock Text="FREE SHIPPING OVER 50€" 
+                               FontSize="14" 
+                               FontWeight="Bold" 
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,6"/>
+                    <TextBlock Text="Free shipping on orders over 50€" 
+                               FontSize="13" 
+                               Foreground="{StaticResource Gray500Brush}" 
+                               HorizontalAlignment="Center"/>
                 </StackPanel>
 
-                <!-- Benefit 4 -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Viewbox Width="24" Height="24" Margin="0,0,12,0">
-                        <Path Data="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM12 6V12L16 14" 
-                              Stroke="{StaticResource BlackPrimaryBrush}" 
-                              StrokeThickness="2"
-                              Fill="Transparent"
-                              StrokeStartLineCap="Round"
-                              StrokeEndLineCap="Round"/>
+                <!-- Worldwide Shipping -->
+                <StackPanel HorizontalAlignment="Center">
+                    <Viewbox Width="42" Height="42" Margin="0,0,0,16">
+                        <Path Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" 
+                              Fill="{StaticResource BlackPrimaryBrush}"/>
                     </Viewbox>
-                    <StackPanel>
-                        <TextBlock Text="24/7 Support" FontWeight="SemiBold" FontSize="13"/>
-                        <TextBlock Text="Dedicated support" Foreground="{StaticResource Gray500Brush}" FontSize="12"/>
-                    </StackPanel>
+                    <TextBlock Text="WORLDWIDE SHIPPING" 
+                               FontSize="14" 
+                               FontWeight="Bold" 
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,6"/>
+                    <TextBlock Text="We ship to all countries" 
+                               FontSize="13" 
+                               Foreground="{StaticResource Gray500Brush}" 
+                               HorizontalAlignment="Center"/>
                 </StackPanel>
             </UniformGrid>
         </Border>
 
         <!-- ============================================ -->
-        <!-- SHOP BY CATEGORY -->
+        <!-- CATEGORY CARDS WITH DISCOUNTS                -->
+        <!-- 3 tall cards: TOPS / BOTTOMS / ACCESSORIES   -->
+        <!-- Dark placeholders with gradient + discount   -->
         <!-- ============================================ -->
-        <Border Padding="80,70">
+        <Border Background="{StaticResource WhitePrimaryBrush}">
+            <UniformGrid Columns="3" Rows="1">
+                <!-- TOPS -->
+                <Border Height="550" Cursor="Hand" Margin="0,0,1,0">
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" 
+                                      Command="{Binding NavigateToCategoryCommand}" 
+                                      CommandParameter="tops"/>
+                    </Border.InputBindings>
+                    <Grid>
+                        <Border Background="{StaticResource BlackSecondaryBrush}"/>
+                        <Border>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#00000000" Offset="0.3"/>
+                                    <GradientStop Color="#CC000000" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <!-- Discount badge -->
+                        <Border Background="{StaticResource RedAccentBrush}" 
+                                Padding="16,8" 
+                                HorizontalAlignment="Right" 
+                                VerticalAlignment="Top" 
+                                Margin="0,20,20,0">
+                            <TextBlock Text="-75%" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                        </Border>
+                        <!-- Category info -->
+                        <StackPanel VerticalAlignment="Bottom" Margin="35,0,35,35">
+                            <TextBlock Text="TOPS" 
+                                       FontSize="32" 
+                                       FontWeight="Black" 
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="UP TO 75% OFF" 
+                                       FontSize="18" 
+                                       FontWeight="Bold" 
+                                       Foreground="White"
+                                       Margin="0,0,0,20"/>
+                            <Border Background="White" 
+                                    HorizontalAlignment="Left" 
+                                    Padding="28,12" 
+                                    Cursor="Hand">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="OFFERS" FontSize="13" FontWeight="Bold" Foreground="Black"/>
+                                    <TextBlock Text="  →" FontSize="13" FontWeight="Bold" Foreground="Black"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- BOTTOMS -->
+                <Border Height="550" Cursor="Hand" Margin="0,0,1,0">
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" 
+                                      Command="{Binding NavigateToCategoryCommand}" 
+                                      CommandParameter="bottoms"/>
+                    </Border.InputBindings>
+                    <Grid>
+                        <Border Background="{StaticResource BlackTertiaryBrush}"/>
+                        <Border>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#00000000" Offset="0.3"/>
+                                    <GradientStop Color="#CC000000" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <Border Background="{StaticResource RedAccentBrush}" 
+                                Padding="16,8" 
+                                HorizontalAlignment="Right" 
+                                VerticalAlignment="Top" 
+                                Margin="0,20,20,0">
+                            <TextBlock Text="-70%" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Bottom" Margin="35,0,35,35">
+                            <TextBlock Text="BOTTOMS" 
+                                       FontSize="32" 
+                                       FontWeight="Black" 
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="UP TO 70% OFF" 
+                                       FontSize="18" 
+                                       FontWeight="Bold" 
+                                       Foreground="White"
+                                       Margin="0,0,0,20"/>
+                            <Border Background="White" 
+                                    HorizontalAlignment="Left" 
+                                    Padding="28,12" 
+                                    Cursor="Hand">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="OFFERS" FontSize="13" FontWeight="Bold" Foreground="Black"/>
+                                    <TextBlock Text="  →" FontSize="13" FontWeight="Bold" Foreground="Black"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ACCESSORIES -->
+                <Border Height="550" Cursor="Hand">
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" 
+                                      Command="{Binding NavigateToCategoryCommand}" 
+                                      CommandParameter="accessories"/>
+                    </Border.InputBindings>
+                    <Grid>
+                        <Border Background="#151515"/>
+                        <Border>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#00000000" Offset="0.3"/>
+                                    <GradientStop Color="#CC000000" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <Border Background="{StaticResource RedAccentBrush}" 
+                                Padding="16,8" 
+                                HorizontalAlignment="Right" 
+                                VerticalAlignment="Top" 
+                                Margin="0,20,20,0">
+                            <TextBlock Text="-50%" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Bottom" Margin="35,0,35,35">
+                            <TextBlock Text="ACCESSORIES" 
+                                       FontSize="32" 
+                                       FontWeight="Black" 
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="UP TO 50% OFF" 
+                                       FontSize="18" 
+                                       FontWeight="Bold" 
+                                       Foreground="White"
+                                       Margin="0,0,0,20"/>
+                            <Border Background="White" 
+                                    HorizontalAlignment="Left" 
+                                    Padding="28,12" 
+                                    Cursor="Hand">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="OFFERS" FontSize="13" FontWeight="Bold" Foreground="Black"/>
+                                    <TextBlock Text="  →" FontSize="13" FontWeight="Bold" Foreground="Black"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </UniformGrid>
+        </Border>
+
+        <!-- ============================================ -->
+        <!-- DISCOVER BY CATEGORY                         -->
+        <!-- Centered title + category links              -->
+        <!-- ============================================ -->
+        <Border Padding="80,60" Background="{StaticResource WhitePrimaryBrush}">
             <StackPanel>
-                <TextBlock Text="SHOP BY CATEGORY" 
-                           FontSize="28"
-                           FontWeight="Bold"
+                <TextBlock Text="DISCOVER BY CATEGORY" 
+                           FontSize="36"
+                           FontWeight="Black"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,50"/>
+                           Margin="0,0,0,30"/>
 
-                <UniformGrid Columns="4" Rows="1">
-                    <!-- TOPS -->
-                    <Border Margin="10" Cursor="Hand" Height="400">
-                        <Border.InputBindings>
-                            <MouseBinding MouseAction="LeftClick" 
-                                          Command="{Binding NavigateToCategoryCommand}" 
-                                          CommandParameter="tops"/>
-                        </Border.InputBindings>
-                        <Grid>
-                            <Border Background="{StaticResource Gray200Brush}"/>
-                            <Border>
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#00000000" Offset="0.5"/>
-                                        <GradientStop Color="#90000000" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                            </Border>
-                            <StackPanel VerticalAlignment="Bottom" Margin="25">
-                                <TextBlock Text="TOPS" 
-                                           FontSize="22" 
-                                           FontWeight="Bold" 
-                                           Foreground="White"/>
-                                <TextBlock Text="Hoodies, T-Shirts, Jackets" 
-                                           FontSize="13" 
-                                           Foreground="{StaticResource Gray300Brush}"
-                                           Margin="0,5,0,0"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- BOTTOMS -->
-                    <Border Margin="10" Cursor="Hand" Height="400">
-                        <Border.InputBindings>
-                            <MouseBinding MouseAction="LeftClick" 
-                                          Command="{Binding NavigateToCategoryCommand}" 
-                                          CommandParameter="bottoms"/>
-                        </Border.InputBindings>
-                        <Grid>
-                            <Border Background="{StaticResource Gray300Brush}"/>
-                            <Border>
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#00000000" Offset="0.5"/>
-                                        <GradientStop Color="#90000000" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                            </Border>
-                            <StackPanel VerticalAlignment="Bottom" Margin="25">
-                                <TextBlock Text="BOTTOMS" 
-                                           FontSize="22" 
-                                           FontWeight="Bold" 
-                                           Foreground="White"/>
-                                <TextBlock Text="Joggers, Cargo, Denim" 
-                                           FontSize="13" 
-                                           Foreground="{StaticResource Gray300Brush}"
-                                           Margin="0,5,0,0"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- FOOTWEAR -->
-                    <Border Margin="10" Cursor="Hand" Height="400">
-                        <Border.InputBindings>
-                            <MouseBinding MouseAction="LeftClick" 
-                                          Command="{Binding NavigateToCategoryCommand}" 
-                                          CommandParameter="footwear"/>
-                        </Border.InputBindings>
-                        <Grid>
-                            <Border Background="{StaticResource Gray400Brush}"/>
-                            <Border>
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#00000000" Offset="0.5"/>
-                                        <GradientStop Color="#90000000" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                            </Border>
-                            <StackPanel VerticalAlignment="Bottom" Margin="25">
-                                <TextBlock Text="FOOTWEAR" 
-                                           FontSize="22" 
-                                           FontWeight="Bold" 
-                                           Foreground="White"/>
-                                <TextBlock Text="Sneakers, Slides" 
-                                           FontSize="13" 
-                                           Foreground="{StaticResource Gray300Brush}"
-                                           Margin="0,5,0,0"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- ACCESSORIES -->
-                    <Border Margin="10" Cursor="Hand" Height="400">
-                        <Border.InputBindings>
-                            <MouseBinding MouseAction="LeftClick" 
-                                          Command="{Binding NavigateToCategoryCommand}" 
-                                          CommandParameter="accessories"/>
-                        </Border.InputBindings>
-                        <Grid>
-                            <Border Background="{StaticResource BlackSecondaryBrush}"/>
-                            <Border>
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#00000000" Offset="0.5"/>
-                                        <GradientStop Color="#90000000" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                            </Border>
-                            <StackPanel VerticalAlignment="Bottom" Margin="25">
-                                <TextBlock Text="ACCESSORIES" 
-                                           FontSize="22" 
-                                           FontWeight="Bold" 
-                                           Foreground="White"/>
-                                <TextBlock Text="Caps, Bags, Beanies" 
-                                           FontSize="13" 
-                                           Foreground="{StaticResource Gray300Brush}"
-                                           Margin="0,5,0,0"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </UniformGrid>
+                <!-- Category links row -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <TextBlock Text="NEW ARRIVALS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="new" MouseAction="LeftClick"/>
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                    <TextBlock Text="FOOTWEAR" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="footwear" MouseAction="LeftClick"/>
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                    <TextBlock Text="DENIMS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="denims" MouseAction="LeftClick"/>
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                    <TextBlock Text="JERSEYS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="jerseys" MouseAction="LeftClick"/>
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                    <TextBlock Text="KNITWEAR" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="knitwear" MouseAction="LeftClick"/>
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                    <TextBlock Text="TRACKSUITS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="tracksuits" MouseAction="LeftClick"/>
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                    <TextBlock Text="HOODIES" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="hoodies" MouseAction="LeftClick"/>
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                    <TextBlock Text="T-SHIRTS" FontSize="14" FontWeight="SemiBold" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="tshirts" MouseAction="LeftClick"/>
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                </StackPanel>
             </StackPanel>
         </Border>
 
         <!-- ============================================ -->
-        <!-- BLACK WEEK BANNER -->
+        <!-- FEATURED PRODUCTS (BEST SELLERS)             -->
         <!-- ============================================ -->
-        <Border Background="{StaticResource BlackPrimaryBrush}" Padding="80,50">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <Border Background="{StaticResource RedAccentBrush}" Padding="10,5">
-                            <TextBlock Text="LIMITED TIME" Foreground="White" FontSize="11" FontWeight="Bold"/>
-                        </Border>
-                    </StackPanel>
-                    <TextBlock Text="BLACK WEEK" 
-                               FontSize="48" 
-                               FontWeight="Black" 
-                               Foreground="White"
-                               Margin="0,0,0,10"/>
-                    <TextBlock Text="Up to 50% off on selected items. Don't miss out on our biggest sale of the year."
-                               FontSize="16"
-                               Foreground="{StaticResource Gray400Brush}"
-                               MaxWidth="500"/>
-                </StackPanel>
-
-                <Button Grid.Column="1" 
-                        Content="SHOP SALE" 
-                        Style="{StaticResource OutlineButton}"
-                        BorderBrush="White"
-                        Foreground="White"
-                        Padding="40,16"
-                        FontSize="14"
-                        VerticalAlignment="Center"
-                        Command="{Binding NavigateToBlackWeekCommand}"/>
-            </Grid>
-        </Border>
-
-        <!-- ============================================ -->
-        <!-- FEATURED PRODUCTS -->
-        <!-- ============================================ -->
-        <Border Padding="80,70" Background="{StaticResource WhitePrimaryBrush}">
+        <Border Padding="80,10,80,70" Background="{StaticResource WhitePrimaryBrush}">
             <StackPanel>
                 <!-- Header -->
                 <Grid Margin="0,0,0,40">
-                    <TextBlock Text="FEATURED PRODUCTS" 
-                               FontSize="28"
-                               FontWeight="Bold"
+                    <TextBlock Text="BEST SELLERS" 
+                               FontSize="32"
+                               FontWeight="Black"
                                HorizontalAlignment="Left"/>
-                    <TextBlock Text="View All →" 
+                    <TextBlock Text="VIEW ALL BEST SELLERS  →" 
                                FontSize="14"
-                               Foreground="{StaticResource Gray600Brush}"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BlackPrimaryBrush}"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"
-                               Cursor="Hand"
-                               TextDecorations="Underline">
+                               Cursor="Hand">
                         <TextBlock.InputBindings>
                             <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCatalogCommand}"/>
                         </TextBlock.InputBindings>
@@ -378,7 +373,7 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <!-- Image -->
+                                    <!-- Image placeholder -->
                                     <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
                                         <Border.InputBindings>
                                             <MouseBinding MouseAction="LeftClick" 
@@ -452,7 +447,7 @@
                                                     Cursor="Hand"
                                                     Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}">
-                                                <TextBlock Text="QUICK ADD +"
+                                                <TextBlock Text="ADD TO CART"
                                                            Foreground="White"
                                                            FontSize="12"
                                                            FontWeight="Bold"
@@ -470,14 +465,15 @@
                                                           CommandParameter="{Binding}"/>
                                         </StackPanel.InputBindings>
                                         <TextBlock Text="{Binding Name}" 
-                                                   FontSize="14"
+                                                   FontSize="13"
                                                    FontWeight="SemiBold"
-                                                   TextTrimming="CharacterEllipsis"/>
-                                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                                            <TextBlock Text="{Binding Price, StringFormat='€{0:N2}'}" 
-                                                       FontSize="14"
+                                                   TextTrimming="CharacterEllipsis"
+                                                  />
+                                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                            <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
+                                                       FontSize="15"
                                                        FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding OriginalPrice, StringFormat='€{0:N2}'}"
+                                            <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
                                                        FontSize="13"
                                                        Foreground="{StaticResource Gray400Brush}"
                                                        TextDecorations="Strikethrough"
@@ -516,82 +512,112 @@
         </Border>
 
         <!-- ============================================ -->
-        <!-- DUAL COLLECTION BANNERS -->
+        <!-- BLACK WEEK BANNER                            -->
         <!-- ============================================ -->
-        <Border Padding="80,0,80,70" Background="{StaticResource WhitePrimaryBrush}">
-            <UniformGrid Columns="2">
-                <!-- SOFTS COLLECTION -->
-                <Border Margin="0,0,10,0" Height="450" Cursor="Hand">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding NavigateToCategoryCommand}" 
-                                      CommandParameter="softs"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Border Background="{StaticResource Gray200Brush}"/>
-                        <Border>
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop Color="#00000000" Offset="0.3"/>
-                                    <GradientStop Color="#80000000" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                        </Border>
-                        <StackPanel VerticalAlignment="Bottom" Margin="40">
-                            <TextBlock Text="SOFTS COLLECTION" 
-                                       FontSize="32" 
-                                       FontWeight="Black" 
-                                       Foreground="White"/>
-                            <TextBlock Text="Premium comfort for everyday wear"
-                                       FontSize="14"
-                                       Foreground="{StaticResource Gray300Brush}"
-                                       Margin="0,10,0,20"/>
-                            <Border Background="White" HorizontalAlignment="Left" Padding="20,12" Cursor="Hand">
-                                <Border.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick" 
-                                                  Command="{Binding NavigateToCategoryCommand}" 
-                                                  CommandParameter="softs"/>
-                                </Border.InputBindings>
-                                <TextBlock Text="SHOP NOW" FontSize="12" FontWeight="Bold"/>
-                            </Border>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+        <Border Background="{StaticResource BlackPrimaryBrush}" Padding="80,50" Cursor="Hand">
+            <Border.InputBindings>
+                <MouseBinding Command="{Binding NavigateToBlackWeekCommand}" MouseAction="LeftClick"/>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-                <!-- CLASSIC COLLECTION -->
-                <Border Margin="10,0,0,0" Height="450" Cursor="Hand">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Border Background="{StaticResource RedAccentBrush}" Padding="10,5">
+                            <TextBlock Text="LIMITED TIME" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                    <TextBlock Text="BLACK WEEK" 
+                               FontSize="48" 
+                               FontWeight="Black" 
+                               Foreground="White"
+                               Margin="0,0,0,10"/>
+                    <TextBlock Text="Up to 50% off on selected items. Don't miss out on our biggest sale of the year."
+                               FontSize="16"
+                               Foreground="{StaticResource Gray400Brush}"
+                               MaxWidth="500"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <Button Grid.Column="1" 
+                        Content="SHOP SALE" 
+                        Style="{StaticResource OutlineButton}"
+                        BorderBrush="White"
+                        Foreground="White"
+                        Padding="40,16"
+                        FontSize="14"
+                        VerticalAlignment="Center"
+                        Command="{Binding NavigateToBlackWeekCommand}"/>
+            </Grid>
+        </Border>
+
+        <!-- ============================================ -->
+        <!-- DUAL BANNERS - NEW ARRIVALS / NEW DENIMS     -->
+        <!-- Like the web: 2 side-by-side full cards      -->
+        <!-- ============================================ -->
+        <Border Background="{StaticResource WhitePrimaryBrush}">
+            <UniformGrid Columns="2">
+                <!-- NEW ARRIVALS -->
+                <Border Height="500" Cursor="Hand" Margin="0,0,1,0">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick" 
                                       Command="{Binding NavigateToCategoryCommand}" 
-                                      CommandParameter="classic"/>
+                                      CommandParameter="new"/>
                     </Border.InputBindings>
                     <Grid>
                         <Border Background="{StaticResource BlackSecondaryBrush}"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop Color="#00000000" Offset="0.3"/>
-                                    <GradientStop Color="#80000000" Offset="1"/>
+                                    <GradientStop Color="#00000000" Offset="0.2"/>
+                                    <GradientStop Color="#AA000000" Offset="1"/>
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
-                        <StackPanel VerticalAlignment="Bottom" Margin="40">
-                            <TextBlock Text="CLASSIC COLLECTION" 
-                                       FontSize="32" 
+                        <StackPanel VerticalAlignment="Bottom" Margin="40,0,40,50">
+                            <TextBlock Text="NEW ARRIVALS" 
+                                       FontSize="36" 
                                        FontWeight="Black" 
-                                       Foreground="White"/>
-                            <TextBlock Text="Timeless streetwear essentials"
-                                       FontSize="14"
-                                       Foreground="{StaticResource Gray300Brush}"
-                                       Margin="0,10,0,20"/>
-                            <Border Background="White" HorizontalAlignment="Left" Padding="20,12" Cursor="Hand">
-                                <Border.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick" 
-                                                  Command="{Binding NavigateToCategoryCommand}" 
-                                                  CommandParameter="classic"/>
-                                </Border.InputBindings>
-                                <TextBlock Text="SHOP NOW" FontSize="12" FontWeight="Bold"/>
-                            </Border>
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="SHOP NOW" 
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource Gray300Brush}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- NEW DENIMS -->
+                <Border Height="500" Cursor="Hand">
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" 
+                                      Command="{Binding NavigateToCategoryCommand}" 
+                                      CommandParameter="denims"/>
+                    </Border.InputBindings>
+                    <Grid>
+                        <Border Background="{StaticResource BlackTertiaryBrush}"/>
+                        <Border>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#00000000" Offset="0.2"/>
+                                    <GradientStop Color="#AA000000" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <StackPanel VerticalAlignment="Bottom" Margin="40,0,40,50">
+                            <TextBlock Text="NEW DENIMS" 
+                                       FontSize="36" 
+                                       FontWeight="Black" 
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="SHOP NOW" 
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource Gray300Brush}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -599,7 +625,132 @@
         </Border>
 
         <!-- ============================================ -->
-        <!-- NEWSLETTER / JOIN THE CREW -->
+        <!-- DUAL BANNERS 2 - OUTERWEAR / FOOTWEAR       -->
+        <!-- ============================================ -->
+        <Border Background="{StaticResource WhitePrimaryBrush}" Margin="0,1,0,0">
+            <UniformGrid Columns="2">
+                <!-- OUTERWEAR -->
+                <Border Height="500" Cursor="Hand" Margin="0,0,1,0">
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" 
+                                      Command="{Binding NavigateToCategoryCommand}" 
+                                      CommandParameter="outerwear"/>
+                    </Border.InputBindings>
+                    <Grid>
+                        <Border Background="#111111"/>
+                        <Border>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#00000000" Offset="0.2"/>
+                                    <GradientStop Color="#AA000000" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <StackPanel VerticalAlignment="Bottom" Margin="40,0,40,50">
+                            <TextBlock Text="OUTERWEAR" 
+                                       FontSize="36" 
+                                       FontWeight="Black" 
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="SHOP NOW" 
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource Gray300Brush}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- FOOTWEAR -->
+                <Border Height="500" Cursor="Hand">
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" 
+                                      Command="{Binding NavigateToCategoryCommand}" 
+                                      CommandParameter="footwear"/>
+                    </Border.InputBindings>
+                    <Grid>
+                        <Border Background="#0D0D0D"/>
+                        <Border>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#00000000" Offset="0.2"/>
+                                    <GradientStop Color="#AA000000" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <StackPanel VerticalAlignment="Bottom" Margin="40,0,40,50">
+                            <TextBlock Text="FOOTWEAR" 
+                                       FontSize="36" 
+                                       FontWeight="Black" 
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="SHOP NOW" 
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource Gray300Brush}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </UniformGrid>
+        </Border>
+
+        <!-- ============================================ -->
+        <!-- WINTER ESSENTIALS / SECOND PRODUCT ROW       -->
+        <!-- ============================================ -->
+        <Border Padding="80,60,80,70" Background="{StaticResource WhitePrimaryBrush}">
+            <StackPanel>
+                <Grid Margin="0,0,0,40">
+                    <TextBlock Text="WINTER ESSENTIALS" 
+                               FontSize="32"
+                               FontWeight="Black"
+                               HorizontalAlignment="Left"/>
+                    <TextBlock Text="VIEW ALL  →" 
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BlackPrimaryBrush}"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Cursor="Hand">
+                        <TextBlock.InputBindings>
+                            <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCatalogCommand}"/>
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                </Grid>
+
+                <!-- Reuse same products or a different set -->
+                <ItemsControl ItemsSource="{Binding FeaturedProducts}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10" Cursor="Hand">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" 
+                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                  CommandParameter="{Binding}"/>
+                                </Border.InputBindings>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="320"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="0" Background="{StaticResource Gray100Brush}"/>
+                                    <StackPanel Grid.Row="1" Margin="0,15,0,0">
+                                        <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" FontSize="15" FontWeight="Bold" Margin="0,8,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+
+        <!-- ============================================ -->
+        <!-- NEWSLETTER / JOIN THE CREW                   -->
         <!-- ============================================ -->
         <Border Background="{StaticResource BlackPrimaryBrush}" Padding="80,70">
             <Grid>
@@ -621,31 +772,28 @@
                                MaxWidth="450"
                                TextWrapping="Wrap"/>
                 </StackPanel>
-                <!-- SECCIÓN: NEWSLETTER (Grid.Column="1")       -->
-                <!-- ============================================ -->
 
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <!-- Email Input con placeholder -->
+                    <!-- Email Input -->
                     <Border Background="White" Height="50" Margin="0,0,0,12">
                         <Grid>
                             <TextBox Text="{Binding NewsletterEmail, UpdateSourceTrigger=PropertyChanged}"
-                     Background="Transparent" 
-                     BorderThickness="0" 
-                     VerticalAlignment="Center"
-                     VerticalContentAlignment="Center"
-                     Padding="18,0"
-                     FontSize="14">
+                                     Background="Transparent" 
+                                     BorderThickness="0" 
+                                     VerticalAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Padding="18,0"
+                                     FontSize="14">
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding SubscribeNewsletterCommand}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
-                            <!-- Placeholder que desaparece cuando escribes -->
                             <TextBlock Text="Enter your email"
-                       Foreground="{StaticResource Gray400Brush}"
-                       FontSize="14"
-                       VerticalAlignment="Center"
-                       Margin="18,0,0,0"
-                       IsHitTestVisible="False">
+                                       Foreground="{StaticResource Gray400Brush}"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"
+                                       Margin="18,0,0,0"
+                                       IsHitTestVisible="False">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -663,11 +811,11 @@
                         </Grid>
                     </Border>
 
-                    <!-- Botón Subscribe -->
+                    <!-- Subscribe Button -->
                     <Button Background="{StaticResource RedAccentBrush}"
-        Padding="0,16"
-        FontSize="13"
-        Command="{Binding SubscribeNewsletterCommand}">
+                            Padding="0,16"
+                            FontSize="13"
+                            Command="{Binding SubscribeNewsletterCommand}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
                                 <Setter Property="Content" Value="SUBSCRIBE"/>
@@ -682,76 +830,176 @@
                         </Button.Style>
                     </Button>
 
-                    <!-- Mensaje de resultado -->
                     <TextBlock Text="{Binding SubscriptionMessage}"
-               FontSize="12"
-               Foreground="{StaticResource Gray400Brush}"
-               Margin="0,10,0,0"/>
+                               FontSize="12"
+                               Foreground="{StaticResource Gray400Brush}"
+                               Margin="0,10,0,0"/>
 
-                    <!-- Texto legal -->
                     <TextBlock Text="By subscribing, you agree to our Privacy Policy"
-               FontSize="11"
-               Foreground="{StaticResource Gray500Brush}"
-               Margin="0,5,0,0"/>
+                               FontSize="11"
+                               Foreground="{StaticResource Gray500Brush}"
+                               Margin="0,5,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>
 
         <!-- ============================================ -->
-        <!-- INSTAGRAM / IMAGE CAROUSEL -->
+        <!-- FOOTER - Like the web version                -->
         <!-- ============================================ -->
-        <Border Padding="80,70" Background="{StaticResource WhitePrimaryBrush}">
+        <Border Background="{StaticResource BlackPrimaryBrush}" 
+                Padding="80,60,80,40"
+                BorderBrush="{StaticResource Gray800Brush}"
+                BorderThickness="0,1,0,0">
             <StackPanel>
-                <TextBlock Text="@HOLOCREW" 
-                           FontSize="28"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,10"/>
-                <TextBlock Text="Follow us on Instagram"
-                           FontSize="14"
-                           Foreground="{StaticResource Gray500Brush}"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,40"/>
+                <!-- Footer main content -->
+                <Grid Margin="0,0,0,50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- Image Carousel - 6 placeholders para imágenes -->
-                <UniformGrid Columns="6" Rows="1">
-                    <Border Background="{StaticResource Gray200Brush}" Height="180" Margin="5" Cursor="Hand">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
-                        </Border.Effect>
-                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
-                    </Border>
-                    <Border Background="{StaticResource Gray300Brush}" Height="180" Margin="5" Cursor="Hand">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
-                        </Border.Effect>
-                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
-                    </Border>
-                    <Border Background="{StaticResource Gray200Brush}" Height="180" Margin="5" Cursor="Hand">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
-                        </Border.Effect>
-                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
-                    </Border>
-                    <Border Background="{StaticResource Gray300Brush}" Height="180" Margin="5" Cursor="Hand">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
-                        </Border.Effect>
-                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
-                    </Border>
-                    <Border Background="{StaticResource Gray200Brush}" Height="180" Margin="5" Cursor="Hand">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
-                        </Border.Effect>
-                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
-                    </Border>
-                    <Border Background="{StaticResource Gray300Brush}" Height="180" Margin="5" Cursor="Hand">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
-                        </Border.Effect>
-                        <TextBlock Text="📷" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
-                    </Border>
-                </UniformGrid>
+                    <!-- Brand -->
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="HOLOCREW" 
+                                   FontSize="22" 
+                                   FontWeight="Black" 
+                                   Foreground="White" 
+                                   FontStyle="Italic"
+                                   Margin="0,0,0,15"/>
+                        <TextBlock Text="Premium streetwear for the modern generation."
+                                   FontSize="13"
+                                   Foreground="{StaticResource Gray400Brush}"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="220"
+                                   LineHeight="22"
+                                   Margin="0,0,0,20"/>
+                        <!-- Social icons as text for now -->
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="36" Height="36" CornerRadius="18" Background="{StaticResource BlackTertiaryBrush}" Margin="0,0,8,0" Cursor="Hand">
+                                <Viewbox Width="16" Height="16">
+                                    <Path Data="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" Stroke="White" StrokeThickness="1.5" Fill="Transparent"/>
+                                </Viewbox>
+                            </Border>
+                            <Border Width="36" Height="36" CornerRadius="18" Background="{StaticResource BlackTertiaryBrush}" Margin="0,0,8,0" Cursor="Hand">
+                                <Viewbox Width="16" Height="16">
+                                    <Path Data="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2z" Stroke="White" StrokeThickness="1.5" Fill="Transparent"/>
+                                </Viewbox>
+                            </Border>
+                            <Border Width="36" Height="36" CornerRadius="18" Background="{StaticResource BlackTertiaryBrush}" Cursor="Hand">
+                                <Viewbox Width="16" Height="16">
+                                    <Path Data="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" Stroke="White" StrokeThickness="1.5" Fill="Transparent"/>
+                                </Viewbox>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Payment Methods -->
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="PAYMENT METHODS" 
+                                   FontSize="14" 
+                                   FontWeight="Bold" 
+                                   Foreground="White" 
+                                   Margin="0,0,0,20"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Viewbox Width="18" Height="18" Margin="0,0,10,0">
+                                <Path Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M2 10h20" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                            </Viewbox>
+                            <TextBlock Text="Credit/Debit Cards" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Viewbox Width="18" Height="18" Margin="0,0,10,0">
+                                <Path Data="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z M8 12h8" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                            </Viewbox>
+                            <TextBlock Text="PayPal" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Width="18" Height="18" Margin="0,0,10,0">
+                                <Path Data="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                            </Viewbox>
+                            <TextBlock Text="Cash on Delivery" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Quick Links -->
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="QUICK LINKS" 
+                                   FontSize="14" 
+                                   FontWeight="Bold" 
+                                   Foreground="White" 
+                                   Margin="0,0,0,20"/>
+                        <TextBlock Text="New Arrivals" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Special Offers" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Tops" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Bottoms" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Accessories" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Full Collection" FontSize="13" Foreground="{StaticResource Gray400Brush}" Cursor="Hand"/>
+                    </StackPanel>
+
+                    <!-- Contact -->
+                    <StackPanel Grid.Column="3">
+                        <TextBlock Text="CONTACT" 
+                                   FontSize="14" 
+                                   FontWeight="Bold" 
+                                   Foreground="White" 
+                                   Margin="0,0,0,20"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Viewbox Width="16" Height="16" Margin="0,0,10,0">
+                                <Path Data="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 7a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                            </Viewbox>
+                            <TextBlock Text="Store Address" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Viewbox Width="16" Height="16" Margin="0,0,10,0">
+                                <Path Data="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                            </Viewbox>
+                            <TextBlock Text="+34 900 000 000" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Width="16" Height="16" Margin="0,0,10,0">
+                                <Path Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                            </Viewbox>
+                            <TextBlock Text="info@holocrew.com" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Footer bottom bar -->
+                <Border BorderBrush="{StaticResource Gray800Brush}" BorderThickness="0,1,0,0" Padding="0,25,0,0">
+                    <Grid>
+                        <!-- Bottom info bar -->
+                        <UniformGrid Columns="3" Margin="0,0,0,25">
+                            <StackPanel>
+                                <TextBlock Text="FAST SHIPPING" FontSize="13" FontWeight="Bold" Foreground="White" Margin="0,0,0,5"/>
+                                <TextBlock Text="24-48h delivery in Spain. Worldwide shipping." FontSize="12" Foreground="{StaticResource Gray500Brush}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="RETURNS" FontSize="13" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                                <TextBlock Text="14 days free returns. Easy and hassle-free." FontSize="12" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Right">
+                                <TextBlock Text="SECURITY" FontSize="13" FontWeight="Bold" Foreground="White" HorizontalAlignment="Right" Margin="0,0,0,5"/>
+                                <TextBlock Text="100% secure checkout with SSL encryption." FontSize="12" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Right" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </Grid>
+                </Border>
+
+                <!-- Copyright -->
+                <Border BorderBrush="{StaticResource Gray800Brush}" BorderThickness="0,1,0,0" Padding="0,20,0,0">
+                    <Grid>
+                        <TextBlock Text="© 2025 HoloCrew. All rights reserved." 
+                                   FontSize="12" 
+                                   Foreground="{StaticResource Gray500Brush}"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="Terms &amp; Conditions" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>
+                            <TextBlock Text="Privacy Policy" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>
+                            <TextBlock Text="Cookie Policy" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>
+                            <TextBlock Text="Legal Notice" FontSize="12" Foreground="{StaticResource Gray500Brush}" Cursor="Hand"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
             </StackPanel>
         </Border>
 

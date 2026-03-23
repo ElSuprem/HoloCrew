@@ -22,22 +22,22 @@ namespace HoloCrew.ViewModels
         private string _currentUserName = "Invitado";
 
         [ObservableProperty]
-        private string _currentUserEmail = "No has iniciado sesión";
+        private string _currentUserEmail = "Not signed in";
 
         // APARIENCIA
         [ObservableProperty]
         private bool _isDarkMode;
 
         [ObservableProperty]
-        private string _selectedLanguage = "Español";
+        private string _selectedLanguage = "Spanish";
 
         public ObservableCollection<string> AvailableLanguages { get; } = new()
         {
-            "Español",
+            "Spanish",
             "English",
-            "Français",
-            "Deutsch",
-            "Italiano"
+            "French",
+            "German",
+            "Italian"
         };
 
         // NOTIFICACIONES
@@ -88,7 +88,7 @@ namespace HoloCrew.ViewModels
             _navigationService = navigationService;
             _settingsService = settingsService;
 
-            Title = "Configuración";
+            Title = "Settings";
 
             LoadSettings();
             UpdateAuthenticationState();
@@ -139,7 +139,7 @@ namespace HoloCrew.ViewModels
                 _navigationService.NavigateTo<LoginViewModel>();
                 return;
             }
-            System.Diagnostics.Debug.WriteLine("🔒 Cambiar contraseña");
+            System.Diagnostics.Debug.WriteLine("Change password");
         }
 
         [RelayCommand]
@@ -155,7 +155,7 @@ namespace HoloCrew.ViewModels
         private void DeleteAccount()
         {
             if (!IsUserLoggedIn) return;
-            System.Diagnostics.Debug.WriteLine("⚠️ Eliminar cuenta");
+            System.Diagnostics.Debug.WriteLine("Delete account");
         }
 
         [RelayCommand]
@@ -166,7 +166,7 @@ namespace HoloCrew.ViewModels
                 _navigationService.NavigateTo<LoginViewModel>();
                 return;
             }
-            System.Diagnostics.Debug.WriteLine("📥 Exportar datos");
+            System.Diagnostics.Debug.WriteLine("Export data");
         }
 
         // Política de Privacidad
@@ -224,7 +224,7 @@ namespace HoloCrew.ViewModels
             else
             {
                 CurrentUserName = "Invitado";
-                CurrentUserEmail = "No has iniciado sesión";
+                CurrentUserEmail = "Not signed in";
             }
         }
 

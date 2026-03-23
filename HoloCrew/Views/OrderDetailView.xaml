@@ -59,7 +59,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <Border Grid.Column="0" Background="{StaticResource Gray100Brush}" Width="80" Height="80" Margin="0,0,20,0">
-                                            <TextBlock Text="📷" FontSize="24" Opacity="0.3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBlock Text="" FontSize="24" Opacity="0.3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         </Border>
 
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -74,7 +74,7 @@
                                             </TextBlock>
                                         </StackPanel>
 
-                                        <TextBlock Grid.Column="2" Text="{Binding TotalPrice, StringFormat='€{0:N2}'}" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding TotalPrice, StringFormat='{}{0:N2}€'}" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -185,7 +185,7 @@
 
                             <Grid Margin="0,0,0,12">
                                 <TextBlock Text="Subtotal" FontSize="14" Foreground="{StaticResource Gray600Brush}"/>
-                                <TextBlock Text="{Binding Subtotal, StringFormat='€{0:N2}'}" FontSize="14" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding Subtotal, StringFormat='{}{0:N2}€'}" FontSize="14" HorizontalAlignment="Right"/>
                             </Grid>
 
                             <Grid Margin="0,0,0,12">
@@ -193,7 +193,7 @@
                                 <TextBlock HorizontalAlignment="Right" FontSize="14">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="{Binding ShippingCost, StringFormat='€{0:N2}'}"/>
+                                            <Setter Property="Text" Value="{Binding ShippingCost, StringFormat='{}{0:N2}€'}"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ShippingCost}" Value="0">
                                                     <Setter Property="Text" Value="FREE"/>
@@ -215,7 +215,7 @@
 
                             <Grid>
                                 <TextBlock Text="TOTAL" FontSize="18" FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Total, StringFormat='€{0:N2}'}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding Total, StringFormat='{}{0:N2}€'}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right"/>
                             </Grid>
                         </StackPanel>
                     </Border>
