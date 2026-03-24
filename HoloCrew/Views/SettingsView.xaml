@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Grid>
         <Grid>
@@ -16,13 +16,14 @@
             </Grid.ColumnDefinitions>
 
             <!-- LEFT SIDEBAR -->
-            <Border Grid.Column="0" Background="{StaticResource BlackPrimaryBrush}" Padding="30,50,30,40">
+            <!-- SIDEBAR: Always dark -->
+            <Border Grid.Column="0" Background="#0A0A0A" Padding="30,50,30,40">
                 <StackPanel>
                     <TextBlock Text="SETTINGS" FontSize="24" FontWeight="Black" Foreground="White" Margin="0,0,0,8"/>
-                    <TextBlock Text="Manage your preferences" FontSize="13" Foreground="{StaticResource Gray500Brush}" Margin="0,0,0,40"/>
+                    <TextBlock Text="Manage your preferences" FontSize="13" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,0,40"/>
 
                     <!-- User card -->
-                    <Border Background="{StaticResource BlackSecondaryBrush}" Padding="18,15" Margin="0,0,0,35" Cursor="Hand">
+                    <Border Background="#1A1A1A" Padding="18,15" Margin="0,0,0,35" Cursor="Hand">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToProfileCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
@@ -32,32 +33,32 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Border Width="36" Height="36" Background="{StaticResource BlackTertiaryBrush}" CornerRadius="18">
+                            <Border Width="36" Height="36" Background="#2A2A2A" CornerRadius="18">
                                 <Viewbox Width="16" Height="16">
                                     <Path Data="M20 21V19C20 16.79 18.21 15 16 15H8C5.79 15 4 16.79 4 19V21M16 7C16 9.21 14.21 11 12 11C9.79 11 8 9.21 8 7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7Z" 
-                                          Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                          Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                                 </Viewbox>
                             </Border>
                             <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding CurrentUserName}" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
-                                <TextBlock Text="{Binding CurrentUserEmail}" FontSize="11" Foreground="{StaticResource Gray500Brush}" Margin="0,2,0,0"/>
+                                <TextBlock Text="{Binding CurrentUserEmail}" FontSize="11" Foreground="{DynamicResource Gray500Brush}" Margin="0,2,0,0"/>
                             </StackPanel>
-                            <TextBlock Grid.Column="2" Text="›" FontSize="18" Foreground="{StaticResource Gray500Brush}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="›" FontSize="18" Foreground="{DynamicResource Gray500Brush}" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
 
-                    <TextBlock Text="GENERAL" FontSize="10" FontWeight="Bold" Foreground="{StaticResource Gray600Brush}" Margin="5,0,0,12"/>
-                    <TextBlock Text="Appearance" FontSize="14" Foreground="{StaticResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
-                    <TextBlock Text="Notifications" FontSize="14" Foreground="{StaticResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
+                    <TextBlock Text="GENERAL" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource Gray600Brush}" Margin="5,0,0,12"/>
+                    <TextBlock Text="Appearance" FontSize="14" Foreground="{DynamicResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
+                    <TextBlock Text="Notifications" FontSize="14" Foreground="{DynamicResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
 
-                    <TextBlock Text="SECURITY" FontSize="10" FontWeight="Bold" Foreground="{StaticResource Gray600Brush}" Margin="5,25,0,12"/>
-                    <TextBlock Text="Privacy &amp; Security" FontSize="14" Foreground="{StaticResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
-                    <TextBlock Text="Account" FontSize="14" Foreground="{StaticResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
+                    <TextBlock Text="SECURITY" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource Gray600Brush}" Margin="5,25,0,12"/>
+                    <TextBlock Text="Privacy &amp; Security" FontSize="14" Foreground="{DynamicResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
+                    <TextBlock Text="Account" FontSize="14" Foreground="{DynamicResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
 
-                    <TextBlock Text="SUPPORT" FontSize="10" FontWeight="Bold" Foreground="{StaticResource Gray600Brush}" Margin="5,25,0,12"/>
-                    <TextBlock Text="Help &amp; Legal" FontSize="14" Foreground="{StaticResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
+                    <TextBlock Text="SUPPORT" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource Gray600Brush}" Margin="5,25,0,12"/>
+                    <TextBlock Text="Help &amp; Legal" FontSize="14" Foreground="{DynamicResource Gray300Brush}" Margin="5,0,0,0" Padding="0,10" Cursor="Hand"/>
 
-                    <Border Height="1" Background="{StaticResource BlackTertiaryBrush}" Margin="0,30,0,20"/>
+                    <Border Height="1" Background="#2A2A2A" Margin="0,30,0,20"/>
 
                     <Button Command="{Binding LogoutCommand}" Cursor="Hand" HorizontalAlignment="Stretch">
                         <Button.Template>
@@ -67,7 +68,7 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="bg" Property="Background" Value="{StaticResource BlackSecondaryBrush}"/>
+                                        <Setter TargetName="bg" Property="Background" Value="#1A1A1A"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -77,37 +78,37 @@
             </Border>
 
             <!-- RIGHT CONTENT -->
-            <Border Grid.Column="1" Background="{StaticResource WhitePrimaryBrush}" Padding="60,50,60,80">
+            <Border Grid.Column="1" Background="{DynamicResource WhitePrimaryBrush}" Padding="60,50,60,80">
                 <StackPanel MaxWidth="700">
 
                     <!-- APPEARANCE -->
-                    <TextBlock Text="APPEARANCE" FontSize="12" FontWeight="Bold" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,20"/>
-                    <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
+                    <TextBlock Text="APPEARANCE" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,0,0,20"/>
+                    <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
                         <Grid>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Dark Mode" FontSize="15" FontWeight="SemiBold"/>
-                                <TextBlock Text="Reduce screen brightness for comfortable viewing" FontSize="13" Foreground="{StaticResource Gray500Brush}" Margin="0,4,0,0"/>
+                                <TextBlock Text="Reduce screen brightness for comfortable viewing" FontSize="13" Foreground="{DynamicResource Gray500Brush}" Margin="0,4,0,0"/>
                             </StackPanel>
                             <CheckBox IsChecked="{Binding IsDarkMode}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/>
                         </Grid>
                     </Border>
-                    <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
+                    <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
                         <Grid>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Language" FontSize="15" FontWeight="SemiBold"/>
-                                <TextBlock Text="Select your preferred language" FontSize="13" Foreground="{StaticResource Gray500Brush}" Margin="0,4,0,0"/>
+                                <TextBlock Text="Select your preferred language" FontSize="13" Foreground="{DynamicResource Gray500Brush}" Margin="0,4,0,0"/>
                             </StackPanel>
                             <ComboBox ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" Width="180" Height="38" FontSize="14" VerticalContentAlignment="Center" Padding="12,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
 
                     <!-- NOTIFICATIONS -->
-                    <TextBlock Text="NOTIFICATIONS" FontSize="12" FontWeight="Bold" Foreground="{StaticResource Gray400Brush}" Margin="0,45,0,20"/>
-                    <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
+                    <TextBlock Text="NOTIFICATIONS" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,45,0,20"/>
+                    <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
                         <Grid>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Enable notifications" FontSize="15" FontWeight="SemiBold"/>
-                                <TextBlock Text="Receive important updates and alerts" FontSize="13" Foreground="{StaticResource Gray500Brush}" Margin="0,4,0,0"/>
+                                <TextBlock Text="Receive important updates and alerts" FontSize="13" Foreground="{DynamicResource Gray500Brush}" Margin="0,4,0,0"/>
                             </StackPanel>
                             <CheckBox IsChecked="{Binding NotificationsEnabled}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/>
                         </Grid>
@@ -118,13 +119,13 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Margin="0,0,20,0">
-                            <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,14">
+                            <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,14">
                                 <Grid>
                                     <TextBlock Text="Email notifications" FontSize="14" VerticalAlignment="Center"/>
                                     <CheckBox IsChecked="{Binding EmailNotifications}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/>
                                 </Grid>
                             </Border>
-                            <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,14">
+                            <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,14">
                                 <Grid>
                                     <TextBlock Text="Push notifications" FontSize="14" VerticalAlignment="Center"/>
                                     <CheckBox IsChecked="{Binding PushNotifications}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/>
@@ -132,13 +133,13 @@
                             </Border>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Margin="20,0,0,0">
-                            <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,14">
+                            <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,14">
                                 <Grid>
                                     <TextBlock Text="Order updates" FontSize="14" VerticalAlignment="Center"/>
                                     <CheckBox IsChecked="{Binding OrderUpdates}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/>
                                 </Grid>
                             </Border>
-                            <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,14">
+                            <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,14">
                                 <Grid>
                                     <TextBlock Text="Promotional emails" FontSize="14" VerticalAlignment="Center"/>
                                     <CheckBox IsChecked="{Binding PromotionalEmails}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/>
@@ -148,20 +149,20 @@
                     </Grid>
 
                     <!-- PRIVACY & SECURITY -->
-                    <TextBlock Text="PRIVACY &amp; SECURITY" FontSize="12" FontWeight="Bold" Foreground="{StaticResource Gray400Brush}" Margin="0,45,0,20"/>
-                    <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
+                    <TextBlock Text="PRIVACY &amp; SECURITY" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,45,0,20"/>
+                    <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
                         <Grid>
                             <TextBlock Text="Data collection" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
                             <CheckBox IsChecked="{Binding DataCollectionEnabled}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/>
                         </Grid>
                     </Border>
-                    <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
+                    <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
                         <Grid>
                             <TextBlock Text="Personalized ads" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
                             <CheckBox IsChecked="{Binding PersonalizedAds}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/>
                         </Grid>
                     </Border>
-                    <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
+                    <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
                         <Grid>
                             <TextBlock Text="Share data with partners" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
                             <CheckBox IsChecked="{Binding ShareDataWithPartners}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/>
@@ -169,14 +170,14 @@
                     </Border>
 
                     <!-- ACCOUNT -->
-                    <TextBlock Text="ACCOUNT" FontSize="12" FontWeight="Bold" Foreground="{StaticResource Gray400Brush}" Margin="0,45,0,20"/>
+                    <TextBlock Text="ACCOUNT" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,45,0,20"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="15"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" BorderBrush="{StaticResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
+                        <Border Grid.Column="0" BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
                             <Border.InputBindings>
                                 <MouseBinding Command="{Binding ChangePasswordCommand}" MouseAction="LeftClick"/>
                             </Border.InputBindings>
@@ -184,7 +185,7 @@
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource Gray50Brush}"/>
+                                            <Setter Property="Background" Value="{DynamicResource Gray50Brush}"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -192,12 +193,12 @@
                             <Grid>
                                 <StackPanel>
                                     <TextBlock Text="Change Password" FontSize="14" FontWeight="SemiBold"/>
-                                    <TextBlock Text="Update your password" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,4,0,0"/>
+                                    <TextBlock Text="Update your password" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="0,4,0,0"/>
                                 </StackPanel>
-                                <TextBlock Text="›" FontSize="20" Foreground="{StaticResource Gray400Brush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBlock Text="›" FontSize="20" Foreground="{DynamicResource Gray400Brush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
-                        <Border Grid.Column="2" BorderBrush="{StaticResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
+                        <Border Grid.Column="2" BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
                             <Border.InputBindings>
                                 <MouseBinding Command="{Binding ExportDataCommand}" MouseAction="LeftClick"/>
                             </Border.InputBindings>
@@ -205,7 +206,7 @@
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource Gray50Brush}"/>
+                                            <Setter Property="Background" Value="{DynamicResource Gray50Brush}"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -213,9 +214,9 @@
                             <Grid>
                                 <StackPanel>
                                     <TextBlock Text="Export My Data" FontSize="14" FontWeight="SemiBold"/>
-                                    <TextBlock Text="Download a copy of your data" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,4,0,0"/>
+                                    <TextBlock Text="Download a copy of your data" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="0,4,0,0"/>
                                 </StackPanel>
-                                <TextBlock Text="›" FontSize="20" Foreground="{StaticResource Gray400Brush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBlock Text="›" FontSize="20" Foreground="{DynamicResource Gray400Brush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
                     </Grid>
@@ -233,7 +234,7 @@
                     </Border>
 
                     <!-- HELP & LEGAL -->
-                    <TextBlock Text="HELP &amp; LEGAL" FontSize="12" FontWeight="Bold" Foreground="{StaticResource Gray400Brush}" Margin="0,45,0,20"/>
+                    <TextBlock Text="HELP &amp; LEGAL" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,45,0,20"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -242,7 +243,7 @@
                             <ColumnDefinition Width="15"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" BorderBrush="{StaticResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
+                        <Border Grid.Column="0" BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
                             <Border.InputBindings>
                                 <MouseBinding Command="{Binding ViewPrivacyPolicyCommand}" MouseAction="LeftClick"/>
                             </Border.InputBindings>
@@ -250,14 +251,14 @@
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource Gray50Brush}"/>
+                                            <Setter Property="Background" Value="{DynamicResource Gray50Brush}"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
                             <TextBlock Text="Privacy Policy" FontSize="14" FontWeight="SemiBold"/>
                         </Border>
-                        <Border Grid.Column="2" BorderBrush="{StaticResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
+                        <Border Grid.Column="2" BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
                             <Border.InputBindings>
                                 <MouseBinding Command="{Binding ViewTermsOfServiceCommand}" MouseAction="LeftClick"/>
                             </Border.InputBindings>
@@ -265,14 +266,14 @@
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource Gray50Brush}"/>
+                                            <Setter Property="Background" Value="{DynamicResource Gray50Brush}"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
                             <TextBlock Text="Terms of Service" FontSize="14" FontWeight="SemiBold"/>
                         </Border>
-                        <Border Grid.Column="4" BorderBrush="{StaticResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
+                        <Border Grid.Column="4" BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="1" Padding="20,18" Cursor="Hand">
                             <Border.InputBindings>
                                 <MouseBinding Command="{Binding ContactSupportCommand}" MouseAction="LeftClick"/>
                             </Border.InputBindings>
@@ -280,7 +281,7 @@
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource Gray50Brush}"/>
+                                            <Setter Property="Background" Value="{DynamicResource Gray50Brush}"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -289,7 +290,7 @@
                         </Border>
                     </Grid>
 
-                    <TextBlock Text="HoloCrew v1.0.0" FontSize="12" Foreground="{StaticResource Gray400Brush}" HorizontalAlignment="Center" Margin="0,45,0,0"/>
+                    <TextBlock Text="HoloCrew v1.0.0" FontSize="12" Foreground="{DynamicResource Gray400Brush}" HorizontalAlignment="Center" Margin="0,45,0,0"/>
                 </StackPanel>
             </Border>
         </Grid>
@@ -301,7 +302,7 @@
                     <MouseBinding MouseAction="LeftClick" Command="{Binding ClosePrivacyPolicyCommand}"/>
                 </Border.InputBindings>
             </Border>
-            <Border Background="{StaticResource WhitePrimaryBrush}" MaxWidth="650" MaxHeight="550" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="40,35">
+            <Border Background="{DynamicResource WhitePrimaryBrush}" MaxWidth="650" MaxHeight="550" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="40,35">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Opacity="0.2" BlurRadius="30" ShadowDepth="5"/>
                 </Border.Effect>
@@ -318,22 +319,22 @@
                                 <MouseBinding MouseAction="LeftClick" Command="{Binding ClosePrivacyPolicyCommand}"/>
                             </Border.InputBindings>
                             <Viewbox Width="14" Height="14">
-                                <Path Data="M18 6L6 18M6 6L18 18" Stroke="{StaticResource Gray500Brush}" StrokeThickness="2.5"/>
+                                <Path Data="M18 6L6 18M6 6L18 18" Stroke="{DynamicResource Gray500Brush}" StrokeThickness="2.5"/>
                             </Viewbox>
                         </Border>
                     </Grid>
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                         <StackPanel>
                             <TextBlock Text="1. Information We Collect" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="We collect information you provide directly, such as your name, email, and payment data when you make a purchase." TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,20"/>
+                            <TextBlock Text="We collect information you provide directly, such as your name, email, and payment data when you make a purchase." TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,20"/>
                             <TextBlock Text="2. Use of Information" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="We use your information to process orders, improve our services, and send you account-related communications." TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,20"/>
+                            <TextBlock Text="We use your information to process orders, improve our services, and send you account-related communications." TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,20"/>
                             <TextBlock Text="3. Data Protection" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="We implement technical and organizational security measures to protect your personal data." TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,20"/>
+                            <TextBlock Text="We implement technical and organizational security measures to protect your personal data." TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,20"/>
                             <TextBlock Text="4. Your Rights" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="You have the right to access, rectify, or delete your personal data at any time from your account settings." TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,20"/>
+                            <TextBlock Text="You have the right to access, rectify, or delete your personal data at any time from your account settings." TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,20"/>
                             <TextBlock Text="5. Contact" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="For any privacy inquiries, contact us at privacy@holocrew.com" TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}"/>
+                            <TextBlock Text="For any privacy inquiries, contact us at privacy@holocrew.com" TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}"/>
                         </StackPanel>
                     </ScrollViewer>
                     <Button Grid.Row="2" Content="GOT IT" Style="{StaticResource PrimaryButton}" Padding="40,14" HorizontalAlignment="Right" Margin="0,20,0,0" Command="{Binding ClosePrivacyPolicyCommand}"/>
@@ -348,7 +349,7 @@
                     <MouseBinding MouseAction="LeftClick" Command="{Binding CloseTermsOfServiceCommand}"/>
                 </Border.InputBindings>
             </Border>
-            <Border Background="{StaticResource WhitePrimaryBrush}" MaxWidth="650" MaxHeight="550" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="40,35">
+            <Border Background="{DynamicResource WhitePrimaryBrush}" MaxWidth="650" MaxHeight="550" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="40,35">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Opacity="0.2" BlurRadius="30" ShadowDepth="5"/>
                 </Border.Effect>
@@ -365,24 +366,24 @@
                                 <MouseBinding MouseAction="LeftClick" Command="{Binding CloseTermsOfServiceCommand}"/>
                             </Border.InputBindings>
                             <Viewbox Width="14" Height="14">
-                                <Path Data="M18 6L6 18M6 6L18 18" Stroke="{StaticResource Gray500Brush}" StrokeThickness="2.5"/>
+                                <Path Data="M18 6L6 18M6 6L18 18" Stroke="{DynamicResource Gray500Brush}" StrokeThickness="2.5"/>
                             </Viewbox>
                         </Border>
                     </Grid>
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                         <StackPanel>
                             <TextBlock Text="1. Acceptance of Terms" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="By using HoloCrew, you accept these terms of service. If you disagree, do not use our services." TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,20"/>
+                            <TextBlock Text="By using HoloCrew, you accept these terms of service. If you disagree, do not use our services." TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,20"/>
                             <TextBlock Text="2. Use of Service" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="You agree to use our service legally and respectfully. Fraudulent use is not permitted." TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,20"/>
+                            <TextBlock Text="You agree to use our service legally and respectfully. Fraudulent use is not permitted." TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,20"/>
                             <TextBlock Text="3. Purchases and Payments" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="All prices are in euros and include applicable taxes. Payments are processed securely." TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,20"/>
+                            <TextBlock Text="All prices are in euros and include applicable taxes. Payments are processed securely." TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,20"/>
                             <TextBlock Text="4. Returns" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="We accept returns within 30 days of purchase, provided the product is in its original condition." TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,20"/>
+                            <TextBlock Text="We accept returns within 30 days of purchase, provided the product is in its original condition." TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,20"/>
                             <TextBlock Text="5. Intellectual Property" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="All HoloCrew content is protected by copyright." TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,20"/>
+                            <TextBlock Text="All HoloCrew content is protected by copyright." TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,20"/>
                             <TextBlock Text="6. Contact" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <TextBlock Text="For legal inquiries, write to us at legal@holocrew.com" TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource Gray600Brush}"/>
+                            <TextBlock Text="For legal inquiries, write to us at legal@holocrew.com" TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource Gray600Brush}"/>
                         </StackPanel>
                     </ScrollViewer>
                     <Button Grid.Row="2" Content="GOT IT" Style="{StaticResource PrimaryButton}" Padding="40,14" HorizontalAlignment="Right" Margin="0,20,0,0" Command="{Binding CloseTermsOfServiceCommand}"/>
@@ -397,7 +398,7 @@
                     <MouseBinding MouseAction="LeftClick" Command="{Binding CloseContactSupportCommand}"/>
                 </Border.InputBindings>
             </Border>
-            <Border Background="{StaticResource WhitePrimaryBrush}" MaxWidth="500" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="40,35">
+            <Border Background="{DynamicResource WhitePrimaryBrush}" MaxWidth="500" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="40,35">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Opacity="0.2" BlurRadius="30" ShadowDepth="5"/>
                 </Border.Effect>
@@ -409,27 +410,27 @@
                                 <MouseBinding MouseAction="LeftClick" Command="{Binding CloseContactSupportCommand}"/>
                             </Border.InputBindings>
                             <Viewbox Width="14" Height="14">
-                                <Path Data="M18 6L6 18M6 6L18 18" Stroke="{StaticResource Gray500Brush}" StrokeThickness="2.5"/>
+                                <Path Data="M18 6L6 18M6 6L18 18" Stroke="{DynamicResource Gray500Brush}" StrokeThickness="2.5"/>
                             </Viewbox>
                         </Border>
                     </Grid>
-                    <TextBlock Text="Need help? We're here for you." FontSize="14" Foreground="{StaticResource Gray600Brush}" Margin="0,0,0,25"/>
-                    <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,15">
+                    <TextBlock Text="Need help? We're here for you." FontSize="14" Foreground="{DynamicResource Gray600Brush}" Margin="0,0,0,25"/>
+                    <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,15">
                         <Grid>
                             <TextBlock Text="Email" FontSize="14" FontWeight="SemiBold"/>
-                            <TextBlock Text="support@holocrew.com" FontSize="14" Foreground="{StaticResource Gray600Brush}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="support@holocrew.com" FontSize="14" Foreground="{DynamicResource Gray600Brush}" HorizontalAlignment="Right"/>
                         </Grid>
                     </Border>
-                    <Border BorderBrush="{StaticResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,15">
+                    <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,15">
                         <Grid>
                             <TextBlock Text="Phone" FontSize="14" FontWeight="SemiBold"/>
-                            <TextBlock Text="+34 900 123 456" FontSize="14" Foreground="{StaticResource Gray600Brush}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="+34 900 123 456" FontSize="14" Foreground="{DynamicResource Gray600Brush}" HorizontalAlignment="Right"/>
                         </Grid>
                     </Border>
                     <Border Padding="0,15">
                         <Grid>
                             <TextBlock Text="Business hours" FontSize="14" FontWeight="SemiBold"/>
-                            <TextBlock Text="Mon-Fri, 9:00 - 18:00" FontSize="14" Foreground="{StaticResource Gray600Brush}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Mon-Fri, 9:00 - 18:00" FontSize="14" Foreground="{DynamicResource Gray600Brush}" HorizontalAlignment="Right"/>
                         </Grid>
                     </Border>
                     <Button Content="CLOSE" Style="{StaticResource OutlineButton}" Padding="40,14" HorizontalAlignment="Right" Margin="0,20,0,0" Command="{Binding CloseContactSupportCommand}"/>

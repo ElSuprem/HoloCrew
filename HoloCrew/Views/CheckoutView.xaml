@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="1000" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -44,7 +44,7 @@
                             <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
                                     </Style>
                                 </Border.Style>
                                 <TextBlock Text="1" Foreground="White" FontSize="14" FontWeight="Bold"
@@ -54,11 +54,11 @@
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="FontWeight" Value="Normal"/>
-                                        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsStep1}" Value="True">
                                                 <Setter Property="FontWeight" Value="SemiBold"/>
-                                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -69,10 +69,10 @@
                             <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="{StaticResource Gray300Brush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource Gray300Brush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsStep1}" Value="False">
-                                                <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                                <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -83,10 +83,10 @@
                             <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="{StaticResource Gray300Brush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource Gray300Brush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsStep1}" Value="False">
-                                                <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                                <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -98,11 +98,11 @@
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="FontWeight" Value="Normal"/>
-                                        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsStep2}" Value="True">
                                                 <Setter Property="FontWeight" Value="SemiBold"/>
-                                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -113,10 +113,10 @@
                             <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="{StaticResource Gray300Brush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource Gray300Brush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsStep3}" Value="True">
-                                                <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                                <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -127,10 +127,10 @@
                             <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="{StaticResource Gray300Brush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource Gray300Brush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsStep3}" Value="True">
-                                                <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                                <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -142,11 +142,11 @@
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="FontWeight" Value="Normal"/>
-                                        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsStep3}" Value="True">
                                                 <Setter Property="FontWeight" Value="SemiBold"/>
-                                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -158,8 +158,8 @@
                     <!-- ============================================ -->
                     <!-- STEP 1: INFORMACIÓN DE ENVÍO -->
                     <!-- ============================================ -->
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
+                    <Border Background="{DynamicResource WhitePrimaryBrush}"
+                            BorderBrush="{DynamicResource BorderDefault}"
                             BorderThickness="1"
                             Padding="35,30"
                             Margin="0,0,0,25"
@@ -181,7 +181,7 @@
                                 <ItemsControl ItemsSource="{Binding SavedAddresses}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                            <Border BorderBrush="{DynamicResource BorderDefault}"
                                                     BorderThickness="1"
                                                     Padding="15"
                                                     Margin="0,0,0,10"
@@ -195,7 +195,7 @@
                                                     <Style TargetType="Border">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsDefault}" Value="True">
-                                                                <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                                                <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
                                                                 <Setter Property="BorderThickness" Value="2"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
@@ -203,7 +203,7 @@
                                                 </Border.Style>
                                                 <StackPanel>
                                                     <TextBlock Text="{Binding Label}" FontWeight="SemiBold" FontSize="14"/>
-                                                    <TextBlock FontSize="13" Foreground="{StaticResource TextSecondary}" Margin="0,5,0,0">
+                                                    <TextBlock FontSize="13" Foreground="{DynamicResource TextSecondary}" Margin="0,5,0,0">
                                                         <Run Text="{Binding FullName}"/>
                                                         <Run Text=" - "/>
                                                         <Run Text="{Binding AddressLine1}"/>
@@ -237,7 +237,7 @@
                                              VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource Gray300Brush}"
+                                             BorderBrush="{DynamicResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
 
@@ -250,7 +250,7 @@
                                              VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource Gray300Brush}"
+                                             BorderBrush="{DynamicResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
                             </Grid>
@@ -265,7 +265,7 @@
                                          VerticalContentAlignment="Center"
                                          Padding="15,0"
                                          FontSize="14"
-                                         BorderBrush="{StaticResource Gray300Brush}"
+                                         BorderBrush="{DynamicResource Gray300Brush}"
                                          BorderThickness="1"/>
                             </StackPanel>
 
@@ -279,7 +279,7 @@
                                          VerticalContentAlignment="Center"
                                          Padding="15,0"
                                          FontSize="14"
-                                         BorderBrush="{StaticResource Gray300Brush}"
+                                         BorderBrush="{DynamicResource Gray300Brush}"
                                          BorderThickness="1"/>
                             </StackPanel>
 
@@ -300,7 +300,7 @@
                                              VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource Gray300Brush}"
+                                             BorderBrush="{DynamicResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
 
@@ -313,7 +313,7 @@
                                              VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource Gray300Brush}"
+                                             BorderBrush="{DynamicResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
                             </Grid>
@@ -334,7 +334,7 @@
                                               VerticalContentAlignment="Center"
                                               Padding="15,0"
                                               FontSize="14"
-                                              BorderBrush="{StaticResource Gray300Brush}"
+                                              BorderBrush="{DynamicResource Gray300Brush}"
                                               BorderThickness="1"
                                               SelectedValue="{Binding ShippingAddress.Country}"
                                               SelectedValuePath="Content">
@@ -355,7 +355,7 @@
                                              VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource Gray300Brush}"
+                                             BorderBrush="{DynamicResource Gray300Brush}"
                                              BorderThickness="1"/>
                                 </StackPanel>
                             </Grid>
@@ -365,8 +365,8 @@
                     <!-- ============================================ -->
                     <!-- STEP 2: PAYMENT METHOD -->
                     <!-- ============================================ -->
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
+                    <Border Background="{DynamicResource WhitePrimaryBrush}"
+                            BorderBrush="{DynamicResource BorderDefault}"
                             BorderThickness="1"
                             Padding="35,30"
                             Margin="0,0,0,25"
@@ -388,7 +388,7 @@
                                 <ItemsControl ItemsSource="{Binding SavedPaymentMethods}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderBrush="{StaticResource BorderDefault}"
+                                            <Border BorderBrush="{DynamicResource BorderDefault}"
                                                     BorderThickness="1"
                                                     Padding="15"
                                                     Margin="0,0,0,10"
@@ -402,7 +402,7 @@
                                                     <TextBlock Text="" FontSize="20" Margin="0,0,15,0" VerticalAlignment="Center"/>
                                                     <StackPanel>
                                                         <TextBlock Text="{Binding CardNumberMasked}" FontWeight="SemiBold" FontSize="14"/>
-                                                        <TextBlock Text="{Binding ExpirationDate}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                                                        <TextBlock Text="{Binding ExpirationDate}" FontSize="12" Foreground="{DynamicResource TextSecondary}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </Border>
@@ -426,7 +426,7 @@
                                          VerticalContentAlignment="Center"
                                          Padding="15,0"
                                          FontSize="14"
-                                         BorderBrush="{StaticResource Gray300Brush}"
+                                         BorderBrush="{DynamicResource Gray300Brush}"
                                          BorderThickness="1"
                                          MaxLength="19"/>
                             </StackPanel>
@@ -441,7 +441,7 @@
                                          VerticalContentAlignment="Center"
                                          Padding="15,0"
                                          FontSize="14"
-                                         BorderBrush="{StaticResource Gray300Brush}"
+                                         BorderBrush="{DynamicResource Gray300Brush}"
                                          BorderThickness="1"/>
                             </StackPanel>
 
@@ -462,7 +462,7 @@
                                              VerticalContentAlignment="Center"
                                              Padding="15,0"
                                              FontSize="14"
-                                             BorderBrush="{StaticResource Gray300Brush}"
+                                             BorderBrush="{DynamicResource Gray300Brush}"
                                              BorderThickness="1"
                                              MaxLength="5"/>
                                 </StackPanel>
@@ -471,7 +471,7 @@
                                     <TextBlock Text="CVV *" 
                                                Style="{StaticResource BodyMedium}"
                                                Margin="0,0,0,8"/>
-                                    <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="50">
+                                    <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Height="50">
                                         <PasswordBox x:Name="CvvBox"
                                                      BorderThickness="0"
                                                      FontSize="14"
@@ -484,14 +484,14 @@
 
                             <!-- Iconos de tarjetas aceptadas -->
                             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                                <TextBlock Text="We accept:" FontSize="12" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <Border Background="{StaticResource Gray100Brush}" Padding="8,4" Margin="0,0,5,0">
+                                <TextBlock Text="We accept:" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Border Background="{DynamicResource Gray100Brush}" Padding="8,4" Margin="0,0,5,0">
                                     <TextBlock Text="VISA" FontSize="11" FontWeight="Bold"/>
                                 </Border>
-                                <Border Background="{StaticResource Gray100Brush}" Padding="8,4" Margin="0,0,5,0">
+                                <Border Background="{DynamicResource Gray100Brush}" Padding="8,4" Margin="0,0,5,0">
                                     <TextBlock Text="MASTERCARD" FontSize="11" FontWeight="Bold"/>
                                 </Border>
-                                <Border Background="{StaticResource Gray100Brush}" Padding="8,4">
+                                <Border Background="{DynamicResource Gray100Brush}" Padding="8,4">
                                     <TextBlock Text="AMEX" FontSize="11" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
@@ -501,8 +501,8 @@
                     <!-- ============================================ -->
                     <!-- STEP 3: CONFIRMACIÓN -->
                     <!-- ============================================ -->
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
+                    <Border Background="{DynamicResource WhitePrimaryBrush}"
+                            BorderBrush="{DynamicResource BorderDefault}"
                             BorderThickness="1"
                             Padding="35,30"
                             Margin="0,0,0,25"
@@ -516,7 +516,7 @@
                                        Margin="0,0,0,25"/>
 
                             <!-- Shipping summary -->
-                            <Border Background="{StaticResource Gray50Brush}"
+                            <Border Background="{DynamicResource Gray50Brush}"
                                     Padding="20"
                                     Margin="0,0,0,20">
                                 <StackPanel>
@@ -524,7 +524,7 @@
                                         <TextBlock Text="SHIPPING ADDRESS" FontWeight="Bold" FontSize="12"/>
                                         <TextBlock Text="Edit" 
                                                    FontSize="12" 
-                                                   Foreground="{StaticResource AccentBrush}"
+                                                   Foreground="{DynamicResource AccentBrush}"
                                                    HorizontalAlignment="Right"
                                                    Cursor="Hand"
                                                    TextDecorations="Underline">
@@ -534,20 +534,20 @@
                                         </TextBlock>
                                     </Grid>
                                     <TextBlock Text="{Binding ShippingAddress.FullName}" FontWeight="SemiBold"/>
-                                    <TextBlock Text="{Binding ShippingAddress.AddressLine1}" Foreground="{StaticResource TextSecondary}"/>
-                                    <TextBlock Foreground="{StaticResource TextSecondary}">
+                                    <TextBlock Text="{Binding ShippingAddress.AddressLine1}" Foreground="{DynamicResource TextSecondary}"/>
+                                    <TextBlock Foreground="{DynamicResource TextSecondary}">
                                         <Run Text="{Binding ShippingAddress.PostalCode}"/>
                                         <Run Text=" "/>
                                         <Run Text="{Binding ShippingAddress.City}"/>
                                         <Run Text=", "/>
                                         <Run Text="{Binding ShippingAddress.Country}"/>
                                     </TextBlock>
-                                    <TextBlock Text="{Binding ShippingAddress.PhoneNumber}" Foreground="{StaticResource TextSecondary}" Margin="0,5,0,0"/>
+                                    <TextBlock Text="{Binding ShippingAddress.PhoneNumber}" Foreground="{DynamicResource TextSecondary}" Margin="0,5,0,0"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Payment summary -->
-                            <Border Background="{StaticResource Gray50Brush}"
+                            <Border Background="{DynamicResource Gray50Brush}"
                                     Padding="20"
                                     Margin="0,0,0,20">
                                 <StackPanel>
@@ -555,7 +555,7 @@
                                         <TextBlock Text="PAYMENT METHOD" FontWeight="Bold" FontSize="12"/>
                                         <TextBlock Text="Edit" 
                                                    FontSize="12" 
-                                                   Foreground="{StaticResource AccentBrush}"
+                                                   Foreground="{DynamicResource AccentBrush}"
                                                    HorizontalAlignment="Right"
                                                    Cursor="Hand"
                                                    TextDecorations="Underline">
@@ -569,7 +569,7 @@
                                         <StackPanel>
                                             <TextBlock Text="Credit Card" FontWeight="SemiBold"/>
                                             <TextBlock Text="{Binding CardNumber}" 
-                                                       Foreground="{StaticResource TextSecondary}"/>
+                                                       Foreground="{DynamicResource TextSecondary}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
@@ -587,11 +587,11 @@
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Border Grid.Column="0" Background="{StaticResource Gray200Brush}" Width="60" Height="60"/>
+                                            <Border Grid.Column="0" Background="{DynamicResource Gray200Brush}" Width="60" Height="60"/>
 
                                             <StackPanel Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding ProductName}" FontWeight="SemiBold" FontSize="14"/>
-                                                <TextBlock FontSize="12" Foreground="{StaticResource TextSecondary}">
+                                                <TextBlock FontSize="12" Foreground="{DynamicResource TextSecondary}">
                                                     <Run Text="Qty: "/>
                                                     <Run Text="{Binding Quantity}"/>
                                                     <Run Text=" | "/>
@@ -670,7 +670,7 @@
                     </Grid>
 
                     <!-- Indicador de procesamiento -->
-                    <Border Background="{StaticResource BlackPrimaryBrush}"
+                    <Border Background="{DynamicResource BlackPrimaryBrush}"
                             Padding="20"
                             Margin="0,20,0,0"
                             Visibility="{Binding IsProcessing, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -710,7 +710,7 @@
         <!-- ORDER SUMMARY SIDEBAR -->
         <!-- ============================================ -->
         <Border Grid.Column="1" 
-                Background="{StaticResource Gray50Brush}">
+                Background="{DynamicResource Gray50Brush}">
             <ScrollViewer VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled">
                 <Border Padding="40,50,40,80">
@@ -731,8 +731,8 @@
 
                                         <!-- Imagen con badge de cantidad -->
                                         <Grid Grid.Column="0">
-                                            <Border Background="{StaticResource Gray200Brush}" Width="70" Height="70"/>
-                                            <Border Background="{StaticResource BlackPrimaryBrush}"
+                                            <Border Background="{DynamicResource Gray200Brush}" Width="70" Height="70"/>
+                                            <Border Background="{DynamicResource BlackPrimaryBrush}"
                                                     CornerRadius="10"
                                                     Width="20" Height="20"
                                                     HorizontalAlignment="Right"
@@ -753,7 +753,7 @@
                                                        FontWeight="SemiBold"
                                                        FontSize="14"
                                                        TextTrimming="CharacterEllipsis"/>
-                                            <TextBlock FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,3,0,0">
+                                            <TextBlock FontSize="12" Foreground="{DynamicResource TextSecondary}" Margin="0,3,0,0">
                                                 <Run Text="{Binding Size}"/>
                                                 <Run Text=" / "/>
                                                 <Run Text="{Binding Color}"/>
@@ -768,7 +768,7 @@
                         </ItemsControl>
 
                         <!-- Separador -->
-                        <Border BorderBrush="{StaticResource BorderDefault}"
+                        <Border BorderBrush="{DynamicResource BorderDefault}"
                                 BorderThickness="0,1,0,0"
                                 Margin="0,0,0,20"/>
 
@@ -799,7 +799,7 @@
                         </Grid>
 
                         <!-- Total -->
-                        <Border BorderBrush="{StaticResource BorderDefault}"
+                        <Border BorderBrush="{DynamicResource BorderDefault}"
                                 BorderThickness="0,1,0,0"
                                 Padding="0,20,0,0">
                             <Grid>
@@ -814,7 +814,7 @@
                         </Border>
 
                         <!-- Info de seguridad -->
-                        <Border Background="{StaticResource WhitePrimaryBrush}"
+                        <Border Background="{DynamicResource WhitePrimaryBrush}"
                                 Padding="15"
                                 Margin="0,30,0,0">
                             <StackPanel>
@@ -824,7 +824,7 @@
                                 </StackPanel>
                                 <TextBlock Text="Your data is protected with 256-bit SSL encryption."
                                            FontSize="12"
-                                           Foreground="{StaticResource TextSecondary}"
+                                           Foreground="{DynamicResource TextSecondary}"
                                            TextWrapping="Wrap"/>
                             </StackPanel>
                         </Border>
@@ -833,11 +833,11 @@
                         <StackPanel Margin="0,20,0,0">
                             <TextBlock Text="📦 Shipping gratis en pedidos +€50" 
                                        FontSize="12" 
-                                       Foreground="{StaticResource TextSecondary}"
+                                       Foreground="{DynamicResource TextSecondary}"
                                        Margin="0,0,0,8"/>
                             <TextBlock Text="14 days free returns" 
                                        FontSize="12" 
-                                       Foreground="{StaticResource TextSecondary}"/>
+                                       Foreground="{DynamicResource TextSecondary}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

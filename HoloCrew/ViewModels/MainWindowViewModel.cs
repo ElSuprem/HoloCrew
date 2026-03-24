@@ -323,7 +323,7 @@ namespace HoloCrew.ViewModels
             if (IsUserLoggedIn)
             {
                 var user = _authenticationService.GetCurrentUser();
-                CurrentUserName = user?.FullName ?? "Usuario";
+                CurrentUserName = user?.FullName ?? "User";
             }
             else
             {

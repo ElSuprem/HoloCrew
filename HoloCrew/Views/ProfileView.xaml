@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -19,15 +19,15 @@
              SIDEBAR (NEGRO)
              ============================================ -->
         <Border Grid.Column="0" 
-                Background="{StaticResource BlackPrimaryBrush}"
-                BorderBrush="{StaticResource Gray800Brush}"
+                Background="#0A0A0A"
+                BorderBrush="#2E2E2E"
                 BorderThickness="0,0,1,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto"
                           PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <Border Padding="30,40">
                     <StackPanel>
                         <!-- Avatar + User Info -->
-                        <Border Background="{StaticResource BlackSecondaryBrush}"
+                        <Border Background="#1A1A1A"
                                 Padding="25"
                                 Margin="0,0,0,40">
                             <StackPanel HorizontalAlignment="Center">
@@ -35,12 +35,12 @@
                                 <Border Width="90" 
                                         Height="90"
                                         CornerRadius="45"
-                                        Background="{StaticResource RedAccentBrush}"
+                                        Background="{DynamicResource RedAccentBrush}"
                                         Margin="0,0,0,20">
                                     <TextBlock Text="{Binding UserInitials}" 
                                                FontSize="32"
                                                FontWeight="Black"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"
+                                               Foreground="{DynamicResource WhitePrimaryBrush}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                 </Border>
@@ -48,14 +48,14 @@
                                 <!-- User Name -->
                                 <TextBlock Text="{Binding UserFullName}" 
                                            Style="{StaticResource SubtitleLarge}"
-                                           Foreground="{StaticResource WhitePrimaryBrush}"
+                                           Foreground="{DynamicResource WhitePrimaryBrush}"
                                            TextAlignment="Center"
                                            Margin="0,0,0,8"/>
 
                                 <!-- Email -->
                                 <TextBlock Text="{Binding UserEmail}" 
                                            Style="{StaticResource Caption}"
-                                           Foreground="{StaticResource Gray400Brush}"
+                                           Foreground="{DynamicResource Gray400Brush}"
                                            TextAlignment="Center"
                                            TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
@@ -65,12 +65,12 @@
                         <StackPanel>
                             <TextBlock Text="ACCOUNT" 
                                        Style="{StaticResource Caption}"
-                                       Foreground="{StaticResource Gray500Brush}"
+                                       Foreground="{DynamicResource Gray500Brush}"
                                        Margin="0,0,0,15"/>
 
                             <Button Content="Personal Info" 
                                     Style="{StaticResource TextButton}"
-                                    Foreground="{StaticResource WhitePrimaryBrush}"
+                                    Foreground="{DynamicResource WhitePrimaryBrush}"
                                     FontSize="14"
                                     Padding="0,12"
                                     HorizontalAlignment="Left"
@@ -80,7 +80,7 @@
 
                             <Button Content="Addresses" 
                                     Style="{StaticResource TextButton}"
-                                    Foreground="{StaticResource Gray400Brush}"
+                                    Foreground="{DynamicResource Gray400Brush}"
                                     FontSize="14"
                                     Padding="0,12"
                                     HorizontalAlignment="Left"
@@ -90,7 +90,7 @@
 
                             <Button Content="Payment Methods" 
                                     Style="{StaticResource TextButton}"
-                                    Foreground="{StaticResource Gray400Brush}"
+                                    Foreground="{DynamicResource Gray400Brush}"
                                     FontSize="14"
                                     Padding="0,12"
                                     HorizontalAlignment="Left"
@@ -100,7 +100,7 @@
 
                             <Button Content="Order History" 
                                     Style="{StaticResource TextButton}"
-                                    Foreground="{StaticResource Gray400Brush}"
+                                    Foreground="{DynamicResource Gray400Brush}"
                                     FontSize="14"
                                     Padding="0,12"
                                     HorizontalAlignment="Left"
@@ -110,7 +110,7 @@
 
                             <Button Content="Settings" 
                                     Style="{StaticResource TextButton}"
-                                    Foreground="{StaticResource Gray400Brush}"
+                                    Foreground="{DynamicResource Gray400Brush}"
                                     FontSize="14"
                                     Padding="0,12"
                                     HorizontalAlignment="Left"
@@ -119,12 +119,12 @@
                                     Margin="0,0,0,40"/>
 
                             <!-- Logout -->
-                            <Border BorderBrush="{StaticResource ErrorColorBrush}"
+                            <Border BorderBrush="{DynamicResource ErrorColorBrush}"
                                     BorderThickness="2"
                                     Height="50">
                                 <Button Content="LOGOUT" 
                                         Style="{StaticResource TextButton}"
-                                        Foreground="{StaticResource ErrorColorBrush}"
+                                        Foreground="{DynamicResource ErrorColorBrush}"
                                         FontSize="14"
                                         FontWeight="Bold"
                                         Command="{Binding LogoutCommand}"
@@ -152,8 +152,8 @@
                                Margin="0,0,0,40" />
 
                     <!-- Personal Info Card -->
-                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                            BorderBrush="{StaticResource BorderDefault}"
+                    <Border Background="{DynamicResource WhitePrimaryBrush}"
+                            BorderBrush="{DynamicResource BorderDefault}"
                             BorderThickness="1"
                             Padding="40"
                             Margin="0,0,0,40">
@@ -171,7 +171,7 @@
                                                Style="{StaticResource BodyMedium}"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,10"/>
-                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{DynamicResource BorderDefault}"
                                             BorderThickness="2"
                                             Height="50">
                                         <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
@@ -188,7 +188,7 @@
                                                Style="{StaticResource BodyMedium}"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,10"/>
-                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{DynamicResource BorderDefault}"
                                             BorderThickness="2"
                                             Height="50">
                                         <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
@@ -214,7 +214,7 @@
                                                Style="{StaticResource BodyMedium}"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,10"/>
-                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{DynamicResource BorderDefault}"
                                             BorderThickness="2"
                                             Height="50">
                                         <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
@@ -231,7 +231,7 @@
                                                Style="{StaticResource BodyMedium}"
                                                FontWeight="SemiBold"
                                                Margin="0,0,0,10"/>
-                                    <Border BorderBrush="{StaticResource BorderDefault}"
+                                    <Border BorderBrush="{DynamicResource BorderDefault}"
                                             BorderThickness="2"
                                             Height="50">
                                         <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}"
@@ -262,8 +262,8 @@
                     <ItemsControl ItemsSource="{Binding RecentOrders}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="{StaticResource WhitePrimaryBrush}"
-                                        BorderBrush="{StaticResource BorderDefault}"
+                                <Border Background="{DynamicResource WhitePrimaryBrush}"
+                                        BorderBrush="{DynamicResource BorderDefault}"
                                         BorderThickness="1"
                                         Padding="30"
                                         Margin="0,0,0,20"
@@ -291,7 +291,7 @@
                                             </TextBlock>
                                             <TextBlock Text="{Binding OrderDate, StringFormat='MMMM dd, yyyy'}"
                                                        Style="{StaticResource BodySmall}"
-                                                       Foreground="{StaticResource TextSecondary}"
+                                                       Foreground="{DynamicResource TextSecondary}"
                                                        Margin="0,5,0,0"/>
                                         </StackPanel>
 
@@ -300,7 +300,7 @@
                                                     VerticalAlignment="Center"
                                                     Margin="0,0,40,0">
                                             <TextBlock Style="{StaticResource BodySmall}"
-                                                       Foreground="{StaticResource TextSecondary}">
+                                                       Foreground="{DynamicResource TextSecondary}">
                                                 <Run Text="{Binding ItemCount}"/>
                                                 <Run Text=" items"/>
                                             </TextBlock>
@@ -316,13 +316,13 @@
 
                                         <!-- Status Badge -->
                                         <Border Grid.Column="3"
-                                                Background="{StaticResource SuccessColorBrush}"
+                                                Background="{DynamicResource SuccessColorBrush}"
                                                 Padding="15,8"
                                                 VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Status}"
                                                        Style="{StaticResource Caption}"
                                                        FontWeight="Bold"
-                                                       Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                                       Foreground="{DynamicResource WhitePrimaryBrush}"/>
                                         </Border>
                                     </Grid>
                                 </Border>

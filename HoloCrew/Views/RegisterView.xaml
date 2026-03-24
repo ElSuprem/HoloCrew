@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Border Padding="40,30,40,60">
         <Grid>
@@ -23,8 +23,8 @@
             <!-- LEFT: REGISTRATION FORM in white card        -->
             <!-- ============================================ -->
             <Border Grid.Column="0"
-                    Background="{StaticResource WhitePrimaryBrush}"
-                    BorderBrush="{StaticResource Gray200Brush}"
+                    Background="{DynamicResource WhitePrimaryBrush}"
+                    BorderBrush="{DynamicResource Gray200Brush}"
                     BorderThickness="1"
                     Padding="50,40">
                 <StackPanel>
@@ -45,7 +45,7 @@
                                Margin="0,0,0,8"/>
 
                     <TextBlock HorizontalAlignment="Center" Margin="0,0,0,30" FontSize="14">
-                        <Run Text="Create your account and get " Foreground="{StaticResource Gray500Brush}"/>
+                        <Run Text="Create your account and get " Foreground="{DynamicResource Gray500Brush}"/>
                         <Run Text="200 FREE CREDITS" FontWeight="Bold" Foreground="#3B82F6"/>
                     </TextBlock>
 
@@ -64,17 +64,17 @@
 
                     <!-- Full Name -->
                     <TextBlock Text="Full Name" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                    <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="48" Margin="0,0,0,18">
+                    <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Height="48" Margin="0,0,0,18">
                         <Grid>
                             <Viewbox Width="16" Height="16" HorizontalAlignment="Left" Margin="14,0,0,0">
                                 <Path Data="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" 
-                                      Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                      Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                             </Viewbox>
                             <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"
                                      Background="Transparent" BorderThickness="0"
                                      Padding="42,0,15,0" VerticalAlignment="Center"
                                      VerticalContentAlignment="Center" FontSize="14"/>
-                            <TextBlock Text="John Doe" Foreground="{StaticResource Gray400Brush}" FontSize="14" VerticalAlignment="Center" Margin="42,0,0,0" IsHitTestVisible="False">
+                            <TextBlock Text="John Doe" Foreground="{DynamicResource Gray400Brush}" FontSize="14" VerticalAlignment="Center" Margin="42,0,0,0" IsHitTestVisible="False">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -94,17 +94,17 @@
 
                     <!-- Email -->
                     <TextBlock Text="Email Address" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                    <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="48" Margin="0,0,0,18">
+                    <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Height="48" Margin="0,0,0,18">
                         <Grid>
                             <Viewbox Width="16" Height="16" HorizontalAlignment="Left" Margin="14,0,0,0">
                                 <Path Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6" 
-                                      Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                      Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                             </Viewbox>
                             <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                                      Background="Transparent" BorderThickness="0"
                                      Padding="42,0,15,0" VerticalAlignment="Center"
                                      VerticalContentAlignment="Center" FontSize="14"/>
-                            <TextBlock Text="john@example.com" Foreground="{StaticResource Gray400Brush}" FontSize="14" VerticalAlignment="Center" Margin="42,0,0,0" IsHitTestVisible="False">
+                            <TextBlock Text="john@example.com" Foreground="{DynamicResource Gray400Brush}" FontSize="14" VerticalAlignment="Center" Margin="42,0,0,0" IsHitTestVisible="False">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -132,11 +132,11 @@
 
                         <StackPanel Grid.Column="0">
                             <TextBlock Text="Password" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                            <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="48">
+                            <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Height="48">
                                 <Grid>
                                     <Viewbox Width="16" Height="16" HorizontalAlignment="Left" Margin="14,0,0,0">
                                         <Path Data="M19 11H5V21H19V11ZM17 11V7C17 4.24 14.76 2 12 2C9.24 2 7 4.24 7 7V11" 
-                                              Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                              Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                                     </Viewbox>
                                     <PasswordBox x:Name="PasswordBox"
                                                  PasswordChanged="PasswordBox_PasswordChanged"
@@ -149,11 +149,11 @@
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Confirm Password" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                            <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="48">
+                            <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Height="48">
                                 <Grid>
                                     <Viewbox Width="16" Height="16" HorizontalAlignment="Left" Margin="14,0,0,0">
                                         <Path Data="M19 11H5V21H19V11ZM17 11V7C17 4.24 14.76 2 12 2C9.24 2 7 4.24 7 7V11" 
-                                              Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                              Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                                     </Viewbox>
                                     <PasswordBox x:Name="ConfirmPasswordBox"
                                                  PasswordChanged="ConfirmPasswordBox_PasswordChanged"
@@ -165,7 +165,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <TextBlock Text="Minimum 6 characters" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,0,0,20"/>
+                    <TextBlock Text="Minimum 6 characters" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,0,20"/>
 
                     <!-- Terms -->
                     <CheckBox IsChecked="{Binding AcceptTerms}" Margin="0,0,0,25" Cursor="Hand">
@@ -184,7 +184,7 @@
                             Margin="0,0,0,25">
                         <Button.Style>
                             <Style TargetType="Button">
-                                <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                <Setter Property="Background" Value="#0A0A0A"/>
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="BorderThickness" Value="0"/>
                                 <Setter Property="Template">
@@ -195,7 +195,7 @@
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="{StaticResource BlackSecondaryBrush}"/>
+                                                    <Setter TargetName="border" Property="Background" Value="#1A1A1A"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -208,10 +208,10 @@
 
                     <!-- Login link -->
                     <TextBlock HorizontalAlignment="Center" FontSize="14">
-                        <Run Text="Already have an account? " Foreground="{StaticResource Gray500Brush}"/>
+                        <Run Text="Already have an account? " Foreground="{DynamicResource Gray500Brush}"/>
                         <Hyperlink Command="{Binding NavigateToLoginCommand}"
                                    TextDecorations="None"
-                                   Foreground="{StaticResource BlackPrimaryBrush}"
+                                   Foreground="{DynamicResource BlackPrimaryBrush}"
                                    FontWeight="Bold">
                             <Run Text="Sign in here"/>
                         </Hyperlink>
@@ -221,10 +221,10 @@
             </Border>
 
             <!-- ============================================ -->
-            <!-- RIGHT: MEMBER BENEFITS panel (dark)          -->
+            <!-- RIGHT: MEMBER BENEFITS panel (always dark)    -->
             <!-- ============================================ -->
             <Border Grid.Column="2"
-                    Background="{StaticResource BlackPrimaryBrush}"
+                    Background="#0A0A0A"
                     Padding="40,40">
                 <StackPanel>
 
@@ -235,7 +235,7 @@
                                Margin="0,0,0,10"/>
                     <TextBlock Text="Join our exclusive community and enjoy premium benefits" 
                                FontSize="14" 
-                               Foreground="{StaticResource Gray400Brush}"
+                               Foreground="{DynamicResource Gray400Brush}"
                                Margin="0,0,0,35"
                                TextWrapping="Wrap"/>
 
@@ -247,7 +247,7 @@
                             </Viewbox>
                             <TextBlock Text="200 welcome credits" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
                         </StackPanel>
-                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="32,4,0,0"/>
+                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="32,4,0,0"/>
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,12">
@@ -257,7 +257,7 @@
                             </Viewbox>
                             <TextBlock Text="Early access to launches" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
                         </StackPanel>
-                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="32,4,0,0"/>
+                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="32,4,0,0"/>
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,12">
@@ -267,7 +267,7 @@
                             </Viewbox>
                             <TextBlock Text="Free shipping on orders +50€" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
                         </StackPanel>
-                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="32,4,0,0"/>
+                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="32,4,0,0"/>
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,12">
@@ -277,7 +277,7 @@
                             </Viewbox>
                             <TextBlock Text="Exclusive member offers" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
                         </StackPanel>
-                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="32,4,0,0"/>
+                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="32,4,0,0"/>
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,35">
@@ -287,7 +287,7 @@
                             </Viewbox>
                             <TextBlock Text="Points and rewards program" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
                         </StackPanel>
-                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="32,4,0,0"/>
+                        <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="32,4,0,0"/>
                     </StackPanel>
 
                     <!-- Credits badge (blue like web) -->
@@ -301,22 +301,22 @@
 
                     <!-- Stats row -->
                     <UniformGrid Columns="3">
-                        <Border BorderBrush="{StaticResource Gray700Brush}" BorderThickness="1" Padding="15,12" Margin="0,0,5,0">
+                        <Border BorderBrush="{DynamicResource Gray700Brush}" BorderThickness="1" Padding="15,12" Margin="0,0,5,0">
                             <StackPanel HorizontalAlignment="Center">
                                 <TextBlock Text="10K+" FontSize="22" FontWeight="Black" Foreground="White" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Active Members" FontSize="11" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Active Members" FontSize="11" Foreground="{DynamicResource Gray500Brush}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-                        <Border BorderBrush="{StaticResource Gray700Brush}" BorderThickness="1" Padding="15,12" Margin="0,0,5,0">
+                        <Border BorderBrush="{DynamicResource Gray700Brush}" BorderThickness="1" Padding="15,12" Margin="0,0,5,0">
                             <StackPanel HorizontalAlignment="Center">
                                 <TextBlock Text="€50K+" FontSize="22" FontWeight="Black" Foreground="White" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Credits Redeemed" FontSize="11" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Credits Redeemed" FontSize="11" Foreground="{DynamicResource Gray500Brush}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-                        <Border BorderBrush="{StaticResource Gray700Brush}" BorderThickness="1" Padding="15,12">
+                        <Border BorderBrush="{DynamicResource Gray700Brush}" BorderThickness="1" Padding="15,12">
                             <StackPanel HorizontalAlignment="Center">
                                 <TextBlock Text="24/7" FontSize="22" FontWeight="Black" Foreground="White" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Support" FontSize="11" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Support" FontSize="11" Foreground="{DynamicResource Gray500Brush}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Border>
                     </UniformGrid>

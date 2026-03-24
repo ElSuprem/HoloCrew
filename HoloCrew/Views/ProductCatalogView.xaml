@@ -5,13 +5,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Grid>
         <!-- Loading state -->
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
                     Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-            <TextBlock Text="Loading products..." FontSize="16" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center"/>
+            <TextBlock Text="Loading products..." FontSize="16" Foreground="{DynamicResource Gray500Brush}" HorizontalAlignment="Center"/>
         </StackPanel>
 
         <!-- Error state -->
@@ -22,7 +22,7 @@
                           Stroke="#DC2626" StrokeThickness="2" Fill="Transparent"/>
                 </Viewbox>
                 <TextBlock Text="Failed to load products" FontSize="20" FontWeight="SemiBold" TextAlignment="Center" Foreground="#DC2626" Margin="0,0,0,10"/>
-                <TextBlock Text="Please try again later" FontSize="14" Foreground="{StaticResource Gray500Brush}" TextAlignment="Center"/>
+                <TextBlock Text="Please try again later" FontSize="14" Foreground="{DynamicResource Gray500Brush}" TextAlignment="Center"/>
             </StackPanel>
         </Border>
 
@@ -37,7 +37,7 @@
             <!-- ============================================ -->
             <!-- CATEGORY TITLE - Centered like web           -->
             <!-- ============================================ -->
-            <Border Grid.Row="0" Background="{StaticResource WhitePrimaryBrush}" Padding="0,35,0,20">
+            <Border Grid.Row="0" Background="{DynamicResource WhitePrimaryBrush}" Padding="0,35,0,20">
                 <TextBlock Text="{Binding CurrentCategoryName}" 
                            FontSize="32"
                            FontWeight="Black"
@@ -50,8 +50,8 @@
             <!-- Right: product count                         -->
             <!-- ============================================ -->
             <Border Grid.Row="1" 
-                    Background="{StaticResource WhitePrimaryBrush}" 
-                    BorderBrush="{StaticResource Gray200Brush}"
+                    Background="{DynamicResource WhitePrimaryBrush}" 
+                    BorderBrush="{DynamicResource Gray200Brush}"
                     BorderThickness="0,1,0,1"
                     Padding="60,16">
                 <Grid>
@@ -67,14 +67,14 @@
                                   IsChecked="{Binding InStockOnly}" 
                                   FontSize="12" 
                                   FontWeight="SemiBold"
-                                  Foreground="{StaticResource BlackPrimaryBrush}"
+                                  Foreground="{DynamicResource BlackPrimaryBrush}"
                                   Cursor="Hand"
                                   Margin="0,0,0,6"/>
                         <CheckBox Content="ON SALE" 
                                   IsChecked="{Binding OnSaleOnly}" 
                                   FontSize="12" 
                                   FontWeight="SemiBold"
-                                  Foreground="{StaticResource BlackPrimaryBrush}"
+                                  Foreground="{DynamicResource BlackPrimaryBrush}"
                                   Cursor="Hand"/>
                     </StackPanel>
 
@@ -88,12 +88,12 @@
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
                                     <Setter Property="BorderThickness" Value="1"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding CategoryAll}" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="Background" Value="#0A0A0A"/>
+                                            <Setter Property="BorderBrush" Value="#0A0A0A"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -101,7 +101,7 @@
                             <TextBlock Text="ALL" FontSize="12" FontWeight="SemiBold">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding CategoryAll}" Value="True">
                                                 <Setter Property="Foreground" Value="White"/>
@@ -120,12 +120,12 @@
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
                                     <Setter Property="BorderThickness" Value="1"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding CategoryTops}" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="Background" Value="#0A0A0A"/>
+                                            <Setter Property="BorderBrush" Value="#0A0A0A"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -133,7 +133,7 @@
                             <TextBlock Text="TOPS" FontSize="12" FontWeight="SemiBold">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding CategoryTops}" Value="True">
                                                 <Setter Property="Foreground" Value="White"/>
@@ -152,12 +152,12 @@
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
                                     <Setter Property="BorderThickness" Value="1"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding CategoryBottoms}" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="Background" Value="#0A0A0A"/>
+                                            <Setter Property="BorderBrush" Value="#0A0A0A"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -165,7 +165,7 @@
                             <TextBlock Text="BOTTOMS" FontSize="12" FontWeight="SemiBold">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding CategoryBottoms}" Value="True">
                                                 <Setter Property="Foreground" Value="White"/>
@@ -184,12 +184,12 @@
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
                                     <Setter Property="BorderThickness" Value="1"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding CategoryFootwear}" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="Background" Value="#0A0A0A"/>
+                                            <Setter Property="BorderBrush" Value="#0A0A0A"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -197,7 +197,7 @@
                             <TextBlock Text="FOOTWEAR" FontSize="12" FontWeight="SemiBold">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding CategoryFootwear}" Value="True">
                                                 <Setter Property="Foreground" Value="White"/>
@@ -216,12 +216,12 @@
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
                                     <Setter Property="BorderThickness" Value="1"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding CategoryAccessories}" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                                            <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                                            <Setter Property="Background" Value="#0A0A0A"/>
+                                            <Setter Property="BorderBrush" Value="#0A0A0A"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -229,7 +229,7 @@
                             <TextBlock Text="ACCESSORIES" FontSize="12" FontWeight="SemiBold">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding CategoryAccessories}" Value="True">
                                                 <Setter Property="Foreground" Value="White"/>
@@ -249,7 +249,8 @@
                                   FontSize="12"
                                   VerticalContentAlignment="Center" 
                                   Padding="12,0"
-                                  BorderBrush="{StaticResource Gray300Brush}"/>
+                                  Style="{StaticResource ThemedComboBox}"
+                                  ItemContainerStyle="{StaticResource ThemedComboBoxItem}"/>
                     </StackPanel>
 
                     <!-- RIGHT: Product count -->
@@ -257,7 +258,7 @@
                                VerticalAlignment="Center"
                                FontSize="13"
                                FontWeight="SemiBold"
-                               Foreground="{StaticResource BlackPrimaryBrush}">
+                               Foreground="{DynamicResource BlackPrimaryBrush}">
                         <Run Text="{Binding TotalProductCount, Mode=OneWay}"/>
                         <Run Text=" PRODUCTS"/>
                     </TextBlock>
@@ -267,7 +268,7 @@
             <!-- ============================================ -->
             <!-- PRODUCTS GRID - Full width                   -->
             <!-- ============================================ -->
-            <Grid Grid.Row="2" Background="{StaticResource WhitePrimaryBrush}">
+            <Grid Grid.Row="2" Background="{DynamicResource WhitePrimaryBrush}">
                 <!-- Products -->
                 <ItemsControl ItemsSource="{Binding FilteredProducts}" Margin="50,30,50,60">
                     <ItemsControl.ItemsPanel>
@@ -278,7 +279,7 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="{StaticResource WhitePrimaryBrush}" 
+                            <Border Background="{DynamicResource WhitePrimaryBrush}" 
                                     Margin="10" 
                                     Cursor="Hand">
                                 <Grid>
@@ -288,7 +289,7 @@
                                     </Grid.RowDefinitions>
 
                                     <!-- Image area -->
-                                    <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
+                                    <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}">
                                         <Border.InputBindings>
                                             <MouseBinding MouseAction="LeftClick" 
                                                           Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
@@ -300,13 +301,13 @@
                                                         HorizontalAlignment="Left" 
                                                         VerticalAlignment="Top" 
                                                         Margin="12">
-                                                <Border Background="{StaticResource BlackPrimaryBrush}" 
+                                                <Border Background="{DynamicResource BlackPrimaryBrush}" 
                                                         Padding="10,5" 
                                                         Margin="0,0,6,0" 
                                                         Visibility="{Binding IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
                                                     <TextBlock Text="NEW" Foreground="White" FontSize="10" FontWeight="Bold"/>
                                                 </Border>
-                                                <Border Background="{StaticResource RedAccentBrush}" 
+                                                <Border Background="{DynamicResource RedAccentBrush}" 
                                                         Padding="10,5" 
                                                         Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
                                                     <TextBlock Foreground="White" FontSize="10" FontWeight="Bold">
@@ -327,7 +328,7 @@
                                                 <Button.Template>
                                                     <ControlTemplate TargetType="Button">
                                                         <Border Width="40" Height="40"
-                                                                Background="{StaticResource WhitePrimaryBrush}"
+                                                                Background="{DynamicResource WhitePrimaryBrush}"
                                                                 CornerRadius="20">
                                                             <Border.Effect>
                                                                 <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="2"/>
@@ -350,7 +351,7 @@
                                             </Button>
 
                                             <!-- Quick Add on hover -->
-                                            <Border Background="{StaticResource BlackPrimaryBrush}" 
+                                            <Border Background="{DynamicResource BlackPrimaryBrush}" 
                                                     Height="45" 
                                                     VerticalAlignment="Bottom" 
                                                     Cursor="Hand" 
@@ -382,17 +383,17 @@
                                             <TextBlock Text="{Binding Name}" 
                                                        FontSize="13" 
                                                        FontWeight="SemiBold" 
-                                                       Foreground="{StaticResource BlackPrimaryBrush}" 
+                                                       Foreground="{DynamicResource BlackPrimaryBrush}" 
                                                        TextTrimming="CharacterEllipsis"
                                                        Margin="0,0,0,8"/>
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
                                                            FontSize="15" 
                                                            FontWeight="Bold" 
-                                                           Foreground="{StaticResource BlackPrimaryBrush}"/>
+                                                           Foreground="{DynamicResource BlackPrimaryBrush}"/>
                                                 <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}" 
                                                            FontSize="13" 
-                                                           Foreground="{StaticResource Gray400Brush}" 
+                                                           Foreground="{DynamicResource Gray400Brush}" 
                                                            TextDecorations="Strikethrough" 
                                                            Margin="10,2,0,0" 
                                                            Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}"/>
@@ -434,7 +435,7 @@
                             Visibility="{Binding FilteredProducts.Count, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
                     <Viewbox Width="64" Height="64" Margin="0,0,0,20" Opacity="0.3">
                         <Path Data="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
-                              Stroke="{StaticResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+                              Stroke="{DynamicResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
                     </Viewbox>
                     <TextBlock Text="No products found" 
                                FontSize="20" 
@@ -443,7 +444,7 @@
                                Margin="0,0,0,8"/>
                     <TextBlock Text="Try adjusting your filters" 
                                FontSize="14" 
-                               Foreground="{StaticResource Gray500Brush}" 
+                               Foreground="{DynamicResource Gray500Brush}" 
                                HorizontalAlignment="Center"
                                Margin="0,0,0,25"/>
                     <Button Content="CLEAR FILTERS" 

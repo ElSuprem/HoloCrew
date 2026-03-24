@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Border Padding="60,40,60,80">
         <StackPanel>
@@ -15,7 +15,7 @@
                            Margin="0,0,0,40" />
 
             <!-- Filtros -->
-            <Border Background="{StaticResource Gray100Brush}"
+            <Border Background="{DynamicResource Gray100Brush}"
                         Padding="30,25"
                         Margin="0,0,0,40">
                 <Grid>
@@ -86,7 +86,7 @@
             </Border>
 
             <!-- Empty State -->
-            <Border Background="{StaticResource Gray100Brush}"
+            <Border Background="{DynamicResource Gray100Brush}"
                         Padding="60,80"
                         Visibility="{Binding HasOrders, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <StackPanel HorizontalAlignment="Center">
@@ -100,7 +100,7 @@
                                    Margin="0,0,0,15"/>
                     <TextBlock Text="You haven't placed any orders yet" 
                                    Style="{StaticResource BodyLarge}"
-                                   Foreground="{StaticResource TextSecondary}"
+                                   Foreground="{DynamicResource TextSecondary}"
                                    TextAlignment="Center"
                                    Margin="0,0,0,30"/>
                     <Button Content="START SHOPPING" 
@@ -114,8 +114,8 @@
                               Visibility="{Binding HasOrders, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="{StaticResource WhitePrimaryBrush}"
-                                    BorderBrush="{StaticResource BorderDefault}"
+                        <Border Background="{DynamicResource WhitePrimaryBrush}"
+                                    BorderBrush="{DynamicResource BorderDefault}"
                                     BorderThickness="1"
                                     Padding="30"
                                     Margin="0,0,0,20"
@@ -151,7 +151,7 @@
                                         </TextBlock>
                                         <TextBlock Text="{Binding OrderDate, StringFormat='MMMM dd, yyyy'}"
                                                        Style="{StaticResource BodyMedium}"
-                                                       Foreground="{StaticResource TextSecondary}"
+                                                       Foreground="{DynamicResource TextSecondary}"
                                                        Margin="0,5,0,0"/>
                                     </StackPanel>
 
@@ -170,7 +170,7 @@
                                         <TextBlock Text="{Binding StatusText}"
                                                        Style="{StaticResource Caption}"
                                                        FontWeight="Bold"
-                                                       Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                                       Foreground="{DynamicResource WhitePrimaryBrush}"/>
                                     </Border>
                                 </Grid>
 
@@ -189,17 +189,17 @@
                                                     Orientation="Horizontal"
                                                     VerticalAlignment="Center">
                                         <TextBlock Style="{StaticResource BodyMedium}"
-                                                       Foreground="{StaticResource TextSecondary}">
+                                                       Foreground="{DynamicResource TextSecondary}">
                                                 <Run Text="{Binding ItemCount}"/>
                                                 <Run Text=" items"/>
                                         </TextBlock>
                                         <TextBlock Text="•" 
                                                        Style="{StaticResource BodyMedium}"
-                                                       Foreground="{StaticResource Gray300Brush}"
+                                                       Foreground="{DynamicResource Gray300Brush}"
                                                        Margin="10,0"/>
                                         <TextBlock Text="{Binding ShippingAddress}"
                                                        Style="{StaticResource BodyMedium}"
-                                                       Foreground="{StaticResource TextSecondary}"
+                                                       Foreground="{DynamicResource TextSecondary}"
                                                        TextTrimming="CharacterEllipsis"
                                                        MaxWidth="400"/>
                                     </StackPanel>
@@ -221,7 +221,7 @@
             </ItemsControl>
 
             <!-- Stats Summary (optional) -->
-            <Border Background="{StaticResource Gray100Brush}"
+            <Border Background="{DynamicResource Gray100Brush}"
                         Padding="40,30"
                         Margin="0,20,0,0"
                         Visibility="{Binding HasOrders, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -239,7 +239,7 @@
                                        HorizontalAlignment="Center"/>
                         <TextBlock Text="TOTAL ORDERS" 
                                        Style="{StaticResource Caption}"
-                                       Foreground="{StaticResource TextSecondary}"
+                                       Foreground="{DynamicResource TextSecondary}"
                                        HorizontalAlignment="Center"
                                        Margin="0,5,0,0"/>
                     </StackPanel>
@@ -251,7 +251,7 @@
                                        HorizontalAlignment="Center"/>
                         <TextBlock Text="TOTAL SPENT" 
                                        Style="{StaticResource Caption}"
-                                       Foreground="{StaticResource TextSecondary}"
+                                       Foreground="{DynamicResource TextSecondary}"
                                        HorizontalAlignment="Center"
                                        Margin="0,5,0,0"/>
                     </StackPanel>
@@ -263,7 +263,7 @@
                                        HorizontalAlignment="Center"/>
                         <TextBlock Text="AVG ORDER VALUE" 
                                        Style="{StaticResource Caption}"
-                                       Foreground="{StaticResource TextSecondary}"
+                                       Foreground="{DynamicResource TextSecondary}"
                                        HorizontalAlignment="Center"
                                        Margin="0,5,0,0"/>
                     </StackPanel>

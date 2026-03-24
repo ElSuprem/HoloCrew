@@ -19,7 +19,7 @@ namespace HoloCrew.ViewModels
         private bool _isUserLoggedIn;
 
         [ObservableProperty]
-        private string _currentUserName = "Invitado";
+        private string _currentUserName = "Guest";
 
         [ObservableProperty]
         private string _currentUserEmail = "Not signed in";
@@ -218,12 +218,12 @@ namespace HoloCrew.ViewModels
             if (IsUserLoggedIn)
             {
                 var user = _authenticationService.GetCurrentUser();
-                CurrentUserName = user?.FullName ?? "Usuario";
+                CurrentUserName = user?.FullName ?? "User";
                 CurrentUserEmail = user?.Email ?? "";
             }
             else
             {
-                CurrentUserName = "Invitado";
+                CurrentUserName = "Guest";
                 CurrentUserEmail = "Not signed in";
             }
         }

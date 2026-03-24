@@ -57,7 +57,7 @@ namespace HoloCrew.Views
         private ScrollViewer? FindMainScrollViewer()
         {
             DependencyObject? current = this;
-            while (current != null && current is not Window)
+            while (current != null && !(current is Window))
                 current = VisualTreeHelper.GetParent(current);
 
             if (current is Window window)

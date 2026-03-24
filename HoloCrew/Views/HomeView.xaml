@@ -5,17 +5,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="3500" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <StackPanel>
 
         <!-- ============================================ -->
         <!-- HERO BANNER - Centered like web              -->
         <!-- ============================================ -->
-        <Border Height="650" Background="{StaticResource BlackPrimaryBrush}">
+        <!-- HERO: Always dark regardless of theme -->
+        <Border Height="650" Background="#0A0A0A">
             <Grid>
                 <!-- Background placeholder (will be image in Phase 2) -->
-                <Border Background="{StaticResource BlackSecondaryBrush}" Opacity="0.6"/>
+                <Border Background="#1A1A1A" Opacity="0.6"/>
 
                 <!-- Gradient overlay for text readability -->
                 <Border>
@@ -59,8 +60,8 @@
         <!-- BENEFITS BAR - 3 columns, centered icons     -->
         <!-- Matching web: Return / Free Shipping / World -->
         <!-- ============================================ -->
-        <Border Background="{StaticResource WhitePrimaryBrush}" 
-                BorderBrush="{StaticResource Gray200Brush}"
+        <Border Background="{DynamicResource WhitePrimaryBrush}" 
+                BorderBrush="{DynamicResource Gray200Brush}"
                 BorderThickness="0,0,0,1"
                 Padding="80,45">
             <UniformGrid Columns="3">
@@ -68,7 +69,7 @@
                 <StackPanel HorizontalAlignment="Center">
                     <Viewbox Width="42" Height="42" Margin="0,0,0,16">
                         <Path Data="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" 
-                              Fill="{StaticResource BlackPrimaryBrush}"/>
+                              Fill="{DynamicResource BlackPrimaryBrush}"/>
                     </Viewbox>
                     <TextBlock Text="14 DAYS RETURN POLICY" 
                                FontSize="14" 
@@ -77,7 +78,7 @@
                                Margin="0,0,0,6"/>
                     <TextBlock Text="Free returns within 14 days" 
                                FontSize="13" 
-                               Foreground="{StaticResource Gray500Brush}" 
+                               Foreground="{DynamicResource Gray500Brush}" 
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
@@ -85,7 +86,7 @@
                 <StackPanel HorizontalAlignment="Center">
                     <Viewbox Width="42" Height="42" Margin="0,0,0,16">
                         <Path Data="M18 18.5a1.5 1.5 0 0 1-1.5-1.5 1.5 1.5 0 0 1 1.5-1.5 1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5zm1.5-9H17V12h4.46L19.5 9.5zM6 18.5A1.5 1.5 0 0 1 4.5 17 1.5 1.5 0 0 1 6 15.5 1.5 1.5 0 0 1 7.5 17 1.5 1.5 0 0 1 6 18.5zM20 8l3 4v5h-2a3 3 0 0 1-3 3 3 3 0 0 1-3-3H9a3 3 0 0 1-3 3 3 3 0 0 1-3-3H1V6c0-1.11.89-2 2-2h14v4h3z" 
-                              Fill="{StaticResource BlackPrimaryBrush}"/>
+                              Fill="{DynamicResource BlackPrimaryBrush}"/>
                     </Viewbox>
                     <TextBlock Text="FREE SHIPPING OVER 50€" 
                                FontSize="14" 
@@ -94,7 +95,7 @@
                                Margin="0,0,0,6"/>
                     <TextBlock Text="Free shipping on orders over 50€" 
                                FontSize="13" 
-                               Foreground="{StaticResource Gray500Brush}" 
+                               Foreground="{DynamicResource Gray500Brush}" 
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
@@ -102,7 +103,7 @@
                 <StackPanel HorizontalAlignment="Center">
                     <Viewbox Width="42" Height="42" Margin="0,0,0,16">
                         <Path Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" 
-                              Fill="{StaticResource BlackPrimaryBrush}"/>
+                              Fill="{DynamicResource BlackPrimaryBrush}"/>
                     </Viewbox>
                     <TextBlock Text="WORLDWIDE SHIPPING" 
                                FontSize="14" 
@@ -111,7 +112,7 @@
                                Margin="0,0,0,6"/>
                     <TextBlock Text="We ship to all countries" 
                                FontSize="13" 
-                               Foreground="{StaticResource Gray500Brush}" 
+                               Foreground="{DynamicResource Gray500Brush}" 
                                HorizontalAlignment="Center"/>
                 </StackPanel>
             </UniformGrid>
@@ -122,7 +123,7 @@
         <!-- 3 tall cards: TOPS / BOTTOMS / ACCESSORIES   -->
         <!-- Dark placeholders with gradient + discount   -->
         <!-- ============================================ -->
-        <Border Background="{StaticResource WhitePrimaryBrush}">
+        <Border Background="{DynamicResource WhitePrimaryBrush}">
             <UniformGrid Columns="3" Rows="1">
                 <!-- TOPS -->
                 <Border Height="550" Cursor="Hand" Margin="0,0,1,0">
@@ -132,7 +133,7 @@
                                       CommandParameter="tops"/>
                     </Border.InputBindings>
                     <Grid>
-                        <Border Background="{StaticResource BlackSecondaryBrush}"/>
+                        <Border Background="#1A1A1A"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -142,7 +143,7 @@
                             </Border.Background>
                         </Border>
                         <!-- Discount badge -->
-                        <Border Background="{StaticResource RedAccentBrush}" 
+                        <Border Background="{DynamicResource RedAccentBrush}" 
                                 Padding="16,8" 
                                 HorizontalAlignment="Right" 
                                 VerticalAlignment="Top" 
@@ -182,7 +183,7 @@
                                       CommandParameter="bottoms"/>
                     </Border.InputBindings>
                     <Grid>
-                        <Border Background="{StaticResource BlackTertiaryBrush}"/>
+                        <Border Background="#2A2A2A"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -191,7 +192,7 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
-                        <Border Background="{StaticResource RedAccentBrush}" 
+                        <Border Background="{DynamicResource RedAccentBrush}" 
                                 Padding="16,8" 
                                 HorizontalAlignment="Right" 
                                 VerticalAlignment="Top" 
@@ -239,7 +240,7 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
-                        <Border Background="{StaticResource RedAccentBrush}" 
+                        <Border Background="{DynamicResource RedAccentBrush}" 
                                 Padding="16,8" 
                                 HorizontalAlignment="Right" 
                                 VerticalAlignment="Top" 
@@ -276,7 +277,7 @@
         <!-- DISCOVER BY CATEGORY                         -->
         <!-- Centered title + category links              -->
         <!-- ============================================ -->
-        <Border Padding="80,60" Background="{StaticResource WhitePrimaryBrush}">
+        <Border Padding="80,60" Background="{DynamicResource WhitePrimaryBrush}">
             <StackPanel>
                 <TextBlock Text="DISCOVER BY CATEGORY" 
                            FontSize="36"
@@ -286,42 +287,42 @@
 
                 <!-- Category links row -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
-                    <TextBlock Text="NEW ARRIVALS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                    <TextBlock Text="NEW ARRIVALS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{DynamicResource BlackPrimaryBrush}">
                         <TextBlock.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="new" MouseAction="LeftClick"/>
                         </TextBlock.InputBindings>
                     </TextBlock>
-                    <TextBlock Text="FOOTWEAR" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                    <TextBlock Text="FOOTWEAR" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{DynamicResource BlackPrimaryBrush}">
                         <TextBlock.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="footwear" MouseAction="LeftClick"/>
                         </TextBlock.InputBindings>
                     </TextBlock>
-                    <TextBlock Text="DENIMS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                    <TextBlock Text="DENIMS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{DynamicResource BlackPrimaryBrush}">
                         <TextBlock.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="denims" MouseAction="LeftClick"/>
                         </TextBlock.InputBindings>
                     </TextBlock>
-                    <TextBlock Text="JERSEYS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                    <TextBlock Text="JERSEYS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{DynamicResource BlackPrimaryBrush}">
                         <TextBlock.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="jerseys" MouseAction="LeftClick"/>
                         </TextBlock.InputBindings>
                     </TextBlock>
-                    <TextBlock Text="KNITWEAR" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                    <TextBlock Text="KNITWEAR" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{DynamicResource BlackPrimaryBrush}">
                         <TextBlock.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="knitwear" MouseAction="LeftClick"/>
                         </TextBlock.InputBindings>
                     </TextBlock>
-                    <TextBlock Text="TRACKSUITS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                    <TextBlock Text="TRACKSUITS" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{DynamicResource BlackPrimaryBrush}">
                         <TextBlock.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="tracksuits" MouseAction="LeftClick"/>
                         </TextBlock.InputBindings>
                     </TextBlock>
-                    <TextBlock Text="HOODIES" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                    <TextBlock Text="HOODIES" FontSize="14" FontWeight="SemiBold" Margin="0,0,30,0" Cursor="Hand" Foreground="{DynamicResource BlackPrimaryBrush}">
                         <TextBlock.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="hoodies" MouseAction="LeftClick"/>
                         </TextBlock.InputBindings>
                     </TextBlock>
-                    <TextBlock Text="T-SHIRTS" FontSize="14" FontWeight="SemiBold" Cursor="Hand" Foreground="{StaticResource BlackPrimaryBrush}">
+                    <TextBlock Text="T-SHIRTS" FontSize="14" FontWeight="SemiBold" Cursor="Hand" Foreground="{DynamicResource BlackPrimaryBrush}">
                         <TextBlock.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCategoryCommand}" CommandParameter="tshirts" MouseAction="LeftClick"/>
                         </TextBlock.InputBindings>
@@ -333,7 +334,7 @@
         <!-- ============================================ -->
         <!-- FEATURED PRODUCTS (BEST SELLERS)             -->
         <!-- ============================================ -->
-        <Border Padding="80,10,80,70" Background="{StaticResource WhitePrimaryBrush}">
+        <Border Padding="80,10,80,70" Background="{DynamicResource WhitePrimaryBrush}">
             <StackPanel>
                 <!-- Header -->
                 <Grid Margin="0,0,0,40">
@@ -344,7 +345,7 @@
                     <TextBlock Text="VIEW ALL BEST SELLERS  →" 
                                FontSize="14"
                                FontWeight="SemiBold"
-                               Foreground="{StaticResource BlackPrimaryBrush}"
+                               Foreground="{DynamicResource BlackPrimaryBrush}"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"
                                Cursor="Hand">
@@ -364,7 +365,7 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="{StaticResource WhitePrimaryBrush}"
+                            <Border Background="{DynamicResource WhitePrimaryBrush}"
                                     Margin="10"
                                     Cursor="Hand">
                                 <Grid>
@@ -374,7 +375,7 @@
                                     </Grid.RowDefinitions>
 
                                     <!-- Image placeholder -->
-                                    <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
+                                    <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}">
                                         <Border.InputBindings>
                                             <MouseBinding MouseAction="LeftClick" 
                                                           Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -386,13 +387,13 @@
                                                         HorizontalAlignment="Left" 
                                                         VerticalAlignment="Top"
                                                         Margin="12">
-                                                <Border Background="{StaticResource BlackPrimaryBrush}"
+                                                <Border Background="{DynamicResource BlackPrimaryBrush}"
                                                         Padding="10,5"
                                                         Margin="0,0,5,0"
                                                         Visibility="{Binding IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
                                                     <TextBlock Text="NEW" Foreground="White" FontSize="10" FontWeight="Bold"/>
                                                 </Border>
-                                                <Border Background="{StaticResource RedAccentBrush}"
+                                                <Border Background="{DynamicResource RedAccentBrush}"
                                                         Padding="10,5"
                                                         Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
                                                     <TextBlock Foreground="White" FontSize="10" FontWeight="Bold">
@@ -438,7 +439,7 @@
                                             </Button>
 
                                             <!-- Quick Add -->
-                                            <Button Background="{StaticResource BlackPrimaryBrush}"
+                                            <Button Background="#0A0A0A"
                                                     BorderThickness="0"
                                                     Height="42"
                                                     VerticalAlignment="Bottom"
@@ -475,7 +476,7 @@
                                                        FontWeight="Bold"/>
                                             <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
                                                        FontSize="13"
-                                                       Foreground="{StaticResource Gray400Brush}"
+                                                       Foreground="{DynamicResource Gray400Brush}"
                                                        TextDecorations="Strikethrough"
                                                        Margin="10,0,0,0"
                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}"/>
@@ -514,7 +515,8 @@
         <!-- ============================================ -->
         <!-- BLACK WEEK BANNER                            -->
         <!-- ============================================ -->
-        <Border Background="{StaticResource BlackPrimaryBrush}" Padding="80,50" Cursor="Hand">
+        <!-- BLACK WEEK BANNER: Always dark -->
+        <Border Background="#0A0A0A" Padding="80,50" Cursor="Hand">
             <Border.InputBindings>
                 <MouseBinding Command="{Binding NavigateToBlackWeekCommand}" MouseAction="LeftClick"/>
             </Border.InputBindings>
@@ -526,7 +528,7 @@
 
                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <Border Background="{StaticResource RedAccentBrush}" Padding="10,5">
+                        <Border Background="{DynamicResource RedAccentBrush}" Padding="10,5">
                             <TextBlock Text="LIMITED TIME" Foreground="White" FontSize="11" FontWeight="Bold"/>
                         </Border>
                     </StackPanel>
@@ -537,7 +539,7 @@
                                Margin="0,0,0,10"/>
                     <TextBlock Text="Up to 50% off on selected items. Don't miss out on our biggest sale of the year."
                                FontSize="16"
-                               Foreground="{StaticResource Gray400Brush}"
+                               Foreground="{DynamicResource Gray400Brush}"
                                MaxWidth="500"
                                TextWrapping="Wrap"/>
                 </StackPanel>
@@ -558,7 +560,7 @@
         <!-- DUAL BANNERS - NEW ARRIVALS / NEW DENIMS     -->
         <!-- Like the web: 2 side-by-side full cards      -->
         <!-- ============================================ -->
-        <Border Background="{StaticResource WhitePrimaryBrush}">
+        <Border Background="{DynamicResource WhitePrimaryBrush}">
             <UniformGrid Columns="2">
                 <!-- NEW ARRIVALS -->
                 <Border Height="500" Cursor="Hand" Margin="0,0,1,0">
@@ -568,7 +570,7 @@
                                       CommandParameter="new"/>
                     </Border.InputBindings>
                     <Grid>
-                        <Border Background="{StaticResource BlackSecondaryBrush}"/>
+                        <Border Background="#1A1A1A"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -586,7 +588,7 @@
                             <TextBlock Text="SHOP NOW" 
                                        FontSize="16"
                                        FontWeight="SemiBold"
-                                       Foreground="{StaticResource Gray300Brush}"/>
+                                       Foreground="{DynamicResource Gray300Brush}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -599,7 +601,7 @@
                                       CommandParameter="denims"/>
                     </Border.InputBindings>
                     <Grid>
-                        <Border Background="{StaticResource BlackTertiaryBrush}"/>
+                        <Border Background="#2A2A2A"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -617,7 +619,7 @@
                             <TextBlock Text="SHOP NOW" 
                                        FontSize="16"
                                        FontWeight="SemiBold"
-                                       Foreground="{StaticResource Gray300Brush}"/>
+                                       Foreground="{DynamicResource Gray300Brush}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -627,7 +629,7 @@
         <!-- ============================================ -->
         <!-- DUAL BANNERS 2 - OUTERWEAR / FOOTWEAR       -->
         <!-- ============================================ -->
-        <Border Background="{StaticResource WhitePrimaryBrush}" Margin="0,1,0,0">
+        <Border Background="{DynamicResource WhitePrimaryBrush}" Margin="0,1,0,0">
             <UniformGrid Columns="2">
                 <!-- OUTERWEAR -->
                 <Border Height="500" Cursor="Hand" Margin="0,0,1,0">
@@ -655,7 +657,7 @@
                             <TextBlock Text="SHOP NOW" 
                                        FontSize="16"
                                        FontWeight="SemiBold"
-                                       Foreground="{StaticResource Gray300Brush}"/>
+                                       Foreground="{DynamicResource Gray300Brush}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -686,7 +688,7 @@
                             <TextBlock Text="SHOP NOW" 
                                        FontSize="16"
                                        FontWeight="SemiBold"
-                                       Foreground="{StaticResource Gray300Brush}"/>
+                                       Foreground="{DynamicResource Gray300Brush}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -696,7 +698,7 @@
         <!-- ============================================ -->
         <!-- WINTER ESSENTIALS / SECOND PRODUCT ROW       -->
         <!-- ============================================ -->
-        <Border Padding="80,60,80,70" Background="{StaticResource WhitePrimaryBrush}">
+        <Border Padding="80,60,80,70" Background="{DynamicResource WhitePrimaryBrush}">
             <StackPanel>
                 <Grid Margin="0,0,0,40">
                     <TextBlock Text="WINTER ESSENTIALS" 
@@ -706,7 +708,7 @@
                     <TextBlock Text="VIEW ALL  →" 
                                FontSize="14"
                                FontWeight="SemiBold"
-                               Foreground="{StaticResource BlackPrimaryBrush}"
+                               Foreground="{DynamicResource BlackPrimaryBrush}"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"
                                Cursor="Hand">
@@ -725,7 +727,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="{StaticResource WhitePrimaryBrush}" Margin="10" Cursor="Hand">
+                            <Border Background="{DynamicResource WhitePrimaryBrush}" Margin="10" Cursor="Hand">
                                 <Border.InputBindings>
                                     <MouseBinding MouseAction="LeftClick" 
                                                   Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
@@ -736,7 +738,7 @@
                                         <RowDefinition Height="320"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <Border Grid.Row="0" Background="{StaticResource Gray100Brush}"/>
+                                    <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}"/>
                                     <StackPanel Grid.Row="1" Margin="0,15,0,0">
                                         <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
                                         <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" FontSize="15" FontWeight="Bold" Margin="0,8,0,0"/>
@@ -752,7 +754,8 @@
         <!-- ============================================ -->
         <!-- NEWSLETTER / JOIN THE CREW                   -->
         <!-- ============================================ -->
-        <Border Background="{StaticResource BlackPrimaryBrush}" Padding="80,70">
+        <!-- NEWSLETTER: Always dark -->
+        <Border Background="#0A0A0A" Padding="80,70">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -767,7 +770,7 @@
                                Margin="0,0,0,15"/>
                     <TextBlock Text="Subscribe to get exclusive access to new drops, special offers, and member-only perks."
                                FontSize="15"
-                               Foreground="{StaticResource Gray400Brush}"
+                               Foreground="{DynamicResource Gray400Brush}"
                                LineHeight="24"
                                MaxWidth="450"
                                TextWrapping="Wrap"/>
@@ -789,7 +792,7 @@
                                 </TextBox.InputBindings>
                             </TextBox>
                             <TextBlock Text="Enter your email"
-                                       Foreground="{StaticResource Gray400Brush}"
+                                       Foreground="{DynamicResource Gray400Brush}"
                                        FontSize="14"
                                        VerticalAlignment="Center"
                                        Margin="18,0,0,0"
@@ -812,7 +815,7 @@
                     </Border>
 
                     <!-- Subscribe Button -->
-                    <Button Background="{StaticResource RedAccentBrush}"
+                    <Button Background="{DynamicResource RedAccentBrush}"
                             Padding="0,16"
                             FontSize="13"
                             Command="{Binding SubscribeNewsletterCommand}">
@@ -832,12 +835,12 @@
 
                     <TextBlock Text="{Binding SubscriptionMessage}"
                                FontSize="12"
-                               Foreground="{StaticResource Gray400Brush}"
+                               Foreground="{DynamicResource Gray400Brush}"
                                Margin="0,10,0,0"/>
 
                     <TextBlock Text="By subscribing, you agree to our Privacy Policy"
                                FontSize="11"
-                               Foreground="{StaticResource Gray500Brush}"
+                               Foreground="{DynamicResource Gray500Brush}"
                                Margin="0,5,0,0"/>
                 </StackPanel>
             </Grid>
@@ -846,9 +849,9 @@
         <!-- ============================================ -->
         <!-- FOOTER - Like the web version                -->
         <!-- ============================================ -->
-        <Border Background="{StaticResource BlackPrimaryBrush}" 
+        <Border Background="{DynamicResource BlackPrimaryBrush}" 
                 Padding="80,60,80,40"
-                BorderBrush="{StaticResource Gray800Brush}"
+                BorderBrush="#2E2E2E"
                 BorderThickness="0,1,0,0">
             <StackPanel>
                 <!-- Footer main content -->
@@ -870,24 +873,24 @@
                                    Margin="0,0,0,15"/>
                         <TextBlock Text="Premium streetwear for the modern generation."
                                    FontSize="13"
-                                   Foreground="{StaticResource Gray400Brush}"
+                                   Foreground="{DynamicResource Gray400Brush}"
                                    TextWrapping="Wrap"
                                    MaxWidth="220"
                                    LineHeight="22"
                                    Margin="0,0,0,20"/>
                         <!-- Social icons as text for now -->
                         <StackPanel Orientation="Horizontal">
-                            <Border Width="36" Height="36" CornerRadius="18" Background="{StaticResource BlackTertiaryBrush}" Margin="0,0,8,0" Cursor="Hand">
+                            <Border Width="36" Height="36" CornerRadius="18" Background="{DynamicResource BlackTertiaryBrush}" Margin="0,0,8,0" Cursor="Hand">
                                 <Viewbox Width="16" Height="16">
                                     <Path Data="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" Stroke="White" StrokeThickness="1.5" Fill="Transparent"/>
                                 </Viewbox>
                             </Border>
-                            <Border Width="36" Height="36" CornerRadius="18" Background="{StaticResource BlackTertiaryBrush}" Margin="0,0,8,0" Cursor="Hand">
+                            <Border Width="36" Height="36" CornerRadius="18" Background="{DynamicResource BlackTertiaryBrush}" Margin="0,0,8,0" Cursor="Hand">
                                 <Viewbox Width="16" Height="16">
                                     <Path Data="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2z" Stroke="White" StrokeThickness="1.5" Fill="Transparent"/>
                                 </Viewbox>
                             </Border>
-                            <Border Width="36" Height="36" CornerRadius="18" Background="{StaticResource BlackTertiaryBrush}" Cursor="Hand">
+                            <Border Width="36" Height="36" CornerRadius="18" Background="#2A2A2A" Cursor="Hand">
                                 <Viewbox Width="16" Height="16">
                                     <Path Data="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" Stroke="White" StrokeThickness="1.5" Fill="Transparent"/>
                                 </Viewbox>
@@ -904,21 +907,21 @@
                                    Margin="0,0,0,20"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <Viewbox Width="18" Height="18" Margin="0,0,10,0">
-                                <Path Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M2 10h20" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                <Path Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M2 10h20" Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                             </Viewbox>
-                            <TextBlock Text="Credit/Debit Cards" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                            <TextBlock Text="Credit/Debit Cards" FontSize="13" Foreground="{DynamicResource Gray400Brush}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <Viewbox Width="18" Height="18" Margin="0,0,10,0">
-                                <Path Data="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z M8 12h8" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                <Path Data="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z M8 12h8" Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                             </Viewbox>
-                            <TextBlock Text="PayPal" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                            <TextBlock Text="PayPal" FontSize="13" Foreground="{DynamicResource Gray400Brush}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="18" Height="18" Margin="0,0,10,0">
-                                <Path Data="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                <Path Data="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3" Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                             </Viewbox>
-                            <TextBlock Text="Cash on Delivery" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                            <TextBlock Text="Cash on Delivery" FontSize="13" Foreground="{DynamicResource Gray400Brush}"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -929,12 +932,12 @@
                                    FontWeight="Bold" 
                                    Foreground="White" 
                                    Margin="0,0,0,20"/>
-                        <TextBlock Text="New Arrivals" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
-                        <TextBlock Text="Special Offers" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
-                        <TextBlock Text="Tops" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
-                        <TextBlock Text="Bottoms" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
-                        <TextBlock Text="Accessories" FontSize="13" Foreground="{StaticResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
-                        <TextBlock Text="Full Collection" FontSize="13" Foreground="{StaticResource Gray400Brush}" Cursor="Hand"/>
+                        <TextBlock Text="New Arrivals" FontSize="13" Foreground="{DynamicResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Special Offers" FontSize="13" Foreground="{DynamicResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Tops" FontSize="13" Foreground="{DynamicResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Bottoms" FontSize="13" Foreground="{DynamicResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Accessories" FontSize="13" Foreground="{DynamicResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
+                        <TextBlock Text="Full Collection" FontSize="13" Foreground="{DynamicResource Gray400Brush}" Cursor="Hand"/>
                     </StackPanel>
 
                     <!-- Contact -->
@@ -946,57 +949,57 @@
                                    Margin="0,0,0,20"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <Viewbox Width="16" Height="16" Margin="0,0,10,0">
-                                <Path Data="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 7a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                <Path Data="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 7a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                             </Viewbox>
-                            <TextBlock Text="Store Address" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                            <TextBlock Text="Store Address" FontSize="13" Foreground="{DynamicResource Gray400Brush}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <Viewbox Width="16" Height="16" Margin="0,0,10,0">
-                                <Path Data="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                <Path Data="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                             </Viewbox>
-                            <TextBlock Text="+34 900 000 000" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                            <TextBlock Text="+34 900 000 000" FontSize="13" Foreground="{DynamicResource Gray400Brush}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" Margin="0,0,10,0">
-                                <Path Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6" Stroke="{StaticResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                <Path Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6" Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
                             </Viewbox>
-                            <TextBlock Text="info@holocrew.com" FontSize="13" Foreground="{StaticResource Gray400Brush}"/>
+                            <TextBlock Text="info@holocrew.com" FontSize="13" Foreground="{DynamicResource Gray400Brush}"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
 
                 <!-- Footer bottom bar -->
-                <Border BorderBrush="{StaticResource Gray800Brush}" BorderThickness="0,1,0,0" Padding="0,25,0,0">
+                <Border BorderBrush="#2E2E2E" BorderThickness="0,1,0,0" Padding="0,25,0,0">
                     <Grid>
                         <!-- Bottom info bar -->
                         <UniformGrid Columns="3" Margin="0,0,0,25">
                             <StackPanel>
                                 <TextBlock Text="FAST SHIPPING" FontSize="13" FontWeight="Bold" Foreground="White" Margin="0,0,0,5"/>
-                                <TextBlock Text="24-48h delivery in Spain. Worldwide shipping." FontSize="12" Foreground="{StaticResource Gray500Brush}" TextWrapping="Wrap"/>
+                                <TextBlock Text="24-48h delivery in Spain. Worldwide shipping." FontSize="12" Foreground="{DynamicResource Gray500Brush}" TextWrapping="Wrap"/>
                             </StackPanel>
                             <StackPanel HorizontalAlignment="Center">
                                 <TextBlock Text="RETURNS" FontSize="13" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,5"/>
-                                <TextBlock Text="14 days free returns. Easy and hassle-free." FontSize="12" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                                <TextBlock Text="14 days free returns. Easy and hassle-free." FontSize="12" Foreground="{DynamicResource Gray500Brush}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                             </StackPanel>
                             <StackPanel HorizontalAlignment="Right">
                                 <TextBlock Text="SECURITY" FontSize="13" FontWeight="Bold" Foreground="White" HorizontalAlignment="Right" Margin="0,0,0,5"/>
-                                <TextBlock Text="100% secure checkout with SSL encryption." FontSize="12" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Right" TextWrapping="Wrap"/>
+                                <TextBlock Text="100% secure checkout with SSL encryption." FontSize="12" Foreground="{DynamicResource Gray500Brush}" HorizontalAlignment="Right" TextWrapping="Wrap"/>
                             </StackPanel>
                         </UniformGrid>
                     </Grid>
                 </Border>
 
                 <!-- Copyright -->
-                <Border BorderBrush="{StaticResource Gray800Brush}" BorderThickness="0,1,0,0" Padding="0,20,0,0">
+                <Border BorderBrush="#2E2E2E" BorderThickness="0,1,0,0" Padding="0,20,0,0">
                     <Grid>
                         <TextBlock Text="© 2025 HoloCrew. All rights reserved." 
                                    FontSize="12" 
-                                   Foreground="{StaticResource Gray500Brush}"/>
+                                   Foreground="{DynamicResource Gray500Brush}"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <TextBlock Text="Terms &amp; Conditions" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>
-                            <TextBlock Text="Privacy Policy" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>
-                            <TextBlock Text="Cookie Policy" FontSize="12" Foreground="{StaticResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>
-                            <TextBlock Text="Legal Notice" FontSize="12" Foreground="{StaticResource Gray500Brush}" Cursor="Hand"/>
+                            <TextBlock Text="Terms &amp; Conditions" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>
+                            <TextBlock Text="Privacy Policy" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>
+                            <TextBlock Text="Cookie Policy" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>
+                            <TextBlock Text="Legal Notice" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Cursor="Hand"/>
                         </StackPanel>
                     </Grid>
                 </Border>

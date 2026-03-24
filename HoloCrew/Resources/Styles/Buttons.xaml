@@ -8,8 +8,8 @@
 
     <!-- ========== BOTÓN PRIMARIO (NEGRO) ========== -->
     <Style x:Key="PrimaryButton" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}" />
+        <Setter Property="Background" Value="#0A0A0A" />
+        <Setter Property="Foreground" Value="White" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Padding" Value="32,16" />
@@ -53,8 +53,8 @@
 
     <!-- ========== BOTÓN ROJO (ACENTO) ========== -->
     <Style x:Key="AccentButton" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource RedAccentBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}" />
+        <Setter Property="Background" Value="{DynamicResource RedAccentBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource WhitePrimaryBrush}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Padding" Value="32,16" />
@@ -95,8 +95,8 @@
     <!-- ========== BOTÓN OUTLINE ========== -->
     <Style x:Key="OutlineButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BlackPrimaryBrush}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Bold" />
@@ -114,8 +114,8 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
-                            <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}"/>
+                            <Setter TargetName="border" Property="Background" Value="#0A0A0A"/>
+                            <Setter Property="Foreground" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="border" Property="RenderTransform">
@@ -134,7 +134,7 @@
     <!-- ========== BOTÓN DE TEXTO/LINK ========== -->
     <Style x:Key="TextButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="8,4" />
         <Setter Property="FontSize" Value="14" />
@@ -153,7 +153,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="text" Property="TextDecorations" Value="Underline"/>
-                            <Setter Property="Foreground" Value="{StaticResource RedAccentBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource RedAccentBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -180,10 +180,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource Gray100Brush}"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray100Brush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource Gray200Brush}"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray200Brush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -194,7 +194,7 @@
     <!-- ========== BOTÓN DE MENÚ ========== -->
     <Style x:Key="MenuButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="20,0" />
         <Setter Property="FontSize" Value="14" />
@@ -214,7 +214,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource RedAccentBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource RedAccentBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -241,12 +241,12 @@
 
     <!-- ========== BOTÓN DE PELIGRO ========== -->
     <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
-        <Setter Property="Background" Value="{StaticResource ErrorColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ErrorColorBrush}" />
     </Style>
 
     <!-- ========== BOTÓN DE ÉXITO ========== -->
     <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
-        <Setter Property="Background" Value="{StaticResource SuccessColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SuccessColorBrush}" />
     </Style>
 
 </ResourceDictionary>

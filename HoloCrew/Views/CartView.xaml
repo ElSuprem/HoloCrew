@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -22,7 +22,7 @@
                            FontSize="32"
                            FontWeight="Black"
                            Margin="0,0,0,8"/>
-                <TextBlock Foreground="{StaticResource Gray500Brush}" FontSize="14" Margin="0,0,0,40">
+                <TextBlock Foreground="{DynamicResource Gray500Brush}" FontSize="14" Margin="0,0,0,40">
                     <Run Text="{Binding CartItems.Count, Mode=OneWay}"/>
                     <Run Text=" items in your cart"/>
                 </TextBlock>
@@ -41,13 +41,13 @@
                     </StackPanel.Style>
                     <Viewbox Width="64" Height="64" Margin="0,0,0,25" Opacity="0.3">
                         <Path Data="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6ZM3 6H21M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10" 
-                              Stroke="{StaticResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+                              Stroke="{DynamicResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
                     </Viewbox>
                     <TextBlock Text="Your cart is empty" 
                                FontSize="22" FontWeight="SemiBold"
                                HorizontalAlignment="Center" Margin="0,0,0,10"/>
                     <TextBlock Text="Browse our collection and add items to your cart" 
-                               FontSize="14" Foreground="{StaticResource Gray500Brush}"
+                               FontSize="14" Foreground="{DynamicResource Gray500Brush}"
                                HorizontalAlignment="Center" Margin="0,0,0,30"/>
                     <Button Content="BROWSE PRODUCTS" 
                             Style="{StaticResource PrimaryButton}"
@@ -59,8 +59,8 @@
                 <ItemsControl ItemsSource="{Binding CartItems}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="{StaticResource WhitePrimaryBrush}"
-                                    BorderBrush="{StaticResource Gray200Brush}"
+                            <Border Background="{DynamicResource WhitePrimaryBrush}"
+                                    BorderBrush="{DynamicResource Gray200Brush}"
                                     BorderThickness="1"
                                     Padding="25"
                                     Margin="0,0,0,15">
@@ -73,7 +73,7 @@
 
                                     <!-- Product image placeholder -->
                                     <Border Grid.Column="0" 
-                                            Background="{StaticResource Gray100Brush}" 
+                                            Background="{DynamicResource Gray100Brush}" 
                                             Width="110" Height="110"/>
 
                                     <!-- Product info -->
@@ -82,9 +82,9 @@
                                                    FontSize="16" FontWeight="SemiBold"
                                                    Margin="0,0,0,8"/>
                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                            <TextBlock Text="Size: " Foreground="{StaticResource Gray500Brush}" FontSize="13"/>
+                                            <TextBlock Text="Size: " Foreground="{DynamicResource Gray500Brush}" FontSize="13"/>
                                             <TextBlock Text="{Binding Size}" FontSize="13" FontWeight="SemiBold"/>
-                                            <TextBlock Text="  ·  Color: " Foreground="{StaticResource Gray500Brush}" FontSize="13"/>
+                                            <TextBlock Text="  ·  Color: " Foreground="{DynamicResource Gray500Brush}" FontSize="13"/>
                                             <TextBlock Text="{Binding Color}" FontSize="13" FontWeight="SemiBold"/>
                                         </StackPanel>
                                         <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
@@ -93,25 +93,25 @@
 
                                     <!-- Quantity + Remove -->
                                     <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
-                                        <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Margin="0,0,0,12">
+                                        <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Margin="0,0,0,12">
                                             <StackPanel Orientation="Horizontal">
                                                 <Button Width="40" Height="40" Cursor="Hand"
                                                         Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                         CommandParameter="{Binding}">
                                                     <Button.Template>
                                                         <ControlTemplate TargetType="Button">
-                                                            <Border x:Name="border" Background="Transparent" BorderThickness="0,0,1,0" BorderBrush="{StaticResource Gray300Brush}">
-                                                                <TextBlock Text="−" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <Border x:Name="border" Background="Transparent" BorderThickness="0,0,1,0" BorderBrush="{DynamicResource Gray300Brush}">
+                                                                <TextBlock Text="−" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource BlackPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                             </Border>
                                                             <ControlTemplate.Triggers>
                                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter TargetName="border" Property="Background" Value="{StaticResource Gray100Brush}"/>
+                                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray100Brush}"/>
                                                                 </Trigger>
                                                             </ControlTemplate.Triggers>
                                                         </ControlTemplate>
                                                     </Button.Template>
                                                 </Button>
-                                                <TextBlock Text="{Binding Quantity}" FontSize="16" FontWeight="SemiBold"
+                                                <TextBlock Text="{Binding Quantity}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource BlackPrimaryBrush}"
                                                            VerticalAlignment="Center" HorizontalAlignment="Center"
                                                            Width="50" TextAlignment="Center"/>
                                                 <Button Width="40" Height="40" Cursor="Hand"
@@ -119,12 +119,12 @@
                                                         CommandParameter="{Binding}">
                                                     <Button.Template>
                                                         <ControlTemplate TargetType="Button">
-                                                            <Border x:Name="border" Background="Transparent" BorderThickness="1,0,0,0" BorderBrush="{StaticResource Gray300Brush}">
-                                                                <TextBlock Text="+" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <Border x:Name="border" Background="Transparent" BorderThickness="1,0,0,0" BorderBrush="{DynamicResource Gray300Brush}">
+                                                                <TextBlock Text="+" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource BlackPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                             </Border>
                                                             <ControlTemplate.Triggers>
                                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter TargetName="border" Property="Background" Value="{StaticResource Gray100Brush}"/>
+                                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray100Brush}"/>
                                                                 </Trigger>
                                                             </ControlTemplate.Triggers>
                                                         </ControlTemplate>
@@ -132,7 +132,7 @@
                                                 </Button>
                                             </StackPanel>
                                         </Border>
-                                        <TextBlock Text="Remove" FontSize="13" Foreground="{StaticResource RedAccentBrush}" 
+                                        <TextBlock Text="Remove" FontSize="13" Foreground="{DynamicResource RedAccentBrush}" 
                                                    HorizontalAlignment="Center" Cursor="Hand" TextDecorations="Underline">
                                             <TextBlock.InputBindings>
                                                 <MouseBinding Command="{Binding DataContext.RemoveFromCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -149,20 +149,20 @@
         </Border>
 
         <!-- ORDER SUMMARY SIDEBAR -->
-        <Border Grid.Column="1" Background="{StaticResource Gray50Brush}">
+        <Border Grid.Column="1" Background="{DynamicResource Gray50Brush}">
             <Border Padding="35,50,35,80">
                 <StackPanel>
                     <TextBlock Text="ORDER SUMMARY" FontSize="20" FontWeight="Black" Margin="0,0,0,30"/>
 
                     <!-- Subtotal -->
                     <Grid Margin="0,0,0,15">
-                        <TextBlock Text="Subtotal" FontSize="14" Foreground="{StaticResource Gray600Brush}"/>
+                        <TextBlock Text="Subtotal" FontSize="14" Foreground="{DynamicResource Gray600Brush}"/>
                         <TextBlock Text="{Binding Subtotal, StringFormat='{}{0:N2}€'}" FontSize="14" HorizontalAlignment="Right"/>
                     </Grid>
 
                     <!-- Shipping -->
                     <Grid Margin="0,0,0,15">
-                        <TextBlock Text="Shipping" FontSize="14" Foreground="{StaticResource Gray600Brush}"/>
+                        <TextBlock Text="Shipping" FontSize="14" Foreground="{DynamicResource Gray600Brush}"/>
                         <TextBlock HorizontalAlignment="Right" FontSize="14">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -181,7 +181,7 @@
 
                     <!-- Tax -->
                     <Grid Margin="0,0,0,15">
-                        <TextBlock Text="Tax (21%)" FontSize="14" Foreground="{StaticResource Gray600Brush}"/>
+                        <TextBlock Text="Tax (21%)" FontSize="14" Foreground="{DynamicResource Gray600Brush}"/>
                         <TextBlock Text="{Binding Tax, StringFormat='{}{0:N2}€'}" FontSize="14" HorizontalAlignment="Right"/>
                     </Grid>
 
@@ -192,7 +192,7 @@
                     </Grid>
 
                     <!-- Total -->
-                    <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="0,1,0,0" Padding="0,20,0,0" Margin="0,10,0,25">
+                    <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="0,1,0,0" Padding="0,20,0,0" Margin="0,10,0,25">
                         <Grid>
                             <TextBlock Text="TOTAL" FontSize="20" FontWeight="Black"/>
                             <TextBlock Text="{Binding Total, StringFormat='{}{0:N2}€'}" FontSize="20" FontWeight="Black" HorizontalAlignment="Right"/>
@@ -202,13 +202,13 @@
                     <!-- Coupon -->
                     <TextBlock Text="Have a coupon?" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,12"/>
                     <Grid Margin="0,0,0,8">
-                        <Border BorderBrush="{StaticResource Gray300Brush}" BorderThickness="1" Height="46">
+                        <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Height="46">
                             <Grid>
                                 <TextBox Text="{Binding CouponCode, UpdateSourceTrigger=PropertyChanged}"
                                          BorderThickness="0" Background="Transparent"
                                          FontSize="14" VerticalContentAlignment="Center"
                                          Padding="15,0,100,0"/>
-                                <TextBlock Text="Enter code" Foreground="{StaticResource Gray400Brush}" FontSize="14"
+                                <TextBlock Text="Enter code" Foreground="{DynamicResource Gray400Brush}" FontSize="14"
                                            VerticalAlignment="Center" Margin="15,0,0,0" IsHitTestVisible="False">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
@@ -237,7 +237,7 @@
                     <TextBlock Text="{Binding CouponMessage}" FontSize="13" Margin="0,0,0,20" TextWrapping="Wrap">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="{StaticResource Gray500Brush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource Gray500Brush}"/>
                                 <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsCouponValid}" Value="True">
@@ -245,7 +245,7 @@
                                         <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsCouponValid}" Value="False">
-                                        <Setter Property="Foreground" Value="{StaticResource RedAccentBrush}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource RedAccentBrush}"/>
                                         <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -281,18 +281,18 @@
 
                     <!-- Payment methods -->
                     <StackPanel Margin="0,25,0,0" HorizontalAlignment="Center">
-                        <TextBlock Text="Secure checkout with" FontSize="11" Foreground="{StaticResource Gray500Brush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                        <TextBlock Text="Secure checkout with" FontSize="11" Foreground="{DynamicResource Gray500Brush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Border Background="{StaticResource Gray100Brush}" Padding="10,5" Margin="0,0,5,0">
+                            <Border Background="{DynamicResource Gray100Brush}" Padding="10,5" Margin="0,0,5,0">
                                 <TextBlock Text="VISA" FontSize="10" FontWeight="Bold"/>
                             </Border>
-                            <Border Background="{StaticResource Gray100Brush}" Padding="10,5" Margin="0,0,5,0">
+                            <Border Background="{DynamicResource Gray100Brush}" Padding="10,5" Margin="0,0,5,0">
                                 <TextBlock Text="MASTERCARD" FontSize="10" FontWeight="Bold"/>
                             </Border>
-                            <Border Background="{StaticResource Gray100Brush}" Padding="10,5" Margin="0,0,5,0">
+                            <Border Background="{DynamicResource Gray100Brush}" Padding="10,5" Margin="0,0,5,0">
                                 <TextBlock Text="PAYPAL" FontSize="10" FontWeight="Bold"/>
                             </Border>
-                            <Border Background="{StaticResource Gray100Brush}" Padding="10,5">
+                            <Border Background="{DynamicResource Gray100Brush}" Padding="10,5">
                                 <TextBlock Text="AMEX" FontSize="10" FontWeight="Bold"/>
                             </Border>
                         </StackPanel>

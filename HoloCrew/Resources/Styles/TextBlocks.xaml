@@ -13,7 +13,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="72" />
         <Setter Property="FontWeight" Value="Black" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="TextWrapping" Value="NoWrap" />
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="LineHeight" Value="80" />
@@ -23,7 +23,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="60" />
         <Setter Property="FontWeight" Value="Black" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="68" />
     </Style>
 
@@ -32,7 +32,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="48" />
         <Setter Property="FontWeight" Value="Black" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="56" />
     </Style>
 
@@ -40,7 +40,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="36" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="44" />
     </Style>
 
@@ -48,7 +48,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="28" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="36" />
     </Style>
 
@@ -56,7 +56,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="28" />
     </Style>
 
@@ -65,7 +65,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="26" />
     </Style>
 
@@ -73,7 +73,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="24" />
     </Style>
 
@@ -81,7 +81,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="20" />
     </Style>
 
@@ -90,7 +90,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="24" />
     </Style>
 
@@ -98,7 +98,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="22" />
     </Style>
 
@@ -106,7 +106,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
         <Setter Property="LineHeight" Value="20" />
     </Style>
 
@@ -115,7 +115,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
         <Setter Property="LineHeight" Value="18" />
     </Style>
 
@@ -123,7 +123,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="LineHeight" Value="18" />
     </Style>
 
@@ -131,14 +131,14 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="11" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
     </Style>
 
     <Style x:Key="Overline" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="10" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
     </Style>
 
     <!-- ========== PRODUCT STYLES ========== -->
@@ -146,7 +146,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         <Setter Property="MaxHeight" Value="48" />
         <Setter Property="LineHeight" Value="24" />
@@ -156,7 +156,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="LineHeight" Value="22" />
     </Style>
@@ -166,35 +166,35 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="36" />
         <Setter Property="FontWeight" Value="Black" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
     <Style x:Key="PriceMain" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="28" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
     <Style x:Key="PriceCard" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
     <Style x:Key="PriceSmall" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
     <Style x:Key="PriceOriginal" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Foreground" Value="{StaticResource Gray400Brush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Gray400Brush}" />
         <Setter Property="TextDecorations" Value="Strikethrough" />
     </Style>
 
@@ -202,7 +202,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource SuccessColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}" />
     </Style>
 
     <!-- ========== BADGE & TAG STYLES ========== -->
@@ -210,14 +210,14 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="11" />
         <Setter Property="FontWeight" Value="Black" />
-        <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource WhitePrimaryBrush}" />
     </Style>
 
     <Style x:Key="TagText" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="10" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
     <!-- ========== BUTTON TEXT ========== -->
@@ -241,34 +241,34 @@
 
     <!-- ========== COLOR VARIANTS ========== -->
     <Style x:Key="TextOnDark" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
-        <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource WhitePrimaryBrush}" />
     </Style>
 
     <Style x:Key="TextSecondaryStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
     </Style>
 
     <Style x:Key="TextMuted" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
-        <Setter Property="Foreground" Value="{StaticResource Gray400Brush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Gray400Brush}" />
     </Style>
 
     <Style x:Key="TextAccent" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
-        <Setter Property="Foreground" Value="{StaticResource RedAccentBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource RedAccentBrush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <Style x:Key="TextSuccess" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
-        <Setter Property="Foreground" Value="{StaticResource SuccessColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <Style x:Key="TextError" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
-        <Setter Property="Foreground" Value="{StaticResource ErrorColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ErrorColorBrush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <Style x:Key="TextWarning" TargetType="TextBlock" BasedOn="{StaticResource BodyMedium}">
-        <Setter Property="Foreground" Value="{StaticResource WarningColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource WarningColorBrush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
@@ -277,7 +277,7 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Foreground" Value="{StaticResource RedAccentBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource RedAccentBrush}" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
@@ -290,21 +290,21 @@
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="48" />
         <Setter Property="FontWeight" Value="Black" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
     <Style x:Key="NumberMedium" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="32" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
     <Style x:Key="NumberSmall" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
     <!-- ========== CODE & MONOSPACE ========== -->
@@ -312,8 +312,8 @@
         <Setter Property="FontFamily" Value="Consolas, Courier New" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
-        <Setter Property="Background" Value="{StaticResource Gray100Brush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+        <Setter Property="Background" Value="{DynamicResource Gray100Brush}" />
         <Setter Property="Padding" Value="4,2" />
     </Style>
 

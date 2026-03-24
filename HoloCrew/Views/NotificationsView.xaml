@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Border Padding="60,40,60,80">
         <StackPanel MaxWidth="900">
@@ -16,7 +16,7 @@
                                Style="{StaticResource HeadingLarge}"
                                VerticalAlignment="Center"/>
                     <!-- Unread count badge -->
-                    <Border Background="{StaticResource RedAccentBrush}"
+                    <Border Background="{DynamicResource RedAccentBrush}"
                             CornerRadius="12"
                             Padding="10,5"
                             Margin="15,0,0,0"
@@ -42,9 +42,9 @@
 
                     <Button Content="CLEAR ALL" 
                             Background="Transparent"
-                            BorderBrush="{StaticResource ErrorColorBrush}"
+                            BorderBrush="{DynamicResource ErrorColorBrush}"
                             BorderThickness="2"
-                            Foreground="{StaticResource ErrorColorBrush}"
+                            Foreground="{DynamicResource ErrorColorBrush}"
                             FontSize="13"
                             FontWeight="Bold"
                             Padding="20,12"
@@ -66,8 +66,8 @@
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="{StaticResource ErrorColorBrush}"/>
-                                                    <Setter Property="Foreground" Value="{StaticResource WhitePrimaryBrush}"/>
+                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource ErrorColorBrush}"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource WhitePrimaryBrush}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -80,7 +80,7 @@
             </Grid>
 
             <!-- Filtros -->
-            <Border Background="{StaticResource Gray100Brush}"
+            <Border Background="{DynamicResource Gray100Brush}"
                     Padding="25,20"
                     Margin="0,0,0,30">
                 <StackPanel Orientation="Horizontal">
@@ -101,7 +101,7 @@
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
                                 <Setter Property="BorderThickness" Value="0"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
@@ -113,7 +113,7 @@
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="{StaticResource Gray200Brush}"/>
+                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray200Brush}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -121,7 +121,7 @@
                                 </Setter>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentFilter}" Value="All">
-                                        <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Setter Property="Background" Value="#0A0A0A"/>
                                         <Setter Property="Foreground" Value="White"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -139,7 +139,7 @@
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
                                 <Setter Property="BorderThickness" Value="0"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
@@ -151,7 +151,7 @@
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="{StaticResource Gray200Brush}"/>
+                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray200Brush}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -159,7 +159,7 @@
                                 </Setter>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentFilter}" Value="Unread">
-                                        <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Setter Property="Background" Value="#0A0A0A"/>
                                         <Setter Property="Foreground" Value="White"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -177,7 +177,7 @@
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
                                 <Setter Property="BorderThickness" Value="0"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
@@ -189,7 +189,7 @@
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="{StaticResource Gray200Brush}"/>
+                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray200Brush}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -197,7 +197,7 @@
                                 </Setter>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentFilter}" Value="Orders">
-                                        <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Setter Property="Background" Value="#0A0A0A"/>
                                         <Setter Property="Foreground" Value="White"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -214,7 +214,7 @@
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
                                 <Setter Property="BorderThickness" Value="0"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
@@ -226,7 +226,7 @@
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="{StaticResource Gray200Brush}"/>
+                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray200Brush}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -234,7 +234,7 @@
                                 </Setter>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentFilter}" Value="Promotions">
-                                        <Setter Property="Background" Value="{StaticResource BlackPrimaryBrush}"/>
+                                        <Setter Property="Background" Value="#0A0A0A"/>
                                         <Setter Property="Foreground" Value="White"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -255,11 +255,11 @@
                             <!-- Conditional style based on IsRead -->
                             <Border.Style>
                                 <Style TargetType="Border">
-                                    <Setter Property="Background" Value="{StaticResource WhitePrimaryBrush}"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
+                                    <Setter Property="Background" Value="{DynamicResource WhitePrimaryBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsRead}" Value="False">
-                                            <Setter Property="Background" Value="#FEF3C7"/>
+                                            <Setter Property="Background" Value="#33F59E0B"/>
                                             <Setter Property="BorderBrush" Value="#F59E0B"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -282,7 +282,7 @@
 
                                 <!-- Icon -->
                                 <Border Grid.Column="0"
-                                        Background="{StaticResource Gray100Brush}"
+                                        Background="{DynamicResource Gray100Brush}"
                                         Width="40"
                                         Height="40"
                                         CornerRadius="20"
@@ -302,14 +302,14 @@
                                                    FontWeight="SemiBold"/>
                                         <!-- Unread indicator dot -->
                                         <Ellipse Width="8" Height="8" 
-                                                 Fill="{StaticResource RedAccentBrush}"
+                                                 Fill="{DynamicResource RedAccentBrush}"
                                                  Margin="10,0,0,0"
                                                  VerticalAlignment="Center"
                                                  Visibility="{Binding IsRead, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
                                     </StackPanel>
                                     <TextBlock Text="{Binding Message}"
                                                Style="{StaticResource BodySmall}"
-                                               Foreground="{StaticResource TextSecondary}"
+                                               Foreground="{DynamicResource TextSecondary}"
                                                TextWrapping="Wrap"/>
                                 </StackPanel>
 
@@ -317,7 +317,7 @@
                                 <TextBlock Grid.Column="2"
                                            Text="{Binding TimeAgo}"
                                            Style="{StaticResource BodySmall}"
-                                           Foreground="{StaticResource TextSecondary}"
+                                           Foreground="{DynamicResource TextSecondary}"
                                            VerticalAlignment="Center"
                                            Margin="0,0,15,0"/>
 
@@ -343,13 +343,13 @@
                                                                 Width="30" Height="30">
                                                             <TextBlock Text="✕" 
                                                                        FontSize="14"
-                                                                       Foreground="{StaticResource Gray400Brush}"
+                                                                       Foreground="{DynamicResource Gray400Brush}"
                                                                        HorizontalAlignment="Center"
                                                                        VerticalAlignment="Center"/>
                                                         </Border>
                                                         <ControlTemplate.Triggers>
                                                             <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter TargetName="border" Property="Background" Value="{StaticResource ErrorColorBrush}"/>
+                                                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ErrorColorBrush}"/>
                                                             </Trigger>
                                                         </ControlTemplate.Triggers>
                                                     </ControlTemplate>
@@ -365,7 +365,7 @@
             </ItemsControl>
 
             <!-- Empty State -->
-            <Border Background="{StaticResource Gray100Brush}"
+            <Border Background="{DynamicResource Gray100Brush}"
                     Padding="60,80"
                     Visibility="{Binding HasNotifications, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <StackPanel HorizontalAlignment="Center">
@@ -379,7 +379,7 @@
                                Margin="0,0,0,15"/>
                     <TextBlock Text="You're all caught up! Notifications about orders, offers, and updates will appear here" 
                                Style="{StaticResource BodyLarge}"
-                               Foreground="{StaticResource TextSecondary}"
+                               Foreground="{DynamicResource TextSecondary}"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
                                MaxWidth="400"/>
@@ -387,8 +387,8 @@
             </Border>
 
             <!-- Notification Preferences -->
-            <Border Background="{StaticResource WhitePrimaryBrush}"
-                    BorderBrush="{StaticResource BorderDefault}"
+            <Border Background="{DynamicResource WhitePrimaryBrush}"
+                    BorderBrush="{DynamicResource BorderDefault}"
                     BorderThickness="1"
                     Padding="40"
                     Margin="0,40,0,0">
@@ -406,7 +406,7 @@
                                        Margin="0,0,0,5"/>
                             <TextBlock Text="Receive notifications via email" 
                                        Style="{StaticResource BodySmall}"
-                                       Foreground="{StaticResource TextSecondary}"/>
+                                       Foreground="{DynamicResource TextSecondary}"/>
                         </StackPanel>
 
                         <CheckBox IsChecked="{Binding EmailNotifications}"
@@ -423,7 +423,7 @@
                                        Margin="0,0,0,5"/>
                             <TextBlock Text="Receive in-app push notifications" 
                                        Style="{StaticResource BodySmall}"
-                                       Foreground="{StaticResource TextSecondary}"/>
+                                       Foreground="{DynamicResource TextSecondary}"/>
                         </StackPanel>
 
                         <CheckBox IsChecked="{Binding PushNotifications}"
@@ -440,7 +440,7 @@
                                        Margin="0,0,0,5"/>
                             <TextBlock Text="Get notified about order status changes" 
                                        Style="{StaticResource BodySmall}"
-                                       Foreground="{StaticResource TextSecondary}"/>
+                                       Foreground="{DynamicResource TextSecondary}"/>
                         </StackPanel>
 
                         <CheckBox IsChecked="{Binding OrderUpdates}"
@@ -457,7 +457,7 @@
                                        Margin="0,0,0,5"/>
                             <TextBlock Text="Get alerts when prices drop on wishlist items" 
                                        Style="{StaticResource BodySmall}"
-                                       Foreground="{StaticResource TextSecondary}"/>
+                                       Foreground="{DynamicResource TextSecondary}"/>
                         </StackPanel>
 
                         <CheckBox IsChecked="{Binding PriceAlerts}"
@@ -474,7 +474,7 @@
                                        Margin="0,0,0,5"/>
                             <TextBlock Text="Receive exclusive deals and special offers" 
                                        Style="{StaticResource BodySmall}"
-                                       Foreground="{StaticResource TextSecondary}"/>
+                                       Foreground="{DynamicResource TextSecondary}"/>
                         </StackPanel>
 
                         <CheckBox IsChecked="{Binding Promotions}"
@@ -501,7 +501,7 @@
                            Margin="0,0,0,20"/>
                 <TextBlock Text="SAVING PREFERENCES..." 
                            Style="{StaticResource SubtitleLarge}"
-                           Foreground="{StaticResource TextSecondary}"
+                           Foreground="{DynamicResource TextSecondary}"
                            HorizontalAlignment="Center"/>
             </StackPanel>
         </StackPanel>

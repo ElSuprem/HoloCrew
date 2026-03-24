@@ -3,8 +3,8 @@
 
     <!-- ========== CARD BASE ========== -->
     <Style x:Key="BaseCard" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource CardBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource CardBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="12" />
         <Setter Property="Padding" Value="16" />
@@ -66,7 +66,7 @@
         <Setter Property="Cursor" Value="Hand" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}" />
                 <Setter Property="BorderThickness" Value="2" />
             </Trigger>
         </Style.Triggers>
@@ -74,22 +74,22 @@
 
     <!-- ========== INFO CARD (sin interacción) ========== -->
     <Style x:Key="InfoCard" TargetType="Border" BasedOn="{StaticResource BaseCard}">
-        <Setter Property="Background" Value="{StaticResource InfoBrush}" />
+        <Setter Property="Background" Value="{DynamicResource InfoBrush}" />
         <Setter Property="BorderBrush" Value="#1976D2" />
     </Style>
 
     <Style x:Key="SuccessCard" TargetType="Border" BasedOn="{StaticResource BaseCard}">
-        <Setter Property="Background" Value="{StaticResource SuccessBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SuccessBrush}" />
         <Setter Property="BorderBrush" Value="#388E3C" />
     </Style>
 
     <Style x:Key="WarningCard" TargetType="Border" BasedOn="{StaticResource BaseCard}">
-        <Setter Property="Background" Value="{StaticResource WarningBrush}" />
+        <Setter Property="Background" Value="{DynamicResource WarningBrush}" />
         <Setter Property="BorderBrush" Value="#F57C00" />
     </Style>
 
     <Style x:Key="ErrorCard" TargetType="Border" BasedOn="{StaticResource BaseCard}">
-        <Setter Property="Background" Value="{StaticResource ErrorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ErrorBrush}" />
         <Setter Property="BorderBrush" Value="#D32F2F" />
     </Style>
 

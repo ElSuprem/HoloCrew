@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Grid>
 
@@ -54,7 +54,7 @@
                                Margin="0,0,0,15"/>
                     <TextBlock Text="Save your favorite products here to buy them later" 
                                Style="{StaticResource BodyLarge}"
-                               Foreground="{StaticResource TextSecondary}"
+                               Foreground="{DynamicResource TextSecondary}"
                                TextAlignment="Center"
                                MaxWidth="400"
                                TextWrapping="Wrap"
@@ -74,8 +74,8 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="{StaticResource WhitePrimaryBrush}"
-                                    BorderBrush="{StaticResource BorderDefault}"
+                            <Border Background="{DynamicResource WhitePrimaryBrush}"
+                                    BorderBrush="{DynamicResource BorderDefault}"
                                     BorderThickness="1"
                                     Margin="0,0,20,20"
                                     Cursor="Hand">
@@ -86,11 +86,11 @@
                                     </Grid.RowDefinitions>
 
                                     <!-- Imagen -->
-                                    <Rectangle Grid.Row="0" Fill="{StaticResource Gray200Brush}"/>
+                                    <Rectangle Grid.Row="0" Fill="{DynamicResource Gray200Brush}"/>
 
                                     <!-- Botón Remove -->
                                     <Border Grid.Row="0"
-                                            Background="{StaticResource WhitePrimaryBrush}"
+                                            Background="{DynamicResource WhitePrimaryBrush}"
                                             Width="40" Height="40"
                                             CornerRadius="20"
                                             HorizontalAlignment="Left"

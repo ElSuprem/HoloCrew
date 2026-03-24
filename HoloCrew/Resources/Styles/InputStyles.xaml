@@ -14,9 +14,9 @@
         <Setter Property="Padding" Value="15,0"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
-        <Setter Property="Background" Value="{StaticResource WhitePrimaryBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"/>
+        <Setter Property="Background" Value="{DynamicResource WhitePrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -32,11 +32,11 @@
                     <ControlTemplate.Triggers>
                         <!-- Hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource Gray400Brush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource Gray400Brush}"/>
                         </Trigger>
                         <!-- Focus -->
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
                             <Setter Property="BorderThickness" Value="2"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -49,7 +49,7 @@
          TEXTBOX CON ERROR
          ======================================== -->
     <Style x:Key="ErrorTextBox" TargetType="TextBox" BasedOn="{StaticResource StandardTextBox}">
-        <Setter Property="BorderBrush" Value="{StaticResource RedAccentBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource RedAccentBrush}"/>
         <Setter Property="BorderThickness" Value="2"/>
     </Style>
 
@@ -61,9 +61,9 @@
         <Setter Property="Padding" Value="15,0"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
-        <Setter Property="Background" Value="{StaticResource WhitePrimaryBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"/>
+        <Setter Property="Background" Value="{DynamicResource WhitePrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -78,10 +78,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource Gray400Brush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource Gray400Brush}"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
                             <Setter Property="BorderThickness" Value="2"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -94,7 +94,7 @@
          PASSWORDBOX CON ERROR
          ======================================== -->
     <Style x:Key="ErrorPasswordBox" TargetType="PasswordBox" BasedOn="{StaticResource StandardPasswordBox}">
-        <Setter Property="BorderBrush" Value="{StaticResource RedAccentBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource RedAccentBrush}"/>
         <Setter Property="BorderThickness" Value="2"/>
     </Style>
 
@@ -106,9 +106,9 @@
         <Setter Property="Padding" Value="15,0"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderDefault}"/>
-        <Setter Property="Background" Value="{StaticResource WhitePrimaryBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"/>
+        <Setter Property="Background" Value="{DynamicResource WhitePrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 
@@ -216,6 +216,111 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Border" Property="Background" Value="#D4AF37"/>
                             <Setter Property="Foreground" Value="#0A0A0A"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!-- ========================================
+         THEMED COMBOBOX (adapts to light/dark)
+         ======================================== -->
+    <ControlTemplate x:Key="ThemedComboBoxToggleButton" TargetType="ToggleButton">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="Border"
+                    Grid.ColumnSpan="2"
+                    Background="{DynamicResource WhitePrimaryBrush}"
+                    BorderBrush="{DynamicResource Gray300Brush}"
+                    BorderThickness="1"/>
+            <Border Grid.Column="0"
+                    Margin="1"
+                    Background="Transparent"/>
+            <Path x:Name="Arrow"
+                  Grid.Column="1"
+                  Fill="{DynamicResource Gray500Brush}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Data="M 0 0 L 4 4 L 8 0 Z"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource Gray400Brush}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="ThemedComboBox" TargetType="ComboBox">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource WhitePrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10,0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton x:Name="ToggleButton"
+                                      Template="{StaticResource ThemedComboBoxToggleButton}"
+                                      Focusable="False"
+                                      IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      ClickMode="Press"/>
+                        <ContentPresenter x:Name="ContentSite"
+                                          IsHitTestVisible="False"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          Margin="10,0,30,0"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Left"/>
+                        <Popup x:Name="Popup"
+                               Placement="Bottom"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Slide">
+                            <Grid x:Name="DropDown"
+                                  SnapsToDevicePixels="True"
+                                  MinWidth="{TemplateBinding ActualWidth}"
+                                  MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border x:Name="DropDownBorder"
+                                        Background="{DynamicResource WhitePrimaryBrush}"
+                                        BorderBrush="{DynamicResource Gray300Brush}"
+                                        BorderThickness="1"/>
+                                <ScrollViewer Margin="4" SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ThemedComboBoxItem" TargetType="ComboBoxItem">
+        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="10,8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Gray200Brush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

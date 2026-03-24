@@ -80,11 +80,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource Gray50Brush}"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BlackPrimaryBrush}"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray50Brush}"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BlackPrimaryBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource Gray100Brush}"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray100Brush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -113,10 +113,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource Gray100Brush}"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray100Brush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource Gray200Brush}"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Gray200Brush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

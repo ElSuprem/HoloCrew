@@ -6,19 +6,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="1200" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Grid>
         <!-- ============================================ -->
         <!-- LOADING STATE -->
         <!-- ============================================ -->
         <Border Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                Background="{StaticResource BackgroundPrimary}">
+                Background="{DynamicResource BackgroundPrimary}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Text="" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,20"/>
                 <TextBlock Text="{Binding LoadingMessage}" 
                            FontSize="16"
-                           Foreground="{StaticResource Gray500Brush}"/>
+                           Foreground="{DynamicResource Gray500Brush}"/>
             </StackPanel>
         </Border>
 
@@ -26,7 +26,7 @@
         <!-- EMPTY STATE -->
         <!-- ============================================ -->
         <Border Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
-                Background="{StaticResource BackgroundPrimary}">
+                Background="{DynamicResource BackgroundPrimary}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="400">
                 <TextBlock Text="" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,20"/>
                 <TextBlock Text="{Binding EmptyTitle}" 
@@ -36,7 +36,7 @@
                            Margin="0,0,0,10"/>
                 <TextBlock Text="{Binding EmptySubtitle}" 
                            FontSize="16"
-                           Foreground="{StaticResource Gray500Brush}"
+                           Foreground="{DynamicResource Gray500Brush}"
                            TextAlignment="Center"
                            TextWrapping="Wrap"
                            Margin="0,0,0,30"/>
@@ -59,7 +59,8 @@
                 <!-- ============================================ -->
                 <!-- HERO BANNER CON COUNTDOWN -->
                 <!-- ============================================ -->
-                <Border Background="{StaticResource BlackPrimaryBrush}" Padding="80,60">
+                <!-- HERO: Always dark -->
+                <Border Background="#0A0A0A" Padding="80,60">
                     <Grid>
                         <!-- Fondo con patrón -->
                         <Border Opacity="0.1">
@@ -81,7 +82,7 @@
                             <!-- Título y subtítulo -->
                             <StackPanel Grid.Column="0" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                                    <Border Background="{StaticResource RedAccentBrush}" Padding="12,6">
+                                    <Border Background="{DynamicResource RedAccentBrush}" Padding="12,6">
                                         <TextBlock Text="LIMITED TIME" 
                                                    Foreground="White" 
                                                    FontSize="12" 
@@ -114,10 +115,10 @@
 
                                 <TextBlock Text="{Binding SaleSubtitle}"
                                            FontSize="16"
-                                           Foreground="{StaticResource Gray400Brush}"
+                                           Foreground="{DynamicResource Gray400Brush}"
                                            Margin="0,0,0,25"/>
 
-                                <TextBlock FontSize="14" Foreground="{StaticResource Gray500Brush}">
+                                <TextBlock FontSize="14" Foreground="{DynamicResource Gray500Brush}">
                                     <Run Text="{Binding TotalProductCount, Mode=OneWay}"/>
                                     <Run Text=" products on sale"/>
                                 </TextBlock>
@@ -132,14 +133,14 @@
                                     <TextBlock Text="ENDS IN"
                                                FontSize="12"
                                                FontWeight="Bold"
-                                               Foreground="{StaticResource Gray500Brush}"
+                                               Foreground="{DynamicResource Gray500Brush}"
                                                HorizontalAlignment="Center"
                                                Margin="0,0,0,15"/>
 
                                     <StackPanel Orientation="Horizontal">
                                         <!-- Hours -->
                                         <StackPanel>
-                                            <Border Background="{StaticResource RedAccentBrush}" 
+                                            <Border Background="{DynamicResource RedAccentBrush}" 
                                                     Padding="20,15"
                                                     MinWidth="70">
                                                 <TextBlock Text="{Binding HoursRemaining, StringFormat={}{0:D2}}"
@@ -150,7 +151,7 @@
                                             </Border>
                                             <TextBlock Text="HOURS"
                                                        FontSize="10"
-                                                       Foreground="{StaticResource Gray500Brush}"
+                                                       Foreground="{DynamicResource Gray500Brush}"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
                                         </StackPanel>
@@ -164,7 +165,7 @@
 
                                         <!-- Minutes -->
                                         <StackPanel>
-                                            <Border Background="{StaticResource RedAccentBrush}" 
+                                            <Border Background="{DynamicResource RedAccentBrush}" 
                                                     Padding="20,15"
                                                     MinWidth="70">
                                                 <TextBlock Text="{Binding MinutesRemaining, StringFormat={}{0:D2}}"
@@ -175,7 +176,7 @@
                                             </Border>
                                             <TextBlock Text="MINS"
                                                        FontSize="10"
-                                                       Foreground="{StaticResource Gray500Brush}"
+                                                       Foreground="{DynamicResource Gray500Brush}"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
                                         </StackPanel>
@@ -189,7 +190,7 @@
 
                                         <!-- Seconds -->
                                         <StackPanel>
-                                            <Border Background="{StaticResource RedAccentBrush}" 
+                                            <Border Background="{DynamicResource RedAccentBrush}" 
                                                     Padding="20,15"
                                                     MinWidth="70">
                                                 <TextBlock Text="{Binding SecondsRemaining, StringFormat={}{0:D2}}"
@@ -200,7 +201,7 @@
                                             </Border>
                                             <TextBlock Text="SECS"
                                                        FontSize="10"
-                                                       Foreground="{StaticResource Gray500Brush}"
+                                                       Foreground="{DynamicResource Gray500Brush}"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
                                         </StackPanel>
@@ -237,8 +238,8 @@
                 <!-- ============================================ -->
                 <!-- FILTERS BAR -->
                 <!-- ============================================ -->
-                <Border Background="{StaticResource WhitePrimaryBrush}"
-                        BorderBrush="{StaticResource Gray200Brush}"
+                <Border Background="{DynamicResource WhitePrimaryBrush}"
+                        BorderBrush="{DynamicResource Gray200Brush}"
                         BorderThickness="0,0,0,1"
                         Padding="80,20">
                     <Grid>
@@ -275,8 +276,8 @@
                                             <Button.Style>
                                                 <Style TargetType="Button">
                                                     <Setter Property="Background" Value="Transparent"/>
-                                                    <Setter Property="Foreground" Value="{StaticResource BlackPrimaryBrush}"/>
-                                                    <Setter Property="BorderBrush" Value="{StaticResource Gray300Brush}"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
                                                     <Setter Property="BorderThickness" Value="1"/>
                                                     <Setter Property="Template">
                                                         <Setter.Value>
@@ -292,7 +293,7 @@
                                                     </Setter>
                                                     <Style.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="{StaticResource Gray100Brush}"/>
+                                                            <Setter Property="Background" Value="{DynamicResource Gray100Brush}"/>
                                                         </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -315,7 +316,8 @@
                                       Height="36"
                                       Padding="12,0"
                                       FontSize="13"
-                                      BorderBrush="{StaticResource Gray300Brush}"/>
+                                      Style="{StaticResource ThemedComboBox}"
+                                      ItemContainerStyle="{StaticResource ThemedComboBoxItem}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -323,7 +325,7 @@
                 <!-- ============================================ -->
                 <!-- PRODUCTS GRID -->
                 <!-- ============================================ -->
-                <Border Padding="80,50" Background="{StaticResource Gray50Brush}">
+                <Border Padding="80,50" Background="{DynamicResource Gray50Brush}">
                     <ItemsControl ItemsSource="{Binding FlashSaleProducts}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -333,7 +335,7 @@
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="{StaticResource WhitePrimaryBrush}"
+                                <Border Background="{DynamicResource WhitePrimaryBrush}"
                                         Margin="10"
                                         Cursor="Hand">
                                     <Border.Effect>
@@ -346,7 +348,7 @@
                                         </Grid.RowDefinitions>
 
                                         <!-- Image -->
-                                        <Border Grid.Row="0" Background="{StaticResource Gray100Brush}">
+                                        <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}">
                                             <Border.InputBindings>
                                                 <MouseBinding MouseAction="LeftClick" 
                                                               Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -354,7 +356,7 @@
                                             </Border.InputBindings>
                                             <Grid>
                                                 <!-- Discount Badge -->
-                                                <Border Background="{StaticResource RedAccentBrush}"
+                                                <Border Background="{DynamicResource RedAccentBrush}"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Top"
                                                         Padding="12,6"
@@ -414,8 +416,8 @@
                                                     </Button.Template>
                                                 </Button>
 
-                                                <!-- Quick Add -->
-                                                <Button Background="{StaticResource BlackPrimaryBrush}"
+                                                <!-- Quick Add (always dark) -->
+                                                <Button Background="#0A0A0A"
                                                         BorderThickness="0"
                                                         Height="45"
                                                         VerticalAlignment="Bottom"
@@ -451,10 +453,10 @@
                                                 <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
                                                            FontSize="18"
                                                            FontWeight="Bold"
-                                                           Foreground="{StaticResource RedAccentBrush}"/>
+                                                           Foreground="{DynamicResource RedAccentBrush}"/>
                                                 <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
                                                            FontSize="14"
-                                                           Foreground="{StaticResource Gray400Brush}"
+                                                           Foreground="{DynamicResource Gray400Brush}"
                                                            TextDecorations="Strikethrough"
                                                            Margin="12,2,0,0"/>
                                             </StackPanel>
@@ -496,8 +498,8 @@
 
                 <!-- ============================================ -->
                 <!-- BOTTOM CTA -->
-                <!-- ============================================ -->
-                <Border Background="{StaticResource BlackPrimaryBrush}" Padding="80,50">
+                <!-- BOTTOM CTA: Always dark -->
+                <Border Background="#0A0A0A" Padding="80,50">
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="Don't see what you're looking for?"
                                    FontSize="18"

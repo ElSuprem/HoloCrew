@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1400"
-             Background="{StaticResource BackgroundPrimary}">
+             Background="{DynamicResource BackgroundPrimary}">
 
     <Grid>
         <!-- ============================================ -->
@@ -41,7 +41,7 @@
                 <StackPanel>
 
                     <!-- HERO SECTION -->
-                    <Border Background="{StaticResource BlackPrimaryBrush}"
+                    <Border Background="#0A0A0A"
                         CornerRadius="20"
                         Padding="60,50"
                         Margin="0,0,0,50">
@@ -59,12 +59,12 @@
                                 <TextBlock Text="MEMBERS CLUB" 
                                        FontSize="48"
                                        FontWeight="Bold"
-                                       Foreground="{StaticResource WhitePrimaryBrush}"
+                                       Foreground="White"
                                        Margin="0,0,0,10"/>
 
                                 <TextBlock Text="Recompensas Exclusivas, Descuentos y Más" 
                                        FontSize="20"
-                                       Foreground="{StaticResource Gray400Brush}"
+                                       Foreground="{DynamicResource Gray400Brush}"
                                        Margin="0,0,0,30"/>
 
                                 <!-- Nivel Actual -->
@@ -76,10 +76,10 @@
                                         <TextBlock Text="{Binding CurrentTier.Name}" 
                                                FontSize="32"
                                                FontWeight="Bold"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                               Foreground="White"/>
                                         <TextBlock Text="MEMBER" 
                                                FontSize="14"
-                                               Foreground="{StaticResource Gray400Brush}"/>
+                                               Foreground="{DynamicResource Gray400Brush}"/>
                                     </StackPanel>
                                 </StackPanel>
 
@@ -96,10 +96,10 @@
                                         <TextBlock Text="{Binding UserMembership.TotalPoints}" 
                                                FontSize="36"
                                                FontWeight="Bold"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                               Foreground="White"/>
                                         <TextBlock Text="Puntos Totales" 
                                                FontSize="14"
-                                               Foreground="{StaticResource Gray400Brush}"/>
+                                               Foreground="{DynamicResource Gray400Brush}"/>
                                     </StackPanel>
 
                                     <!-- Total Orders -->
@@ -107,10 +107,10 @@
                                         <TextBlock Text="{Binding UserMembership.TotalOrders}" 
                                                FontSize="36"
                                                FontWeight="Bold"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                               Foreground="White"/>
                                         <TextBlock Text="Pedidos" 
                                                FontSize="14"
-                                               Foreground="{StaticResource Gray400Brush}"/>
+                                               Foreground="{DynamicResource Gray400Brush}"/>
                                     </StackPanel>
 
                                     <!-- Member Since -->
@@ -118,10 +118,10 @@
                                         <TextBlock Text="{Binding UserMembership.MemberSince, StringFormat='{}{0:MMM yyyy}'}" 
                                                FontSize="36"
                                                FontWeight="Bold"
-                                               Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                               Foreground="White"/>
                                         <TextBlock Text="Miembro Desde" 
                                                FontSize="14"
-                                               Foreground="{StaticResource Gray400Brush}"/>
+                                               Foreground="{DynamicResource Gray400Brush}"/>
                                     </StackPanel>
                                 </Grid>
                             </StackPanel>
@@ -136,7 +136,7 @@
                                     <TextBlock Text="PROGRESO AL SIGUIENTE NIVEL" 
                                            FontSize="14"
                                            FontWeight="SemiBold"
-                                           Foreground="{StaticResource Gray400Brush}"
+                                           Foreground="{DynamicResource Gray400Brush}"
                                            Margin="0,0,0,20"/>
 
                                     <!-- Next Level Icon -->
@@ -147,8 +147,8 @@
                                             <TextBlock Text="{Binding NextTier.Name}" 
                                                    FontSize="28"
                                                    FontWeight="Bold"
-                                                   Foreground="{StaticResource WhitePrimaryBrush}"/>
-                                            <TextBlock FontSize="14" Foreground="{StaticResource Gray400Brush}">
+                                                   Foreground="White"/>
+                                            <TextBlock FontSize="14" Foreground="{DynamicResource Gray400Brush}">
                                             <Run Text="{Binding UserMembership.PointsToNextLevel}"/>
                                             <Run Text=" puntos restantes"/>
                                             </TextBlock>
@@ -162,7 +162,7 @@
                                             CornerRadius="6"
                                             Width="270"/>
                                         <!-- 75% de 270 = 202.5 -->
-                                        <Border Background="{StaticResource AccentBrush}"
+                                        <Border Background="{DynamicResource AccentBrush}"
                                             Height="12"
                                             CornerRadius="6"
                                             HorizontalAlignment="Left"
@@ -173,10 +173,10 @@
                                     <Run Text="{Binding UserMembership.ProgressPercentage, StringFormat={}{0:F0}}" 
                                          FontSize="16" 
                                          FontWeight="Bold" 
-                                         Foreground="{StaticResource WhitePrimaryBrush}"/>
+                                         Foreground="White"/>
                                     <Run Text="%" 
                                          FontSize="16" 
-                                         Foreground="{StaticResource Gray400Brush}"/>
+                                         Foreground="{DynamicResource Gray400Brush}"/>
                                     </TextBlock>
                                 </StackPanel>
                             </Border>
@@ -199,8 +199,8 @@
 
                             <!-- Benefit 1: Descuento -->
                             <Border Grid.Column="0"
-                                Background="{StaticResource WhitePrimaryBrush}"
-                                BorderBrush="{StaticResource BorderDefault}"
+                                Background="{DynamicResource WhitePrimaryBrush}"
+                                BorderBrush="{DynamicResource BorderDefault}"
                                 BorderThickness="1"
                                 Padding="30"
                                 Margin="0,0,15,0">
@@ -216,14 +216,14 @@
                                     </TextBlock>
                                     <TextBlock Text="Descuento" 
                                            FontSize="16"
-                                           Foreground="{StaticResource TextSecondary}"/>
+                                           Foreground="{DynamicResource TextSecondary}"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Benefit 2: Puntos Multiplier -->
                             <Border Grid.Column="1"
-                                Background="{StaticResource WhitePrimaryBrush}"
-                                BorderBrush="{StaticResource BorderDefault}"
+                                Background="{DynamicResource WhitePrimaryBrush}"
+                                BorderBrush="{DynamicResource BorderDefault}"
                                 BorderThickness="1"
                                 Padding="30"
                                 Margin="0,0,15,0">
@@ -239,14 +239,14 @@
                                     </TextBlock>
                                     <TextBlock Text="Puntos por €1" 
                                            FontSize="16"
-                                           Foreground="{StaticResource TextSecondary}"/>
+                                           Foreground="{DynamicResource TextSecondary}"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Benefit 3: Free Shipping -->
                             <Border Grid.Column="2"
-                                Background="{StaticResource WhitePrimaryBrush}"
-                                BorderBrush="{StaticResource BorderDefault}"
+                                Background="{DynamicResource WhitePrimaryBrush}"
+                                BorderBrush="{DynamicResource BorderDefault}"
                                 BorderThickness="1"
                                 Padding="30">
                                 <StackPanel>
@@ -257,7 +257,7 @@
                                            FontSize="28" 
                                            FontWeight="Bold" 
                                            Margin="0,0,0,10"/>
-                                    <TextBlock FontSize="16" Foreground="{StaticResource TextSecondary}">
+                                    <TextBlock FontSize="16" Foreground="{DynamicResource TextSecondary}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Text" Value="Con condiciones"/>
@@ -289,8 +289,8 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                                        BorderBrush="{StaticResource BorderDefault}"
+                                    <Border Background="{DynamicResource WhitePrimaryBrush}"
+                                        BorderBrush="{DynamicResource BorderDefault}"
                                         BorderThickness="2"
                                         Padding="25,30"
                                         Margin="0,0,15,0">
@@ -307,7 +307,7 @@
                                                    Margin="0,0,0,5"/>
                                             <TextBlock HorizontalAlignment="Center" 
                                                    FontSize="14" 
-                                                   Foreground="{StaticResource TextSecondary}"
+                                                   Foreground="{DynamicResource TextSecondary}"
                                                    Margin="0,0,0,20">
                                             <Run Text="{Binding PointsRequired}"/>
                                             <Run Text=" pts"/>
@@ -321,7 +321,7 @@
                                                                FontSize="12"
                                                                TextWrapping="Wrap"
                                                                Margin="0,0,0,8"
-                                                               Foreground="{StaticResource TextSecondary}"/>
+                                                               Foreground="{DynamicResource TextSecondary}"/>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -347,8 +347,8 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="{StaticResource WhitePrimaryBrush}"
-                                        BorderBrush="{StaticResource BorderDefault}"
+                                    <Border Background="{DynamicResource WhitePrimaryBrush}"
+                                        BorderBrush="{DynamicResource BorderDefault}"
                                         BorderThickness="1"
                                         Padding="25"
                                         Margin="0,0,15,15">
@@ -375,9 +375,9 @@
                                                 <TextBlock Text="{Binding Description}" 
                                                        FontSize="14"
                                                        TextWrapping="Wrap"
-                                                       Foreground="{StaticResource TextSecondary}"
+                                                       Foreground="{DynamicResource TextSecondary}"
                                                        Margin="0,0,0,15"/>
-                                                <TextBlock FontSize="16" FontWeight="Bold" Foreground="{StaticResource AccentBrush}">
+                                                <TextBlock FontSize="16" FontWeight="Bold" Foreground="{DynamicResource AccentBrush}">
                                                 <Run Text="{Binding PointsCost}"/>
                                                 <Run Text=" puntos"/>
                                                 </TextBlock>
@@ -395,7 +395,7 @@
                                                 <Button.Style>
                                                     <Style TargetType="Button">
                                                         <Setter Property="Content" Value="CANJEAR"/>
-                                                        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                                        <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
                                                         <Setter Property="Foreground" Value="White"/>
                                                         <Setter Property="BorderThickness" Value="0"/>
                                                         <Setter Property="Template">
@@ -411,11 +411,11 @@
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsRedeemed}" Value="True">
                                                                 <Setter Property="Content" Value="✓ CANJEADO"/>
-                                                                <Setter Property="Background" Value="{StaticResource Gray300Brush}"/>
+                                                                <Setter Property="Background" Value="{DynamicResource Gray300Brush}"/>
                                                                 <Setter Property="IsEnabled" Value="False"/>
                                                             </DataTrigger>
                                                             <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter Property="Background" Value="{StaticResource AccentDarkBrush}"/>
+                                                                <Setter Property="Background" Value="{DynamicResource AccentDarkBrush}"/>
                                                             </Trigger>
                                                         </Style.Triggers>
                                                     </Style>

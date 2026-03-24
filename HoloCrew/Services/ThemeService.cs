@@ -1,12 +1,11 @@
-﻿using HoloCrew.Services;
-using HoloCrew.Services.Interfaces;
+﻿using HoloCrew.Services.Interfaces;
 using System;
-using System.Windows;
 
 namespace HoloCrew.Services
 {
     /// <summary>
-    /// Implementación del servicio de temas
+    /// Servicio de temas — Delega a ThemeManager para el cambio real.
+    /// Ya NO intenta cargar Dark.xaml/Light.xaml (no existen).
     /// </summary>
     public class ThemeService : IThemeService
     {
@@ -15,25 +14,8 @@ namespace HoloCrew.Services
         public void SetTheme(AppTheme theme)
         {
             _currentTheme = theme;
-
-            // Cambiar los recursos de la aplicación
-            var themeDictionary = theme == AppTheme.Dark
-                ? new ResourceDictionary { Source = new Uri("Resources/Themes/Dark.xaml", UriKind.Relative) }
-                : new ResourceDictionary { Source = new Uri("Resources/Themes/Light.xaml", UriKind.Relative) };
-
-            try
-            {
-                Application.Current.Resources.MergedDictionaries.Clear();
-                Application.Current.Resources.MergedDictionaries.Add(themeDictionary);
-
-                // Guardar preferencia
-                SaveThemePreference(theme);
-            }
-            catch (Exception)
-            {
-                // Si falla (ej: archivos de tema no existen), continuar sin error
-                System.Diagnostics.Debug.WriteLine($"No se pudo cargar el tema: {theme}");
-            }
+            ThemeManager.ApplyTheme(theme == AppTheme.Dark);
+            SaveThemePreference(theme);
         }
 
         public AppTheme GetCurrentTheme()
@@ -49,24 +31,21 @@ namespace HoloCrew.Services
 
         public void ApplySavedTheme()
         {
-            // Cargar tema guardado desde configuración
             var savedTheme = LoadThemePreference();
-            SetTheme(savedTheme);
+            _currentTheme = savedTheme;
+            // Apply via ThemeManager — no ResourceDictionary file loading
+            ThemeManager.ApplyTheme(savedTheme == AppTheme.Dark);
         }
 
         private void SaveThemePreference(AppTheme theme)
         {
-            // TODO: Guardar en configuración persistente
-            // Properties.Settings.Default.Theme = theme.ToString();
-            // Properties.Settings.Default.Save();
+            // TODO Fase 2: Guardar en configuración persistente (Supabase o local settings)
+            System.Diagnostics.Debug.WriteLine($"[ThemeService] Saved preference: {theme}");
         }
 
         private AppTheme LoadThemePreference()
         {
-            // TODO: Cargar desde configuración persistente
-            // var savedTheme = Properties.Settings.Default.Theme;
-            // return Enum.TryParse<AppTheme>(savedTheme, out var theme) ? theme : AppTheme.Light;
-
+            // TODO Fase 2: Cargar desde configuración persistente
             return AppTheme.Light;
         }
     }

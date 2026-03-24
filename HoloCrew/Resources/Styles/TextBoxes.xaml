@@ -5,10 +5,10 @@
     <Style x:Key="BaseTextBox" TargetType="TextBox">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="12,10" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Background" Value="White" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
@@ -22,12 +22,12 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource BorderFocusBrush}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
                             <Setter Property="BorderThickness" Value="2" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Background" Value="#F5F5F5" />
-                            <Setter Property="Foreground" Value="{StaticResource TextDisabledBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource TextDisabledBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -44,10 +44,10 @@
     <Style x:Key="BasePasswordBox" TargetType="PasswordBox">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="12,10" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Background" Value="White" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="PasswordBox">
@@ -61,7 +61,7 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource BorderFocusBrush}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
                             <Setter Property="BorderThickness" Value="2" />
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -74,10 +74,10 @@
     <Style x:Key="BaseComboBox" TargetType="ComboBox">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="12,10" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Background" Value="White" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
     </Style>
 
 </ResourceDictionary>
