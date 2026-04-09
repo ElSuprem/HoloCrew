@@ -5,6 +5,10 @@ using System.Windows.Navigation;
 
 namespace HoloCrew.Views
 {
+    // Vista de registro (code-behind).
+    // Sincroniza los PasswordBox con las propiedades del ViewModel.
+    // Muestra los términos y condiciones en un MessageBox.
+
     public partial class RegisterView : UserControl
     {
         public RegisterView()
@@ -12,7 +16,7 @@ namespace HoloCrew.Views
             InitializeComponent();
         }
 
-        // Sincronizar PasswordBox con ViewModel
+        // sincroniza el campo contraseña con el ViewModel
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RegisterViewModel viewModel)
@@ -21,7 +25,7 @@ namespace HoloCrew.Views
             }
         }
 
-        // Sincronizar ConfirmPasswordBox con ViewModel
+        // sincroniza el campo confirmar contraseña con el ViewModel
         private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RegisterViewModel viewModel)
@@ -30,10 +34,9 @@ namespace HoloCrew.Views
             }
         }
 
-        // Abrir términos y condiciones en navegador
+        // muestra los términos y condiciones en un cuadro de diálogo
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            // Mostrar términos en un MessageBox por ahora
             MessageBox.Show(
                 "TÉRMINOS Y CONDICIONES DE HOLOCREW\n\n" +
                 "1. Aceptación de los términos\n" +

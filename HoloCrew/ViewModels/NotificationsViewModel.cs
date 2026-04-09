@@ -5,6 +5,11 @@ using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
 using System.Collections.ObjectModel;
 
+// ViewModel de la página de notificaciones.
+// Muestra la lista de notificaciones, permite filtrar por tipo (todas, no leídas, pedidos, promociones),
+// marcar como leídas, eliminar, y cambiar la configuración de notificaciones.
+// Se conecta con NotificationService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class NotificationsViewModel : ViewModelBase
@@ -59,80 +64,18 @@ namespace HoloCrew.ViewModels
             UpdateCounts();
         }
 
+        // datos de ejemplo para probar sin base de datos real
         private void LoadMockNotifications()
         {
             _allNotifications = new ObservableCollection<Notification>
             {
-                new Notification
-                {
-                    Id = 1,
-                    Title = "Order Shipped",
-                    Message = "Your order #12345 has been shipped and is on its way!",
-                    Type = "Order",
-                    Icon = "📦",
-                    CreatedAt = DateTime.Now.AddMinutes(-30),
-                    IsRead = false
-                },
-                new Notification
-                {
-                    Id = 2,
-                    Title = "Flash Sale Alert",
-                    Message = "50% OFF on all hoodies! Limited time offer.",
-                    Type = "Promotion",
-                    Icon = "🔥",
-                    CreatedAt = DateTime.Now.AddHours(-2),
-                    IsRead = false
-                },
-                new Notification
-                {
-                    Id = 3,
-                    Title = "Order Delivered",
-                    Message = "Your order #12340 has been delivered successfully.",
-                    Type = "Order",
-                    Icon = "✅",
-                    CreatedAt = DateTime.Now.AddHours(-5),
-                    IsRead = true
-                },
-                new Notification
-                {
-                    Id = 4,
-                    Title = "Price Drop Alert",
-                    Message = "CARGO PANTS now €59.99 (was €79.99)",
-                    Type = "Alert",
-                    Icon = "💰",
-                    CreatedAt = DateTime.Now.AddDays(-1),
-                    IsRead = false
-                },
-                new Notification
-                {
-                    Id = 5,
-                    Title = "New Arrivals",
-                    Message = "Check out our new winter collection!",
-                    Type = "Promotion",
-                    Icon = "✨",
-                    CreatedAt = DateTime.Now.AddDays(-2),
-                    IsRead = true
-                },
-                new Notification
-                {
-                    Id = 6,
-                    Title = "Welcome to HoloCrew",
-                    Message = "Thanks for joining! Here's 10% off your first order: WELCOME10",
-                    Type = "Info",
-                    Icon = "👋",
-                    CreatedAt = DateTime.Now.AddDays(-7),
-                    IsRead = true
-                },
-                new Notification
-                {
-                    Id = 7,
-                    Title = "Order Confirmed",
-                    Message = "We've received your order #12345. Preparing for shipment.",
-                    Type = "Order",
-                    Icon = "🛒",
-                    CreatedAt = DateTime.Now.AddDays(-8),
-                    IsRead = true
-                }
+                new Notification { Id = 1, Title = "Order Shipped", Message = "Your order #12345 has been shipped and is on its way!", Type = "Order", Icon = "📦", CreatedAt = DateTime.Now.AddMinutes(-30), IsRead = false },
+                new Notification { Id = 2, Title = "Flash Sale Alert", Message = "50% OFF on all hoodies! Limited time offer.", Type = "Promotion", Icon = "🔥", CreatedAt = DateTime.Now.AddHours(-2), IsRead = false },
+                new Notification { Id = 3, Title = "Order Delivered", Message = "Your order #12340 has been delivered successfully.", Type = "Order", Icon = "✅", CreatedAt = DateTime.Now.AddHours(-5), IsRead = true },
+                new Notification { Id = 4, Title = "Price Drop Alert", Message = "CARGO PANTS now €59.99 (was €79.99)", Type = "Alert", Icon = "💰", CreatedAt = DateTime.Now.AddDays(-1), IsRead = false },
+                new Notification { Id = 5, Title = "New Arrivals", Message = "Check out our new winter collection!", Type = "Promotion", Icon = "✨", CreatedAt = DateTime.Now.AddDays(-2), IsRead = true },
+                new Notification { Id = 6, Title = "Welcome to HoloCrew", Message = "Thanks for joining! Here's 10% off your first order: WELCOME10", Type = "Info", Icon = "👋", CreatedAt = DateTime.Now.AddDays(-7), IsRead = true },
+                new Notification { Id = 7, Title = "Order Confirmed", Message = "We've received your order #12345. Preparing for shipment.", Type = "Order", Icon = "🛒", CreatedAt = DateTime.Now.AddDays(-8), IsRead = true }
             };
 
             Notifications = new ObservableCollection<Notification>(_allNotifications);
@@ -150,8 +93,7 @@ namespace HoloCrew.ViewModels
         private void ShowUnread()
         {
             CurrentFilter = "Unread";
-            Notifications = new ObservableCollection<Notification>(
-                _allNotifications.Where(n => !n.IsRead));
+            Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => !n.IsRead));
             UpdateCounts();
         }
 
@@ -159,8 +101,7 @@ namespace HoloCrew.ViewModels
         private void ShowOrders()
         {
             CurrentFilter = "Orders";
-            Notifications = new ObservableCollection<Notification>(
-                _allNotifications.Where(n => n.Type == "Order"));
+            Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => n.Type == "Order"));
             UpdateCounts();
         }
 
@@ -168,20 +109,17 @@ namespace HoloCrew.ViewModels
         private void ShowPromotions()
         {
             CurrentFilter = "Promotions";
-            Notifications = new ObservableCollection<Notification>(
-                _allNotifications.Where(n => n.Type == "Promotion"));
+            Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => n.Type == "Promotion"));
             UpdateCounts();
         }
 
         [RelayCommand]
         private void MarkAllAsRead()
         {
-            // ⭐ CORREGIDO: Crear nuevas instancias para forzar actualización de UI
             var updatedNotifications = new ObservableCollection<Notification>();
 
             foreach (var notification in _allNotifications)
             {
-                // Crear nueva instancia con IsRead = true
                 updatedNotifications.Add(new Notification
                 {
                     Id = notification.Id,
@@ -190,27 +128,22 @@ namespace HoloCrew.ViewModels
                     Type = notification.Type,
                     Icon = notification.Icon,
                     CreatedAt = notification.CreatedAt,
-                    IsRead = true // ⭐ Marcar como leído
+                    IsRead = true
                 });
             }
 
-            // Reemplazar la lista completa
             _allNotifications = updatedNotifications;
 
-            // Actualizar la vista según el filtro actual
             switch (CurrentFilter)
             {
                 case "Unread":
-                    Notifications = new ObservableCollection<Notification>(
-                        _allNotifications.Where(n => !n.IsRead));
+                    Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => !n.IsRead));
                     break;
                 case "Orders":
-                    Notifications = new ObservableCollection<Notification>(
-                        _allNotifications.Where(n => n.Type == "Order"));
+                    Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => n.Type == "Order"));
                     break;
                 case "Promotions":
-                    Notifications = new ObservableCollection<Notification>(
-                        _allNotifications.Where(n => n.Type == "Promotion"));
+                    Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => n.Type == "Promotion"));
                     break;
                 default:
                     Notifications = new ObservableCollection<Notification>(_allNotifications);
@@ -233,7 +166,6 @@ namespace HoloCrew.ViewModels
         {
             if (notification == null) return;
 
-            // Encontrar y actualizar en la lista principal
             var index = _allNotifications.ToList().FindIndex(n => n.Id == notification.Id);
             if (index >= 0)
             {
@@ -250,7 +182,6 @@ namespace HoloCrew.ViewModels
 
                 _allNotifications[index] = updatedNotification;
 
-                // Actualizar en la vista actual
                 var viewIndex = Notifications.ToList().FindIndex(n => n.Id == notification.Id);
                 if (viewIndex >= 0)
                 {
@@ -266,7 +197,6 @@ namespace HoloCrew.ViewModels
         {
             if (notification == null) return;
 
-            // Remover de ambas listas
             var toRemoveFromAll = _allNotifications.FirstOrDefault(n => n.Id == notification.Id);
             if (toRemoveFromAll != null)
             {
@@ -287,11 +217,7 @@ namespace HoloCrew.ViewModels
         {
             if (notification == null) return;
 
-            // Marcar como leído
             MarkAsRead(notification);
-
-            // Aquí podrías navegar según el tipo de notificación
-            // Por ejemplo, si es una orden, navegar al detalle de la orden
             System.Diagnostics.Debug.WriteLine($"Opened notification: {notification.Title}");
         }
 
@@ -301,10 +227,7 @@ namespace HoloCrew.ViewModels
             try
             {
                 IsLoading = true;
-                await Task.Delay(500);
-
-                // Aquí guardarías las preferencias
-                // await _notificationService.SaveSettingsAsync(...)
+                await Task.Delay(500);  // simula guardado
 
                 System.Diagnostics.Debug.WriteLine("Notification settings saved!");
                 System.Diagnostics.Debug.WriteLine($"Email: {EmailNotifications}, Push: {PushNotifications}");

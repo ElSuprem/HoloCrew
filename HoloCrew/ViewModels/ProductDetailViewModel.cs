@@ -10,6 +10,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
+// ViewModel de la página de detalle de un producto.
+// Muestra la información del producto, imágenes, selección de color/talla, cantidad,
+// añadir al carrito, comprar ahora, wishlist, reseñas y productos relacionados.
+// Se conecta con ProductService, CartService, WishlistService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class ProductDetailViewModel : ViewModelBase
@@ -45,33 +50,25 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _isInWishlist;
 
-        // ══════════════════════════════════════════════
-        // SELECCIÓN DE COLOR
-        // ══════════════════════════════════════════════
+        // selección de color
         [ObservableProperty]
         private string _selectedColor = "Black";
 
         [ObservableProperty]
         private ObservableCollection<ColorOption> _availableColors = new();
 
-        // ══════════════════════════════════════════════
-        // SELECCIÓN DE TALLA
-        // ══════════════════════════════════════════════
+        // selección de talla
         [ObservableProperty]
         private string _selectedSize = "M";
 
         [ObservableProperty]
         private ObservableCollection<SizeOption> _availableSizes = new();
 
-        // ══════════════════════════════════════════════
-        // SIZE GUIDE
-        // ══════════════════════════════════════════════
+        // guía de tallas (popup)
         [ObservableProperty]
         private bool _isSizeGuideOpen = false;
 
-        // ══════════════════════════════════════════════
-        // WRITE REVIEW
-        // ══════════════════════════════════════════════
+        // escribir reseña (popup)
         [ObservableProperty]
         private bool _isWriteReviewOpen = false;
 
@@ -118,7 +115,7 @@ namespace HoloCrew.ViewModels
 
                 if (Product != null)
                 {
-                    // Imágenes - asegurar que siempre hay 4
+                    // imágenes del producto (asegurar que haya al menos 4)
                     var imageList = Product.ImageUrls?.ToList() ?? new List<string>();
                     while (imageList.Count < 4)
                     {
@@ -128,20 +125,14 @@ namespace HoloCrew.ViewModels
                     SelectedImage = Images.FirstOrDefault() ?? "placeholder1";
                     SelectedImageIndex = 0;
 
-                    // Colores disponibles
                     SetupAvailableColors();
-
-                    // Tallas disponibles
                     SetupAvailableSizes();
 
-                    // Productos relacionados
                     var related = await _productService.GetRelatedProductsAsync(productId);
                     RelatedProducts = new ObservableCollection<Product>(related);
 
-                    // Wishlist
                     IsInWishlist = await _wishlistService.IsInWishlistAsync(productId);
 
-                    // Reset quantity
                     Quantity = 1;
 
                     SetSuccess();
@@ -168,7 +159,6 @@ namespace HoloCrew.ViewModels
                 });
             }
 
-            // Si el color seleccionado no está disponible, seleccionar el primero
             if (!colors.Contains(SelectedColor) && colors.Any())
             {
                 SelectColor(colors.First());
@@ -183,7 +173,6 @@ namespace HoloCrew.ViewModels
             AvailableSizes.Clear();
             foreach (var size in allSizes)
             {
-                // Una talla está disponible si está en la lista del producto
                 bool isAvailable = productSizes.Contains(size);
 
                 AvailableSizes.Add(new SizeOption
@@ -194,7 +183,6 @@ namespace HoloCrew.ViewModels
                 });
             }
 
-            // Si la talla seleccionada no está disponible, seleccionar la primera disponible
             var currentSelection = AvailableSizes.FirstOrDefault(s => s.Size == SelectedSize);
             if (currentSelection == null || !currentSelection.IsAvailable)
             {
@@ -231,7 +219,6 @@ namespace HoloCrew.ViewModels
             try
             {
                 await _cartService.AddToCartAsync(Product, Quantity);
-                // TODO: Mostrar notificación de éxito
             }
             catch (Exception ex)
             {
@@ -333,7 +320,6 @@ namespace HoloCrew.ViewModels
 
         private void UpdateThumbnailSelection()
         {
-            // Notificar cambio para actualizar UI de thumbnails
             OnPropertyChanged(nameof(SelectedImageIndex));
         }
 
@@ -348,13 +334,11 @@ namespace HoloCrew.ViewModels
 
             SelectedColor = colorName;
 
-            // Actualizar selección visual
             foreach (var color in AvailableColors)
             {
                 color.IsSelected = color.Name == colorName;
             }
 
-            // Forzar actualización de la colección
             OnPropertyChanged(nameof(AvailableColors));
         }
 
@@ -372,13 +356,11 @@ namespace HoloCrew.ViewModels
 
             SelectedSize = size;
 
-            // Actualizar selección visual
             foreach (var s in AvailableSizes)
             {
                 s.IsSelected = s.Size == size;
             }
 
-            // Forzar actualización de la colección
             OnPropertyChanged(nameof(AvailableSizes));
         }
 
@@ -397,7 +379,6 @@ namespace HoloCrew.ViewModels
         {
             IsWriteReviewOpen = !IsWriteReviewOpen;
 
-            // Reset form cuando se abre
             if (IsWriteReviewOpen)
             {
                 NewReviewRating = 5;
@@ -423,7 +404,6 @@ namespace HoloCrew.ViewModels
                 return;
             }
 
-            // Crear review (en producción esto iría al backend)
             var review = new Review
             {
                 ProductId = Product.Id,
@@ -436,13 +416,9 @@ namespace HoloCrew.ViewModels
                 User = new User { FullName = "You" }
             };
 
-            // Añadir al principio de la lista
             Reviews.Insert(0, review);
-
-            // Cerrar formulario
             IsWriteReviewOpen = false;
 
-            // TODO: Enviar al backend
             await Task.CompletedTask;
         }
 
@@ -474,6 +450,7 @@ namespace HoloCrew.ViewModels
 
     #region Helper Classes
 
+    // opción de color para la interfaz (nombre, código hex, si está seleccionado)
     public partial class ColorOption : ObservableObject
     {
         [ObservableProperty]
@@ -486,6 +463,7 @@ namespace HoloCrew.ViewModels
         private bool _isSelected;
     }
 
+    // opción de talla para la interfaz (talla, disponible, si está seleccionada)
     public partial class SizeOption : ObservableObject
     {
         [ObservableProperty]

@@ -9,6 +9,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
+// ViewModel de la página de checkout (finalizar compra).
+// Tiene 3 pasos: dirección de envío, método de pago, resumen del pedido.
+// Se conecta con OrderService, CartService, AuthenticationService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class CheckoutViewModel : ViewModelBase

@@ -6,6 +6,11 @@ using HoloCrew.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.Windows;
 
+// ViewModel de la página del club de miembros (Members Club).
+// Muestra los niveles de membresía (Bronce, Plata, Oro, Platino), puntos del usuario,
+// recompensas disponibles para canjear, y progreso hacia el siguiente nivel.
+// Se conecta con NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class MembersClubViewModel : ViewModelBase
@@ -52,7 +57,7 @@ namespace HoloCrew.ViewModels
 
         private void InitializeMembershipData()
         {
-            // Definir los 4 niveles de membresía
+            // los 4 niveles de membresía
             MembershipTiers = new ObservableCollection<MembershipTier>
             {
                 new MembershipTier
@@ -147,84 +152,35 @@ namespace HoloCrew.ViewModels
                 }
             };
 
-            // Recompensas disponibles
+            // recompensas disponibles para canjear con puntos
             AvailableRewards = new ObservableCollection<MembershipReward>
             {
-                new MembershipReward
-                {
-                    Id = 1,
-                    Title = "€10 Coupon",
-                    Description = "€10 discount on your next purchase",
-                    Icon = "💰",
-                    PointsCost = 200,
-                    MinimumLevel = MembershipLevel.Bronze
-                },
-                new MembershipReward
-                {
-                    Id = 2,
-                    Title = "Free Express Shipping",
-                    Description = "One free express delivery",
-                    Icon = "🚀",
-                    PointsCost = 150,
-                    MinimumLevel = MembershipLevel.Silver
-                },
-                new MembershipReward
-                {
-                    Id = 3,
-                    Title = "€25 Coupon",
-                    Description = "€25 discount on your next purchase",
-                    Icon = "💵",
-                    PointsCost = 450,
-                    MinimumLevel = MembershipLevel.Silver
-                },
-                new MembershipReward
-                {
-                    Id = 4,
-                    Title = "Free Product",
-                    Description = "Choose any product up to €50",
-                    Icon = "🎁",
-                    PointsCost = 800,
-                    MinimumLevel = MembershipLevel.Silver
-                },
-                new MembershipReward
-                {
-                    Id = 5,
-                    Title = "VIP Event",
-                    Description = "Ticket to an exclusive event",
-                    Icon = "🎟️",
-                    PointsCost = 1000,
-                    MinimumLevel = MembershipLevel.Silver
-                },
-                new MembershipReward
-                {
-                    Id = 6,
-                    Title = "Exclusive Product",
-                    Description = "Access to limited edition product",
-                    Icon = "★",
-                    PointsCost = 1200,
-                    MinimumLevel = MembershipLevel.Silver
-                }
+                new MembershipReward { Id = 1, Title = "€10 Coupon", Description = "€10 discount on your next purchase", Icon = "💰", PointsCost = 200, MinimumLevel = MembershipLevel.Bronze },
+                new MembershipReward { Id = 2, Title = "Free Express Shipping", Description = "One free express delivery", Icon = "🚀", PointsCost = 150, MinimumLevel = MembershipLevel.Silver },
+                new MembershipReward { Id = 3, Title = "€25 Coupon", Description = "€25 discount on your next purchase", Icon = "💵", PointsCost = 450, MinimumLevel = MembershipLevel.Silver },
+                new MembershipReward { Id = 4, Title = "Free Product", Description = "Choose any product up to €50", Icon = "🎁", PointsCost = 800, MinimumLevel = MembershipLevel.Silver },
+                new MembershipReward { Id = 5, Title = "VIP Event", Description = "Ticket to an exclusive event", Icon = "🎟️", PointsCost = 1000, MinimumLevel = MembershipLevel.Silver },
+                new MembershipReward { Id = 6, Title = "Exclusive Product", Description = "Access to limited edition product", Icon = "★", PointsCost = 1200, MinimumLevel = MembershipLevel.Silver }
             };
         }
 
+        // datos de ejemplo del usuario (nivel Silver con progreso hacia Gold)
         private void LoadUserMembership()
         {
-            // ⭐ DATOS MOCK - Usuario en nivel SILVER con progreso hacia GOLD
             UserMembership = new UserMembership
             {
                 UserId = 1,
                 CurrentLevel = MembershipLevel.Silver,
                 TotalPoints = 1250,
-                CurrentLevelPoints = 750, // Points since reaching Silver (500)
-                PointsToNextLevel = 250,  // Needs 1500 for Gold (1250 actual)
+                CurrentLevelPoints = 750,
+                PointsToNextLevel = 250,
                 TotalSpent = 1250.00m,
                 TotalOrders = 15,
                 MemberSince = DateTime.Now.AddMonths(-8),
-                ProgressPercentage = 75.0, // 750/1000 * 100
+                ProgressPercentage = 75.0,
                 NextLevel = MembershipLevel.Gold
             };
 
-            // Actualizar tier actual y siguiente
             CurrentTier = MembershipTiers.FirstOrDefault(t => t.Level == UserMembership.CurrentLevel);
             NextTier = MembershipTiers.FirstOrDefault(t => t.Level == UserMembership.NextLevel);
         }
@@ -234,31 +190,26 @@ namespace HoloCrew.ViewModels
         {
             if (reward == null) return;
 
-            // Verificar si tiene suficientes puntos
             if (UserMembership.TotalPoints < reward.PointsCost)
             {
                 ShowStatus($"Not enough points. You need {reward.PointsCost} points.", false);
                 return;
             }
 
-            // Verificar nivel mínimo (comparar valores numéricos del enum)
             if ((int)UserMembership.CurrentLevel < (int)reward.MinimumLevel)
             {
                 ShowStatus($"You need level {reward.MinimumLevel} to redeem this reward.", false);
                 return;
             }
 
-            // Verificar si ya fue canjeado
             if (reward.IsRedeemed)
             {
                 ShowStatus("This reward has already been redeemed.", false);
                 return;
             }
 
-            // ⭐ CANJEAR RECOMPENSA - Actualizar puntos
             var newPoints = UserMembership.TotalPoints - reward.PointsCost;
 
-            // Crear nuevo objeto UserMembership para forzar actualización de UI
             UserMembership = new UserMembership
             {
                 UserId = UserMembership.UserId,
@@ -273,11 +224,9 @@ namespace HoloCrew.ViewModels
                 NextLevel = UserMembership.NextLevel
             };
 
-            // Marcar recompensa como canjeada
             reward.IsRedeemed = true;
             reward.RedeemedDate = DateTime.Now;
 
-            // Actualizar la lista de recompensas para refrescar UI
             var index = AvailableRewards.IndexOf(reward);
             if (index >= 0)
             {
@@ -290,9 +239,8 @@ namespace HoloCrew.ViewModels
 
         private double CalculateProgressPercentage(int currentPoints)
         {
-            // Silver (500) -> Gold (1500) = 1000 puntos de diferencia
-            var pointsInCurrentLevel = currentPoints - 500; // Points since Silver
-            var pointsNeeded = 1000; // Silver to Gold
+            var pointsInCurrentLevel = currentPoints - 500;
+            var pointsNeeded = 1000;
             return Math.Min(100, (pointsInCurrentLevel / (double)pointsNeeded) * 100);
         }
 
@@ -302,7 +250,6 @@ namespace HoloCrew.ViewModels
             IsStatusSuccess = isSuccess;
             ShowStatusMessage = true;
 
-            // Hide message after 3 seconds
             await Task.Delay(3000);
             ShowStatusMessage = false;
         }

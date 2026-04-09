@@ -7,6 +7,12 @@ using HoloCrew.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
+// ViewModel de la página de configuración (Settings).
+// Gestiona apariencia (modo oscuro, idioma), notificaciones, privacidad,
+// y acciones como cambiar contraseña, cerrar sesión, eliminar cuenta, etc.
+// Se conecta con AuthenticationService, NavigationService y SettingsService.
+// Los cambios en las propiedades se guardan automáticamente en JSON.
+
 namespace HoloCrew.ViewModels
 {
     public partial class SettingsViewModel : ViewModelBase
@@ -24,7 +30,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private string _currentUserEmail = "Not signed in";
 
-        // APARIENCIA
+        // apariencia
         [ObservableProperty]
         private bool _isDarkMode;
 
@@ -40,7 +46,7 @@ namespace HoloCrew.ViewModels
             "Italian"
         };
 
-        // NOTIFICACIONES
+        // notificaciones
         [ObservableProperty]
         private bool _notificationsEnabled = true;
 
@@ -56,7 +62,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _promotionalEmails = false;
 
-        // PRIVACIDAD
+        // privacidad
         [ObservableProperty]
         private bool _dataCollectionEnabled = true;
 
@@ -66,7 +72,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _shareDataWithPartners = false;
 
-        // MODALES
+        // modales (popups)
         [ObservableProperty]
         private bool _showPrivacyPolicy = false;
 
@@ -76,7 +82,6 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _showContactSupport = false;
 
-        // Evento para notificar a la vista que haga scroll arriba
         public event EventHandler? ScrollToTopRequested;
 
         public SettingsViewModel(
@@ -93,6 +98,7 @@ namespace HoloCrew.ViewModels
             LoadSettings();
             UpdateAuthenticationState();
 
+            // cuando cambia una propiedad que no es de autenticación, se guarda automáticamente
             PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName != nameof(IsUserLoggedIn) &&
@@ -169,7 +175,7 @@ namespace HoloCrew.ViewModels
             System.Diagnostics.Debug.WriteLine("Export data");
         }
 
-        // Política de Privacidad
+        // política de privacidad
         [RelayCommand]
         private void ViewPrivacyPolicy()
         {
@@ -183,7 +189,7 @@ namespace HoloCrew.ViewModels
             ShowPrivacyPolicy = false;
         }
 
-        // Términos de Servicio
+        // términos de servicio
         [RelayCommand]
         private void ViewTermsOfService()
         {
@@ -197,7 +203,7 @@ namespace HoloCrew.ViewModels
             ShowTermsOfService = false;
         }
 
-        // Contactar Soporte
+        // contacto con soporte
         [RelayCommand]
         private void ContactSupport()
         {

@@ -1,12 +1,16 @@
 ﻿namespace HoloCrew.Constants
+
+// Centraliza todas las constantes de la app: textos de interfaz,
+// mensajes de éxito/error, rutas de recursos, límites, formatos, etc.
+// Todo lo que pueda necesitar traducción o cambio está aquí.
 {
     /// <summary>
-    /// Constantes globales de la aplicación
-    /// Centraliza todos los textos para facilitar traducción futura
+    /// Constantes globales de la app
+    /// Todo los textos están aquí para poder traducirlos después fácilmente
     /// </summary>
     public static class AppConstants
     {
-        // ========== INFORMACIÓN DE LA APP ==========
+        // ========== INFO DE LA APP ==========
         public const string AppName = "HoloCrew";
         public const string AppVersion = "1.0.0";
         public const string CompanyName = "HoloCrew Inc.";
@@ -14,48 +18,48 @@
 
         // ========== API ==========
         public const string ApiBaseUrl = "https://api.holocrew.com/v1/";
-        public const int ApiTimeoutSeconds = 30;
-        public const int MaxRetryAttempts = 3;
-        public const int RetryDelayMilliseconds = 1000;
+        public const int ApiTimeoutSeconds = 30;            // tiempo máximo de espera para llamadas a la api
+        public const int MaxRetryAttempts = 3;              // cuántas veces reintentar si falla
+        public const int RetryDelayMilliseconds = 1000;     // espera de 1 segundo entre reintentos
 
         // ========== PAGINACIÓN ==========
-        public const int DefaultPageSize = 20;
-        public const int MaxPageSize = 100;
+        public const int DefaultPageSize = 20;              // cuántos items se muestran por página por defecto
+        public const int MaxPageSize = 100;                 // máximo de items que se pueden pedir de una vez
 
         // ========== CACHÉ ==========
-        public const int CacheExpirationMinutes = 10;
-        public const int ImageCacheExpirationHours = 24;
+        public const int CacheExpirationMinutes = 10;       // los datos se guardan en caché 10 minutos
+        public const int ImageCacheExpirationHours = 24;    // las imágenes se guardan 24 horas
 
         // ========== VALIDACIÓN ==========
         public const int MinPasswordLength = 8;
         public const int MaxPasswordLength = 50;
         public const int MinNameLength = 2;
         public const int MaxNameLength = 100;
-        public const int MinSearchLength = 2;
+        public const int MinSearchLength = 2;               // mínimo de letras para empezar a buscar
 
         // ========== FORMATOS ==========
         public const string DateFormat = "dd/MM/yyyy";
         public const string DateTimeFormat = "dd/MM/yyyy HH:mm";
         public const string TimeFormat = "HH:mm";
-        public const string CurrencyFormat = "€{0:N2}";
+        public const string CurrencyFormat = "€{0:N2}";     // muestra el dinero así: €5,99
         public const string CurrencySymbol = "€";
 
         // ========== ENVÍO ==========
-        public const decimal FreeShippingThreshold = 50.00m;
+        public const decimal FreeShippingThreshold = 50.00m;   // pedidos de más de 50€ tienen envío gratis
         public const decimal DefaultShippingCost = 5.99m;
         public const decimal ExpressShippingCost = 9.99m;
-        public const decimal TaxRate = 0.21m; // IVA 21%
+        public const decimal TaxRate = 0.21m;                   // IVA 21%
 
         // ========== LÍMITES ==========
-        public const int MaxCartItemQuantity = 99;
+        public const int MaxCartItemQuantity = 99;              // no se pueden añadir más de 99 unidades de un producto
         public const int MaxWishlistItems = 100;
-        public const int MaxRecentSearches = 10;
+        public const int MaxRecentSearches = 10;                // guarda las últimas 10 búsquedas
         public const int MaxNotifications = 100;
-        public const int LowStockThreshold = 10;
+        public const int LowStockThreshold = 10;                // si quedan menos de 10 unidades, se avisa
 
         // ========== NOTIFICACIONES ==========
         public const int NotificationDisplayDurationSeconds = 5;
-        public const int ToastDurationMilliseconds = 3000;
+        public const int ToastDurationMilliseconds = 3000;      // los mensajes emergentes duran 3 segundos
 
         // ========== RUTAS ==========
         public static class Paths
@@ -68,16 +72,16 @@
             public const string PlaceholderAvatar = "/Resources/Images/avatar-placeholder.png";
         }
 
-        // ========== REGEX PATTERNS ==========
+        // ========== REGEX (patrones para validar) ==========
         public static class RegexPatterns
         {
             public const string Email = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-            public const string Phone = @"^(\+34|0034|34)?[ -]?[6-9]\d{2}[ -]?\d{3}[ -]?\d{3}$";
-            public const string PostalCode = @"^(?:0[1-9]|[1-4]\d|5[0-2])\d{3}$";
-            public const string Password = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$";
+            public const string Phone = @"^(\+34|0034|34)?[ -]?[6-9]\d{2}[ -]?\d{3}[ -]?\d{3}$";   // teléfono España
+            public const string PostalCode = @"^(?:0[1-9]|[1-4]\d|5[0-2])\d{3}$";                    // código postal España
+            public const string Password = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$";                 // mínimo una mayúscula, una minúscula y un número
         }
 
-        // ========== UI - TEXTOS GENERALES ==========
+        // ========== TEXTOS GENERALES DE LA INTERFAZ ==========
         public static class UI
         {
             // Navegación
@@ -133,7 +137,7 @@
             public const string Empty = "Nothing here yet";
         }
 
-        // ========== MENSAJES DE ÉXITO ==========
+        // ========== MENSAJES CUANDO ALGO SALE BIEN ==========
         public static class Success
         {
             // Carrito
@@ -142,7 +146,7 @@
             public const string CartUpdated = "Cart updated";
             public const string CartCleared = "Cart cleared";
 
-            // Wishlist
+            // Wishlist (lista de deseos)
             public const string AddedToWishlist = "Added to wishlist";
             public const string RemovedFromWishlist = "Removed from wishlist";
 
@@ -168,7 +172,7 @@
             public const string ActionCompleted = "Action completed";
         }
 
-        // ========== MENSAJES DE ERROR ==========
+        // ========== MENSAJES CUANDO ALGO SALE MAL ==========
         public static class Errors
         {
             // Conexión
@@ -177,14 +181,14 @@
             public const string TimeoutError = "Request timed out. Please try again.";
             public const string UnexpectedError = "An unexpected error occurred.";
 
-            // Autenticación
+            // Autenticación (iniciar sesión / registrarse)
             public const string InvalidCredentials = "Invalid email or password";
             public const string EmailInUse = "Email is already in use";
             public const string WeakPassword = "Password is too weak";
             public const string SessionExpired = "Your session has expired. Please log in again.";
             public const string Unauthorized = "You don't have permission to do this.";
 
-            // Validación
+            // Validación de datos
             public const string RequiredField = "This field is required";
             public const string InvalidEmail = "Please enter a valid email address";
             public const string InvalidPhone = "Please enter a valid phone number";
@@ -213,7 +217,7 @@
             public const string ProfileLoadFailed = "Failed to load profile";
         }
 
-        // ========== MENSAJES VACÍOS / PLACEHOLDER ==========
+        // ========== MENSAJES PARA CUANDO NO HAY NADA QUE MOSTRAR ==========
         public static class Empty
         {
             public const string CartTitle = "Your cart is empty";
@@ -244,7 +248,7 @@
             public const string ReviewsAction = "Write a Review";
         }
 
-        // ========== TEXTOS DE PRODUCTO ==========
+        // ========== TEXTOS DE PRODUCTOS ==========
         public static class Product
         {
             public const string AddToCart = "Add to Cart";
@@ -278,7 +282,7 @@
             public const string ShipsWithin = "Ships within 24h";
         }
 
-        // ========== TEXTOS DE CHECKOUT ==========
+        // ========== TEXTOS DEL PROCESO DE PAGO ==========
         public static class Checkout
         {
             public const string Title = "Checkout";
@@ -306,7 +310,7 @@
             public const string EncryptedPayment = "Your payment information is encrypted";
         }
 
-        // ========== TEXTOS DE AUTENTICACIÓN ==========
+        // ========== TEXTOS DE INICIO DE SESIÓN Y REGISTRO ==========
         public static class Auth
         {
             public const string Login = "Log In";
@@ -335,7 +339,7 @@
             public const string NewsletterOptIn = "Subscribe to our newsletter";
         }
 
-        // ========== TEXTOS DE PERFIL ==========
+        // ========== TEXTOS DEL PERFIL DE USUARIO ==========
         public static class Profile
         {
             public const string Title = "My Account";
@@ -367,7 +371,7 @@
             public const string Reorder = "Reorder";
             public const string CancelOrder = "Cancel Order";
 
-            // Estados
+            // Estados del pedido
             public const string StatusPending = "Pending";
             public const string StatusProcessing = "Processing";
             public const string StatusShipped = "Shipped";
@@ -391,7 +395,7 @@
             public const string PriceDropAlert = "Price drop alert!";
         }
 
-        // ========== TEXTOS DE FOOTER/LEGALES ==========
+        // ========== TEXTOS DEL PIE DE PÁGINA / LEGALES ==========
         public static class Footer
         {
             public const string About = "About Us";

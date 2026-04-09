@@ -1,15 +1,16 @@
-﻿<!-- ========================================
-     HOLOCREW - APP.XAML
-     ✅ Incluye MegaMenuStyles para el nuevo header
-     ======================================== -->
-
-<Application x:Class="HoloCrew.App"
+﻿<Application x:Class="HoloCrew.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:HoloCrew.Converters"
              xmlns:vm="clr-namespace:HoloCrew.ViewModels"
              xmlns:views="clr-namespace:HoloCrew.Views"
              DispatcherUnhandledException="Application_DispatcherUnhandledException">
+
+    <!-- APP.XAML
+         Archivo principal de la aplicación.
+         Registra los converters, los DataTemplates que asocian cada ViewModel con su Vista,
+         y carga todos los diccionarios de recursos (colores, estilos, etc.) en orden.
+         El orden de carga es importante porque unos estilos dependen de otros. -->
 
     <Application.Resources>
         <ResourceDictionary>
@@ -26,10 +27,10 @@
             <converters:StatusToColourConverter x:Key="StatusToColourConverter" />
             <converters:SelectedButtonTextConverter x:Key="SelectedButtonTextConverter" />
 
-            <!-- Converter incorporado de WPF -->
+            <!-- converter nativo de WPF -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
-            <!-- ========== DATA TEMPLATES ========== -->
+            <!-- ========== DATA TEMPLATES (asocian ViewModel con Vista) ========== -->
             <DataTemplate DataType="{x:Type vm:HomeViewModel}">
                 <views:HomeView />
             </DataTemplate>
@@ -94,21 +95,21 @@
                 <views:MembersClubView />
             </DataTemplate>
 
-            <!-- ========== ESTILOS - ORDEN CRÍTICO ========== -->
+            <!-- ========== ESTILOS (el orden de carga es importante) ========== -->
             <ResourceDictionary.MergedDictionaries>
-                <!-- 1. COLORES -->
+                <!-- 1. colores base -->
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
 
-                <!-- 2. BRUSHES -->
+                <!-- 2. pinceles (dependen de Colors) -->
                 <ResourceDictionary Source="Resources/Styles/Brushes.xaml" />
 
-                <!-- 3. ESTILOS DE TEXTO -->
+                <!-- 3. estilos de texto (dependen de Brushes) -->
                 <ResourceDictionary Source="Resources/Styles/TextBlocks.xaml" />
 
-                <!-- 4. ESTILOS DE BOTONES -->
+                <!-- 4. estilos de botones -->
                 <ResourceDictionary Source="Resources/Styles/Buttons.xaml" />
 
-                <!-- 5. RESTO DE ESTILOS -->
+                <!-- 5. resto de estilos -->
                 <ResourceDictionary Source="Resources/Styles/InputStyles.xaml" />
                 <ResourceDictionary Source="Resources/Styles/ToggleSwitch.xaml" />
                 <ResourceDictionary Source="Resources/Styles/LinkStyles.xaml" />
@@ -118,7 +119,7 @@
                 <ResourceDictionary Source="Resources/Styles/ScrollViewers.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Animations.xaml" />
 
-                <!-- 6. ⭐ NUEVO: Estilos del Mega Menu -->
+                <!-- 6. estilos del mega menú -->
                 <ResourceDictionary Source="Resources/Styles/MegaMenuStyles.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/LoadingStates.xaml"/>
             </ResourceDictionary.MergedDictionaries>

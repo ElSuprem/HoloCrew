@@ -1,37 +1,19 @@
-﻿namespace HoloCrew.Services.Interfaces
+﻿// Servicio para cambiar entre tema claro y oscuro.
+// Guarda la preferencia del usuario y aplica los colores correspondientes.
+
+namespace HoloCrew.Services.Interfaces
 {
-    /// <summary>
-    /// Enumeración de temas disponibles
-    /// </summary>
     public enum AppTheme
     {
         Light,
         Dark
     }
 
-    /// <summary>
-    /// Servicio para gestión de temas de la aplicación
-    /// </summary>
     public interface IThemeService
     {
-        /// <summary>
-        /// Establece el tema de la aplicación
-        /// </summary>
-        void SetTheme(AppTheme theme);
-
-        /// <summary>
-        /// Obtiene el tema actual
-        /// </summary>
-        AppTheme GetCurrentTheme();
-
-        /// <summary>
-        /// Alterna entre tema claro y oscuro
-        /// </summary>
-        void ToggleTheme();
-
-        /// <summary>
-        /// Aplica el tema guardado en las preferencias
-        /// </summary>
-        void ApplySavedTheme();
+        void SetTheme(AppTheme theme);           // cambiar a un tema concreto
+        AppTheme GetCurrentTheme();              // saber qué tema está activo ahora
+        void ToggleTheme();                      // cambiar de claro a oscuro o viceversa
+        void ApplySavedTheme();                  // cargar el tema que el usuario tenía guardado
     }
 }

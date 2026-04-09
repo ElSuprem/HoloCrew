@@ -8,22 +8,24 @@
              d:DesignHeight="1000" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
 
+    <!-- Vista del proceso de pago (checkout).
+         Tiene 3 pasos: dirección de envío, método de pago, confirmación del pedido.
+         Se conecta con CheckoutViewModel. -->
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="450"/>
         </Grid.ColumnDefinitions>
 
-        <!-- FORMULARIO DE CHECKOUT CON SCROLL -->
+        <!-- formulario de checkout (con scroll) -->
         <ScrollViewer Grid.Column="0"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
             <Border Padding="80,50,40,80">
                 <StackPanel>
 
-                    <!-- ============================================ -->
-                    <!-- HEADER CON STEPPER DINÁMICO -->
-                    <!-- ============================================ -->
+                    <!-- cabecera con indicador de paso -->
                     <Grid Margin="0,0,0,40">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -34,13 +36,13 @@
                                    Text="CHECKOUT" 
                                    Style="{StaticResource HeadingLarge}"/>
 
-                        <!-- Step indicator -->
+                        <!-- indicador de paso -->
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center">
 
-                            <!-- Step 1 -->
+                            <!-- Paso 1 -->
                             <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -65,7 +67,7 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <!-- Connector line -->
+                            <!-- línea conectora -->
                             <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -79,7 +81,7 @@
                                 </Border.Style>
                             </Border>
 
-                            <!-- Step 2 -->
+                            <!-- Paso 2 -->
                             <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -109,7 +111,7 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <!-- Connector line -->
+                            <!-- línea conectora -->
                             <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -123,7 +125,7 @@
                                 </Border.Style>
                             </Border>
 
-                            <!-- Step 3 -->
+                            <!-- Paso 3 -->
                             <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -155,9 +157,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- ============================================ -->
-                    <!-- STEP 1: INFORMACIÓN DE ENVÍO -->
-                    <!-- ============================================ -->
+                    <!-- PASO 1: INFORMACIÓN DE ENVÍO -->
                     <Border Background="{DynamicResource WhitePrimaryBrush}"
                             BorderBrush="{DynamicResource BorderDefault}"
                             BorderThickness="1"
@@ -172,7 +172,7 @@
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- Saved addresses -->
+                            <!-- direcciones guardadas -->
                             <StackPanel Visibility="{Binding SavedAddresses.Count, Converter={StaticResource CountToVisibilityConverter}}"
                                         Margin="0,0,0,25">
                                 <TextBlock Text="Saved addresses" 
@@ -220,7 +220,7 @@
                                         Margin="0,5,0,0"/>
                             </StackPanel>
 
-                            <!-- Address form -->
+                            <!-- formulario de dirección -->
                             <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -255,7 +255,6 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Address line 1 -->
                             <StackPanel Margin="0,0,0,20">
                                 <TextBlock Text="Address *" 
                                            Style="{StaticResource BodyMedium}"
@@ -269,7 +268,6 @@
                                          BorderThickness="1"/>
                             </StackPanel>
 
-                            <!-- Address line 2 -->
                             <StackPanel Margin="0,0,0,20">
                                 <TextBlock Text="Apartment, floor, etc. (optional)" 
                                            Style="{StaticResource BodyMedium}"
@@ -283,7 +281,6 @@
                                          BorderThickness="1"/>
                             </StackPanel>
 
-                            <!-- City and Postal Code -->
                             <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="2*"/>
@@ -318,7 +315,6 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Country and State/Province -->
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -362,9 +358,7 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- ============================================ -->
-                    <!-- STEP 2: PAYMENT METHOD -->
-                    <!-- ============================================ -->
+                    <!-- PASO 2: MÉTODO DE PAGO -->
                     <Border Background="{DynamicResource WhitePrimaryBrush}"
                             BorderBrush="{DynamicResource BorderDefault}"
                             BorderThickness="1"
@@ -379,7 +373,7 @@
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- Saved payment methods -->
+                            <!-- métodos de pago guardados -->
                             <StackPanel Visibility="{Binding SavedPaymentMethods.Count, Converter={StaticResource CountToVisibilityConverter}}"
                                         Margin="0,0,0,25">
                                 <TextBlock Text="Saved methods" 
@@ -399,7 +393,7 @@
                                                                   CommandParameter="{Binding}"/>
                                                 </Border.InputBindings>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="" FontSize="20" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="💳" FontSize="20" Margin="0,0,15,0" VerticalAlignment="Center"/>
                                                     <StackPanel>
                                                         <TextBlock Text="{Binding CardNumberMasked}" FontWeight="SemiBold" FontSize="14"/>
                                                         <TextBlock Text="{Binding ExpirationDate}" FontSize="12" Foreground="{DynamicResource TextSecondary}"/>
@@ -411,12 +405,10 @@
                                 </ItemsControl>
                             </StackPanel>
 
-                            <!-- Formulario de tarjeta nueva -->
                             <TextBlock Text="Or add a new card" 
                                        Style="{StaticResource SubtitleMedium}"
                                        Margin="0,0,0,20"/>
 
-                            <!-- Card number -->
                             <StackPanel Margin="0,0,0,20">
                                 <TextBlock Text="Card Number *" 
                                            Style="{StaticResource BodyMedium}"
@@ -431,7 +423,6 @@
                                          MaxLength="19"/>
                             </StackPanel>
 
-                            <!-- Nombre del titular -->
                             <StackPanel Margin="0,0,0,20">
                                 <TextBlock Text="Cardholder Name *" 
                                            Style="{StaticResource BodyMedium}"
@@ -445,7 +436,6 @@
                                          BorderThickness="1"/>
                             </StackPanel>
 
-                            <!-- Fecha y CVV -->
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -482,7 +472,6 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Iconos de tarjetas aceptadas -->
                             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                                 <TextBlock Text="We accept:" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <Border Background="{DynamicResource Gray100Brush}" Padding="8,4" Margin="0,0,5,0">
@@ -498,9 +487,7 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- ============================================ -->
-                    <!-- STEP 3: CONFIRMACIÓN -->
-                    <!-- ============================================ -->
+                    <!-- PASO 3: CONFIRMACIÓN -->
                     <Border Background="{DynamicResource WhitePrimaryBrush}"
                             BorderBrush="{DynamicResource BorderDefault}"
                             BorderThickness="1"
@@ -515,7 +502,6 @@
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- Shipping summary -->
                             <Border Background="{DynamicResource Gray50Brush}"
                                     Padding="20"
                                     Margin="0,0,0,20">
@@ -546,7 +532,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Payment summary -->
                             <Border Background="{DynamicResource Gray50Brush}"
                                     Padding="20"
                                     Margin="0,0,0,20">
@@ -565,7 +550,7 @@
                                         </TextBlock>
                                     </Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="" FontSize="18" Margin="0,0,10,0"/>
+                                        <TextBlock Text="💳" FontSize="18" Margin="0,0,10,0"/>
                                         <StackPanel>
                                             <TextBlock Text="Credit Card" FontWeight="SemiBold"/>
                                             <TextBlock Text="{Binding CardNumber}" 
@@ -575,7 +560,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Productos -->
                             <TextBlock Text="PRODUCTS" FontWeight="Bold" FontSize="12" Margin="0,0,0,15"/>
                             <ItemsControl ItemsSource="{Binding OrderItems}" Margin="0,0,0,20">
                                 <ItemsControl.ItemTemplate>
@@ -612,9 +596,7 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- ============================================ -->
-                    <!-- BOTONES DE NAVEGACIÓN -->
-                    <!-- ============================================ -->
+                    <!-- botones de navegación -->
                     <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -622,7 +604,6 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Back button -->
                         <Button Grid.Column="0"
                                 Content="← VOLVER"
                                 Style="{StaticResource OutlineButton}"
@@ -630,7 +611,6 @@
                                 Command="{Binding PreviousStepCommand}"
                                 Visibility="{Binding IsStep1, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
 
-                        <!-- Cancel button (step 1 only) -->
                         <Button Grid.Column="0"
                                 Content="CANCELAR"
                                 Style="{StaticResource OutlineButton}"
@@ -638,7 +618,6 @@
                                 Command="{Binding CancelCheckoutCommand}"
                                 Visibility="{Binding IsStep1, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                        <!-- Next button / Confirm -->
                         <Button Grid.Column="2"
                                 Style="{StaticResource AccentButton}"
                                 Padding="40,15"
@@ -653,7 +632,6 @@
                             </Button.Content>
                         </Button>
 
-                        <!-- Place order button (step 3 only) -->
                         <Button Grid.Column="2"
                                 Style="{StaticResource AccentButton}"
                                 Padding="40,15"
@@ -669,7 +647,7 @@
                         </Button>
                     </Grid>
 
-                    <!-- Indicador de procesamiento -->
+                    <!-- indicador de procesamiento -->
                     <Border Background="{DynamicResource BlackPrimaryBrush}"
                             Padding="20"
                             Margin="0,20,0,0"
@@ -680,7 +658,7 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Mensaje de error -->
+                    <!-- mensaje de error -->
                     <Border Background="#FEE2E2"
                             BorderBrush="#F87171"
                             BorderThickness="1"
@@ -706,9 +684,7 @@
             </Border>
         </ScrollViewer>
 
-        <!-- ============================================ -->
-        <!-- ORDER SUMMARY SIDEBAR -->
-        <!-- ============================================ -->
+        <!-- resumen del pedido (sidebar) -->
         <Border Grid.Column="1" 
                 Background="{DynamicResource Gray50Brush}">
             <ScrollViewer VerticalScrollBarVisibility="Auto"
@@ -719,7 +695,6 @@
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,30"/>
 
-                        <!-- Items del pedido -->
                         <ItemsControl ItemsSource="{Binding OrderItems}" Margin="0,0,0,30">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -729,7 +704,6 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <!-- Imagen con badge de cantidad -->
                                         <Grid Grid.Column="0">
                                             <Border Background="{DynamicResource Gray200Brush}" Width="70" Height="70"/>
                                             <Border Background="{DynamicResource BlackPrimaryBrush}"
@@ -747,7 +721,6 @@
                                             </Border>
                                         </Grid>
 
-                                        <!-- Info -->
                                         <StackPanel Grid.Column="1" Margin="15,0,0,0">
                                             <TextBlock Text="{Binding ProductName}" 
                                                        FontWeight="SemiBold"
@@ -767,12 +740,10 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
-                        <!-- Separador -->
                         <Border BorderBrush="{DynamicResource BorderDefault}"
                                 BorderThickness="0,1,0,0"
                                 Margin="0,0,0,20"/>
 
-                        <!-- Subtotal -->
                         <Grid Margin="0,0,0,12">
                             <TextBlock Text="Subtotal" Style="{StaticResource BodyLarge}"/>
                             <TextBlock Text="{Binding OrderTotal, StringFormat={}{0:C}}" 
@@ -780,7 +751,6 @@
                                        HorizontalAlignment="Right"/>
                         </Grid>
 
-                        <!-- Shipping -->
                         <Grid Margin="0,0,0,12">
                             <TextBlock Text="Shipping" Style="{StaticResource BodyLarge}"/>
                             <TextBlock Text="GRATIS" 
@@ -790,7 +760,6 @@
                                        HorizontalAlignment="Right"/>
                         </Grid>
 
-                        <!-- Impuestos -->
                         <Grid Margin="0,0,0,20">
                             <TextBlock Text="IVA (21%)" Style="{StaticResource BodyLarge}"/>
                             <TextBlock Text="{Binding OrderTotal, StringFormat=€{0:N2}}" 
@@ -798,7 +767,6 @@
                                        HorizontalAlignment="Right"/>
                         </Grid>
 
-                        <!-- Total -->
                         <Border BorderBrush="{DynamicResource BorderDefault}"
                                 BorderThickness="0,1,0,0"
                                 Padding="0,20,0,0">
@@ -813,7 +781,6 @@
                             </Grid>
                         </Border>
 
-                        <!-- Info de seguridad -->
                         <Border Background="{DynamicResource WhitePrimaryBrush}"
                                 Padding="15"
                                 Margin="0,30,0,0">
@@ -829,7 +796,6 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Policies -->
                         <StackPanel Margin="0,20,0,0">
                             <TextBlock Text="📦 Shipping gratis en pedidos +€50" 
                                        FontSize="12" 

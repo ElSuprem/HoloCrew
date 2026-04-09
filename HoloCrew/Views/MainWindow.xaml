@@ -10,21 +10,26 @@
         Foreground="{DynamicResource BlackPrimaryBrush}"
         Background="{DynamicResource BackgroundPrimary}">
 
+    <!-- Ventana principal de la aplicación.
+         Contiene barra superior negra, barra de navegación blanca con mega menú,
+         barra de búsqueda con resultados en vivo, y área de contenido.
+         Se conecta con MainWindowViewModel. -->
+
     <Grid>
         <Grid.RowDefinitions>
-            <!-- Row 0: Top nav bar (black) - main links centered -->
+            <!-- fila 0: barra de navegación superior (negra) - enlaces centrados -->
             <RowDefinition Height="45"/>
-            <!-- Row 1: Sub nav bar (white) - SHOP+MEMBER left, Logo center, icons right -->
+            <!-- fila 1: barra de navegación inferior (blanca) - SHOP+MEMBER izquierda, Logo centro, iconos derecha -->
             <RowDefinition Height="55"/>
-            <!-- Row 2: Content area -->
+            <!-- fila 2: área de contenido -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- ============================================ -->
-        <!-- ROW 0: TOP NAVIGATION BAR (BLACK)            -->
-        <!-- Centered links: SHOP / FLASH SALE / BLACK WEEK / MEMBERS CLUB -->
+        <!-- FILA 0: BARRA DE NAVEGACIÓN SUPERIOR (NEGRA) -->
+        <!-- Enlaces centrados: SHOP / FLASH SALE / BLACK WEEK / MEMBERS CLUB -->
         <!-- ============================================ -->
-        <!-- TOP BAR: Always dark regardless of theme -->
+        <!-- barra superior: siempre oscura independientemente del tema -->
         <Border Grid.Row="0" Background="#0A0A0A">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Text="SHOP" Foreground="White" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,50,0" Cursor="Hand">
@@ -54,10 +59,10 @@
         </Border>
 
         <!-- ============================================ -->
-        <!-- ROW 1: SUB NAVIGATION BAR (WHITE)            -->
-        <!-- Left: SHOP dropdown + MEMBER CLUB            -->
-        <!-- Center: HOLOCREW logo                        -->
-        <!-- Right: EUR € | SPAIN + Search/Wishlist/User/Cart -->
+        <!-- FILA 1: BARRA DE NAVEGACIÓN INFERIOR (BLANCA) -->
+        <!-- Izquierda: menú desplegable SHOP + MEMBER CLUB -->
+        <!-- Centro: logo HOLOCREW -->
+        <!-- Derecha: EUR € | SPAIN + búsqueda/wishlist/usuario/carrito -->
         <!-- ============================================ -->
         <Border Grid.Row="1" Background="{DynamicResource WhitePrimaryBrush}"
                 BorderBrush="{DynamicResource Gray200Brush}"
@@ -69,7 +74,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- LEFT: SHOP dropdown + MEMBER CLUB -->
+                <!-- izquierda: menú desplegable SHOP + MEMBER CLUB -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <Border x:Name="ShopMenuTrigger" Background="Transparent" Padding="0,0,25,0" Cursor="Hand"
                             MouseEnter="ShopMenu_MouseEnter" MouseLeave="ShopMenu_MouseLeave">
@@ -86,7 +91,7 @@
                     </TextBlock>
                 </StackPanel>
 
-                <!-- CENTER: Logo -->
+                <!-- centro: logo -->
                 <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand">
                     <Border.InputBindings>
                         <MouseBinding Command="{Binding NavigateToHomeCommand}" MouseAction="LeftClick"/>
@@ -94,15 +99,15 @@
                     <TextBlock Text="HOLOCREW" FontSize="22" FontWeight="Black" Foreground="{DynamicResource BlackPrimaryBrush}" FontStyle="Italic"/>
                 </Border>
 
-                <!-- RIGHT: Currency + Icons -->
+                <!-- derecha: moneda + iconos -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                     <TextBlock Text="EUR €" Foreground="{DynamicResource Gray500Brush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
                     <TextBlock Text="|" Foreground="{DynamicResource Gray300Brush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
                     <TextBlock Text="SPAIN" Foreground="{DynamicResource Gray500Brush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,15,0"/>
-                    <!-- Down arrow for country -->
+                    <!-- flecha abajo para país -->
                     <TextBlock Text="▾" Foreground="{DynamicResource Gray400Brush}" FontSize="10" VerticalAlignment="Center" Margin="0,0,20,0"/>
 
-                    <!-- Search -->
+                    <!-- búsqueda -->
                     <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Search">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding ToggleSearchCommand}" MouseAction="LeftClick"/>
@@ -112,7 +117,7 @@
                         </Viewbox>
                     </Border>
 
-                    <!-- Wishlist -->
+                    <!-- wishlist -->
                     <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Wishlist">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToWishlistCommand}" MouseAction="LeftClick"/>
@@ -127,7 +132,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- User account -->
+                    <!-- cuenta de usuario -->
                     <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="My Account">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToProfileCommand}" MouseAction="LeftClick"/>
@@ -137,7 +142,7 @@
                         </Viewbox>
                     </Border>
 
-                    <!-- Notifications -->
+                    <!-- notificaciones -->
                     <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Notifications">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToNotificationsCommand}" MouseAction="LeftClick"/>
@@ -152,7 +157,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- Settings -->
+                    <!-- configuración -->
                     <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Settings">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToSettingsCommand}" MouseAction="LeftClick"/>
@@ -162,7 +167,7 @@
                         </Viewbox>
                     </Border>
 
-                    <!-- Cart (bag icon like web) -->
+                    <!-- carrito (icono de bolsa) -->
                     <Border Background="Transparent" Width="40" Height="40" Cursor="Hand" ToolTip="Cart">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCartCommand}" MouseAction="LeftClick"/>
@@ -181,8 +186,8 @@
         </Border>
 
         <!-- ============================================ -->
-        <!-- MEGA MENU DROPDOWN                           -->
-        <!-- Matches web: 6 columns + collection image    -->
+        <!-- MEGA MENÚ DESPLEGABLE -->
+        <!-- 6 columnas + imagen de colección -->
         <!-- ============================================ -->
         <Border x:Name="MegaMenuDropdown" Grid.Row="1" Grid.RowSpan="2" 
                 Background="{DynamicResource WhitePrimaryBrush}" 
@@ -201,7 +206,7 @@
                     <ColumnDefinition Width="380"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Category columns -->
+                <!-- columnas de categorías -->
                 <Grid Grid.Column="0" Margin="50,35,30,35">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -397,7 +402,7 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- Collection promo panel (right side) -->
+                <!-- panel promocional derecho -->
                 <Border Grid.Column="1" Background="{DynamicResource Gray100Brush}">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="30">
                         <TextBlock Text="SOFTS COLLECTION" FontSize="28" FontWeight="Black" HorizontalAlignment="Center" TextAlignment="Center"/>
@@ -410,7 +415,7 @@
 
 
         <!-- ============================================ -->
-        <!-- SEARCH BAR + LIVE RESULTS DROPDOWN           -->
+        <!-- BARRA DE BÚSQUEDA CON RESULTADOS EN VIVO      -->
         <!-- ============================================ -->
         <Border x:Name="SearchBarExpanded" Grid.Row="1" Grid.RowSpan="2"
                 Visibility="{Binding IsSearchVisible, Converter={StaticResource BoolToVisibilityConverter}}" 
@@ -419,7 +424,7 @@
                 VerticalAlignment="Top">
 
             <Grid>
-                <!-- Dark backdrop (click to close) -->
+                <!-- fondo oscuro (click para cerrar) -->
                 <Border Background="#80000000" 
                         VerticalAlignment="Stretch"
                         MinHeight="800">
@@ -428,7 +433,7 @@
                     </Border.InputBindings>
                 </Border>
 
-                <!-- Search panel -->
+                <!-- panel de búsqueda -->
                 <Border Background="{DynamicResource WhitePrimaryBrush}" 
                         VerticalAlignment="Top"
                         BorderBrush="{DynamicResource Gray200Brush}"
@@ -438,7 +443,7 @@
                     </Border.Effect>
 
                     <StackPanel>
-                        <!-- Search input row -->
+                        <!-- fila de entrada de búsqueda -->
                         <Border Padding="50,18">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -448,13 +453,13 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Search icon -->
+                                <!-- icono de búsqueda -->
                                 <Viewbox Grid.Column="0" Width="22" Height="22" Margin="0,0,15,0" VerticalAlignment="Center">
                                     <Path Data="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
                                           Stroke="{DynamicResource Gray400Brush}" StrokeThickness="2" Fill="Transparent"/>
                                 </Viewbox>
 
-                                <!-- Search input -->
+                                <!-- campo de búsqueda -->
                                 <Grid Grid.Column="1">
                                     <TextBox x:Name="SearchTextBox" 
                                              Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
@@ -472,7 +477,7 @@
                                         </TextBox.InputBindings>
                                     </TextBox>
 
-                                    <!-- Placeholder -->
+                                    <!-- texto de ejemplo -->
                                     <TextBlock Text="Search for products, categories..." 
                                                Foreground="{DynamicResource Gray400Brush}" 
                                                FontSize="18" 
@@ -495,13 +500,13 @@
                                     </TextBlock>
                                 </Grid>
 
-                                <!-- Loading indicator -->
+                                <!-- indicador de carga -->
                                 <TextBlock Grid.Column="2" Text="Searching..." 
                                            FontSize="12" Foreground="{DynamicResource Gray400Brush}" 
                                            VerticalAlignment="Center" Margin="0,0,15,0"
                                            Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                                <!-- Close button -->
+                                <!-- botón cerrar -->
                                 <Border Grid.Column="3" Width="36" Height="36" Cursor="Hand" VerticalAlignment="Center">
                                     <Border.InputBindings>
                                         <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleSearchCommand}"/>
@@ -513,21 +518,21 @@
                             </Grid>
                         </Border>
 
-                        <!-- Separator -->
+                        <!-- separador -->
                         <Border Height="1" Background="{DynamicResource Gray200Brush}"/>
 
-                        <!-- LIVE SEARCH RESULTS -->
+                        <!-- RESULTADOS DE BÚSQUEDA EN VIVO -->
                         <Border Visibility="{Binding HasSearchResults, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Padding="50,10,50,20"
                                 MaxHeight="450">
                             <StackPanel>
-                                <!-- Results count -->
+                                <!-- contador de resultados -->
                                 <TextBlock FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="0,8,0,12">
                                     <Run Text="{Binding SearchResultCount, Mode=OneWay}"/>
                                     <Run Text=" results found"/>
                                 </TextBlock>
 
-                                <!-- Product results -->
+                                <!-- resultados de productos -->
                                 <ItemsControl ItemsSource="{Binding SearchResults}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
@@ -554,11 +559,11 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <!-- Product image placeholder -->
+                                                    <!-- imagen placeholder -->
                                                     <Border Grid.Column="0" Width="50" Height="50" 
                                                             Background="{DynamicResource Gray100Brush}"/>
 
-                                                    <!-- Product info -->
+                                                    <!-- información del producto -->
                                                     <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
                                                         <TextBlock Text="{Binding Name}" 
                                                                    FontSize="14" FontWeight="SemiBold" 
@@ -569,7 +574,7 @@
                                                                    Margin="0,3,0,0"/>
                                                     </StackPanel>
 
-                                                    <!-- Price -->
+                                                    <!-- precio -->
                                                     <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
                                                         <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
                                                                    FontSize="14" FontWeight="Bold" HorizontalAlignment="Right"/>
@@ -584,7 +589,7 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
 
-                                <!-- View all results -->
+                                <!-- ver todos los resultados -->
                                 <Border Margin="0,10,0,5" Padding="12" Cursor="Hand" Background="{DynamicResource BlackPrimaryBrush}">
                                     <Border.InputBindings>
                                         <MouseBinding MouseAction="LeftClick" Command="{Binding ExecuteSearchCommand}"/>
@@ -596,7 +601,7 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Quick categories (when no query) -->
+                        <!-- categorías populares (cuando no hay búsqueda) -->
                         <Border Padding="50,15,50,20">
                             <Border.Style>
                                 <Style TargetType="Border">
@@ -665,7 +670,7 @@
         </Border>
 
         <!-- ============================================ -->
-        <!-- CONTENT AREA                                 -->
+        <!-- ÁREA DE CONTENIDO                            -->
         <!-- ============================================ -->
         <ScrollViewer Grid.Row="2" x:Name="MainScrollViewer" 
                       VerticalScrollBarVisibility="Auto" 

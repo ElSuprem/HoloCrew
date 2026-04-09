@@ -8,6 +8,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
+// ViewModel de la página de perfil del usuario.
+// Muestra y edita los datos personales, direcciones guardadas, métodos de pago,
+// preferencias de notificaciones, cambio de contraseña, etc.
+// Se conecta con AuthenticationService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class ProfileViewModel : ViewModelBase
@@ -90,8 +95,7 @@ namespace HoloCrew.ViewModels
 
             await ExecuteAsync(async () =>
             {
-                // TODO: Call service to update profile
-                await Task.Delay(500); // Simulate API call
+                await Task.Delay(500);  // simula llamada a la API
 
                 SuccessMessage = AppConstants.Success.ProfileUpdated;
                 IsEditing = false;
@@ -125,7 +129,7 @@ namespace HoloCrew.ViewModels
                 return;
             }
 
-            if (NewPassword.Length < 6)
+            if (NewPassword.Length < 8)
             {
                 ErrorMessage = AppConstants.Errors.PasswordTooShort;
                 return;
@@ -133,8 +137,7 @@ namespace HoloCrew.ViewModels
 
             await ExecuteAsync(async () =>
             {
-                // TODO: Call service to change password
-                await Task.Delay(500);
+                await Task.Delay(500);  // simula llamada a la API
 
                 SuccessMessage = AppConstants.Success.PasswordChanged;
                 CurrentPassword = string.Empty;
@@ -181,8 +184,7 @@ namespace HoloCrew.ViewModels
         {
             await ExecuteAsync(async () =>
             {
-                // TODO: Save preferences
-                await Task.Delay(500);
+                await Task.Delay(500);  // simula llamada a la API
 
                 SuccessMessage = AppConstants.Success.PreferencesSaved;
                 SetSuccess();
@@ -195,23 +197,23 @@ namespace HoloCrew.ViewModels
             _navigationService.NavigateTo<OrderHistoryViewModel>();
         }
 
-        // Sidebar navigation commands
+        // navegación lateral
         [RelayCommand]
         private void NavigateToPersonalInfo()
         {
-            // Already showing personal info - no action needed
+            // ya está en la sección de información personal
         }
 
         [RelayCommand]
         private void NavigateToAddresses()
         {
-            // TODO: Fase 2 - section switching for saved addresses
+            // pendiente: cambiar a la sección de direcciones guardadas
         }
 
         [RelayCommand]
         private void NavigateToPaymentMethods()
         {
-            // TODO: Fase 2 - section switching for payment methods
+            // pendiente: cambiar a la sección de métodos de pago
         }
 
         [RelayCommand]

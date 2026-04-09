@@ -2,18 +2,11 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
+// Compara dos valores y dice si son iguales. Se usa con MultiBinding
+// para resaltar el elemento seleccionado en una lista.
+
 namespace HoloCrew.Converters
 {
-    /// <summary>
-    /// Compara dos valores y devuelve true si son iguales.
-    /// Útil para resaltar elementos seleccionados en listas.
-    /// 
-    /// Uso con MultiBinding:
-    /// <MultiBinding Converter="{StaticResource EqualityConverter}">
-    ///     <Binding Path="." />  <!-- Valor actual del item -->
-    ///     <Binding Path="DataContext.SelectedCategory" RelativeSource="..." />  <!-- Valor seleccionado -->
-    /// </MultiBinding>
-    /// </summary>
     public class EqualityConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -30,6 +23,9 @@ namespace HoloCrew.Converters
             if (value1 == null || value2 == null)
                 return false;
 
+            // compara dos valores y dice si son iguales
+            // se usa con dos bindings: el item actual y el elemento seleccionado
+            // sirve para marcar cuál está seleccionado en una lista (ejemplo: categoría activa)
             return value1.Equals(value2);
         }
 

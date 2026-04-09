@@ -4,18 +4,19 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 
+// Servicio de navegación entre pantallas (MVVM puro).
+// En lugar de navegar a vistas, navega a ViewModels.
+// Guarda un historial para poder volver atrás (GoBack).
+
 namespace HoloCrew.Services
 {
-    /// <summary>
-    /// Implementación del servicio de navegación
-    /// </summary>
     public class NavigationService : INavigationService
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly Stack<ViewModelBase> _navigationStack;
+        private readonly Stack<ViewModelBase> _navigationStack;  // historial de pantallas
         private Action<object> _setCurrentView;
 
-        public bool CanGoBack => _navigationStack.Count > 1;
+        public bool CanGoBack => _navigationStack.Count > 1;  // se puede volver atrás si hay más de una pantalla
 
         public NavigationService(IServiceProvider serviceProvider)
         {
@@ -25,7 +26,7 @@ namespace HoloCrew.Services
 
         public void Initialize(Action<object> setCurrentView)
         {
-            _setCurrentView = setCurrentView;
+            _setCurrentView = setCurrentView;  // se guarda la función que cambia la vista actual
         }
 
         public void NavigateTo<TViewModel>() where TViewModel : ViewModelBase
@@ -35,17 +36,16 @@ namespace HoloCrew.Services
 
         public void NavigateTo<TViewModel>(object parameter) where TViewModel : ViewModelBase
         {
-            // Resolver ViewModel desde DI
             var viewModel = _serviceProvider.GetRequiredService<TViewModel>();
 
-            // Notificar al ViewModel anterior que se está saliendo
+            // avisar a la pantalla actual que nos vamos
             if (_navigationStack.Count > 0)
             {
                 var previousViewModel = _navigationStack.Peek();
                 previousViewModel.OnNavigatedFrom();
             }
 
-            // Notificar al nuevo ViewModel que se está navegando a él
+            // avisar a la nueva pantalla que ha llegado (con o sin parámetro)
             if (parameter != null)
             {
                 viewModel.OnNavigatedTo(parameter);
@@ -55,10 +55,7 @@ namespace HoloCrew.Services
                 viewModel.OnNavigatedTo(null);
             }
 
-            // Agregar al historial
             _navigationStack.Push(viewModel);
-
-            // Actualizar vista actual
             _setCurrentView?.Invoke(viewModel);
         }
 
@@ -66,15 +63,12 @@ namespace HoloCrew.Services
         {
             if (!CanGoBack) return;
 
-            // Remover vista actual
             var currentViewModel = _navigationStack.Pop();
             currentViewModel.OnNavigatedFrom();
 
-            // Obtener vista anterior
             var previousViewModel = _navigationStack.Peek();
             previousViewModel.OnNavigatedTo(null);
 
-            // Actualizar vista actual
             _setCurrentView?.Invoke(previousViewModel);
         }
     }

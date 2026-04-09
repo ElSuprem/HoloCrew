@@ -9,6 +9,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
+// ViewModel de la página Black Week (ofertas).
+// Muestra productos con descuento, cuenta regresiva, filtros por categoría y ordenación.
+// Se conecta con ProductService, CartService, WishlistService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class BlackWeekViewModel : ViewModelBase
@@ -17,10 +21,9 @@ namespace HoloCrew.ViewModels
         private readonly ICartService _cartService;
         private readonly IWishlistService _wishlistService;
         private readonly INavigationService _navigationService;
-        private DispatcherTimer? _countdownTimer;
+        private DispatcherTimer? _countdownTimer;  // temporizador para la cuenta regresiva
 
-        // Lista completa sin filtrar
-        private ObservableCollection<Product> _allBlackWeekProducts = new();
+        private ObservableCollection<Product> _allBlackWeekProducts = new();  // lista completa sin filtrar
 
         #region Properties
 
@@ -28,7 +31,7 @@ namespace HoloCrew.ViewModels
         private ObservableCollection<Product> _blackWeekProducts = new();
 
         [ObservableProperty]
-        private ObservableCollection<Product> _topDeals = new();
+        private ObservableCollection<Product> _topDeals = new();  // los mejores descuentos
 
         [ObservableProperty]
         private string _saleTitle = "BLACK WEEK";
@@ -36,7 +39,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private string _saleSubtitle = "The biggest sale of the year is here";
 
-        // Countdown properties
+        // tiempo restante
         [ObservableProperty]
         private int _daysRemaining;
 
@@ -64,7 +67,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private decimal _maxDiscountPercent = 80;
 
-        // Filtros
+        // filtros
         [ObservableProperty]
         private string _selectedCategory = "All";
 
@@ -118,7 +121,7 @@ namespace HoloCrew.ViewModels
             EmptySubtitle = "Stay tuned for our biggest sale of the year!";
             EmptyActionText = "Browse All Products";
 
-            // Black Week dura 7 días (simulado)
+            // la oferta dura 7 días
             SaleEndTime = DateTime.Now.Date.AddDays(7).AddHours(23).AddMinutes(59).AddSeconds(59);
         }
 
@@ -144,35 +147,31 @@ namespace HoloCrew.ViewModels
             {
                 LoadingMessage = "Loading Black Week deals...";
 
-                // Intentar cargar productos de Black Week del servicio
                 var blackWeekProducts = await _productService.GetBlackWeekProductsAsync();
 
-                // Si no hay productos, crear mock data
+                // si no hay, crear datos de ejemplo
                 if (blackWeekProducts == null || blackWeekProducts.Count == 0)
                 {
                     blackWeekProducts = CreateMockBlackWeekProducts().ToList();
                 }
 
-                // Asignar descuentos aleatorios si no tienen
+                // asignar descuentos aleatorios si no tienen
                 var random = new Random();
                 foreach (var product in blackWeekProducts)
                 {
                     if (!product.HasDiscount)
                     {
-                        var discountPercent = random.Next(30, 81); // 30-80% descuento
+                        var discountPercent = random.Next(30, 81);  // entre 30% y 80%
                         product.OriginalPrice = product.Price;
                         product.Price = Math.Round(product.OriginalPrice.Value * (100 - discountPercent) / 100, 2);
                     }
                     product.IsBlackWeek = true;
                 }
 
-                // Guardar lista completa
                 _allBlackWeekProducts = new ObservableCollection<Product>(blackWeekProducts);
-
-                // Aplicar filtros
                 ApplyFiltersAndSort();
 
-                // Top Deals: los 4 con mayor descuento
+                // top deals: los 4 con mayor descuento
                 TopDeals = new ObservableCollection<Product>(
                     _allBlackWeekProducts
                         .OrderByDescending(p => p.DiscountPercentage)
@@ -186,203 +185,23 @@ namespace HoloCrew.ViewModels
             });
         }
 
+        // datos de ejemplo para probar sin base de datos real
         private ObservableCollection<Product> CreateMockBlackWeekProducts()
         {
             return new ObservableCollection<Product>
             {
-                // TOP DEALS - Descuentos más altos
-                new Product
-                {
-                    Id = 201,
-                    Name = "Premium Leather Jacket",
-                    Price = 89.99m,
-                    OriginalPrice = 249.99m,
-                    Stock = 3,
-                    IsNew = false,
-                    IsFeatured = true,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/jacket_leather.jpg",
-                    CategoryId = 1,
-                    Category = new Category { Name = "Tops" },
-                    AverageRating = 4.8,
-                    ReviewCount = 124
-                },
-                new Product
-                {
-                    Id = 202,
-                    Name = "Designer Sneakers - Limited",
-                    Price = 79.99m,
-                    OriginalPrice = 199.99m,
-                    Stock = 5,
-                    IsNew = false,
-                    IsFeatured = true,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/sneaker_designer.jpg",
-                    CategoryId = 3,
-                    Category = new Category { Name = "Footwear" },
-                    AverageRating = 4.9,
-                    ReviewCount = 89
-                },
-                new Product
-                {
-                    Id = 203,
-                    Name = "Cashmere Hoodie",
-                    Price = 59.99m,
-                    OriginalPrice = 149.99m,
-                    Stock = 8,
-                    IsNew = true,
-                    IsFeatured = true,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/hoodie_cashmere.jpg",
-                    CategoryId = 1,
-                    Category = new Category { Name = "Tops" },
-                    AverageRating = 4.7,
-                    ReviewCount = 56
-                },
-                new Product
-                {
-                    Id = 204,
-                    Name = "Luxury Watch Cap",
-                    Price = 19.99m,
-                    OriginalPrice = 59.99m,
-                    Stock = 15,
-                    IsNew = false,
-                    IsFeatured = true,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/cap_luxury.jpg",
-                    CategoryId = 4,
-                    Category = new Category { Name = "Accessories" },
-                    AverageRating = 4.5,
-                    ReviewCount = 78
-                },
-                new Product
-                {
-                    Id = 205,
-                    Name = "Cargo Pants - Military Edition",
-                    Price = 34.99m,
-                    OriginalPrice = 89.99m,
-                    Stock = 12,
-                    IsNew = false,
-                    IsFeatured = true,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/cargo_military.jpg",
-                    CategoryId = 2,
-                    Category = new Category { Name = "Bottoms" },
-                    AverageRating = 4.6,
-                    ReviewCount = 203
-                },
-                new Product
-                {
-                    Id = 206,
-                    Name = "Oversized Graphic Tee",
-                    Price = 19.99m,
-                    OriginalPrice = 44.99m,
-                    Stock = 25,
-                    IsNew = true,
-                    IsFeatured = false,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/tee_graphic.jpg",
-                    CategoryId = 1,
-                    Category = new Category { Name = "Tops" },
-                    AverageRating = 4.4,
-                    ReviewCount = 167
-                },
-                new Product
-                {
-                    Id = 207,
-                    Name = "Tactical Backpack",
-                    Price = 44.99m,
-                    OriginalPrice = 99.99m,
-                    Stock = 7,
-                    IsNew = false,
-                    IsFeatured = true,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/backpack_tactical.jpg",
-                    CategoryId = 4,
-                    Category = new Category { Name = "Accessories" },
-                    AverageRating = 4.8,
-                    ReviewCount = 92
-                },
-                new Product
-                {
-                    Id = 208,
-                    Name = "Slim Fit Chinos",
-                    Price = 29.99m,
-                    OriginalPrice = 69.99m,
-                    Stock = 18,
-                    IsNew = false,
-                    IsFeatured = false,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/chinos_slim.jpg",
-                    CategoryId = 2,
-                    Category = new Category { Name = "Bottoms" },
-                    AverageRating = 4.3,
-                    ReviewCount = 145
-                },
-                new Product
-                {
-                    Id = 209,
-                    Name = "Puffer Jacket - Winter Edition",
-                    Price = 69.99m,
-                    OriginalPrice = 159.99m,
-                    Stock = 4,
-                    IsNew = true,
-                    IsFeatured = true,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/puffer_winter.jpg",
-                    CategoryId = 1,
-                    Category = new Category { Name = "Tops" },
-                    AverageRating = 4.9,
-                    ReviewCount = 34
-                },
-                new Product
-                {
-                    Id = 210,
-                    Name = "Canvas Belt",
-                    Price = 12.99m,
-                    OriginalPrice = 29.99m,
-                    Stock = 30,
-                    IsNew = false,
-                    IsFeatured = false,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/belt_canvas.jpg",
-                    CategoryId = 4,
-                    Category = new Category { Name = "Accessories" },
-                    AverageRating = 4.2,
-                    ReviewCount = 256
-                },
-                new Product
-                {
-                    Id = 211,
-                    Name = "High-Top Boots",
-                    Price = 64.99m,
-                    OriginalPrice = 139.99m,
-                    Stock = 6,
-                    IsNew = false,
-                    IsFeatured = true,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/boots_hightop.jpg",
-                    CategoryId = 3,
-                    Category = new Category { Name = "Footwear" },
-                    AverageRating = 4.7,
-                    ReviewCount = 67
-                },
-                new Product
-                {
-                    Id = 212,
-                    Name = "Fleece Sweatpants",
-                    Price = 24.99m,
-                    OriginalPrice = 54.99m,
-                    Stock = 20,
-                    IsNew = false,
-                    IsFeatured = false,
-                    IsBlackWeek = true,
-                    MainImageUrl = "/Resources/Images/sweatpants_fleece.jpg",
-                    CategoryId = 2,
-                    Category = new Category { Name = "Bottoms" },
-                    AverageRating = 4.5,
-                    ReviewCount = 189
-                }
+                new Product { Id = 201, Name = "Premium Leather Jacket", Price = 89.99m, OriginalPrice = 249.99m, Stock = 3, IsFeatured = true, IsBlackWeek = true, MainImageUrl = "/Resources/Images/jacket_leather.jpg", CategoryId = 1, Category = new Category { Name = "Tops" }, AverageRating = 4.8, ReviewCount = 124 },
+                new Product { Id = 202, Name = "Designer Sneakers - Limited", Price = 79.99m, OriginalPrice = 199.99m, Stock = 5, IsFeatured = true, IsBlackWeek = true, MainImageUrl = "/Resources/Images/sneaker_designer.jpg", CategoryId = 3, Category = new Category { Name = "Footwear" }, AverageRating = 4.9, ReviewCount = 89 },
+                new Product { Id = 203, Name = "Cashmere Hoodie", Price = 59.99m, OriginalPrice = 149.99m, Stock = 8, IsNew = true, IsFeatured = true, IsBlackWeek = true, MainImageUrl = "/Resources/Images/hoodie_cashmere.jpg", CategoryId = 1, Category = new Category { Name = "Tops" }, AverageRating = 4.7, ReviewCount = 56 },
+                new Product { Id = 204, Name = "Luxury Watch Cap", Price = 19.99m, OriginalPrice = 59.99m, Stock = 15, IsFeatured = true, IsBlackWeek = true, MainImageUrl = "/Resources/Images/cap_luxury.jpg", CategoryId = 4, Category = new Category { Name = "Accessories" }, AverageRating = 4.5, ReviewCount = 78 },
+                new Product { Id = 205, Name = "Cargo Pants - Military Edition", Price = 34.99m, OriginalPrice = 89.99m, Stock = 12, IsFeatured = true, IsBlackWeek = true, MainImageUrl = "/Resources/Images/cargo_military.jpg", CategoryId = 2, Category = new Category { Name = "Bottoms" }, AverageRating = 4.6, ReviewCount = 203 },
+                new Product { Id = 206, Name = "Oversized Graphic Tee", Price = 19.99m, OriginalPrice = 44.99m, Stock = 25, IsNew = true, IsBlackWeek = true, MainImageUrl = "/Resources/Images/tee_graphic.jpg", CategoryId = 1, Category = new Category { Name = "Tops" }, AverageRating = 4.4, ReviewCount = 167 },
+                new Product { Id = 207, Name = "Tactical Backpack", Price = 44.99m, OriginalPrice = 99.99m, Stock = 7, IsFeatured = true, IsBlackWeek = true, MainImageUrl = "/Resources/Images/backpack_tactical.jpg", CategoryId = 4, Category = new Category { Name = "Accessories" }, AverageRating = 4.8, ReviewCount = 92 },
+                new Product { Id = 208, Name = "Slim Fit Chinos", Price = 29.99m, OriginalPrice = 69.99m, Stock = 18, IsBlackWeek = true, MainImageUrl = "/Resources/Images/chinos_slim.jpg", CategoryId = 2, Category = new Category { Name = "Bottoms" }, AverageRating = 4.3, ReviewCount = 145 },
+                new Product { Id = 209, Name = "Puffer Jacket - Winter Edition", Price = 69.99m, OriginalPrice = 159.99m, Stock = 4, IsNew = true, IsFeatured = true, IsBlackWeek = true, MainImageUrl = "/Resources/Images/puffer_winter.jpg", CategoryId = 1, Category = new Category { Name = "Tops" }, AverageRating = 4.9, ReviewCount = 34 },
+                new Product { Id = 210, Name = "Canvas Belt", Price = 12.99m, OriginalPrice = 29.99m, Stock = 30, IsBlackWeek = true, MainImageUrl = "/Resources/Images/belt_canvas.jpg", CategoryId = 4, Category = new Category { Name = "Accessories" }, AverageRating = 4.2, ReviewCount = 256 },
+                new Product { Id = 211, Name = "High-Top Boots", Price = 64.99m, OriginalPrice = 139.99m, Stock = 6, IsFeatured = true, IsBlackWeek = true, MainImageUrl = "/Resources/Images/boots_hightop.jpg", CategoryId = 3, Category = new Category { Name = "Footwear" }, AverageRating = 4.7, ReviewCount = 67 },
+                new Product { Id = 212, Name = "Fleece Sweatpants", Price = 24.99m, OriginalPrice = 54.99m, Stock = 20, IsBlackWeek = true, MainImageUrl = "/Resources/Images/sweatpants_fleece.jpg", CategoryId = 2, Category = new Category { Name = "Bottoms" }, AverageRating = 4.5, ReviewCount = 189 }
             };
         }
 
@@ -394,7 +213,7 @@ namespace HoloCrew.ViewModels
         {
             var filtered = _allBlackWeekProducts.AsEnumerable();
 
-            // Filtrar por categoría
+            // filtrar por categoría
             if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
             {
                 filtered = filtered.Where(p =>
@@ -402,7 +221,7 @@ namespace HoloCrew.ViewModels
                     GetCategoryNameById(p.CategoryId).Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase));
             }
 
-            // Ordenar
+            // ordenar
             filtered = SortBy switch
             {
                 "Price: Low to High" => filtered.OrderBy(p => p.Price),
@@ -429,15 +248,8 @@ namespace HoloCrew.ViewModels
             };
         }
 
-        partial void OnSelectedCategoryChanged(string value)
-        {
-            ApplyFiltersAndSort();
-        }
-
-        partial void OnSortByChanged(string value)
-        {
-            ApplyFiltersAndSort();
-        }
+        partial void OnSelectedCategoryChanged(string value) => ApplyFiltersAndSort();
+        partial void OnSortByChanged(string value) => ApplyFiltersAndSort();
 
         #endregion
 
@@ -445,13 +257,9 @@ namespace HoloCrew.ViewModels
 
         private void StartCountdownTimer()
         {
-            _countdownTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
+            _countdownTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _countdownTimer.Tick += CountdownTimer_Tick;
             _countdownTimer.Start();
-
             UpdateCountdown();
         }
 
@@ -465,10 +273,7 @@ namespace HoloCrew.ViewModels
             }
         }
 
-        private void CountdownTimer_Tick(object? sender, EventArgs e)
-        {
-            UpdateCountdown();
-        }
+        private void CountdownTimer_Tick(object? sender, EventArgs e) => UpdateCountdown();
 
         private void UpdateCountdown()
         {
@@ -531,7 +336,6 @@ namespace HoloCrew.ViewModels
         {
             if (product == null) return;
 
-            // Cambio inmediato
             product.IsInWishlist = !product.IsInWishlist;
 
             try
@@ -543,8 +347,7 @@ namespace HoloCrew.ViewModels
             }
             catch (Exception ex)
             {
-                // Revertir si falla
-                product.IsInWishlist = !product.IsInWishlist;
+                product.IsInWishlist = !product.IsInWishlist;  // revertir si falla
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
         }

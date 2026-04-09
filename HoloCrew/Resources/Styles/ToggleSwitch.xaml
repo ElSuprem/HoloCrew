@@ -1,10 +1,10 @@
-﻿<!-- ========================================
-     TOGGLE SWITCH - Para CheckBoxes en Settings
-     Estilo moderno iOS-style
-     ======================================== -->
-
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- TOGGLESWITCH.XAML
+     Estilo de interruptor estilo iOS para CheckBox.
+     Se usa en la pantalla de configuración (Settings) para activar/desactivar opciones.
+     Al hacer clic, la bolita se desliza de izquierda a derecha y cambia el color de fondo. -->
 
     <Style x:Key="ToggleSwitch" TargetType="CheckBox">
         <Setter Property="Cursor" Value="Hand"/>
@@ -12,7 +12,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
                     <Grid Background="Transparent">
-                        <!-- Toggle Track -->
+                        <!-- riel del interruptor -->
                         <Border x:Name="Track"
                                 Width="50"
                                 Height="28"
@@ -26,7 +26,7 @@
                             </Border.Effect>
                         </Border>
 
-                        <!-- Toggle Thumb -->
+                        <!-- bolita que se desliza -->
                         <Border x:Name="Thumb"
                                 Width="24"
                                 Height="24"
@@ -47,7 +47,7 @@
                     </Grid>
 
                     <ControlTemplate.Triggers>
-                        <!-- Checked State -->
+                        <!-- cuando está activado, la bolita se mueve a la derecha y el riel se pone rojo -->
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Track" Property="Background" Value="{DynamicResource AccentBrush}"/>
                             <Trigger.EnterActions>
@@ -80,7 +80,7 @@
                             </Trigger.ExitActions>
                         </Trigger>
 
-                        <!-- Hover -->
+                        <!-- al pasar el ratón, se oscurece un poco -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Track" Property="Opacity" Value="0.9"/>
                         </Trigger>

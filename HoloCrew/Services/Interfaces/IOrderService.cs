@@ -1,45 +1,18 @@
 ﻿using HoloCrew.Models;
 
+// Servicio para gestionar pedidos: crear, cancelar, consultar, tracking, cambiar estado.
+// Se conecta con los modelos Order, OrderStatus, TrackingInfo, OrderStatusHistory.
+
 namespace HoloCrew.Services.Interfaces
 {
-    /// <summary>
-    /// Servicio para gestión de pedidos
-    /// </summary>
     public interface IOrderService
     {
-        /// <summary>
-        /// Crea un nuevo pedido
-        /// </summary>
-        Task<Order> CreateOrderAsync(Order order);
-
-        /// <summary>
-        /// Obtiene todos los pedidos de un usuario
-        /// </summary>
-        Task<List<Order>> GetUserOrdersAsync(int userId);
-
-        /// <summary>
-        /// Obtiene un pedido por su ID
-        /// </summary>
-        Task<Order> GetOrderByIdAsync(int orderId);
-
-        /// <summary>
-        /// Cancela un pedido
-        /// </summary>
-        Task<bool> CancelOrderAsync(int orderId);
-
-        /// <summary>
-        /// Obtiene información de tracking de un pedido
-        /// </summary>
-        Task<TrackingInfo> GetTrackingInfoAsync(string trackingNumber);
-
-        /// <summary>
-        /// Actualiza el estado de un pedido
-        /// </summary>
-        Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus newStatus);
-
-        /// <summary>
-        /// Obtiene el historial de estados de un pedido
-        /// </summary>
-        Task<List<OrderStatusHistory>> GetOrderStatusHistoryAsync(int orderId);
+        Task<Order> CreateOrderAsync(Order order);                               // crear nuevo pedido
+        Task<List<Order>> GetUserOrdersAsync(int userId);                        // pedidos de un usuario
+        Task<Order> GetOrderByIdAsync(int orderId);                              // buscar pedido por id
+        Task<bool> CancelOrderAsync(int orderId);                                // cancelar pedido
+        Task<TrackingInfo> GetTrackingInfoAsync(string trackingNumber);          // seguimiento del envío
+        Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus newStatus);   // cambiar estado (admin)
+        Task<List<OrderStatusHistory>> GetOrderStatusHistoryAsync(int orderId);  // historial de cambios de estado
     }
 }

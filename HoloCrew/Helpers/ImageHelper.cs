@@ -2,16 +2,16 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 
+// Helper para cargar imágenes desde ruta o desde bytes, redimensionarlas,
+// y obtener una imagen placeholder por defecto. Las imágenes se congelan
+// (Freeze) para poder usarlas desde varios hilos.
+
 namespace HoloCrew.Helpers
 {
-    /// <summary>
-    /// Funciones de ayuda para manejo de imágenes
-    /// </summary>
     public static class ImageHelper
     {
-        /// <summary>
-        /// Carga una imagen desde una URL local o recurso
-        /// </summary>
+        // carga una imagen desde una ruta (puede ser relativa o absoluta)
+        // si falla, devuelve null
         public static BitmapImage LoadImage(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -24,7 +24,7 @@ namespace HoloCrew.Helpers
                 bitmap.UriSource = new Uri(path, UriKind.RelativeOrAbsolute);
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
-                bitmap.Freeze(); // Para thread-safety
+                bitmap.Freeze(); // se congela para poder usarla desde varios hilos sin problemas
                 return bitmap;
             }
             catch
@@ -33,9 +33,7 @@ namespace HoloCrew.Helpers
             }
         }
 
-        /// <summary>
-        /// Carga una imagen desde bytes
-        /// </summary>
+        // carga una imagen desde un array de bytes (ejemplo: imagen descargada de internet o sacada de base de datos)
         public static BitmapImage LoadImageFromBytes(byte[] imageBytes)
         {
             if (imageBytes == null || imageBytes.Length == 0)
@@ -60,9 +58,8 @@ namespace HoloCrew.Helpers
             }
         }
 
-        /// <summary>
-        /// Redimensiona una imagen manteniendo aspecto
-        /// </summary>
+        // carga una imagen pero la redimensiona al ancho y alto máximo indicados
+        // mantiene el aspecto original, no la estira
         public static BitmapImage ResizeImage(string path, int maxWidth, int maxHeight)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -86,12 +83,10 @@ namespace HoloCrew.Helpers
             }
         }
 
-        /// <summary>
-        /// Obtiene una imagen placeholder por defecto
-        /// </summary>
+        // devuelve una imagen por defecto para cuando no hay foto disponible
+        // la imagen está en Resources/Images/placeholder.png
         public static BitmapImage GetPlaceholderImage()
         {
-            // Retornar una imagen por defecto desde recursos
             return LoadImage("pack://application:,,,/Resources/Images/placeholder.png");
         }
     }

@@ -2,27 +2,22 @@
 using System.Windows;
 using System.Windows.Media;
 
+// Gestor de temas para cambiar entre modo claro y oscuro.
+// Funciona así:
+// 1. Colors.xaml define colores (BlackPrimary, WhitePrimary, etc.)
+// 2. Brushes.xaml define pinceles usando DynamicResource a esos colores
+// 3. Los XAML usan DynamicResource a los pinceles
+// 4. Este ThemeManager solo cambia los colores → los pinceles se actualizan solos
+// Resultado: cambio de tema instantáneo sin recargar vistas.
+
 namespace HoloCrew.Services
 {
-    /// <summary>
-    /// Gestor de temas — Cambia entre modo claro y oscuro.
-    /// 
-    /// CÓMO FUNCIONA:
-    /// 1. Colors.xaml define Color resources (BlackPrimary, WhitePrimary, etc.)
-    /// 2. Brushes.xaml define SolidColorBrush resources usando DynamicResource a esos Colors
-    /// 3. Los XAML usan DynamicResource a los Brushes
-    /// 4. Este ThemeManager solo cambia los Color resources → los Brushes se actualizan solos
-    /// 
-    /// RESULTADO: Cambio de tema instantáneo sin recargar vistas.
-    /// </summary>
     public static class ThemeManager
     {
         private static bool _isDarkMode = false;
         public static bool IsDarkMode => _isDarkMode;
 
-        /// <summary>
-        /// Aplica el tema claro u oscuro a toda la aplicación
-        /// </summary>
+        // aplica el tema claro u oscuro a toda la app
         public static void ApplyTheme(bool isDarkMode)
         {
             try
@@ -44,51 +39,47 @@ namespace HoloCrew.Services
             }
         }
 
-        // ================================================================
-        // DARK THEME
-        // ================================================================
+        // ========== TEMA OSCURO ==========
         private static void ApplyDarkTheme(Application app)
         {
-            // === BASE COLORS (inverted) ===
-            SetColor(app, "BlackPrimary", "#F0F0F0");   // Was dark text → now light text
+            // colores base (invertidos)
+            SetColor(app, "BlackPrimary", "#F0F0F0");   // texto oscuro → texto claro
             SetColor(app, "BlackSecondary", "#E0E0E0");
             SetColor(app, "BlackTertiary", "#CCCCCC");
 
-            SetColor(app, "WhitePrimary", "#121212");   // Was white bg → now dark bg
+            SetColor(app, "WhitePrimary", "#121212");   // fondo blanco → fondo oscuro
             SetColor(app, "WhiteSecondary", "#1A1A1A");
             SetColor(app, "WhiteTertiary", "#222222");
 
-            // === REDS (accent — slightly softer for dark) ===
+            // rojo de acento (un poco más suave en oscuro)
             SetColor(app, "RedAccent", "#FF2D2D");
             SetColor(app, "RedAccentDark", "#CC0000");
             SetColor(app, "RedAccentLight", "#FF5555");
 
-            // === GRAYS (adjusted for dark backgrounds) ===
-            SetColor(app, "Gray100", "#1E1E1E");   // Light cards → dark cards
-            SetColor(app, "Gray200", "#2A2A2A");   // Borders
-            SetColor(app, "Gray300", "#3A3A3A");   // Separators
-            SetColor(app, "Gray400", "#888888");   // Muted text
-            SetColor(app, "Gray500", "#999999");   // Secondary text
+            // grises ajustados para fondos oscuros
+            SetColor(app, "Gray100", "#1E1E1E");
+            SetColor(app, "Gray200", "#2A2A2A");
+            SetColor(app, "Gray300", "#3A3A3A");
+            SetColor(app, "Gray400", "#888888");
+            SetColor(app, "Gray500", "#999999");
             SetColor(app, "Gray600", "#AAAAAA");
-            SetColor(app, "Gray700", "#CCCCCC");   // Was dark text → light
+            SetColor(app, "Gray700", "#CCCCCC");
             SetColor(app, "Gray800", "#E0E0E0");
             SetColor(app, "Gray900", "#F0F0F0");
 
-            // === SEMANTIC (same hues, adjusted brightness) ===
+            // colores semánticos
             SetColor(app, "SuccessColor", "#34D399");
             SetColor(app, "WarningColor", "#FBBF24");
             SetColor(app, "ErrorColor", "#F87171");
             SetColor(app, "InfoColor", "#60A5FA");
 
-            // === OVERLAYS ===
             SetColor(app, "OverlayDark", "#B0000000");
             SetColor(app, "OverlayLight", "#20FFFFFF");
 
-            // === HOVER ===
             SetColor(app, "HoverLight", "#2A2A2A");
             SetColor(app, "HoverDark", "#30FFFFFF");
 
-            // === SEMANTIC ALIASES (Brushes.xaml uses DynamicResource to these) ===
+            // alias semánticos
             SetBrush(app, "BackgroundPrimary", "#121212");
             SetBrush(app, "BackgroundSecondary", "#1A1A1A");
             SetBrush(app, "BackgroundDark", "#0A0A0A");
@@ -103,7 +94,7 @@ namespace HoloCrew.Services
             SetBrush(app, "AccentPrimary", "#FF2D2D");
             SetBrush(app, "AccentSecondary", "#F0F0F0");
 
-            // Compatibility aliases
+            // alias de compatibilidad
             SetBrush(app, "PrimaryBrush", "#F0F0F0");
             SetBrush(app, "PrimaryDarkBrush", "#E0E0E0");
             SetBrush(app, "PrimaryLightBrush", "#CCCCCC");
@@ -135,7 +126,7 @@ namespace HoloCrew.Services
 
             SetBrush(app, "StarBrush", "#FBBF24");
 
-            // Named Brush resources that reference Color keys
+            // pinceles nombrados individualmente
             UpdateNamedBrush(app, "BlackPrimaryBrush", "#F0F0F0");
             UpdateNamedBrush(app, "BlackSecondaryBrush", "#E0E0E0");
             UpdateNamedBrush(app, "BlackTertiaryBrush", "#CCCCCC");
@@ -165,12 +156,9 @@ namespace HoloCrew.Services
             UpdateNamedBrush(app, "HoverDark", "#30FFFFFF");
         }
 
-        // ================================================================
-        // LIGHT THEME (restore original values from Colors.xaml / Brushes.xaml)
-        // ================================================================
+        // ========== TEMA CLARO (valores originales) ==========
         private static void ApplyLightTheme(Application app)
         {
-            // === BASE COLORS ===
             SetColor(app, "BlackPrimary", "#0A0A0A");
             SetColor(app, "BlackSecondary", "#1A1A1A");
             SetColor(app, "BlackTertiary", "#2A2A2A");
@@ -204,7 +192,6 @@ namespace HoloCrew.Services
             SetColor(app, "HoverLight", "#F0F0F0");
             SetColor(app, "HoverDark", "#20FFFFFF");
 
-            // === SEMANTIC ALIASES ===
             SetBrush(app, "BackgroundPrimary", "#FFFFFF");
             SetBrush(app, "BackgroundSecondary", "#F5F5F5");
             SetBrush(app, "BackgroundDark", "#0A0A0A");
@@ -250,7 +237,6 @@ namespace HoloCrew.Services
 
             SetBrush(app, "StarBrush", "#F59E0B");
 
-            // Named Brush resources
             UpdateNamedBrush(app, "BlackPrimaryBrush", "#0A0A0A");
             UpdateNamedBrush(app, "BlackSecondaryBrush", "#1A1A1A");
             UpdateNamedBrush(app, "BlackTertiaryBrush", "#2A2A2A");
@@ -280,13 +266,9 @@ namespace HoloCrew.Services
             UpdateNamedBrush(app, "HoverDark", "#20FFFFFF");
         }
 
-        // ================================================================
-        // HELPERS
-        // ================================================================
+        // ========== FUNCIONES AUXILIARES ==========
 
-        /// <summary>
-        /// Sets a Color resource in app resources
-        /// </summary>
+        // cambia un color en los recursos de la app
         private static void SetColor(Application app, string key, string hex)
         {
             try
@@ -297,9 +279,7 @@ namespace HoloCrew.Services
             catch { }
         }
 
-        /// <summary>
-        /// Sets a SolidColorBrush resource in app resources
-        /// </summary>
+        // cambia un pincel sólido en los recursos de la app
         private static void SetBrush(Application app, string key, string hex)
         {
             try
@@ -310,9 +290,7 @@ namespace HoloCrew.Services
             catch { }
         }
 
-        /// <summary>
-        /// Updates a named Brush resource (e.g. BlackPrimaryBrush, Gray100Brush)
-        /// </summary>
+        // actualiza un pincel nombrado (ej: BlackPrimaryBrush)
         private static void UpdateNamedBrush(Application app, string key, string hex)
         {
             try

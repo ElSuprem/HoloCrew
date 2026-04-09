@@ -4,6 +4,10 @@ using System.Windows.Input;
 
 namespace HoloCrew.Views
 {
+    // Vista del perfil de usuario (code-behind).
+    // Maneja el evento de scroll para que cuando el scroll interno llegue al final,
+    // el evento pase al ScrollViewer padre (MainWindow).
+
     public partial class ProfileView : UserControl
     {
         public ProfileView()
@@ -13,16 +17,14 @@ namespace HoloCrew.Views
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            // Pasar el evento al ScrollViewer padre (MainWindow)
             if (sender is ScrollViewer scrollViewer)
             {
-                // Solo pasar si el ScrollViewer interno no puede hacer scroll más
                 var canScrollUp = scrollViewer.VerticalOffset > 0;
                 var canScrollDown = scrollViewer.VerticalOffset < scrollViewer.ScrollableHeight;
 
+                // si no puede seguir haciendo scroll, pasar el evento al padre
                 if ((e.Delta > 0 && !canScrollUp) || (e.Delta < 0 && !canScrollDown))
                 {
-                    // Crear un nuevo evento y pasarlo al padre
                     var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
                     {
                         RoutedEvent = UIElement.MouseWheelEvent,

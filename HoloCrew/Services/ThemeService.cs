@@ -1,12 +1,11 @@
 ﻿using HoloCrew.Services.Interfaces;
 using System;
 
+// Servicio de temas. Delega el cambio real a ThemeManager.
+// No intenta cargar archivos Dark.xaml / Light.xaml porque no existen.
+
 namespace HoloCrew.Services
 {
-    /// <summary>
-    /// Servicio de temas — Delega a ThemeManager para el cambio real.
-    /// Ya NO intenta cargar Dark.xaml/Light.xaml (no existen).
-    /// </summary>
     public class ThemeService : IThemeService
     {
         private AppTheme _currentTheme = AppTheme.Light;
@@ -33,20 +32,19 @@ namespace HoloCrew.Services
         {
             var savedTheme = LoadThemePreference();
             _currentTheme = savedTheme;
-            // Apply via ThemeManager — no ResourceDictionary file loading
             ThemeManager.ApplyTheme(savedTheme == AppTheme.Dark);
         }
 
+        // guarda la preferencia del tema (pendiente de implementar con base de datos o settings)
         private void SaveThemePreference(AppTheme theme)
         {
-            // TODO Fase 2: Guardar en configuración persistente (Supabase o local settings)
             System.Diagnostics.Debug.WriteLine($"[ThemeService] Saved preference: {theme}");
         }
 
+        // carga la preferencia del tema guardada (pendiente de implementar)
         private AppTheme LoadThemePreference()
         {
-            // TODO Fase 2: Cargar desde configuración persistente
-            return AppTheme.Light;
+            return AppTheme.Light;  // por defecto, tema claro
         }
     }
 }

@@ -6,16 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// Servicio de productos con catálogo completo de streetwear.
+// Organizado por subcategorías igual que la web de HoloCrew.
+// Los productos están en GetStreetwearCatalog() como datos mock.
+
 namespace HoloCrew.Services
 {
-    /// <summary>
-    /// Servicio de productos con CATÁLOGO COMPLETO DE STREETWEAR
-    /// Organizado por subcategorías igual que la web de HoloCrew
-    /// </summary>
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
-        private List<Product> _cachedProducts;
+        private List<Product> _cachedProducts;  // guarda los productos en memoria para no recargar siempre
 
         public ProductService(IProductRepository productRepository)
         {
@@ -25,7 +25,7 @@ namespace HoloCrew.Services
         public async Task<List<Product>> GetFeaturedProductsAsync()
         {
             var products = await GetAllProductsAsync();
-            return products.Where(p => p.IsFeatured).Take(8).ToList();
+            return products.Where(p => p.IsFeatured).Take(8).ToList();  // hasta 8 destacados
         }
 
         public async Task<List<Product>> GetProductsByCategoryAsync(int categoryId)
@@ -34,19 +34,16 @@ namespace HoloCrew.Services
 
             if (categoryId == 0) return products;
 
-            // Si es categoría principal (1-5), devolver todos los productos de esa categoría
+            // categorías principales (1-5) o subcategorías (10+)
             if (categoryId >= 1 && categoryId <= 5)
             {
                 return products.Where(p => p.CategoryId == categoryId).ToList();
             }
 
-            // Si es subcategoría (10+), filtrar por SubCategoryId
             return products.Where(p => p.SubCategoryId == categoryId).ToList();
         }
 
-        /// <summary>
-        /// Obtiene productos por slug de subcategoría (usado desde el mega menú)
-        /// </summary>
+        // obtiene productos por slug de subcategoría (usado desde el mega menú)
         public async Task<List<Product>> GetProductsBySlugAsync(string slug)
         {
             var products = await GetAllProductsAsync();
@@ -56,24 +53,24 @@ namespace HoloCrew.Services
 
             slug = slug.ToLower();
 
-            // Casos especiales
+            // casos especiales del menú
             switch (slug)
             {
-                case "new":
+                case "new":   // productos nuevos
                     return products.Where(p => p.IsNew).OrderByDescending(p => p.CreatedAt).ToList();
-                case "blackweek":
+                case "blackweek":  // ofertas Black Week
                     return products.Where(p => p.IsBlackWeek || p.HasDiscount).ToList();
-                case "softs":
+                case "softs":   // colección Softs
                     return products.Where(p => p.IsSoftsCollection).ToList();
-                case "classic":
+                case "classic":  // colección Classic
                     return products.Where(p => p.IsClassicCollection).ToList();
-                case "activewear":
+                case "activewear":  // ropa deportiva
                     return products.Where(p => p.SubCategorySlug == "joggers" || p.SubCategorySlug == "trackpants" || p.SubCategorySlug == "shorts").ToList();
-                case "tracksuits":
+                case "tracksuits":  // chándales
                     return products.Where(p => p.SubCategorySlug == "trackjackets" || p.SubCategorySlug == "trackpants").ToList();
             }
 
-            // Filtrar por slug de subcategoría
+            // filtrar por slug de subcategoría
             return products.Where(p => p.SubCategorySlug == slug).ToList();
         }
 
@@ -111,6 +108,7 @@ namespace HoloCrew.Services
 
             var products = await GetAllProductsAsync();
 
+            // productos de la misma subcategoría (sin incluir el mismo)
             return products
                 .Where(p => p.Id != productId && p.SubCategoryId == product.SubCategoryId)
                 .Take(4)
@@ -120,7 +118,7 @@ namespace HoloCrew.Services
         public async Task<List<Product>> GetBestSellersAsync()
         {
             var products = await GetAllProductsAsync();
-            return products.OrderByDescending(p => p.ReviewCount).Take(10).ToList();
+            return products.OrderByDescending(p => p.ReviewCount).Take(10).ToList();  // los más valorados
         }
 
         public async Task<List<Product>> GetNewProductsAsync()
@@ -135,6 +133,7 @@ namespace HoloCrew.Services
             return products.Where(p => p.IsBlackWeek || p.HasDiscount).ToList();
         }
 
+        // carga todos los productos (con caché para no repetir)
         private async Task<List<Product>> GetAllProductsAsync()
         {
             if (_cachedProducts != null) return _cachedProducts;
@@ -151,15 +150,13 @@ namespace HoloCrew.Services
             return _cachedProducts;
         }
 
-        // ⭐⭐⭐ CATÁLOGO COMPLETO DE STREETWEAR HOLOCREW ⭐⭐⭐
+        // ========== CATÁLOGO COMPLETO DE STREETWEAR HOLOCREW ==========
         private List<Product> GetStreetwearCatalog()
         {
             var products = new List<Product>();
             int id = 1;
 
-            // ============================================
             // T-SHIRTS (SubCategoryId = 20)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "CLASSIC LOGO TEE", "Essential cotton t-shirt with embroidered logo", 34.99m, 44.99m,
@@ -176,9 +173,7 @@ namespace HoloCrew.Services
                     2, 20, "tshirts", isFeatured: true, isClassic: true),
             });
 
-            // ============================================
             // HOODIES (SubCategoryId = 21)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "CLASSIC LOGO HOODIE", "Premium heavyweight hoodie with embroidered logo", 89.99m, 109.99m,
@@ -195,9 +190,7 @@ namespace HoloCrew.Services
                     2, 21, "hoodies"),
             });
 
-            // ============================================
             // TRACK JACKETS (SubCategoryId = 22)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "RETRO TRACK JACKET", "90s inspired track jacket with stripe detail", 109.99m, 139.99m,
@@ -208,9 +201,7 @@ namespace HoloCrew.Services
                     2, 22, "trackjackets"),
             });
 
-            // ============================================
             // JERSEYS (SubCategoryId = 23)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "SOCCER JERSEY", "Premium mesh soccer jersey", 74.99m, 89.99m,
@@ -221,9 +212,7 @@ namespace HoloCrew.Services
                     2, 23, "jerseys"),
             });
 
-            // ============================================
             // KNITWEAR (SubCategoryId = 24)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "CABLE KNIT SWEATER", "Classic cable knit in premium wool blend", 99.99m, 129.99m,
@@ -234,9 +223,7 @@ namespace HoloCrew.Services
                     2, 24, "knitwear", isSofts: true),
             });
 
-            // ============================================
             // JACKETS (SubCategoryId = 25)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "PUFFER JACKET", "Premium down-filled puffer jacket", 179.99m, 229.99m,
@@ -251,9 +238,7 @@ namespace HoloCrew.Services
                     2, 25, "jackets", isFeatured: true),
             });
 
-            // ============================================
             // DENIM PANTS (SubCategoryId = 30)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "STRAIGHT FIT JEANS", "Classic straight leg denim", 89.99m, 109.99m,
@@ -266,9 +251,7 @@ namespace HoloCrew.Services
                     3, 30, "denim"),
             });
 
-            // ============================================
             // CARGO PANTS (SubCategoryId = 31)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "UTILITY CARGO PANTS", "6-pocket utility cargo pants", 99.99m, 129.99m,
@@ -281,9 +264,7 @@ namespace HoloCrew.Services
                     3, 31, "cargo", isBlackWeek: true),
             });
 
-            // ============================================
             // JOGGERS (SubCategoryId = 32)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "CLASSIC JOGGERS", "Essential cotton blend joggers", 69.99m, 89.99m,
@@ -296,9 +277,7 @@ namespace HoloCrew.Services
                     3, 32, "joggers"),
             });
 
-            // ============================================
             // TRACK PANTS (SubCategoryId = 33)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "RETRO TRACK PANTS", "90s inspired with side stripe", 89.99m, 109.99m,
@@ -309,9 +288,7 @@ namespace HoloCrew.Services
                     3, 33, "trackpants", isNew: true),
             });
 
-            // ============================================
             // SHORTS (SubCategoryId = 35)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "MESH SHORTS", "Breathable mesh basketball shorts", 49.99m, 64.99m,
@@ -324,9 +301,7 @@ namespace HoloCrew.Services
                     3, 35, "shorts"),
             });
 
-            // ============================================
             // SWIMSHORTS (SubCategoryId = 36)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "CLASSIC SWIM TRUNKS", "Quick-dry swim trunks with logo", 49.99m, 64.99m,
@@ -335,9 +310,7 @@ namespace HoloCrew.Services
                     3, 36, "swimshorts"),
             });
 
-            // ============================================
             // ARMBO LOWS (SubCategoryId = 40)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "ARMBO LOW WHITE", "Classic low-top sneaker in white", 139.99m, 169.99m,
@@ -348,9 +321,7 @@ namespace HoloCrew.Services
                     4, 40, "armbo", isNew: true),
             });
 
-            // ============================================
             // VORTEX (SubCategoryId = 41)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "VORTEX RUNNER", "Technical running-inspired sneaker", 159.99m, 189.99m,
@@ -359,9 +330,7 @@ namespace HoloCrew.Services
                     4, 41, "vortex", isNew: true),
             });
 
-            // ============================================
             // VENTURE (SubCategoryId = 42)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "VENTURE MID", "Mid-top basketball-inspired sneaker", 149.99m, 179.99m,
@@ -370,9 +339,7 @@ namespace HoloCrew.Services
                     4, 42, "venture"),
             });
 
-            // ============================================
             // VITORIA (SubCategoryId = 43)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "VITORIA LOAFER", "Premium leather loafer", 199.99m, 249.99m,
@@ -381,9 +348,7 @@ namespace HoloCrew.Services
                     4, 43, "vitoria"),
             });
 
-            // ============================================
             // V-SLIDES (SubCategoryId = 44)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "V-SLIDES CLASSIC", "Comfortable everyday slides", 39.99m, 49.99m,
@@ -392,9 +357,7 @@ namespace HoloCrew.Services
                     4, 44, "vslides", isNew: true),
             });
 
-            // ============================================
             // CAPS (SubCategoryId = 50)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "CLASSIC CAP", "6-panel structured cap with logo", 34.99m, 44.99m,
@@ -407,9 +370,7 @@ namespace HoloCrew.Services
                     5, 50, "caps"),
             });
 
-            // ============================================
             // BAGS (SubCategoryId = 51)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "MESSENGER BAG", "Classic messenger bag with logo", 79.99m, 99.99m,
@@ -424,9 +385,7 @@ namespace HoloCrew.Services
                     5, 51, "bags", isBlackWeek: true),
             });
 
-            // ============================================
             // BEANIES (SubCategoryId = 52)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "RIBBED BEANIE", "Classic ribbed knit beanie", 24.99m, 34.99m,
@@ -437,9 +396,7 @@ namespace HoloCrew.Services
                     5, 52, "beanies", isNew: true, isSofts: true),
             });
 
-            // ============================================
             // CARDHOLDER (SubCategoryId = 53)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "LEATHER CARDHOLDER", "Slim leather cardholder with 6 slots", 39.99m, 49.99m,
@@ -448,9 +405,7 @@ namespace HoloCrew.Services
                     5, 53, "cardholder"),
             });
 
-            // ============================================
             // BELTS (SubCategoryId = 54)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "CANVAS WEB BELT", "Military-style canvas belt", 34.99m, 44.99m,
@@ -459,9 +414,7 @@ namespace HoloCrew.Services
                     5, 54, "belts", isFeatured: true, isClassic: true),
             });
 
-            // ============================================
             // RINGS (SubCategoryId = 55)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "SILVER BAND RING", "Sterling silver band ring", 44.99m, 54.99m,
@@ -470,9 +423,7 @@ namespace HoloCrew.Services
                     5, 55, "rings", isNew: true),
             });
 
-            // ============================================
             // RUGS (SubCategoryId = 56)
-            // ============================================
             products.AddRange(new[]
             {
                 CreateProduct(id++, "LOGO RUG", "Premium floor rug with embroidered logo", 79.99m, 99.99m,
@@ -484,9 +435,7 @@ namespace HoloCrew.Services
             return products;
         }
 
-        /// <summary>
-        /// Helper para crear productos de forma consistente
-        /// </summary>
+        // función auxiliar para crear productos de forma consistente
         private Product CreateProduct(
             int id, string name, string description,
             decimal price, decimal? originalPrice,
@@ -494,7 +443,7 @@ namespace HoloCrew.Services
             bool isFeatured = false, bool isNew = false, bool isBlackWeek = false,
             bool isSofts = false, bool isClassic = false, string gender = "Unisex")
         {
-            var categoryName = categoryId switch
+            string categoryName = categoryId switch
             {
                 2 => "Tops",
                 3 => "Bottoms",

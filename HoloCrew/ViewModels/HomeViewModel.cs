@@ -8,6 +8,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
+// ViewModel de la página principal (Home).
+// Muestra productos destacados, categorías, y tiene navegación a otras secciones.
+// Se conecta con ProductService, NavigationService, CartService y WishlistService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class HomeViewModel : ViewModelBase
@@ -180,7 +184,7 @@ namespace HoloCrew.ViewModels
 
             try
             {
-                await Task.Delay(1000);
+                await Task.Delay(1000);  // simula el envío del email
                 SubscriptionMessage = "Thanks for subscribing!";
                 NewsletterEmail = string.Empty;
             }

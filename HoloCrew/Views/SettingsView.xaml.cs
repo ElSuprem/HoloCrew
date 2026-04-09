@@ -4,6 +4,10 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using HoloCrew.ViewModels;
 
+// Vista de configuración (code-behind).
+// Maneja el scroll de la ventana principal cuando se abren los modales (política, términos, soporte).
+// Se conecta con SettingsViewModel.
+
 namespace HoloCrew.Views
 {
     public partial class SettingsView : UserControl
@@ -25,6 +29,7 @@ namespace HoloCrew.Views
                 newVm.PropertyChanged += ViewModel_PropertyChanged;
         }
 
+        // cuando se abre o cierra un modal, se bloquea o desbloquea el scroll de la ventana principal
         private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(SettingsViewModel.ShowPrivacyPolicy) ||
@@ -42,18 +47,19 @@ namespace HoloCrew.Views
                     {
                         if (anyModalOpen)
                         {
-                            _mainScrollViewer.ScrollToTop();
-                            _mainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                            _mainScrollViewer.ScrollToTop();  // sube al principio al abrir modal
+                            _mainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;  // desactiva scroll
                         }
                         else
                         {
-                            _mainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                            _mainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;  // reactiva scroll
                         }
                     }
                 }
             }
         }
 
+        // busca el ScrollViewer principal de la ventana
         private ScrollViewer? FindMainScrollViewer()
         {
             DependencyObject? current = this;
@@ -66,6 +72,7 @@ namespace HoloCrew.Views
             return null;
         }
 
+        // busca un elemento por nombre dentro del árbol visual
         private T? FindChildByName<T>(DependencyObject parent, string name) where T : FrameworkElement
         {
             int childCount = VisualTreeHelper.GetChildrenCount(parent);

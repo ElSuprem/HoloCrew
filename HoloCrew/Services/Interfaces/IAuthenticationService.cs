@@ -1,50 +1,19 @@
 ﻿using HoloCrew.Models;
 
+// Servicio para manejar login, registro, cierre de sesión, cambio de contraseña, etc.
+// Se conecta con el modelo User.
+
 namespace HoloCrew.Services.Interfaces
 {
-    /// <summary>
-    /// Servicio de autenticación y autorización
-    /// </summary>
     public interface IAuthenticationService
     {
-        /// <summary>
-        /// Inicia sesión con email y contraseña
-        /// </summary>
-        Task<User> LoginAsync(string email, string password);
-
-        /// <summary>
-        /// Registra un nuevo usuario
-        /// </summary>
-        Task<User> RegisterAsync(User user, string password);
-
-        /// <summary>
-        /// Cierra la sesión actual
-        /// </summary>
-        Task LogoutAsync();
-
-        /// <summary>
-        /// Verifica si hay un usuario autenticado
-        /// </summary>
-        Task<bool> IsAuthenticatedAsync();
-
-        /// <summary>
-        /// Obtiene el usuario actual
-        /// </summary>
-        User GetCurrentUser();
-
-        /// <summary>
-        /// Valida el token de sesión
-        /// </summary>
-        Task<bool> ValidateTokenAsync();
-
-        /// <summary>
-        /// Cambia la contraseña del usuario actual
-        /// </summary>
-        Task<bool> ChangePasswordAsync(string currentPassword, string newPassword);
-
-        /// <summary>
-        /// Solicita recuperación de contraseña
-        /// </summary>
-        Task<bool> RequestPasswordResetAsync(string email);
+        Task<User> LoginAsync(string email, string password);           // inicia sesión
+        Task<User> RegisterAsync(User user, string password);          // crea cuenta nueva
+        Task LogoutAsync();                                             // cierra sesión
+        Task<bool> IsAuthenticatedAsync();                              // comprueba si hay alguien logueado
+        User GetCurrentUser();                                          // devuelve el usuario logueado
+        Task<bool> ValidateTokenAsync();                                // comprueba si el token de sesión es válido
+        Task<bool> ChangePasswordAsync(string currentPassword, string newPassword); // cambia la contraseña
+        Task<bool> RequestPasswordResetAsync(string email);             // envía email para recuperar contraseña
     }
 }

@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// Repositorio de pedidos con datos falsos en memoria (mock).
+// Los datos de ejemplo están en InitializeMockData().
+
 namespace HoloCrew.Repositories
 {
-    /// <summary>
-    /// Implementación del repositorio de pedidos
-    /// NOTA: Usa datos MOCK en memoria
-    /// </summary>
     public class OrderRepository : IOrderRepository
     {
         private static List<Order> _orders;
@@ -28,7 +27,7 @@ namespace HoloCrew.Repositories
             order.Id = _nextId++;
             order.OrderDate = DateTime.Now;
 
-            // Asegurar que las listas no sean null
+            // por si acaso, que las listas no estén vacías
             order.Items ??= new List<OrderItem>();
             order.StatusHistory ??= new List<OrderStatusHistory>();
 
@@ -103,6 +102,7 @@ namespace HoloCrew.Repositories
             return Task.FromResult(false);
         }
 
+        // datos de ejemplo para probar sin base de datos real
         private void InitializeMockData()
         {
             _orders = new List<Order>
@@ -124,20 +124,8 @@ namespace HoloCrew.Repositories
                     TrackingNumber = "ES123456789",
                     Items = new List<OrderItem>
                     {
-                        new OrderItem
-                        {
-                            Id = 1,
-                            ProductId = 1,
-                            Quantity = 1,
-                            UnitPrice = 699.99m
-                        },
-                        new OrderItem
-                        {
-                            Id = 2,
-                            ProductId = 4,
-                            Quantity = 1,
-                            UnitPrice = 29.99m
-                        }
+                        new OrderItem { Id = 1, ProductId = 1, Quantity = 1, UnitPrice = 699.99m },
+                        new OrderItem { Id = 2, ProductId = 4, Quantity = 1, UnitPrice = 29.99m }
                     },
                     ShippingAddress = new Address
                     {
@@ -172,13 +160,7 @@ namespace HoloCrew.Repositories
                     TrackingNumber = "ES987654321",
                     Items = new List<OrderItem>
                     {
-                        new OrderItem
-                        {
-                            Id = 3,
-                            ProductId = 2,
-                            Quantity = 1,
-                            UnitPrice = 279.99m
-                        }
+                        new OrderItem { Id = 3, ProductId = 2, Quantity = 1, UnitPrice = 279.99m }
                     },
                     ShippingAddress = new Address
                     {

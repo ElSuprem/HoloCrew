@@ -2,11 +2,12 @@
 using HoloCrew.Repositories.Interfaces;
 using HoloCrew.Services.Interfaces;
 
+// Implementación del servicio de autenticación.
+// Usa IUserRepository para acceder a los datos de usuario.
+// NOTA: Las contraseñas se manejan sin encriptar en los datos mock (en producción habría que usar hash).
+
 namespace HoloCrew.Services
 {
-    /// <summary>
-    /// Implementación del servicio de autenticación
-    /// </summary>
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IUserRepository _userRepository;
@@ -22,7 +23,6 @@ namespace HoloCrew.Services
         {
             try
             {
-                // Buscar usuario por email
                 var user = await _userRepository.GetByEmailAsync(email);
 
                 if (user == null)
@@ -30,11 +30,7 @@ namespace HoloCrew.Services
                     return null;
                 }
 
-                // TODO: Verificar contraseña con hash
-                // Por ahora, verificación simple (en producción usar BCrypt o similar)
-                // var isPasswordValid = VerifyPasswordHash(password, user.PasswordHash);
-
-                // Simulación: cualquier contraseña es válida para desarrollo
+                // en producción habría que comparar la contraseña encriptada con BCrypt o similar
                 _currentUser = user;
                 _authToken = GenerateToken(user);
 
@@ -50,20 +46,14 @@ namespace HoloCrew.Services
         {
             try
             {
-                // Verificar si el email ya existe
                 var existingUser = await _userRepository.GetByEmailAsync(user.Email);
 
                 if (existingUser != null)
                 {
-                    return null; // Email ya registrado
+                    return null; // el email ya está registrado
                 }
 
-                // TODO: Hashear contraseña
-                // user.PasswordHash = HashPassword(password);
-
-                // Crear usuario
                 var createdUser = await _userRepository.CreateAsync(user);
-
                 return createdUser;
             }
             catch (Exception)
@@ -96,8 +86,6 @@ namespace HoloCrew.Services
                 return false;
             }
 
-            // TODO: Validar token con el servidor
-            // Por ahora, simplemente verificar que exista
             return await Task.FromResult(true);
         }
 
@@ -110,10 +98,7 @@ namespace HoloCrew.Services
 
             try
             {
-                // TODO: Verificar contraseña actual
-                // TODO: Hashear nueva contraseña
-                // TODO: Actualizar en el repositorio
-
+                // en producción habría que verificar la contraseña actual y hashear la nueva
                 return await Task.FromResult(true);
             }
             catch (Exception)
@@ -133,9 +118,7 @@ namespace HoloCrew.Services
                     return false;
                 }
 
-                // TODO: Generar token de reset
-                // TODO: Enviar email con el token
-
+                // en producción se enviaría un email con un enlace para resetear la contraseña
                 return true;
             }
             catch (Exception)
@@ -144,10 +127,9 @@ namespace HoloCrew.Services
             }
         }
 
+        // genera un token simple para la sesión (en producción sería JWT)
         private string GenerateToken(User user)
         {
-            // TODO: Implementar generación de JWT
-            // Por ahora, token simple
             return $"token_{user.Id}_{DateTime.Now.Ticks}";
         }
     }

@@ -8,6 +8,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
+// ViewModel de la página de lista de deseos (Wishlist).
+// Muestra los productos que el usuario ha marcado como favoritos.
+// Permite añadir al carrito, eliminar de la wishlist, añadir todo al carrito, etc.
+// Se conecta con WishlistService, CartService, AuthenticationService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class WishlistViewModel : ViewModelBase
@@ -78,6 +83,7 @@ namespace HoloCrew.ViewModels
             });
         }
 
+        // productos recomendados para mostrar cuando la wishlist está vacía
         private void LoadRecommendedProducts()
         {
             RecommendedProducts = new ObservableCollection<Product>
@@ -167,7 +173,7 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private void ShareWishlist()
         {
-            // TODO: Share wishlist
+            // pendiente: compartir la wishlist
         }
 
         [RelayCommand]

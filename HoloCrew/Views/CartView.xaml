@@ -8,16 +8,21 @@
              d:DesignHeight="800" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
 
+    <!-- Vista del carrito de compras.
+         Muestra los productos añadidos, permite cambiar cantidades, quitar productos,
+         aplicar cupones, y ver el resumen del pedido (subtotal, envío, IVA, total).
+         Se conecta con CartViewModel. -->
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="420"/>
         </Grid.ColumnDefinitions>
 
-        <!-- CART ITEMS -->
+        <!-- lista de productos del carrito -->
         <Border Grid.Column="0" Padding="70,50,40,80">
             <StackPanel>
-                <!-- Title -->
+                <!-- título -->
                 <TextBlock Text="YOUR CART" 
                            FontSize="32"
                            FontWeight="Black"
@@ -27,7 +32,7 @@
                     <Run Text=" items in your cart"/>
                 </TextBlock>
 
-                <!-- EMPTY STATE -->
+                <!-- estado vacío -->
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,80,0,0">
                     <StackPanel.Style>
                         <Style TargetType="StackPanel">
@@ -55,7 +60,7 @@
                             Padding="40,15"/>
                 </StackPanel>
 
-                <!-- CART ITEMS LIST -->
+                <!-- lista de productos -->
                 <ItemsControl ItemsSource="{Binding CartItems}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -71,12 +76,12 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- Product image placeholder -->
+                                    <!-- imagen del producto -->
                                     <Border Grid.Column="0" 
                                             Background="{DynamicResource Gray100Brush}" 
                                             Width="110" Height="110"/>
 
-                                    <!-- Product info -->
+                                    <!-- información del producto -->
                                     <StackPanel Grid.Column="1" Margin="25,0,0,0" VerticalAlignment="Center">
                                         <TextBlock Text="{Binding ProductName}" 
                                                    FontSize="16" FontWeight="SemiBold"
@@ -91,7 +96,7 @@
                                                    FontSize="18" FontWeight="Bold"/>
                                     </StackPanel>
 
-                                    <!-- Quantity + Remove -->
+                                    <!-- cantidad y botón eliminar -->
                                     <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
                                         <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Margin="0,0,0,12">
                                             <StackPanel Orientation="Horizontal">
@@ -148,19 +153,19 @@
             </StackPanel>
         </Border>
 
-        <!-- ORDER SUMMARY SIDEBAR -->
+        <!-- resumen del pedido (sidebar) -->
         <Border Grid.Column="1" Background="{DynamicResource Gray50Brush}">
             <Border Padding="35,50,35,80">
                 <StackPanel>
                     <TextBlock Text="ORDER SUMMARY" FontSize="20" FontWeight="Black" Margin="0,0,0,30"/>
 
-                    <!-- Subtotal -->
+                    <!-- subtotal -->
                     <Grid Margin="0,0,0,15">
                         <TextBlock Text="Subtotal" FontSize="14" Foreground="{DynamicResource Gray600Brush}"/>
                         <TextBlock Text="{Binding Subtotal, StringFormat='{}{0:N2}€'}" FontSize="14" HorizontalAlignment="Right"/>
                     </Grid>
 
-                    <!-- Shipping -->
+                    <!-- envío -->
                     <Grid Margin="0,0,0,15">
                         <TextBlock Text="Shipping" FontSize="14" Foreground="{DynamicResource Gray600Brush}"/>
                         <TextBlock HorizontalAlignment="Right" FontSize="14">
@@ -179,19 +184,19 @@
                         </TextBlock>
                     </Grid>
 
-                    <!-- Tax -->
+                    <!-- impuestos (IVA 21%) -->
                     <Grid Margin="0,0,0,15">
                         <TextBlock Text="Tax (21%)" FontSize="14" Foreground="{DynamicResource Gray600Brush}"/>
                         <TextBlock Text="{Binding Tax, StringFormat='{}{0:N2}€'}" FontSize="14" HorizontalAlignment="Right"/>
                     </Grid>
 
-                    <!-- Discount -->
+                    <!-- descuento -->
                     <Grid Margin="0,0,0,15" Visibility="{Binding Discount, Converter={StaticResource CountToVisibilityConverter}}">
                         <TextBlock Text="Discount" FontSize="14" Foreground="#10B981"/>
                         <TextBlock Text="{Binding Discount, StringFormat='-{0:N2}€'}" FontSize="14" Foreground="#10B981" HorizontalAlignment="Right"/>
                     </Grid>
 
-                    <!-- Total -->
+                    <!-- total -->
                     <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="0,1,0,0" Padding="0,20,0,0" Margin="0,10,0,25">
                         <Grid>
                             <TextBlock Text="TOTAL" FontSize="20" FontWeight="Black"/>
@@ -199,7 +204,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- Coupon -->
+                    <!-- cupón de descuento -->
                     <TextBlock Text="Have a coupon?" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,12"/>
                     <Grid Margin="0,0,0,8">
                         <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Height="46">
@@ -233,7 +238,7 @@
                         </Border>
                     </Grid>
 
-                    <!-- Coupon feedback -->
+                    <!-- mensaje del cupón -->
                     <TextBlock Text="{Binding CouponMessage}" FontSize="13" Margin="0,0,0,20" TextWrapping="Wrap">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
@@ -253,7 +258,7 @@
                         </TextBlock.Style>
                     </TextBlock>
 
-                    <!-- Free shipping banner -->
+                    <!-- banner de envío gratis -->
                     <Border Background="#ECFDF5" BorderBrush="#10B981" BorderThickness="1" Padding="15" Margin="0,0,0,25">
                         <Border.Style>
                             <Style TargetType="Border">
@@ -268,7 +273,7 @@
                         <TextBlock Text="You qualify for FREE shipping!" FontSize="13" Foreground="#059669" FontWeight="SemiBold" TextAlignment="Center"/>
                     </Border>
 
-                    <!-- Buttons -->
+                    <!-- botones -->
                     <Button Content="PROCEED TO CHECKOUT" 
                             Style="{StaticResource PrimaryButton}"
                             Padding="0,18" Margin="0,0,0,12"
@@ -279,7 +284,7 @@
                             Padding="0,18"
                             Command="{Binding BrowseProductsCommand}"/>
 
-                    <!-- Payment methods -->
+                    <!-- métodos de pago aceptados -->
                     <StackPanel Margin="0,25,0,0" HorizontalAlignment="Center">
                         <TextBlock Text="Secure checkout with" FontSize="11" Foreground="{DynamicResource Gray500Brush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

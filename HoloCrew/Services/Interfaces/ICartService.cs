@@ -1,60 +1,22 @@
 ﻿using HoloCrew.Models;
 
+// Servicio para manejar el carrito de compras: añadir, quitar, actualizar cantidades, aplicar cupón.
+// Cuando el carrito cambia, lanza el evento CartUpdated para que la interfaz se refresque sola.
+
 namespace HoloCrew.Services.Interfaces
 {
-    /// <summary>
-    /// Servicio para gestión del carrito de compras
-    /// </summary>
     public interface ICartService
     {
-        /// <summary>
-        /// Evento que se dispara cuando el carrito se actualiza
-        /// </summary>
-        event EventHandler CartUpdated;
+        event EventHandler CartUpdated;  // se avisa cuando algo cambia en el carrito
 
-        /// <summary>
-        /// Agrega un producto al carrito
-        /// </summary>
-        Task AddToCartAsync(Product product, int quantity, string variant = null);
-
-        /// <summary>
-        /// Actualiza la cantidad de un item del carrito
-        /// </summary>
-        Task UpdateQuantityAsync(int cartItemId, int newQuantity);
-
-        /// <summary>
-        /// Elimina un item del carrito
-        /// </summary>
-        Task RemoveFromCartAsync(int cartItemId);
-
-        /// <summary>
-        /// Vacía completamente el carrito
-        /// </summary>
-        Task ClearCartAsync();
-
-        /// <summary>
-        /// Obtiene todos los items del carrito
-        /// </summary>
-        Task<List<CartItem>> GetCartItemsAsync();
-
-        /// <summary>
-        /// Calcula el total del carrito
-        /// </summary>
-        Task<decimal> GetCartTotalAsync();
-
-        /// <summary>
-        /// Obtiene la cantidad de items en el carrito
-        /// </summary>
-        int GetCartItemCount();
-
-        /// <summary>
-        /// Aplica un cupón de descuento
-        /// </summary>
-        Task<bool> ApplyCouponAsync(string couponCode);
-
-        /// <summary>
-        /// Obtiene el descuento actual aplicado
-        /// </summary>
-        decimal GetCurrentDiscount();
+        Task AddToCartAsync(Product product, int quantity, string variant = null);  // añadir producto
+        Task UpdateQuantityAsync(int cartItemId, int newQuantity);                  // cambiar cantidad
+        Task RemoveFromCartAsync(int cartItemId);                                   // quitar un producto
+        Task ClearCartAsync();                                                      // vaciar todo
+        Task<List<CartItem>> GetCartItemsAsync();                                   // lista de productos en el carrito
+        Task<decimal> GetCartTotalAsync();                                          // suma total
+        int GetCartItemCount();                                                     // cuántos productos (sumando cantidades)
+        Task<bool> ApplyCouponAsync(string couponCode);                             // aplicar descuento
+        decimal GetCurrentDiscount();                                               // descuento actual aplicado
     }
 }

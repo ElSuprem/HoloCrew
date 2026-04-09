@@ -9,6 +9,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
+// ViewModel del historial de pedidos del usuario.
+// Muestra todos los pedidos, permite filtrar por estado y ver el detalle de cada uno.
+// Se conecta con OrderService, AuthenticationService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class OrderHistoryViewModel : ViewModelBase
@@ -91,7 +95,7 @@ namespace HoloCrew.ViewModels
 
             try
             {
-                // TODO: Add items to cart
+                // pendiente: añadir los productos al carrito
                 _navigationService.NavigateTo<CartViewModel>();
             }
             catch (Exception ex)

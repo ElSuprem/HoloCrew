@@ -1,10 +1,10 @@
 using System.Windows;
 
+// AssemblyInfo.cs (archivo de configuración del ensamblado).
+// Indica dónde buscar los diccionarios de recursos para los temas.
+// No necesita cambios de traducción porque es código de configuración de ensamblado.
+
 [assembly: ThemeInfo(
-    ResourceDictionaryLocation.None,            //where theme specific resource dictionaries are located
-                                                //(used if a resource is not found in the page,
-                                                // or application resource dictionaries)
-    ResourceDictionaryLocation.SourceAssembly   //where the generic resource dictionary is located
-                                                //(used if a resource is not found in the page,
-                                                // app, or any theme specific resource dictionaries)
+    ResourceDictionaryLocation.None,            // ubicación de diccionarios específicos de tema
+    ResourceDictionaryLocation.SourceAssembly   // ubicación del diccionario de recursos genérico
 )]

@@ -10,6 +10,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+// ViewModel principal de la ventana principal (MainWindow).
+// Gestiona la navegación, barra de búsqueda con live search, carrito, wishlist, usuario, notificaciones.
+// Se conecta con NavigationService, CartService, AuthenticationService, WishlistService, NotificationService, ProductService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
@@ -21,8 +25,7 @@ namespace HoloCrew.ViewModels
         private readonly INotificationService _notificationService;
         private readonly IProductService _productService;
 
-        // Debounce timer for live search
-        private CancellationTokenSource _searchCts;
+        private CancellationTokenSource _searchCts;  // para cancelar búsquedas anteriores
 
         [ObservableProperty]
         private object _currentView;
@@ -48,7 +51,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _isSearchVisible;
 
-        // Live search results
+        // resultados de búsqueda en vivo
         [ObservableProperty]
         private ObservableCollection<Product> _searchResults = new();
 
@@ -78,21 +81,17 @@ namespace HoloCrew.ViewModels
 
             Title = "HoloCrew";
 
-            // Suscribirse a eventos
             _cartService.CartUpdated += OnCartUpdated;
             _wishlistService.WishlistUpdated += OnWishlistUpdated;
             _notificationService.NotificationReceived += OnNotificationReceived;
 
-            // Inicializar estados
             UpdateAuthenticationState();
             CartItemCount = _cartService.GetCartItemCount();
             UpdateWishlistCount();
             UpdateNotificationCount();
         }
 
-        // ============================
-        // COMANDOS DE NAVEGACIÓN
-        // ============================
+        // ========== COMANDOS DE NAVEGACIÓN ==========
 
         [RelayCommand]
         private void NavigateToHome()
@@ -104,7 +103,6 @@ namespace HoloCrew.ViewModels
         [RelayCommand]
         private void NavigateToCatalog(object parameter = null)
         {
-            // Si viene un parámetro de categoría, pasarlo al catálogo
             if (parameter != null && parameter is string category)
             {
                 _navigationService.NavigateTo<ProductCatalogViewModel>(category);
@@ -127,7 +125,7 @@ namespace HoloCrew.ViewModels
             IsSearchVisible = false;
         }
 
-        // ⭐ NUEVO: Toggle de la barra de búsqueda
+        // muestra/oculta la barra de búsqueda
         [RelayCommand]
         private void ToggleSearch()
         {
@@ -150,7 +148,7 @@ namespace HoloCrew.ViewModels
             SearchResultCount = 0;
         }
 
-        // Live search - triggered when SearchQuery changes
+        // búsqueda en vivo al escribir
         partial void OnSearchQueryChanged(string value)
         {
             _ = PerformLiveSearchAsync(value);
@@ -158,7 +156,6 @@ namespace HoloCrew.ViewModels
 
         private async Task PerformLiveSearchAsync(string query)
         {
-            // Cancel previous search
             _searchCts?.Cancel();
             _searchCts = new CancellationTokenSource();
             var token = _searchCts.Token;
@@ -176,8 +173,7 @@ namespace HoloCrew.ViewModels
 
             try
             {
-                // Debounce 300ms
-                await Task.Delay(300, token);
+                await Task.Delay(300, token);  // espera 300ms para no buscar en cada letra
                 if (token.IsCancellationRequested) return;
 
                 var results = await _productService.SearchProductsAsync(query);
@@ -189,7 +185,7 @@ namespace HoloCrew.ViewModels
             }
             catch (TaskCanceledException)
             {
-                // Debounce cancelled, ignore
+                // búsqueda cancelada, no hacer nada
             }
             catch (Exception ex)
             {
@@ -281,9 +277,7 @@ namespace HoloCrew.ViewModels
             CloseSearch();
         }
 
-        // ============================
-        // AUTENTICACIÓN
-        // ============================
+        // ========== AUTENTICACIÓN ==========
 
         [RelayCommand]
         private async Task LogoutAsync()
@@ -293,9 +287,7 @@ namespace HoloCrew.ViewModels
             _navigationService.NavigateTo<HomeViewModel>();
         }
 
-        // ============================
-        // EVENT HANDLERS
-        // ============================
+        // ========== EVENTOS ==========
 
         private void OnCartUpdated(object sender, EventArgs e)
         {
@@ -312,9 +304,7 @@ namespace HoloCrew.ViewModels
             UpdateNotificationCount();
         }
 
-        // ============================
-        // MÉTODOS AUXILIARES
-        // ============================
+        // ========== MÉTODOS AUXILIARES ==========
 
         private async void UpdateAuthenticationState()
         {

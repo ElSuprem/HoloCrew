@@ -7,11 +7,15 @@
              d:DesignHeight="800" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
 
+    <!-- Vista de la lista de deseos (wishlist).
+         Muestra los productos guardados como favoritos, permite eliminarlos o añadirlos al carrito.
+         Se conecta con WishlistViewModel. -->
+
     <Grid>
 
         <Border Padding="60,40,60,80">
             <StackPanel>
-                <!-- Header -->
+                <!-- cabecera -->
                 <Grid Margin="0,0,0,40">
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="MY WISHLIST" 
@@ -23,7 +27,6 @@
                         </TextBlock>
                     </StackPanel>
 
-                    <!-- Clear All Button -->
                     <Button Content="CLEAR ALL" 
                             Style="{StaticResource OutlineButton}"
                             Command="{Binding ClearWishlistCommand}"
@@ -31,7 +34,7 @@
                             HorizontalAlignment="Right"/>
                 </Grid>
 
-                <!-- Empty State -->
+                <!-- estado vacío -->
                 <StackPanel HorizontalAlignment="Center" Margin="0,100,0,0">
                     <StackPanel.Style>
                         <Style TargetType="StackPanel">
@@ -44,7 +47,7 @@
                         </Style>
                     </StackPanel.Style>
 
-                    <TextBlock Text="" 
+                    <TextBlock Text="No items" 
                                FontSize="100"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,30" />
@@ -65,7 +68,7 @@
                             Command="{Binding BrowseProductsCommand}"/>
                 </StackPanel>
 
-                <!-- Lista de Productos -->
+                <!-- lista de productos -->
                 <ItemsControl ItemsSource="{Binding WishlistItems}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -85,10 +88,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <!-- Imagen -->
+                                    <!-- imagen -->
                                     <Rectangle Grid.Row="0" Fill="{DynamicResource Gray200Brush}"/>
 
-                                    <!-- Botón Remove -->
+                                    <!-- botón eliminar -->
                                     <Border Grid.Row="0"
                                             Background="{DynamicResource WhitePrimaryBrush}"
                                             Width="40" Height="40"
@@ -108,7 +111,7 @@
                                                    VerticalAlignment="Center"/>
                                     </Border>
 
-                                    <!-- Info -->
+                                    <!-- información del producto -->
                                     <Border Grid.Row="1" Padding="20">
                                         <StackPanel>
                                             <TextBlock Text="{Binding Name}"

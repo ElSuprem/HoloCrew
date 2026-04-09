@@ -6,9 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 
-// ⭐ IMPORTANTE: Agregar estos using para los repositorios
-using HoloCrew.Repositories; // Para UserRepository, ProductRepository, etc.
-using HoloCrew.Repositories.Interfaces; // Para IUserRepository, IProductRepository, etc.
+// Registro de repositorios necesarios
+using HoloCrew.Repositories;
+using HoloCrew.Repositories.Interfaces;
+
+// Archivo principal de la aplicación (code-behind).
+// Configura la inyección de dependencias (DI) registrando repositorios, servicios, ViewModels y vistas.
+// Al iniciar, aplica el tema guardado, crea la ventana principal y navega a HomeViewModel.
 
 namespace HoloCrew
 {
@@ -18,7 +22,6 @@ namespace HoloCrew
 
         public App()
         {
-            // Configurar el contenedor de dependencias
             var services = new ServiceCollection();
             ConfigureServices(services);
             _serviceProvider = services.BuildServiceProvider();
@@ -26,15 +29,13 @@ namespace HoloCrew
 
         private void ConfigureServices(IServiceCollection services)
         {
-            // ========== REPOSITORIES ==========
-            // ⭐ REGISTRAR TODOS LOS REPOSITORIOS QUE EXISTEN
+            // ========== REPOSITORIOS ==========
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<IWishlistRepository, WishlistRepository>();
 
-            // ========== SERVICES ==========
-            // Singleton: Servicios que mantienen estado global
+            // ========== SERVICIOS ==========
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ICartService, CartService>();
             services.AddSingleton<ISettingsService, SettingsService>();
@@ -42,13 +43,11 @@ namespace HoloCrew
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<IThemeService, ThemeService>();
 
-            // Transient: Nueva instancia cada vez que se solicita
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddSingleton<IWishlistService, WishlistService>();
 
             // ========== VIEWMODELS ==========
-            // Transient: Cada vista obtiene su propia instancia del ViewModel
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<HomeViewModel>();
             services.AddTransient<ProductCatalogViewModel>();
@@ -64,26 +63,21 @@ namespace HoloCrew
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<NotificationsViewModel>();
 
-            // NUEVOS ViewModels agregados
             services.AddTransient<FlashSaleViewModel>();
             services.AddTransient<BlackWeekViewModel>();
             services.AddTransient<MembersClubViewModel>();
 
-            // ========== VIEWS/WINDOWS ==========
-            // Transient: Cada vez que se necesita una ventana, se crea una nueva
+            // ========== VISTAS ==========
             services.AddTransient<MainWindow>();
         }
 
-        /// <summary>
-        /// Se ejecuta cuando la aplicación inicia
-        /// </summary>
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
             try
             {
-                // Aplicar tema guardado (si ThemeService está implementado)
+                // aplicar tema guardado (si falla, continuar igual)
                 try
                 {
                     var themeService = _serviceProvider.GetRequiredService<IThemeService>();
@@ -91,28 +85,21 @@ namespace HoloCrew
                 }
                 catch
                 {
-                    // Si falla el tema, continuar sin él
+                    // si falla el tema, se sigue sin él
                 }
 
-                // Obtener MainWindow desde DI
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-
-                // Obtener MainWindowViewModel desde DI
                 var mainWindowViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
 
-                // Establecer el DataContext
                 mainWindow.DataContext = mainWindowViewModel;
 
-                // Obtener NavigationService y configurarlo
                 var navigationService = _serviceProvider.GetRequiredService<INavigationService>();
 
-                // Inicializar NavigationService con el callback para actualizar CurrentView
+                // configura el servicio de navegación para que actualice CurrentView
                 navigationService.Initialize(view => mainWindowViewModel.CurrentView = view);
 
-                // Navegar a la página inicial (HomeViewModel)
                 navigationService.NavigateTo<HomeViewModel>();
 
-                // Mostrar la ventana principal
                 mainWindow.Show();
             }
             catch (Exception ex)

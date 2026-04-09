@@ -8,6 +8,10 @@
              d:DesignHeight="900" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
 
+    <!-- Vista de configuración (Settings).
+         Barra lateral con opciones de navegación, contenido principal con toggles y modales.
+         Se conecta con SettingsViewModel. -->
+
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -15,14 +19,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- LEFT SIDEBAR -->
-            <!-- SIDEBAR: Always dark -->
+            <!-- barra lateral izquierda (siempre oscura) -->
             <Border Grid.Column="0" Background="#0A0A0A" Padding="30,50,30,40">
                 <StackPanel>
                     <TextBlock Text="SETTINGS" FontSize="24" FontWeight="Black" Foreground="White" Margin="0,0,0,8"/>
                     <TextBlock Text="Manage your preferences" FontSize="13" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,0,40"/>
 
-                    <!-- User card -->
+                    <!-- tarjeta del usuario -->
                     <Border Background="#1A1A1A" Padding="18,15" Margin="0,0,0,35" Cursor="Hand">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToProfileCommand}" MouseAction="LeftClick"/>
@@ -77,11 +80,11 @@
                 </StackPanel>
             </Border>
 
-            <!-- RIGHT CONTENT -->
+            <!-- contenido principal -->
             <Border Grid.Column="1" Background="{DynamicResource WhitePrimaryBrush}" Padding="60,50,60,80">
                 <StackPanel MaxWidth="700">
 
-                    <!-- APPEARANCE -->
+                    <!-- APARIENCIA -->
                     <TextBlock Text="APPEARANCE" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,0,0,20"/>
                     <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
                         <Grid>
@@ -102,7 +105,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- NOTIFICATIONS -->
+                    <!-- NOTIFICACIONES -->
                     <TextBlock Text="NOTIFICATIONS" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,45,0,20"/>
                     <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
                         <Grid>
@@ -148,7 +151,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- PRIVACY & SECURITY -->
+                    <!-- PRIVACIDAD Y SEGURIDAD -->
                     <TextBlock Text="PRIVACY &amp; SECURITY" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,45,0,20"/>
                     <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,0,0,1" Padding="0,18">
                         <Grid>
@@ -169,7 +172,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- ACCOUNT -->
+                    <!-- CUENTA -->
                     <TextBlock Text="ACCOUNT" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,45,0,20"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -233,7 +236,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- HELP & LEGAL -->
+                    <!-- AYUDA Y LEGAL -->
                     <TextBlock Text="HELP &amp; LEGAL" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Gray400Brush}" Margin="0,45,0,20"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -295,7 +298,7 @@
             </Border>
         </Grid>
 
-        <!-- MODAL: PRIVACY POLICY -->
+        <!-- MODAL: POLÍTICA DE PRIVACIDAD -->
         <Grid Visibility="{Binding ShowPrivacyPolicy, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" Panel.ZIndex="100">
             <Border Background="#80000000">
                 <Border.InputBindings>
@@ -342,7 +345,7 @@
             </Border>
         </Grid>
 
-        <!-- MODAL: TERMS OF SERVICE -->
+        <!-- MODAL: TÉRMINOS DE SERVICIO -->
         <Grid Visibility="{Binding ShowTermsOfService, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" Panel.ZIndex="100">
             <Border Background="#80000000">
                 <Border.InputBindings>
@@ -391,7 +394,7 @@
             </Border>
         </Grid>
 
-        <!-- MODAL: CONTACT SUPPORT -->
+        <!-- MODAL: CONTACTO CON SOPORTE -->
         <Grid Visibility="{Binding ShowContactSupport, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" Panel.ZIndex="100">
             <Border Background="#80000000">
                 <Border.InputBindings>

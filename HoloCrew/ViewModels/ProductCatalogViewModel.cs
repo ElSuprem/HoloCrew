@@ -9,6 +9,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
+// ViewModel del catálogo de productos.
+// Muestra productos con filtros por categoría, precio, talla, color, género, etc.
+// Se conecta con ProductService, NavigationService, CartService y WishlistService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class ProductCatalogViewModel : ViewModelBase
@@ -45,14 +49,14 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private int _totalProductCount;
 
-        // Precio
+        // precio
         [ObservableProperty]
         private decimal _minPrice = 0;
 
         [ObservableProperty]
         private decimal _maxPrice = 500;
 
-        // Categorías (para RadioButtons)
+        // categorías
         [ObservableProperty]
         private string _selectedCategory = "All";
 
@@ -67,14 +71,14 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _categoryAccessories = false;
 
-        // Disponibilidad
+        // disponibilidad
         [ObservableProperty]
         private bool _inStockOnly;
 
         [ObservableProperty]
         private bool _onSaleOnly;
 
-        // Tallas
+        // tallas
         [ObservableProperty]
         private bool _sizeXS;
         [ObservableProperty]
@@ -88,7 +92,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _sizeXXL;
 
-        // Colores
+        // colores
         [ObservableProperty]
         private bool _colorBlack;
         [ObservableProperty]
@@ -102,7 +106,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _colorGreen;
 
-        // Género
+        // género
         [ObservableProperty]
         private bool _genderMen;
         [ObservableProperty]
@@ -285,7 +289,6 @@ namespace HoloCrew.ViewModels
         {
             if (string.IsNullOrEmpty(size) || _isResetting) return;
 
-            // Toggle directo - cambio visual instantáneo
             switch (size)
             {
                 case "XS": _sizeXS = !_sizeXS; OnPropertyChanged(nameof(SizeXS)); break;
@@ -304,7 +307,6 @@ namespace HoloCrew.ViewModels
         {
             if (string.IsNullOrEmpty(color) || _isResetting) return;
 
-            // Toggle directo - cambio visual instantáneo
             switch (color)
             {
                 case "Black": _colorBlack = !_colorBlack; OnPropertyChanged(nameof(ColorBlack)); break;
@@ -343,7 +345,6 @@ namespace HoloCrew.ViewModels
 
             SortBy = "Featured";
 
-            // Notificar todos los cambios de una vez
             OnPropertyChanged(nameof(CategoryAll));
             OnPropertyChanged(nameof(CategoryTops));
             OnPropertyChanged(nameof(CategoryBottoms));
@@ -394,7 +395,7 @@ namespace HoloCrew.ViewModels
 
             var filtered = _allProducts.AsEnumerable();
 
-            // 1. Búsqueda
+            // 1. búsqueda por texto
             if (!string.IsNullOrWhiteSpace(SearchQuery))
             {
                 var query = SearchQuery.ToLower();
@@ -404,7 +405,7 @@ namespace HoloCrew.ViewModels
                     (p.Category?.Name?.ToLower().Contains(query) ?? false));
             }
 
-            // 2. Categoría
+            // 2. categoría
             if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
             {
                 filtered = SelectedCategory switch
@@ -417,14 +418,14 @@ namespace HoloCrew.ViewModels
                 };
             }
 
-            // 3. Precio
+            // 3. precio
             filtered = filtered.Where(p => p.Price >= MinPrice && p.Price <= MaxPrice);
 
-            // 4. Disponibilidad
+            // 4. disponibilidad
             if (InStockOnly) filtered = filtered.Where(p => p.Stock > 0);
             if (OnSaleOnly) filtered = filtered.Where(p => p.HasDiscount);
 
-            // 5. Tallas
+            // 5. tallas seleccionadas
             var selectedSizes = new List<string>();
             if (_sizeXS) selectedSizes.Add("XS");
             if (_sizeS) selectedSizes.Add("S");
@@ -440,7 +441,7 @@ namespace HoloCrew.ViewModels
                     p.AvailableSizes.Any(s => selectedSizes.Contains(s)));
             }
 
-            // 6. Colores
+            // 6. colores seleccionados
             var selectedColors = new List<string>();
             if (_colorBlack) selectedColors.Add("Black");
             if (_colorWhite) selectedColors.Add("White");
@@ -456,7 +457,7 @@ namespace HoloCrew.ViewModels
                     p.AvailableColors.Any(c => selectedColors.Contains(c)));
             }
 
-            // 7. Género
+            // 7. género
             var selectedGenders = new List<string>();
             if (_genderMen) selectedGenders.Add("Men");
             if (_genderWomen) selectedGenders.Add("Women");
@@ -467,7 +468,7 @@ namespace HoloCrew.ViewModels
                 filtered = filtered.Where(p => selectedGenders.Contains(p.Gender));
             }
 
-            // 8. Ordenamiento
+            // 8. ordenación
             filtered = SortBy switch
             {
                 "Newest" => filtered.OrderByDescending(p => p.CreatedAt),
@@ -477,7 +478,6 @@ namespace HoloCrew.ViewModels
                 _ => filtered.OrderByDescending(p => p.IsFeatured).ThenByDescending(p => p.CreatedAt)
             };
 
-            // Actualizar UI
             var resultList = filtered.ToList();
             FilteredProducts = new ObservableCollection<Product>(resultList);
             TotalProductCount = resultList.Count;
@@ -517,7 +517,6 @@ namespace HoloCrew.ViewModels
             _ => slug.Replace("-", " ").ToUpper()
         };
 
-        // Property changed handlers
         partial void OnSortByChanged(string value)
         {
             if (!_isResetting && _isInitialized) ApplyFiltersInternal();

@@ -7,6 +7,10 @@ using HoloCrew.ViewModels.Base;
 using System;
 using System.Threading.Tasks;
 
+// ViewModel de la página de registro de usuario.
+// Valida los campos (nombre, email, contraseña, términos) y crea una cuenta nueva.
+// Se conecta con AuthenticationService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class RegisterViewModel : ViewModelBase
@@ -68,7 +72,7 @@ namespace HoloCrew.ViewModels
                 return;
             }
 
-            if (Password.Length < 6)
+            if (Password.Length < 8)
             {
                 ErrorMessage = AppConstants.Errors.PasswordTooShort;
                 return;

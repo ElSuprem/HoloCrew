@@ -9,6 +9,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
+// ViewModel de la página de venta flash (ofertas rápidas con cuenta regresiva).
+// Muestra productos con descuentos temporales, cuenta regresiva, filtros por categoría y ordenación.
+// Se conecta con ProductService, CartService, WishlistService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class FlashSaleViewModel : ViewModelBase
@@ -19,7 +23,7 @@ namespace HoloCrew.ViewModels
         private readonly INavigationService _navigationService;
         private DispatcherTimer? _countdownTimer;
 
-        // Lista completa de productos (sin filtrar)
+        // lista completa sin filtrar
         private ObservableCollection<Product> _allFlashSaleProducts = new();
 
         #region Properties
@@ -33,7 +37,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private string _saleSubtitle = "Limited time offers - Don't miss out!";
 
-        // Countdown properties
+        // tiempo restante
         [ObservableProperty]
         private int _hoursRemaining;
 
@@ -58,7 +62,7 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private decimal _maxDiscountPercent = 70;
 
-        // Filtros
+        // filtros
         [ObservableProperty]
         private string _selectedCategory = "All";
 
@@ -101,7 +105,7 @@ namespace HoloCrew.ViewModels
             EmptySubtitle = "Check back soon for amazing deals!";
             EmptyActionText = "Browse All Products";
 
-            // Establecer fin de la venta (ejemplo: 24 horas desde ahora)
+            // la venta termina dentro de 24 horas
             SaleEndTime = DateTime.Now.Date.AddDays(1).AddHours(23).AddMinutes(59).AddSeconds(59);
         }
 
@@ -127,35 +131,26 @@ namespace HoloCrew.ViewModels
             {
                 LoadingMessage = "Loading flash deals...";
 
-                // Cargar productos con descuento
                 var allProducts = await _productService.GetFeaturedProductsAsync();
 
-                // Filtrar solo productos con descuento y crear datos mock de flash sale
                 var flashProducts = new ObservableCollection<Product>();
                 var random = new Random();
 
                 foreach (var product in allProducts)
                 {
-                    // Simular descuentos de flash sale (30-70%)
-                    var discountPercent = random.Next(30, 71);
-
+                    var discountPercent = random.Next(30, 71);  // descuento entre 30% y 70%
                     product.OriginalPrice = product.Price;
                     product.Price = Math.Round(product.OriginalPrice.Value * (100 - discountPercent) / 100, 2);
                     product.IsBlackWeek = true;
-
                     flashProducts.Add(product);
                 }
 
-                // Si no hay productos, crear algunos mock
                 if (flashProducts.Count == 0)
                 {
                     flashProducts = CreateMockFlashSaleProducts();
                 }
 
-                // Guardar todos los productos
                 _allFlashSaleProducts = flashProducts;
-
-                // Aplicar filtros iniciales
                 ApplyFiltersAndSort();
 
                 if (TotalProductCount == 0)
@@ -165,114 +160,19 @@ namespace HoloCrew.ViewModels
             });
         }
 
+        // datos de ejemplo para probar sin base de datos real
         private ObservableCollection<Product> CreateMockFlashSaleProducts()
         {
             return new ObservableCollection<Product>
             {
-                new Product
-                {
-                    Id = 101,
-                    Name = "Premium Hoodie - Limited Edition",
-                    Price = 39.99m,
-                    OriginalPrice = 89.99m,
-                    Stock = 5,
-                    IsNew = false,
-                    IsFeatured = true,
-                    MainImageUrl = "/Resources/Images/hoodie1.jpg",
-                    CategoryId = 1,
-                    Category = new Category { Name = "Tops" }
-                },
-                new Product
-                {
-                    Id = 102,
-                    Name = "Cargo Pants - Street Style",
-                    Price = 29.99m,
-                    OriginalPrice = 79.99m,
-                    Stock = 8,
-                    IsNew = false,
-                    IsFeatured = true,
-                    MainImageUrl = "/Resources/Images/cargo1.jpg",
-                    CategoryId = 2,
-                    Category = new Category { Name = "Bottoms" }
-                },
-                new Product
-                {
-                    Id = 103,
-                    Name = "Classic Logo Tee",
-                    Price = 14.99m,
-                    OriginalPrice = 34.99m,
-                    Stock = 15,
-                    IsNew = false,
-                    IsFeatured = true,
-                    MainImageUrl = "/Resources/Images/tee1.jpg",
-                    CategoryId = 1,
-                    Category = new Category { Name = "Tops" }
-                },
-                new Product
-                {
-                    Id = 104,
-                    Name = "Armbo Low Sneakers",
-                    Price = 59.99m,
-                    OriginalPrice = 129.99m,
-                    Stock = 3,
-                    IsNew = false,
-                    IsFeatured = true,
-                    MainImageUrl = "/Resources/Images/sneaker1.jpg",
-                    CategoryId = 3,
-                    Category = new Category { Name = "Footwear" }
-                },
-                new Product
-                {
-                    Id = 105,
-                    Name = "Track Jacket - Retro",
-                    Price = 44.99m,
-                    OriginalPrice = 99.99m,
-                    Stock = 7,
-                    IsNew = true,
-                    IsFeatured = true,
-                    MainImageUrl = "/Resources/Images/jacket1.jpg",
-                    CategoryId = 1,
-                    Category = new Category { Name = "Tops" }
-                },
-                new Product
-                {
-                    Id = 106,
-                    Name = "Beanie - Winter Collection",
-                    Price = 9.99m,
-                    OriginalPrice = 24.99m,
-                    Stock = 20,
-                    IsNew = false,
-                    IsFeatured = true,
-                    MainImageUrl = "/Resources/Images/beanie1.jpg",
-                    CategoryId = 4,
-                    Category = new Category { Name = "Accessories" }
-                },
-                new Product
-                {
-                    Id = 107,
-                    Name = "Joggers - Comfort Fit",
-                    Price = 24.99m,
-                    OriginalPrice = 59.99m,
-                    Stock = 12,
-                    IsNew = false,
-                    IsFeatured = true,
-                    MainImageUrl = "/Resources/Images/joggers1.jpg",
-                    CategoryId = 2,
-                    Category = new Category { Name = "Bottoms" }
-                },
-                new Product
-                {
-                    Id = 108,
-                    Name = "Crossbody Bag",
-                    Price = 19.99m,
-                    OriginalPrice = 49.99m,
-                    Stock = 6,
-                    IsNew = true,
-                    IsFeatured = true,
-                    MainImageUrl = "/Resources/Images/bag1.jpg",
-                    CategoryId = 4,
-                    Category = new Category { Name = "Accessories" }
-                }
+                new Product { Id = 101, Name = "Premium Hoodie - Limited Edition", Price = 39.99m, OriginalPrice = 89.99m, Stock = 5, IsFeatured = true, MainImageUrl = "/Resources/Images/hoodie1.jpg", CategoryId = 1, Category = new Category { Name = "Tops" } },
+                new Product { Id = 102, Name = "Cargo Pants - Street Style", Price = 29.99m, OriginalPrice = 79.99m, Stock = 8, IsFeatured = true, MainImageUrl = "/Resources/Images/cargo1.jpg", CategoryId = 2, Category = new Category { Name = "Bottoms" } },
+                new Product { Id = 103, Name = "Classic Logo Tee", Price = 14.99m, OriginalPrice = 34.99m, Stock = 15, IsFeatured = true, MainImageUrl = "/Resources/Images/tee1.jpg", CategoryId = 1, Category = new Category { Name = "Tops" } },
+                new Product { Id = 104, Name = "Armbo Low Sneakers", Price = 59.99m, OriginalPrice = 129.99m, Stock = 3, IsFeatured = true, MainImageUrl = "/Resources/Images/sneaker1.jpg", CategoryId = 3, Category = new Category { Name = "Footwear" } },
+                new Product { Id = 105, Name = "Track Jacket - Retro", Price = 44.99m, OriginalPrice = 99.99m, Stock = 7, IsNew = true, IsFeatured = true, MainImageUrl = "/Resources/Images/jacket1.jpg", CategoryId = 1, Category = new Category { Name = "Tops" } },
+                new Product { Id = 106, Name = "Beanie - Winter Collection", Price = 9.99m, OriginalPrice = 24.99m, Stock = 20, IsFeatured = true, MainImageUrl = "/Resources/Images/beanie1.jpg", CategoryId = 4, Category = new Category { Name = "Accessories" } },
+                new Product { Id = 107, Name = "Joggers - Comfort Fit", Price = 24.99m, OriginalPrice = 59.99m, Stock = 12, IsFeatured = true, MainImageUrl = "/Resources/Images/joggers1.jpg", CategoryId = 2, Category = new Category { Name = "Bottoms" } },
+                new Product { Id = 108, Name = "Crossbody Bag", Price = 19.99m, OriginalPrice = 49.99m, Stock = 6, IsNew = true, IsFeatured = true, MainImageUrl = "/Resources/Images/bag1.jpg", CategoryId = 4, Category = new Category { Name = "Accessories" } }
             };
         }
 
@@ -284,7 +184,6 @@ namespace HoloCrew.ViewModels
         {
             var filtered = _allFlashSaleProducts.AsEnumerable();
 
-            // Filtrar por categoría
             if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
             {
                 filtered = filtered.Where(p =>
@@ -292,7 +191,6 @@ namespace HoloCrew.ViewModels
                     GetCategoryNameById(p.CategoryId).Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase));
             }
 
-            // Ordenar
             filtered = SortBy switch
             {
                 "Price: Low to High" => filtered.OrderBy(p => p.Price),
@@ -319,15 +217,8 @@ namespace HoloCrew.ViewModels
             };
         }
 
-        partial void OnSelectedCategoryChanged(string value)
-        {
-            ApplyFiltersAndSort();
-        }
-
-        partial void OnSortByChanged(string value)
-        {
-            ApplyFiltersAndSort();
-        }
+        partial void OnSelectedCategoryChanged(string value) => ApplyFiltersAndSort();
+        partial void OnSortByChanged(string value) => ApplyFiltersAndSort();
 
         #endregion
 
@@ -335,14 +226,9 @@ namespace HoloCrew.ViewModels
 
         private void StartCountdownTimer()
         {
-            _countdownTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
+            _countdownTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _countdownTimer.Tick += CountdownTimer_Tick;
             _countdownTimer.Start();
-
-            // Actualizar inmediatamente
             UpdateCountdown();
         }
 
@@ -356,10 +242,7 @@ namespace HoloCrew.ViewModels
             }
         }
 
-        private void CountdownTimer_Tick(object? sender, EventArgs e)
-        {
-            UpdateCountdown();
-        }
+        private void CountdownTimer_Tick(object? sender, EventArgs e) => UpdateCountdown();
 
         private void UpdateCountdown()
         {

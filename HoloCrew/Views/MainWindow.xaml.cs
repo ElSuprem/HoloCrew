@@ -8,9 +8,11 @@ using System.ComponentModel;
 
 namespace HoloCrew.Views
 {
-    /// <summary>
-    /// Ventana principal con mega menú desplegable estilo HoloCrew
-    /// </summary>
+    // Ventana principal (code-behind).
+    // Maneja el mega menú desplegable, la barra de búsqueda con foco automático,
+    // el scroll inteligente del contenido y la navegación entre vistas.
+    // Se conecta con MainWindowViewModel.
+
     public partial class MainWindow : Window
     {
         private bool _isMenuOpen = false;
@@ -19,13 +21,10 @@ namespace HoloCrew.Views
         {
             InitializeComponent();
 
-            // Suscribirse al cambio de vista para resetear scroll
             DataContextChanged += MainWindow_DataContextChanged;
         }
 
-        /// <summary>
-        /// Cuando cambia el DataContext, suscribirse a cambios de CurrentView
-        /// </summary>
+        // cuando cambia el DataContext, suscribirse a los cambios del ViewModel
         private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (e.OldValue is INotifyPropertyChanged oldVm)
@@ -39,14 +38,11 @@ namespace HoloCrew.Views
             }
         }
 
-        /// <summary>
-        /// Cuando cambia CurrentView, resetear el scroll a la parte superior
-        /// </summary>
+        // cuando cambia CurrentView, resetear el scroll al principio de la página
         private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "CurrentView")
             {
-                // Resetear scroll al inicio cuando cambia la vista
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     MainScrollViewer.ScrollToTop();
@@ -54,28 +50,22 @@ namespace HoloCrew.Views
             }
         }
 
-        /// <summary>
-        /// Muestra el mega menú cuando el mouse entra en "SHOP"
-        /// </summary>
+        // muestra el mega menú cuando el ratón entra en "SHOP"
         private void ShopMenu_MouseEnter(object sender, MouseEventArgs e)
         {
             MegaMenuDropdown.Visibility = Visibility.Visible;
             _isMenuOpen = true;
         }
 
-        /// <summary>
-        /// Oculta el mega menú cuando el mouse sale
-        /// </summary>
+        // oculta el mega menú cuando el ratón sale (con un pequeño retraso para evitar cierre accidental)
         private void ShopMenu_MouseLeave(object sender, MouseEventArgs e)
         {
-            // Pequeño delay para evitar cierre accidental
             System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Tick += (s, args) =>
             {
                 timer.Stop();
 
-                // Verificar si el mouse está sobre el menú o el trigger
                 if (!IsMouseOverElement(MegaMenuDropdown) && !IsMouseOverElement(ShopMenuTrigger))
                 {
                     MegaMenuDropdown.Visibility = Visibility.Collapsed;
@@ -85,9 +75,7 @@ namespace HoloCrew.Views
             timer.Start();
         }
 
-        /// <summary>
-        /// Verifica si el mouse está sobre un elemento
-        /// </summary>
+        // comprueba si el ratón está sobre un elemento de la interfaz
         private bool IsMouseOverElement(UIElement element)
         {
             if (element == null) return false;
@@ -98,14 +86,11 @@ namespace HoloCrew.Views
                    mousePos.Y <= ((FrameworkElement)element).ActualHeight;
         }
 
-        /// <summary>
-        /// Cuando la barra de búsqueda se hace visible, poner el foco automáticamente
-        /// </summary>
+        // cuando la barra de búsqueda se hace visible, poner el foco automáticamente
         private void SearchBar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (sender is Border border && border.Visibility == Visibility.Visible)
             {
-                // Usar Dispatcher para asegurar que el focus se aplica después del render
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     SearchTextBox.Focus();
@@ -114,9 +99,7 @@ namespace HoloCrew.Views
             }
         }
 
-        /// <summary>
-        /// Scroll inteligente para el contenido principal
-        /// </summary>
+        // scroll inteligente: si el scroll interno puede moverse, no pasa el evento al exterior
         private void MainScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             var scrollViewer = sender as ScrollViewer;
@@ -153,6 +136,7 @@ namespace HoloCrew.Views
             e.Handled = true;
         }
 
+        // busca un ScrollViewer padre en el árbol visual (excluyendo el actual)
         private ScrollViewer? FindParentScrollViewer(DependencyObject child, ScrollViewer scrollViewerToExclude)
         {
             if (child == null) return null;
@@ -184,9 +168,7 @@ namespace HoloCrew.Views
             return null;
         }
 
-        /// <summary>
-        /// Limpiar suscripciones al cerrar
-        /// </summary>
+        // limpiar suscripciones al cerrar la ventana
         protected override void OnClosed(EventArgs e)
         {
             if (DataContext is INotifyPropertyChanged vm)

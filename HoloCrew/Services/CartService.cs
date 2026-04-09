@@ -2,12 +2,12 @@
 using HoloCrew.Services.Interfaces;
 using System.Collections.ObjectModel;
 
+// Servicio del carrito con datos falsos en memoria (mock).
+// Permite añadir productos, cambiar cantidades, quitar, aplicar cupones.
+// Al cambiar el carrito, lanza CartUpdated para que la interfaz se refresque.
+
 namespace HoloCrew.Services
 {
-    /// <summary>
-    /// Servicio del carrito con datos MOCK para testing
-    /// Implementa correctamente ICartService
-    /// </summary>
     public class CartService : ICartService
     {
         private ObservableCollection<CartItem> _cartItems;
@@ -20,6 +20,7 @@ namespace HoloCrew.Services
             InitializeMockCart();
         }
 
+        // datos de ejemplo para probar sin base de datos real
         private void InitializeMockCart()
         {
             _cartItems = new ObservableCollection<CartItem>
@@ -62,8 +63,9 @@ namespace HoloCrew.Services
 
         public async Task AddToCartAsync(Product product, int quantity, string variant = null)
         {
-            var size = variant ?? "M"; // Default size si no se especifica
+            string size = variant ?? "M"; // si no viene talla, se pone M por defecto
 
+            // si ya hay un producto igual (mismo id y misma talla), se suma cantidad
             var existingItem = _cartItems.FirstOrDefault(i =>
                 i.ProductId == product.Id &&
                 i.Size == size);
@@ -130,8 +132,8 @@ namespace HoloCrew.Services
         public async Task<decimal> GetCartTotalAsync()
         {
             var subtotal = _cartItems.Sum(i => i.Subtotal);
-            var shipping = subtotal > 50 ? 0 : 5.99m;
-            var tax = subtotal * 0.21m;
+            var shipping = subtotal > 50 ? 0 : 5.99m;   // envío gratis si el pedido supera 50€
+            var tax = subtotal * 0.21m;                 // IVA 21%
             return await Task.FromResult(subtotal + shipping + tax - _appliedDiscount);
         }
 
@@ -140,9 +142,9 @@ namespace HoloCrew.Services
             return _cartItems.Sum(i => i.Quantity);
         }
 
+        // cupones de ejemplo
         public async Task<bool> ApplyCouponAsync(string couponCode)
         {
-            // Cupones de ejemplo
             var validCoupons = new Dictionary<string, decimal>
             {
                 { "WELCOME10", 10m },

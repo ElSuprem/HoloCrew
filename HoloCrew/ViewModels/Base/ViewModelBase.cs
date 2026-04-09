@@ -4,11 +4,13 @@ using HoloCrew.Constants;
 using System;
 using System.Threading.Tasks;
 
+// Estados de carga y clase base para todos los ViewModels.
+// Maneja estados (cargando, éxito, vacío, error), reintentos automáticos,
+// y métodos de navegación (OnNavigatedTo, OnNavigatedFrom).
+// Los mensajes de error y textos vacíos se sacan de AppConstants.
+
 namespace HoloCrew.ViewModels.Base
 {
-    /// <summary>
-    /// Estado de carga del ViewModel
-    /// </summary>
     public enum LoadingState
     {
         Idle,
@@ -20,10 +22,6 @@ namespace HoloCrew.ViewModels.Base
         Error
     }
 
-    /// <summary>
-    /// Clase base abstracta para todos los ViewModels
-    /// Compatible con código legacy (IsBusy asignable) + nuevos estados
-    /// </summary>
     public abstract partial class ViewModelBase : ObservableObject
     {
         #region Properties
@@ -43,7 +41,7 @@ namespace HoloCrew.ViewModels.Base
         [NotifyPropertyChangedFor(nameof(ShowError))]
         private LoadingState _state = LoadingState.Idle;
 
-        /// <summary>IsBusy - Calculado desde State (solo lectura)</summary>
+        // IsBusy se calcula desde State (true si está cargando, refrescando o cargando más)
         public bool IsBusy => State == LoadingState.Loading ||
                               State == LoadingState.Refreshing ||
                               State == LoadingState.LoadingMore;
@@ -89,7 +87,7 @@ namespace HoloCrew.ViewModels.Base
 
         #region Retry Logic
 
-        private Func<Task>? _lastOperation;
+        private Func<Task>? _lastOperation;  // guarda la última operación para poder reintentar
         private int _retryCount = 0;
         public int RetryCount => _retryCount;
 
@@ -124,6 +122,7 @@ namespace HoloCrew.ViewModels.Base
 
         #region Protected Methods
 
+        // ejecuta una operación asíncrona y maneja estados de carga
         protected async Task ExecuteAsync(Func<Task> operation, bool isRefresh = false, bool isLoadMore = false)
         {
             _lastOperation = operation;
@@ -143,6 +142,7 @@ namespace HoloCrew.ViewModels.Base
             }
         }
 
+        // ejecuta una operación con reintentos automáticos (hasta 3 intentos)
         protected async Task ExecuteWithRetryAsync(Func<Task> operation, int maxRetries = 3)
         {
             _lastOperation = operation;
@@ -170,6 +170,7 @@ namespace HoloCrew.ViewModels.Base
             }
         }
 
+        // ejecuta una operación que devuelve un resultado
         protected async Task<T?> ExecuteAsync<T>(Func<Task<T>> operation, bool isRefresh = false)
         {
             State = isRefresh ? LoadingState.Refreshing : LoadingState.Loading;
@@ -202,9 +203,10 @@ namespace HoloCrew.ViewModels.Base
             State = LoadingState.Error;
         }
 
+        // traduce la excepción a un mensaje amigable para el usuario
         protected virtual void HandleError(Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"❌ Error in {GetType().Name}: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"Error in {GetType().Name}: {ex.Message}");
 
             ErrorMessage = ex switch
             {
@@ -223,9 +225,9 @@ namespace HoloCrew.ViewModels.Base
 
         #region Navigation
 
-        public virtual void OnNavigatedTo(object? parameter) { }
-        public virtual void OnNavigatedFrom() { }
-        public virtual void Cleanup() => _lastOperation = null;
+        public virtual void OnNavigatedTo(object? parameter) { }  // cuando se navega a esta pantalla
+        public virtual void OnNavigatedFrom() { }                 // cuando se sale de esta pantalla
+        public virtual void Cleanup() => _lastOperation = null;   // limpiar referencias
 
         #endregion
     }

@@ -1,40 +1,17 @@
 ﻿using HoloCrew.Models;
 
+// Repositorio para la lista de deseos (wishlist) del usuario.
+// Guarda qué productos ha marcado cada usuario.
+
 namespace HoloCrew.Repositories.Interfaces
 {
-    /// <summary>
-    /// Repositorio para acceso a datos de wishlist
-    /// </summary>
     public interface IWishlistRepository
     {
-        /// <summary>
-        /// Agrega un producto a la wishlist
-        /// </summary>
-        Task<bool> AddProductAsync(int userId, int productId);
-
-        /// <summary>
-        /// Elimina un producto de la wishlist
-        /// </summary>
-        Task<bool> RemoveProductAsync(int userId, int productId);
-
-        /// <summary>
-        /// Obtiene todos los IDs de productos en la wishlist de un usuario
-        /// </summary>
-        Task<List<int>> GetProductIdsAsync(int userId);
-
-        /// <summary>
-        /// Verifica si un producto está en la wishlist
-        /// </summary>
-        Task<bool> ContainsProductAsync(int userId, int productId);
-
-        /// <summary>
-        /// Limpia toda la wishlist de un usuario
-        /// </summary>
-        Task<bool> ClearAsync(int userId);
-
-        /// <summary>
-        /// Obtiene la cantidad de productos en la wishlist
-        /// </summary>
-        Task<int> GetCountAsync(int userId);
+        Task<bool> AddProductAsync(int userId, int productId);       // añadir a favoritos
+        Task<bool> RemoveProductAsync(int userId, int productId);    // quitar de favoritos
+        Task<List<int>> GetProductIdsAsync(int userId);              // sacar todos los ids de productos favoritos
+        Task<bool> ContainsProductAsync(int userId, int productId);  // comprobar si ya está en favoritos
+        Task<bool> ClearAsync(int userId);                           // vaciar toda la wishlist
+        Task<int> GetCountAsync(int userId);                         // cuántos productos tiene en favoritos
     }
 }

@@ -1,39 +1,38 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ============================================ -->
-    <!-- SKELETON LOADER ANIMATION -->
-    <!-- ============================================ -->
+    <!-- LOADINGSTATES.XAML
+     Estados de carga de la app: skeletons (placeholders con animación shimmer),
+     spinner de carga, overlay, estados de error y vacío, toasts de éxito/error.
+     Los skeletons se muestran mientras cargan los datos reales. -->
 
-    <!-- Animación de shimmer para skeleton -->
+    <!-- animación de brillo que se mueve de izquierda a derecha -->
     <Storyboard x:Key="SkeletonShimmer" RepeatBehavior="Forever">
         <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
                          From="-200" To="400"
                          Duration="0:0:1.5"/>
     </Storyboard>
 
-    <!-- Brush con gradiente para shimmer -->
+    <!-- pincel con degradado para el efecto shimmer -->
     <LinearGradientBrush x:Key="SkeletonShimmerBrush" StartPoint="0,0" EndPoint="1,0">
         <GradientStop Color="#E5E7EB" Offset="0"/>
         <GradientStop Color="#F3F4F6" Offset="0.5"/>
         <GradientStop Color="#E5E7EB" Offset="1"/>
     </LinearGradientBrush>
 
-    <!-- ============================================ -->
-    <!-- SKELETON BASE STYLE -->
-    <!-- ============================================ -->
+    <!-- skeleton base (color gris claro) -->
     <Style x:Key="SkeletonBase" TargetType="Border">
         <Setter Property="Background" Value="#E5E7EB"/>
         <Setter Property="CornerRadius" Value="4"/>
     </Style>
 
-    <!-- Skeleton para texto (línea) -->
+    <!-- skeleton para texto (línea) -->
     <Style x:Key="SkeletonText" TargetType="Border" BasedOn="{StaticResource SkeletonBase}">
         <Setter Property="Height" Value="16"/>
         <Setter Property="Margin" Value="0,0,0,8"/>
     </Style>
 
-    <!-- Skeleton para título -->
+    <!-- skeleton para título -->
     <Style x:Key="SkeletonTitle" TargetType="Border" BasedOn="{StaticResource SkeletonBase}">
         <Setter Property="Height" Value="24"/>
         <Setter Property="Width" Value="200"/>
@@ -41,57 +40,45 @@
         <Setter Property="Margin" Value="0,0,0,12"/>
     </Style>
 
-    <!-- Skeleton para imagen cuadrada -->
+    <!-- skeleton para imagen cuadrada -->
     <Style x:Key="SkeletonImageSquare" TargetType="Border" BasedOn="{StaticResource SkeletonBase}">
         <Setter Property="CornerRadius" Value="0"/>
     </Style>
 
-    <!-- Skeleton para avatar circular -->
+    <!-- skeleton para avatar circular -->
     <Style x:Key="SkeletonAvatar" TargetType="Border" BasedOn="{StaticResource SkeletonBase}">
         <Setter Property="Width" Value="48"/>
         <Setter Property="Height" Value="48"/>
         <Setter Property="CornerRadius" Value="24"/>
     </Style>
 
-    <!-- Skeleton para botón -->
+    <!-- skeleton para botón -->
     <Style x:Key="SkeletonButton" TargetType="Border" BasedOn="{StaticResource SkeletonBase}">
         <Setter Property="Height" Value="44"/>
         <Setter Property="CornerRadius" Value="0"/>
     </Style>
 
-    <!-- ============================================ -->
-    <!-- SKELETON PRODUCT CARD -->
-    <!-- ============================================ -->
+    <!-- skeleton de tarjeta de producto -->
     <ControlTemplate x:Key="SkeletonProductCard">
         <Border Background="White" Margin="10">
             <StackPanel>
-                <!-- Image placeholder -->
                 <Border Style="{StaticResource SkeletonImageSquare}" Height="280"/>
-
-                <!-- Content -->
                 <StackPanel Margin="15">
-                    <!-- Category -->
                     <Border Style="{StaticResource SkeletonText}" Width="60" Height="12"/>
-                    <!-- Title -->
                     <Border Style="{StaticResource SkeletonText}" Width="180"/>
-                    <!-- Price -->
                     <Border Style="{StaticResource SkeletonText}" Width="80" Height="20" Margin="0,8,0,0"/>
                 </StackPanel>
             </StackPanel>
         </Border>
     </ControlTemplate>
 
-    <!-- ============================================ -->
-    <!-- SKELETON PRODUCT DETAIL -->
-    <!-- ============================================ -->
+    <!-- skeleton de página de detalle de producto -->
     <ControlTemplate x:Key="SkeletonProductDetail">
         <Grid Margin="80,40">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="55*"/>
                 <ColumnDefinition Width="45*"/>
             </Grid.ColumnDefinitions>
-
-            <!-- Left: Image -->
             <StackPanel Grid.Column="0" Margin="0,0,50,0">
                 <Border Style="{StaticResource SkeletonImageSquare}" Height="500"/>
                 <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
@@ -100,23 +87,15 @@
                     <Border Style="{StaticResource SkeletonImageSquare}" Width="80" Height="80" Margin="0,0,10,0"/>
                 </StackPanel>
             </StackPanel>
-
-            <!-- Right: Info -->
             <StackPanel Grid.Column="1">
-                <!-- Category -->
                 <Border Style="{StaticResource SkeletonText}" Width="80" Height="14"/>
-                <!-- Title -->
                 <Border Style="{StaticResource SkeletonTitle}" Width="300" Height="36" Margin="0,10,0,0"/>
                 <Border Style="{StaticResource SkeletonTitle}" Width="200" Height="36"/>
-                <!-- Rating -->
                 <Border Style="{StaticResource SkeletonText}" Width="150" Height="20" Margin="0,20,0,0"/>
-                <!-- Price -->
                 <Border Style="{StaticResource SkeletonText}" Width="120" Height="40" Margin="0,20,0,0"/>
-                <!-- Description -->
                 <Border Style="{StaticResource SkeletonText}" Margin="0,30,0,0"/>
                 <Border Style="{StaticResource SkeletonText}"/>
                 <Border Style="{StaticResource SkeletonText}" Width="250"/>
-                <!-- Size selector -->
                 <Border Style="{StaticResource SkeletonText}" Width="60" Height="14" Margin="0,30,0,10"/>
                 <StackPanel Orientation="Horizontal">
                     <Border Style="{StaticResource SkeletonBase}" Width="50" Height="44" Margin="0,0,8,0"/>
@@ -124,26 +103,12 @@
                     <Border Style="{StaticResource SkeletonBase}" Width="50" Height="44" Margin="0,0,8,0"/>
                     <Border Style="{StaticResource SkeletonBase}" Width="50" Height="44" Margin="0,0,8,0"/>
                 </StackPanel>
-                <!-- Add to cart button -->
                 <Border Style="{StaticResource SkeletonButton}" Margin="0,30,0,0"/>
             </StackPanel>
         </Grid>
     </ControlTemplate>
 
-    <!-- ============================================ -->
-    <!-- LOADING SPINNER -->
-    <!-- ============================================ -->
-    <Style x:Key="LoadingSpinner" TargetType="Border">
-        <Setter Property="Width" Value="40"/>
-        <Setter Property="Height" Value="40"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-    </Style>
-
-    <!-- ============================================ -->
-    <!-- LOADING OVERLAY -->
-    <!-- ============================================ -->
+    <!-- overlay de carga semitransparente -->
     <Style x:Key="LoadingOverlay" TargetType="Border">
         <Setter Property="Background" Value="#80FFFFFF"/>
         <Setter Property="Visibility" Value="Collapsed"/>
@@ -154,9 +119,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ============================================ -->
-    <!-- ERROR STATE -->
-    <!-- ============================================ -->
+    <!-- estado de error: fondo rojo claro con mensaje -->
     <Style x:Key="ErrorStateContainer" TargetType="Border">
         <Setter Property="Background" Value="#FEF2F2"/>
         <Setter Property="BorderBrush" Value="#FECACA"/>
@@ -194,6 +157,7 @@
         <Setter Property="Margin" Value="0,0,0,20"/>
     </Style>
 
+    <!-- botón para reintentar -->
     <Style x:Key="RetryButton" TargetType="Button">
         <Setter Property="Content" Value="Try Again"/>
         <Setter Property="Background" Value="#DC2626"/>
@@ -219,9 +183,7 @@
         </Setter>
     </Style>
 
-    <!-- ============================================ -->
-    <!-- EMPTY STATE -->
-    <!-- ============================================ -->
+    <!-- estado vacío (sin datos) -->
     <Style x:Key="EmptyStateContainer" TargetType="Border">
         <Setter Property="Padding" Value="60"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -250,6 +212,7 @@
         <Setter Property="Margin" Value="0,0,0,24"/>
     </Style>
 
+    <!-- botón de acción para estado vacío -->
     <Style x:Key="EmptyActionButton" TargetType="Button">
         <Setter Property="Background" Value="#0A0A0A"/>
         <Setter Property="Foreground" Value="White"/>
@@ -276,34 +239,7 @@
         </Setter>
     </Style>
 
-    <!-- ============================================ -->
-    <!-- PULL TO REFRESH INDICATOR -->
-    <!-- ============================================ -->
-    <Style x:Key="RefreshIndicator" TargetType="Border">
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="Height" Value="50"/>
-        <Setter Property="Margin" Value="0,-50,0,0"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-    </Style>
-
-    <!-- ============================================ -->
-    <!-- LOAD MORE INDICATOR -->
-    <!-- ============================================ -->
-    <Style x:Key="LoadMoreContainer" TargetType="Border">
-        <Setter Property="Padding" Value="20"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-    </Style>
-
-    <Style x:Key="LoadMoreText" TargetType="TextBlock">
-        <Setter Property="Text" Value="Loading more..."/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Foreground" Value="#6B7280"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-    </Style>
-
-    <!-- ============================================ -->
-    <!-- INLINE ERROR (for form fields) -->
-    <!-- ============================================ -->
+    <!-- mensaje de error dentro de un formulario (campo inválido) -->
     <Style x:Key="InlineError" TargetType="TextBlock">
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="Foreground" Value="#DC2626"/>
@@ -311,9 +247,7 @@
         <Setter Property="Visibility" Value="Collapsed"/>
     </Style>
 
-    <!-- ============================================ -->
-    <!-- SUCCESS TOAST -->
-    <!-- ============================================ -->
+    <!-- toast de éxito (mensaje temporal) -->
     <Style x:Key="SuccessToast" TargetType="Border">
         <Setter Property="Background" Value="#10B981"/>
         <Setter Property="Padding" Value="20,14"/>
@@ -328,9 +262,7 @@
         </Setter>
     </Style>
 
-    <!-- ============================================ -->
-    <!-- ERROR TOAST -->
-    <!-- ============================================ -->
+    <!-- toast de error -->
     <Style x:Key="ErrorToast" TargetType="Border">
         <Setter Property="Background" Value="#DC2626"/>
         <Setter Property="Padding" Value="20,14"/>

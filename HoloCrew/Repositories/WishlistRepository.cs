@@ -4,16 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// Repositorio de wishlist (lista de deseos) con datos falsos en memoria.
+// Guarda para cada usuario (userId) una lista de ids de productos (productId).
+
 namespace HoloCrew.Repositories
 {
-    /// <summary>
-    /// Implementación del repositorio de wishlist
-    /// NOTA: Usa datos MOCK en memoria
-    /// Almacena pares (userId, productId)
-    /// </summary>
     public class WishlistRepository : IWishlistRepository
     {
-        // Estructura: Dictionary<UserId, List<ProductId>>
+        // diccionario: clave = userId, valor = lista de productId
         private static Dictionary<int, List<int>> _wishlists = new();
 
         public Task<bool> AddProductAsync(int userId, int productId)

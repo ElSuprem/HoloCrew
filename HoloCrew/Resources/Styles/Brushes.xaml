@@ -1,28 +1,28 @@
-<!-- ========================================
-     HOLOCREW - BRUSHES CON VALORES DIRECTOS
-     Sin referencias StaticResource (evita cuelgues del diseñador)
-     Compatible con diseñador VS 2022
-     ======================================== -->
-
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ========== NEGROS ========== -->
+    <!-- BRUSHES.XAML
+         Colores de la aplicación: negros, blancos, grises, acento rojo, etc.
+         Se usan con {StaticResource BlackPrimaryBrush} en los estilos de la interfaz.
+         Los valores son directos (sin referencias a otros recursos) para evitar errores del diseñador.
+    -->
+
+    <!-- negros -->
     <SolidColorBrush x:Key="BlackPrimaryBrush" Color="#0A0A0A"/>
     <SolidColorBrush x:Key="BlackSecondaryBrush" Color="#1A1A1A"/>
     <SolidColorBrush x:Key="BlackTertiaryBrush" Color="#2A2A2A"/>
 
-    <!-- ========== BLANCOS ========== -->
+    <!-- blancos -->
     <SolidColorBrush x:Key="WhitePrimaryBrush" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="WhiteSecondaryBrush" Color="#F5F5F5"/>
     <SolidColorBrush x:Key="WhiteTertiaryBrush" Color="#E8E8E8"/>
 
-    <!-- ========== ROJOS (ACENTO) ========== -->
+    <!-- rojo principal (marca) -->
     <SolidColorBrush x:Key="RedAccentBrush" Color="#E31E24"/>
     <SolidColorBrush x:Key="RedAccentDarkBrush" Color="#CC0000"/>
     <SolidColorBrush x:Key="RedAccentLightBrush" Color="#FF3333"/>
 
-    <!-- ========== ESCALA DE GRISES ========== -->
+    <!-- grises -->
     <SolidColorBrush x:Key="Gray50Brush" Color="#FAFAFA"/>
     <SolidColorBrush x:Key="Gray100Brush" Color="#F7F7F7"/>
     <SolidColorBrush x:Key="Gray200Brush" Color="#E8E8E8"/>
@@ -34,21 +34,21 @@
     <SolidColorBrush x:Key="Gray800Brush" Color="#2E2E2E"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="#1F1F1F"/>
 
-    <!-- ========== COLORES SEMÁNTICOS ========== -->
+    <!-- colores para mensajes de éxito, error, advertencia, info -->
     <SolidColorBrush x:Key="SuccessColorBrush" Color="#10B981"/>
     <SolidColorBrush x:Key="WarningColorBrush" Color="#F59E0B"/>
     <SolidColorBrush x:Key="ErrorColorBrush" Color="#EF4444"/>
     <SolidColorBrush x:Key="InfoColorBrush" Color="#3B82F6"/>
 
-    <!-- ========== OVERLAYS ========== -->
+    <!-- capas semitransparentes para superponer -->
     <SolidColorBrush x:Key="OverlayDarkBrush" Color="#80000000"/>
     <SolidColorBrush x:Key="OverlayLightBrush" Color="#40FFFFFF"/>
 
-    <!-- ========== HOVER ========== -->
+    <!-- colores al pasar el ratón -->
     <SolidColorBrush x:Key="HoverLight" Color="#F0F0F0"/>
     <SolidColorBrush x:Key="HoverDark" Color="#20FFFFFF"/>
 
-    <!-- ========== ALIASES COMUNES ========== -->
+    <!-- nombres cortos para usar directamente -->
     <SolidColorBrush x:Key="BackgroundPrimary" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="BackgroundSecondary" Color="#F5F5F5"/>
     <SolidColorBrush x:Key="BackgroundDark" Color="#0A0A0A"/>
@@ -63,7 +63,7 @@
     <SolidColorBrush x:Key="AccentPrimary" Color="#E31E24"/>
     <SolidColorBrush x:Key="AccentSecondary" Color="#0A0A0A"/>
 
-    <!-- ========== ALIASES DE COMPATIBILIDAD ========== -->
+    <!-- alias para compatibilidad con otros estilos que usen estos nombres -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="#0A0A0A"/>
     <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#1A1A1A"/>
     <SolidColorBrush x:Key="PrimaryLightBrush" Color="#2A2A2A"/>

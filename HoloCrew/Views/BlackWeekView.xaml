@@ -8,8 +8,13 @@
              d:DesignHeight="1400" d:DesignWidth="1400"
              Background="#0A0A0A">
 
+    <!-- Vista de la página de Black Week (ofertas).
+         Muestra banner con cuenta regresiva, top deals, filtros por categoría,
+         y lista de productos con descuento.
+         Se conecta con BlackWeekViewModel. -->
+
     <UserControl.Resources>
-        <!-- Gold gradient brush -->
+        <!-- degradado dorado -->
         <LinearGradientBrush x:Key="GoldGradient" StartPoint="0,0" EndPoint="1,0">
             <GradientStop Color="#D4AF37" Offset="0"/>
             <GradientStop Color="#F4E4BC" Offset="0.5"/>
@@ -21,7 +26,7 @@
             <GradientStop Color="#AA8C2C" Offset="1"/>
         </LinearGradientBrush>
 
-        <!-- ComboBox oscuro estilizado para tema negro -->
+        <!-- combobox oscuro para el tema negro -->
         <Style x:Key="DarkComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Background" Value="#1A1A1A"/>
             <Setter Property="Foreground" Value="#FFFFFF"/>
@@ -113,9 +118,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <!-- ============================================ -->
-        <!-- LOADING STATE -->
-        <!-- ============================================ -->
+        <!-- estado de carga -->
         <Border Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
                 Background="#0A0A0A">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -126,9 +129,7 @@
             </StackPanel>
         </Border>
 
-        <!-- ============================================ -->
-        <!-- EMPTY STATE -->
-        <!-- ============================================ -->
+        <!-- estado vacío -->
         <Border Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
                 Background="#0A0A0A">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="400">
@@ -158,20 +159,16 @@
             </StackPanel>
         </Border>
 
-        <!-- ============================================ -->
-        <!-- MAIN CONTENT -->
-        <!-- ============================================ -->
+        <!-- contenido principal -->
         <ScrollViewer VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled"
                       Visibility="{Binding IsSuccess, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel>
 
-                <!-- ============================================ -->
-                <!-- HERO BANNER -->
-                <!-- ============================================ -->
+                <!-- banner principal -->
                 <Border Background="#0A0A0A" Padding="80,80">
                     <Grid>
-                        <!-- Decorative elements -->
+                        <!-- elementos decorativos -->
                         <Border Opacity="0.05" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-20,-20,0">
                             <TextBlock Text="%" FontSize="300" FontWeight="Black" Foreground="White"/>
                         </Border>
@@ -182,9 +179,9 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Left: Title and info -->
+                            <!-- izquierda: título e info -->
                             <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                <!-- Badge -->
+                                <!-- insignia -->
                                 <Border Background="{StaticResource GoldGradientVertical}" 
                                         Padding="15,8"
                                         HorizontalAlignment="Left"
@@ -195,7 +192,7 @@
                                                Foreground="#0A0A0A"/>
                                 </Border>
 
-                                <!-- Main title -->
+                                <!-- título principal -->
                                 <TextBlock Text="BLACK" 
                                            FontSize="90"
                                            FontWeight="Black"
@@ -212,7 +209,7 @@
                                            Foreground="#AAAAAA"
                                            Margin="0,0,0,30"/>
 
-                                <!-- Stats row -->
+                                <!-- estadísticas -->
                                 <StackPanel Orientation="Horizontal">
                                     <Border BorderBrush="#333333" BorderThickness="0,0,1,0" Padding="0,0,30,0">
                                         <StackPanel>
@@ -221,7 +218,7 @@
                                                 <Run Text="{Binding MaxDiscountPercent, StringFormat={}{0:0}}"/>
                                                 <Run Text="%"/>
                                             </TextBlock>
-                                            <TextBlock Text="D I S C O U N T" FontSize="10" Foreground="#666666"/>
+                                            <TextBlock Text="DISCOUNT" FontSize="10" Foreground="#666666"/>
                                         </StackPanel>
                                     </Border>
                                     <Border Padding="30,0">
@@ -230,13 +227,13 @@
                                                        FontSize="32" 
                                                        FontWeight="Bold" 
                                                        Foreground="White"/>
-                                            <TextBlock Text="P R O D U C T S" FontSize="10" Foreground="#666666"/>
+                                            <TextBlock Text="PRODUCTS" FontSize="10" Foreground="#666666"/>
                                         </StackPanel>
                                     </Border>
                                 </StackPanel>
                             </StackPanel>
 
-                            <!-- Right: Countdown -->
+                            <!-- derecha: cuenta regresiva -->
                             <Border Grid.Column="1" 
                                     Background="#111111"
                                     BorderBrush="#222222"
@@ -244,7 +241,7 @@
                                     Padding="50,40"
                                     VerticalAlignment="Center">
                                 <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="S A L E   E N D S   I N"
+                                    <TextBlock Text="SALE ENDS IN"
                                                FontSize="10"
                                                FontWeight="Bold"
                                                Foreground="#666666"
@@ -252,7 +249,7 @@
                                                Margin="0,0,0,25"/>
 
                                     <StackPanel Orientation="Horizontal">
-                                        <!-- Days -->
+                                        <!-- días -->
                                         <StackPanel Margin="0,0,15,0">
                                             <Border Background="#1A1A1A" 
                                                     BorderBrush="#333333"
@@ -279,7 +276,7 @@
                                                    VerticalAlignment="Top"
                                                    Margin="0,12,0,0"/>
 
-                                        <!-- Hours -->
+                                        <!-- horas -->
                                         <StackPanel Margin="15,0">
                                             <Border Background="#1A1A1A" 
                                                     BorderBrush="#333333"
@@ -306,7 +303,7 @@
                                                    VerticalAlignment="Top"
                                                    Margin="0,12,0,0"/>
 
-                                        <!-- Minutes -->
+                                        <!-- minutos -->
                                         <StackPanel Margin="15,0">
                                             <Border Background="#1A1A1A" 
                                                     BorderBrush="#333333"
@@ -333,7 +330,7 @@
                                                    VerticalAlignment="Top"
                                                    Margin="0,12,0,0"/>
 
-                                        <!-- Seconds -->
+                                        <!-- segundos -->
                                         <StackPanel Margin="15,0,0,0">
                                             <Border Background="#1A1A1A" 
                                                     BorderBrush="#D4AF37"
@@ -354,7 +351,7 @@
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <!-- Urgency message -->
+                                    <!-- mensaje de urgencia -->
                                     <Border Background="#1A1A1A" 
                                             Padding="20,10" 
                                             Margin="0,25,0,0"
@@ -370,9 +367,7 @@
                     </Grid>
                 </Border>
 
-                <!-- ============================================ -->
-                <!-- TOP DEALS SECTION -->
-                <!-- ============================================ -->
+                <!-- sección top deals -->
                 <Border Background="#111111" Padding="80,60">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,35">
@@ -393,14 +388,13 @@
                             </Border>
                         </StackPanel>
 
-                        <!-- Top Deals Grid (4 productos) -->
+                        <!-- grid de top deals (4 productos) -->
                         <ItemsControl ItemsSource="{Binding TopDeals}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <UniformGrid Columns="4"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
-
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Background="#1A1A1A"
@@ -414,7 +408,7 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
 
-                                            <!-- Image con overlay -->
+                                            <!-- imagen con overlay -->
                                             <Border Grid.Row="0" Background="#252525">
                                                 <Border.InputBindings>
                                                     <MouseBinding MouseAction="LeftClick" 
@@ -422,10 +416,9 @@
                                                                   CommandParameter="{Binding}"/>
                                                 </Border.InputBindings>
                                                 <Grid>
-                                                    <Image Source="{Binding MainImageUrl}" 
-                                                           Stretch="UniformToFill"/>
+                                                    <Image Source="{Binding MainImageUrl}" Stretch="UniformToFill"/>
 
-                                                    <!-- Discount badge grande -->
+                                                    <!-- insignia de descuento grande -->
                                                     <Border Background="{StaticResource GoldGradientVertical}"
                                                             Padding="15,8"
                                                             HorizontalAlignment="Left"
@@ -438,7 +431,7 @@
                                                         </TextBlock>
                                                     </Border>
 
-                                                    <!-- Top Deal badge -->
+                                                    <!-- insignia top deal -->
                                                     <Border Background="#DC2626"
                                                             Padding="10,5"
                                                             HorizontalAlignment="Right"
@@ -450,7 +443,7 @@
                                                                    FontWeight="Bold"/>
                                                     </Border>
 
-                                                    <!-- Quick Add - CORREGIDO CON BUTTON -->
+                                                    <!-- botón de añadir rápido -->
                                                     <Button Background="{StaticResource GoldGradientVertical}"
                                                             Height="45"
                                                             VerticalAlignment="Bottom"
@@ -475,7 +468,7 @@
                                                 </Grid>
                                             </Border>
 
-                                            <!-- Info -->
+                                            <!-- información -->
                                             <StackPanel Grid.Row="1" Margin="18">
                                                 <TextBlock Text="{Binding Name}" 
                                                            FontSize="14"
@@ -530,9 +523,7 @@
                     </StackPanel>
                 </Border>
 
-                <!-- ============================================ -->
-                <!-- FILTERS BAR - CORREGIDO CON COMBOBOX OSCURO -->
-                <!-- ============================================ -->
+                <!-- barra de filtros -->
                 <Border Background="#0A0A0A"
                         BorderBrush="#222222"
                         BorderThickness="0,1"
@@ -544,7 +535,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Category filters - CORREGIDO CON BUTTON -->
+                        <!-- filtros de categoría -->
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
                             <TextBlock Text="Category:"
                                        FontSize="13"
@@ -615,7 +606,7 @@
                             </ItemsControl>
                         </StackPanel>
 
-                        <!-- Sort dropdown -->
+                        <!-- ordenación -->
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
                             <TextBlock Text="Sort by:"
                                        FontSize="13"
@@ -631,9 +622,7 @@
                     </Grid>
                 </Border>
 
-                <!-- ============================================ -->
-                <!-- ALL PRODUCTS GRID -->
-                <!-- ============================================ -->
+                <!-- grid de todos los productos Black Week -->
                 <Border Padding="80,50" Background="#0A0A0A">
                     <StackPanel>
                         <TextBlock Text="ALL BLACK WEEK DEALS" 
@@ -648,7 +637,6 @@
                                     <UniformGrid Columns="4"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
-
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Background="#151515"
@@ -662,7 +650,7 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
 
-                                            <!-- Image -->
+                                            <!-- imagen -->
                                             <Border Grid.Row="0" Background="#1A1A1A">
                                                 <Border.InputBindings>
                                                     <MouseBinding MouseAction="LeftClick" 
@@ -672,7 +660,7 @@
                                                 <Grid>
                                                     <Image Source="{Binding MainImageUrl}" Stretch="UniformToFill"/>
 
-                                                    <!-- Discount badge -->
+                                                    <!-- insignia de descuento -->
                                                     <Border Background="#DC2626"
                                                             Padding="10,5"
                                                             HorizontalAlignment="Left"
@@ -685,7 +673,7 @@
                                                         </TextBlock>
                                                     </Border>
 
-                                                    <!-- Wishlist button -->
+                                                    <!-- botón de wishlist -->
                                                     <Button Width="36" Height="36"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Top"
@@ -700,13 +688,11 @@
                                                                         Background="#2A2A2A"
                                                                         CornerRadius="18">
                                                                     <Grid>
-                                                                        <!-- Corazón vacío -->
                                                                         <Viewbox Width="20" Height="20" Margin="0,1,0,0"
                                                                                  Visibility="{Binding IsInWishlist, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                                                                             <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                                                                   Fill="Transparent" Stroke="#FFFFFF" StrokeThickness="1.5"/>
                                                                         </Viewbox>
-                                                                        <!-- Corazón relleno -->
                                                                         <Viewbox Width="20" Height="20" Margin="0,1,0,0"
                                                                                  Visibility="{Binding IsInWishlist, Converter={StaticResource BoolToVisibilityConverter}}">
                                                                             <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
@@ -718,7 +704,7 @@
                                                         </Button.Template>
                                                     </Button>
 
-                                                    <!-- Quick Add - CORREGIDO CON BUTTON -->
+                                                    <!-- botón de añadir rápido -->
                                                     <Button Background="White"
                                                             Height="42"
                                                             VerticalAlignment="Bottom"
@@ -743,7 +729,7 @@
                                                 </Grid>
                                             </Border>
 
-                                            <!-- Info -->
+                                            <!-- información -->
                                             <StackPanel Grid.Row="1" Margin="14">
                                                 <TextBlock Text="{Binding Name}" 
                                                            FontSize="13"
@@ -793,9 +779,7 @@
                     </StackPanel>
                 </Border>
 
-                <!-- ============================================ -->
-                <!-- BOTTOM CTA -->
-                <!-- ============================================ -->
+                <!-- llamada a la acción al final -->
                 <Border Background="#111111" Padding="80,60">
                     <Grid>
                         <Grid.ColumnDefinitions>

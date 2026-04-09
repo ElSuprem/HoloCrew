@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// Repositorio de usuarios con datos falsos en memoria (mock).
+// Guarda usuarios, direcciones, métodos de pago y preferencias.
+// La contraseña se guarda sin encriptar en los datos mock (en producción habría que encriptarla).
+
 namespace HoloCrew.Repositories
 {
-    /// <summary>
-    /// Implementación del repositorio de usuarios
-    /// NOTA: Usa datos MOCK en memoria
-    /// </summary>
     public class UserRepository : IUserRepository
     {
         private static List<User> _users;
@@ -42,7 +42,7 @@ namespace HoloCrew.Repositories
             user.Id = _nextId++;
             user.CreatedAt = DateTime.Now;
 
-            // Inicializar listas vacías si son null
+            // por si acaso, que las listas no estén vacías
             user.Addresses ??= new List<Address>();
             user.PaymentMethods ??= new List<PaymentMethod>();
             user.NotificationPreferences ??= new NotificationSettings
@@ -98,21 +98,22 @@ namespace HoloCrew.Repositories
             var user = _users.FirstOrDefault(u => u.Id == userId);
             if (user != null)
             {
-                user.LastLoginAt = DateTime.Now; // ⭐ Ahora funciona con la nueva propiedad
+                user.LastLoginAt = DateTime.Now;
             }
             return Task.CompletedTask;
         }
 
-        // ⭐ AGREGADO - Método necesario para AuthenticationService
+        // comprueba si el email y la contraseña son correctos
         public Task<User> ValidateCredentialsAsync(string email, string password)
         {
             var user = _users.FirstOrDefault(u =>
                 u.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-                u.Password == password); // En producción debería comparar hash
+                u.Password == password); // en producción habría que comparar la contraseña encriptada
 
             return Task.FromResult(user);
         }
 
+        // datos de ejemplo para probar sin base de datos real
         private void InitializeMockData()
         {
             _users = new List<User>
@@ -122,7 +123,7 @@ namespace HoloCrew.Repositories
                     Id = _nextId++,
                     FullName = "Juan Pérez",
                     Email = "juan@example.com",
-                    Password = "demo123", // ⭐ AGREGADO - Password para login
+                    Password = "demo123",
                     PhoneNumber = "+34 600 123 456",
                     DateOfBirth = new DateTime(1990, 5, 15),
                     CreatedAt = DateTime.Now.AddYears(-2),
@@ -169,7 +170,7 @@ namespace HoloCrew.Repositories
                     Id = _nextId++,
                     FullName = "María García",
                     Email = "maria@example.com",
-                    Password = "demo123", // ⭐ AGREGADO - Password para login
+                    Password = "demo123",
                     PhoneNumber = "+34 600 654 321",
                     DateOfBirth = new DateTime(1985, 8, 22),
                     CreatedAt = DateTime.Now.AddYears(-1),

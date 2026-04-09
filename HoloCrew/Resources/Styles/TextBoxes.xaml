@@ -1,7 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ========== TEXTBOX BASE ========== -->
+    <!-- INPUTSTYLES.XAML
+     Estilos base para inputs: TextBox, PasswordBox, ComboBox.
+     Se usan con Style="{StaticResource BaseTextBox}" en los campos de texto.
+     Al enfocar cambia el borde de color y se pone más grueso. -->
+
+    <!-- textbox base -->
     <Style x:Key="BaseTextBox" TargetType="TextBox">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="12,10" />
@@ -19,7 +24,6 @@
                             Padding="{TemplateBinding Padding}">
                         <ScrollViewer x:Name="PART_ContentHost" />
                     </Border>
-
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
@@ -35,12 +39,12 @@
         </Setter>
     </Style>
 
-    <!-- ========== TEXTBOX CON PLACEHOLDER ========== -->
+    <!-- textbox con texto de ejemplo (placeholder) -->
     <Style x:Key="TextBoxWithPlaceholder" TargetType="TextBox" BasedOn="{StaticResource BaseTextBox}">
-        <!-- El placeholder se maneja en el XAML con VisualBrush -->
+        <!-- el placeholder se maneja en el XAML con VisualBrush -->
     </Style>
 
-    <!-- ========== PASSWORDBOX ========== -->
+    <!-- passwordbox base -->
     <Style x:Key="BasePasswordBox" TargetType="PasswordBox">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="12,10" />
@@ -58,7 +62,6 @@
                             Padding="{TemplateBinding Padding}">
                         <ScrollViewer x:Name="PART_ContentHost" />
                     </Border>
-
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
@@ -70,7 +73,7 @@
         </Setter>
     </Style>
 
-    <!-- ========== COMBOBOX ========== -->
+    <!-- combobox base -->
     <Style x:Key="BaseComboBox" TargetType="ComboBox">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="12,10" />

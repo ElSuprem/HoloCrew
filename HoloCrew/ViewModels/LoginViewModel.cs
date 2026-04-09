@@ -5,6 +5,10 @@ using HoloCrew.ViewModels.Base;
 using System;
 using System.Windows.Input;
 
+// ViewModel de la página de inicio de sesión.
+// Valida email y contraseña antes de enviar, muestra errores en tiempo real.
+// Se conecta con AuthenticationService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class LoginViewModel : ViewModelBase
@@ -21,7 +25,6 @@ namespace HoloCrew.ViewModels
             {
                 SetProperty(ref _email, value);
                 ValidateEmail();
-                // ⭐ CORREGIDO: NotifyCanExecuteChanged en lugar de RaiseCanExecuteChanged
                 ((RelayCommand)LoginCommand).NotifyCanExecuteChanged();
             }
         }
@@ -34,7 +37,6 @@ namespace HoloCrew.ViewModels
             {
                 SetProperty(ref _password, value);
                 ValidatePassword();
-                // ⭐ CORREGIDO: NotifyCanExecuteChanged
                 ((RelayCommand)LoginCommand).NotifyCanExecuteChanged();
             }
         }
@@ -46,7 +48,7 @@ namespace HoloCrew.ViewModels
             set => SetProperty(ref _rememberMe, value);
         }
 
-        // ⭐ VALIDACIÓN: Propiedades de error
+        // errores de validación
         private bool _hasEmailError;
         public bool HasEmailError
         {
@@ -106,7 +108,7 @@ namespace HoloCrew.ViewModels
             NavigateToRegisterCommand = new RelayCommand(ExecuteNavigateToRegister);
         }
 
-        // ⭐ VALIDACIÓN: Métodos de validación
+        // valida el formato del email
         private void ValidateEmail()
         {
             if (string.IsNullOrWhiteSpace(Email))
@@ -128,6 +130,7 @@ namespace HoloCrew.ViewModels
             }
         }
 
+        // valida la longitud de la contraseña
         private void ValidatePassword()
         {
             if (string.IsNullOrWhiteSpace(Password))
@@ -140,7 +143,7 @@ namespace HoloCrew.ViewModels
             if (!ValidationHelper.IsValidPassword(Password))
             {
                 HasPasswordError = true;
-                PasswordErrorMessage = "Password must be at least 6 characters";
+                PasswordErrorMessage = "Password must be at least 8 characters";
             }
             else
             {
@@ -165,7 +168,6 @@ namespace HoloCrew.ViewModels
                 IsLoading = true;
                 ErrorMessage = string.Empty;
 
-                // Validación final antes de enviar
                 ValidateEmail();
                 ValidatePassword();
 
@@ -174,12 +176,10 @@ namespace HoloCrew.ViewModels
                     return;
                 }
 
-                // ⭐ CORREGIDO: LoginAsync solo acepta 2 parámetros (email, password)
                 var user = await _authService.LoginAsync(Email, Password);
 
                 if (user != null)
                 {
-                    // ⭐ CORREGIDO: NavigateTo<TViewModel>() en lugar de NavigateTo(string)
                     _navigationService.NavigateTo<HomeViewModel>();
                 }
                 else
@@ -190,7 +190,6 @@ namespace HoloCrew.ViewModels
             catch (Exception ex)
             {
                 ErrorMessage = "An unexpected error occurred. Please try again.";
-                // Log error
                 System.Diagnostics.Debug.WriteLine($"Login error: {ex.Message}");
             }
             finally
@@ -201,17 +200,13 @@ namespace HoloCrew.ViewModels
 
         private void ExecuteForgotPassword()
         {
-            // ⭐ CORREGIDO: NavigateTo<TViewModel>()
-            // Asumiendo que existe ForgotPasswordViewModel, si no existe, comentar esta línea
+            // si existe ForgotPasswordViewModel, descomentar la línea de abajo
             // _navigationService.NavigateTo<ForgotPasswordViewModel>();
-
-            // O si solo quieres mostrar un mensaje:
             ErrorMessage = "Password recovery feature coming soon.";
         }
 
         private void ExecuteNavigateToRegister()
         {
-            // ⭐ CORREGIDO: NavigateTo<TViewModel>()
             _navigationService.NavigateTo<RegisterViewModel>();
         }
     }

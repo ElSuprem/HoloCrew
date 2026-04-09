@@ -1,14 +1,12 @@
-﻿<!-- ========================================
-     ESTILOS MEJORADOS PARA BOTONES
-     Hover effects + estados activos
-     ======================================== -->
-
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ========================================
-         ACCENT BUTTON CON HOVER ANIMADO
-         ======================================== -->
+    <!-- BUTTONSTYLES_ENHANCED.XAML
+         Versiones mejoradas de los botones con animaciones más suaves y efectos de sombra.
+         Complementa a ButtonStyles.xaml.
+    -->
+
+    <!-- botón de acento con sombra más grande al pasar el ratón y efecto de pulsación -->
     <Style x:Key="AccentButtonEnhanced" TargetType="Button" BasedOn="{StaticResource AccentButton}">
         <Setter Property="Template">
             <Setter.Value>
@@ -23,7 +21,6 @@
                                           Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <!-- Hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="Background">
                                 <Setter.Value>
@@ -39,7 +36,6 @@
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
-                        <!-- Pressed -->
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="border" Property="Background">
                                 <Setter.Value>
@@ -52,7 +48,6 @@
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
-                        <!-- Disabled -->
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="border" Property="Opacity" Value="0.5"/>
                         </Trigger>
@@ -62,9 +57,7 @@
         </Setter>
     </Style>
 
-    <!-- ========================================
-         OUTLINE BUTTON CON HOVER
-         ======================================== -->
+    <!-- botón outline: fondo gris claro al pasar el ratón -->
     <Style x:Key="OutlineButtonEnhanced" TargetType="Button" BasedOn="{StaticResource OutlineButton}">
         <Setter Property="Template">
             <Setter.Value>
@@ -92,10 +85,8 @@
         </Setter>
     </Style>
 
-    <!-- ========================================
-         ICON BUTTON (cuadrado, para iconos)
-         ======================================== -->
-    <Style x:Key="IconButton" TargetType="Button">
+    <!-- botón cuadrado de 40x40 para iconos, fondo gris al pasar el ratón -->
+    <Style x:Key="IconButtonEnhanced" TargetType="Button">
         <Setter Property="Width" Value="40"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="Background" Value="Transparent"/>

@@ -2,10 +2,10 @@
 
 namespace HoloCrew.Models
 {
-    /// <summary>
-    /// Modelo de item en el carrito
-    /// Compatible con ambas versiones (vieja y nueva)
-    /// </summary>
+    // Un producto dentro del carrito de compras.
+    // Guarda el nombre, precio, cantidad, talla, color, etc.
+    // Subtotal = precio * cantidad.
+    // Las propiedades con [ObservableProperty] se pueden usar en la interfaz y se actualizan solas.
     public partial class CartItem : ObservableObject
     {
         [ObservableProperty]
@@ -32,25 +32,21 @@ namespace HoloCrew.Models
         [ObservableProperty]
         private string _imageUrl;
 
-        // ⭐ Propiedades adicionales para compatibilidad con código antiguo
+        // compatibilidad con código antiguo
         [ObservableProperty]
         private Product _product;
 
         [ObservableProperty]
         private string _selectedVariant;
 
-        /// <summary>
-        /// UnitPrice - Alias de Price para compatibilidad
-        /// </summary>
+        // UnitPrice es lo mismo que Price, solo que con otro nombre para compatibilidad
         public decimal UnitPrice
         {
             get => Price;
             set => Price = value;
         }
 
-        /// <summary>
-        /// Subtotal del item (Price * Quantity)
-        /// </summary>
+        // total del item sin sumar otros (precio x cantidad)
         public decimal Subtotal => Price * Quantity;
     }
 }

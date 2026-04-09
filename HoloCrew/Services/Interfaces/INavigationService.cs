@@ -1,36 +1,16 @@
 ﻿using HoloCrew.ViewModels.Base;
 
+// Servicio para navegar entre pantallas sin usar code-behind (MVVM puro).
+// En lugar de navegar directamente a vistas, se navega a ViewModels.
+
 namespace HoloCrew.Services.Interfaces
 {
-    /// <summary>
-    /// Servicio de navegación entre vistas
-    /// Permite navegar sin code-behind siguiendo MVVM puro
-    /// </summary>
     public interface INavigationService
     {
-        /// <summary>
-        /// Navega a un ViewModel específico
-        /// </summary>
-        void NavigateTo<TViewModel>() where TViewModel : ViewModelBase;
-
-        /// <summary>
-        /// Navega a un ViewModel con parámetro
-        /// </summary>
-        void NavigateTo<TViewModel>(object parameter) where TViewModel : ViewModelBase;
-
-        /// <summary>
-        /// Navega hacia atrás en el historial
-        /// </summary>
-        void GoBack();
-
-        /// <summary>
-        /// Indica si se puede navegar hacia atrás
-        /// </summary>
-        bool CanGoBack { get; }
-
-        /// <summary>
-        /// Inicializa el servicio de navegación con el setter de la vista actual
-        /// </summary>
-        void Initialize(Action<object> setCurrentView);
+        void NavigateTo<TViewModel>() where TViewModel : ViewModelBase;        // ir a una pantalla
+        void NavigateTo<TViewModel>(object parameter) where TViewModel : ViewModelBase; // ir con un dato extra
+        void GoBack();                                                          // volver a la pantalla anterior
+        bool CanGoBack { get; }                                                 // si se puede volver atrás
+        void Initialize(Action<object> setCurrentView);                         // configurar el servicio (se llama al arrancar)
     }
 }

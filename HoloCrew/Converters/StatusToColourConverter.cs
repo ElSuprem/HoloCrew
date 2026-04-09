@@ -4,28 +4,29 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
+// Convierte cada estado de pedido (OrderStatus) en un color distinto.
+// Los estados vienen del modelo en HoloCrew.Models.
+
 namespace HoloCrew.Converters
 {
-    /// <summary>
-    /// Convierte OrderStatus a color
-    /// ⭐ CORREGIDO: Manejo seguro de ColorConverter.ConvertFromString
-    /// </summary>
     public class StatusToColourConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is OrderStatus status)
             {
+                // cada estado del pedido tiene un color distinto para mostrar en la interfaz
+                // los estados vienen del modelo OrderStatus (está en HoloCrew.Models)
                 return status switch
                 {
-                    OrderStatus.Pending => CreateBrush("#FFA500"),      // Naranja
-                    OrderStatus.Confirmed => CreateBrush("#1976D2"),    // Azul
-                    OrderStatus.Processing => CreateBrush("#1976D2"),   // Azul
-                    OrderStatus.Shipped => CreateBrush("#2196F3"),      // Azul claro
-                    OrderStatus.Delivered => CreateBrush("#4CAF50"),    // Verde
-                    OrderStatus.Cancelled => CreateBrush("#F44336"),    // Rojo
-                    OrderStatus.Refunded => CreateBrush("#FF9800"),     // Naranja oscuro
-                    _ => CreateBrush("#757575")                          // Gris
+                    OrderStatus.Pending => CreateBrush("#FFA500"),      // Naranja - esperando
+                    OrderStatus.Confirmed => CreateBrush("#1976D2"),    // Azul - confirmado
+                    OrderStatus.Processing => CreateBrush("#1976D2"),   // Azul - preparando
+                    OrderStatus.Shipped => CreateBrush("#2196F3"),      // Azul claro - enviado
+                    OrderStatus.Delivered => CreateBrush("#4CAF50"),    // Verde - entregado
+                    OrderStatus.Cancelled => CreateBrush("#F44336"),    // Rojo - cancelado
+                    OrderStatus.Refunded => CreateBrush("#FF9800"),     // Naranja oscuro - reembolsado
+                    _ => CreateBrush("#757575")                          // Gris - estado desconocido
                 };
             }
             return new SolidColorBrush(Colors.Gray);
@@ -36,9 +37,8 @@ namespace HoloCrew.Converters
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Crea un SolidColorBrush de forma segura desde un código hex
-        /// </summary>
+        // convierte un texto como "#FFA500" en un pincel de color (brush)
+        // si falla la conversión, devuelve gris por si acaso
         private static SolidColorBrush CreateBrush(string hexColor)
         {
             try
@@ -51,7 +51,7 @@ namespace HoloCrew.Converters
             }
             catch
             {
-                // Si falla la conversión, usar gris por defecto
+                // si el color no es válido, usa gris
             }
 
             return new SolidColorBrush(Colors.Gray);

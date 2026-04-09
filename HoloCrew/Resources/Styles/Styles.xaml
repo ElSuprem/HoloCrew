@@ -1,16 +1,12 @@
-<!-- ========================================
-     HOLOCREW - ESTILOS DE TEXTO Y BOTONES
-     Usa StaticResource solo de archivos previos
-     ======================================== -->
-
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ============================================
-         ESTILOS DE TEXTO
-         ============================================ -->
+    <!-- TEXTSTYLES.XAML
+     Estilos de texto para toda la app: títulos, subtítulos, cuerpo, precios, etc.
+     También incluye estilos de botones básicos (sin animaciones complejas).
+     Se usan con Style="{StaticResource HeroTitle}" en cualquier TextBlock. -->
 
-    <!-- TÍTULOS GRANDES -->
+    <!-- ========== TÍTULOS ========== -->
     <Style x:Key="HeroTitle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="72" />
@@ -48,7 +44,7 @@
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
-    <!-- SUBTÍTULOS -->
+    <!-- ========== SUBTÍTULOS ========== -->
     <Style x:Key="SubtitleLarge" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="18" />
@@ -63,7 +59,7 @@
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
-    <!-- TEXTO DE CUERPO -->
+    <!-- ========== TEXTO NORMAL ========== -->
     <Style x:Key="BodyLarge" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
@@ -92,7 +88,7 @@
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
     </Style>
 
-    <!-- ESTILOS ESPECIALES -->
+    <!-- ========== TEXTOS ESPECIALES ========== -->
     <Style x:Key="ProductTitle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="16" />
@@ -144,11 +140,7 @@
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
-    <!-- ============================================
-         ESTILOS DE BOTONES
-         ============================================ -->
-
-    <!-- BOTÓN PRIMARIO (NEGRO) -->
+    <!-- ========== BOTONES ========== -->
     <Style x:Key="PrimaryButton" TargetType="Button">
         <Setter Property="Background" Value="{DynamicResource BlackPrimaryBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource WhitePrimaryBrush}" />
@@ -159,12 +151,10 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
-    <!-- BOTÓN ROJO -->
     <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
         <Setter Property="Background" Value="{DynamicResource RedAccentBrush}" />
     </Style>
 
-    <!-- BOTÓN OUTLINE -->
     <Style x:Key="OutlineButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}" />
@@ -176,7 +166,6 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
-    <!-- BOTÓN DE TEXTO -->
     <Style x:Key="TextButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}" />
@@ -187,7 +176,6 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
-    <!-- BOTÓN DE ICONO -->
     <Style x:Key="IconButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
@@ -197,7 +185,6 @@
         <Setter Property="Height" Value="48" />
     </Style>
 
-    <!-- BOTÓN DE MENÚ -->
     <Style x:Key="MenuButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}" />
@@ -209,7 +196,7 @@
         <Setter Property="Height" Value="60" />
     </Style>
 
-    <!-- VARIANTES DE BOTONES -->
+    <!-- variantes de tamaño -->
     <Style x:Key="AddToCartButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Padding" Value="24,12" />

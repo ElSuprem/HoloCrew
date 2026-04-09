@@ -3,11 +3,12 @@ using HoloCrew.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
+// Servicio de notificaciones con datos en memoria (mock).
+// Permite listar, marcar como leídas, borrar, enviar notificaciones.
+// NotificationReceived avisa cuando llega una notificación nueva.
+
 namespace HoloCrew.Services
 {
-    /// <summary>
-    /// Implementación del servicio de notificaciones
-    /// </summary>
     public class NotificationService : INotificationService
     {
         private List<Notification> _notifications = new();
@@ -56,9 +57,8 @@ namespace HoloCrew.Services
 
         public void ShowToast(string title, string message, NotificationType type)
         {
-            // TODO: Implementar notificación toast en la UI
-            // Podría usar un sistema de ventanas emergentes o un área de notificaciones
-
+            // de momento solo escribe en la consola de depuración
+            // en producción habría que mostrar un mensaje flotante en la interfaz
             System.Diagnostics.Debug.WriteLine($"[TOAST] {type}: {title} - {message}");
         }
 
@@ -70,8 +70,6 @@ namespace HoloCrew.Services
             notification.IsRead = false;
 
             _notifications.Add(notification);
-
-            // Disparar evento
             OnNotificationReceived(notification);
 
             return Task.CompletedTask;

@@ -3,16 +3,17 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
+// Si el valor es nulo se esconde, si tiene algo se ve.
+// Sirve para mostrar detalles solo cuando hay datos seleccionados.
+
 namespace HoloCrew.Converters
 {
-    /// <summary>
-    /// Convierte null a Visibility
-    /// null = Collapsed, no null = Visible
-    /// </summary>
     public class NullToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            // si el valor es nulo se esconde, si tiene algo se ve
+            // sirve para mostrar cosas solo cuando hay datos (ejemplo: detalles de un producto seleccionado)
             return value == null ? Visibility.Collapsed : Visibility.Visible;
         }
 

@@ -5,16 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// Repositorio de productos con datos falsos en memoria (mock).
+// Las categorías son: 1=Tops, 2=Bottoms, 3=Footwear, 4=Accessories.
+// Los datos de ejemplo están en InitializeMockData().
+
 namespace HoloCrew.Repositories
 {
-    /// <summary>
-    /// Implementación del repositorio de productos
-    /// ⭐ CORREGIDO: Categorías unificadas con ProductService (Streetwear)
-    /// - CategoryId 1: Tops
-    /// - CategoryId 2: Bottoms
-    /// - CategoryId 3: Footwear
-    /// - CategoryId 4: Accessories
-    /// </summary>
     public class ProductRepository : IProductRepository
     {
         private static List<Product> _products;
@@ -22,7 +18,6 @@ namespace HoloCrew.Repositories
 
         public ProductRepository()
         {
-            // Inicializar datos mock solo una vez
             if (_products == null)
             {
                 InitializeMockData();
@@ -42,9 +37,7 @@ namespace HoloCrew.Repositories
 
         public Task<List<Product>> GetByCategoryAsync(int categoryId)
         {
-            var products = _products
-                .Where(p => p.CategoryId == categoryId)
-                .ToList();
+            var products = _products.Where(p => p.CategoryId == categoryId).ToList();
             return Task.FromResult(products);
         }
 
@@ -99,38 +92,28 @@ namespace HoloCrew.Repositories
 
         public Task<List<Product>> GetFeaturedAsync()
         {
-            var featured = _products
-                .Where(p => p.IsFeatured)
-                .ToList();
+            var featured = _products.Where(p => p.IsFeatured).ToList();
             return Task.FromResult(featured);
         }
 
         public Task<List<Product>> GetNewProductsAsync()
         {
-            var newProducts = _products
-                .Where(p => p.IsNew)
-                .OrderByDescending(p => p.CreatedAt)
-                .ToList();
+            var newProducts = _products.Where(p => p.IsNew).OrderByDescending(p => p.CreatedAt).ToList();
             return Task.FromResult(newProducts);
         }
 
-        /// <summary>
-        /// Inicializa datos mock con las mismas categorías que ProductService
-        /// ⭐ CORREGIDO: Categorías unificadas (Tops, Bottoms, Footwear, Accessories)
-        /// </summary>
+        // productos de ejemplo para probar sin base de datos real
         private void InitializeMockData()
         {
             _products = new List<Product>
             {
-                // ============================================
-                // TOPS (CategoryId = 1)
-                // ============================================
+                // ========== TOPS (CategoryId = 1) ==========
                 new Product
                 {
                     Id = _nextId++,
                     Name = "PREMIUM LOGO TEE",
-                    Description = "Essential cotton t-shirt with embroidered logo",
-                    LongDescription = "100% premium cotton t-shirt. Relaxed fit, ribbed crew neck. Available in multiple colors.",
+                    Description = "Camiseta básica de algodón con logo bordado",
+                    LongDescription = "Camiseta 100% algodón. Corte relajado, cuello redondo acanalado.",
                     Price = 34.99m,
                     OriginalPrice = 44.99m,
                     Stock = 150,
@@ -150,8 +133,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "OVERSIZED HOODIE",
-                    Description = "Premium heavyweight hoodie",
-                    LongDescription = "450GSM cotton blend hoodie with oversized fit. Kangaroo pocket, adjustable drawstring hood.",
+                    Description = "Sudadera con capucha oversized",
+                    LongDescription = "Mezcla de algodón 450GSM con corte oversize.",
                     Price = 79.99m,
                     Stock = 85,
                     MainImageUrl = "/Resources/Images/Products/hoodie1.jpg",
@@ -170,8 +153,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "CREWNECK SWEATSHIRT",
-                    Description = "Classic crew neck sweatshirt",
-                    LongDescription = "Soft fleece interior, ribbed cuffs and hem. Perfect layering piece.",
+                    Description = "Sudadera clásica con cuello redondo",
+                    LongDescription = "Interior de felpa suave, puños y dobladillo acanalados.",
                     Price = 64.99m,
                     OriginalPrice = 79.99m,
                     Stock = 95,
@@ -188,15 +171,13 @@ namespace HoloCrew.Repositories
                     UpdatedAt = DateTime.Now
                 },
 
-                // ============================================
-                // BOTTOMS (CategoryId = 2)
-                // ============================================
+                // ========== BOTTOMS (CategoryId = 2) ==========
                 new Product
                 {
                     Id = _nextId++,
                     Name = "TACTICAL CARGO PANTS",
-                    Description = "Military-inspired cargo pants",
-                    LongDescription = "Durable ripstop fabric, multiple utility pockets, adjustable waist. Perfect for urban exploration.",
+                    Description = "Pantalón cargo estilo militar",
+                    LongDescription = "Tela ripstop duradera, múltiples bolsillos.",
                     Price = 89.99m,
                     Stock = 65,
                     MainImageUrl = "/Resources/Images/Products/cargo1.jpg",
@@ -215,8 +196,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "SLIM FIT DENIM",
-                    Description = "Classic black slim fit jeans",
-                    LongDescription = "Stretch denim for comfort. Slim through hip and thigh, narrow leg opening.",
+                    Description = "Vaqueros negros ajustados clásicos",
+                    LongDescription = "Denim elástico para mayor comodidad.",
                     Price = 69.99m,
                     Stock = 100,
                     MainImageUrl = "/Resources/Images/Products/jeans1.jpg",
@@ -235,8 +216,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "TECH JOGGERS",
-                    Description = "Performance jogger pants",
-                    LongDescription = "Moisture-wicking fabric, zippered pockets, elastic cuffs. From gym to street.",
+                    Description = "Joggers de alto rendimiento",
+                    LongDescription = "Tejido que absorbe la humedad, bolsillos con cremallera.",
                     Price = 59.99m,
                     OriginalPrice = 74.99m,
                     Stock = 120,
@@ -253,15 +234,13 @@ namespace HoloCrew.Repositories
                     UpdatedAt = DateTime.Now
                 },
 
-                // ============================================
-                // FOOTWEAR (CategoryId = 3)
-                // ============================================
+                // ========== FOOTWEAR (CategoryId = 3) ==========
                 new Product
                 {
                     Id = _nextId++,
                     Name = "ARMBO LOW WHITE",
-                    Description = "Clean minimal leather sneakers",
-                    LongDescription = "Premium full-grain leather, cushioned insole, durable rubber outsole. Timeless design.",
+                    Description = "Zapatillas de cuero minimalistas",
+                    LongDescription = "Cuero de primera calidad, plantilla acolchada.",
                     Price = 129.99m,
                     Stock = 55,
                     MainImageUrl = "/Resources/Images/Products/sneaker1.jpg",
@@ -280,8 +259,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "HIGH-TOP CANVAS",
-                    Description = "Classic canvas high-tops",
-                    LongDescription = "Durable canvas upper, vulcanized rubber sole, metal eyelets. Street style essential.",
+                    Description = "Caña alta de lona clásicas",
+                    LongDescription = "Parte superior de lona duradera, suela de goma vulcanizada.",
                     Price = 79.99m,
                     OriginalPrice = 99.99m,
                     Stock = 80,
@@ -301,8 +280,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "CHUNKY RUNNER",
-                    Description = "Retro-inspired chunky sneakers",
-                    LongDescription = "Multi-layer foam sole, mesh and suede upper, maximum cushioning. Dad shoe vibes.",
+                    Description = "Zapatillas Chunky retro",
+                    LongDescription = "Suela de espuma multicapa, parte superior de malla y ante.",
                     Price = 149.99m,
                     Stock = 40,
                     MainImageUrl = "/Resources/Images/Products/chunky1.jpg",
@@ -318,15 +297,13 @@ namespace HoloCrew.Repositories
                     UpdatedAt = DateTime.Now
                 },
 
-                // ============================================
-                // ACCESSORIES (CategoryId = 4)
-                // ============================================
+                // ========== ACCESSORIES (CategoryId = 4) ==========
                 new Product
                 {
                     Id = _nextId++,
                     Name = "LOGO BASEBALL CAP",
-                    Description = "Classic 6-panel cap",
-                    LongDescription = "Adjustable strap, embroidered logo, curved brim. One size fits most.",
+                    Description = "Gorra clásica de 6 paneles",
+                    LongDescription = "Correa ajustable, logo bordado, visera curva.",
                     Price = 29.99m,
                     Stock = 200,
                     MainImageUrl = "/Resources/Images/Products/cap1.jpg",
@@ -345,8 +322,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "CROSSBODY BAG",
-                    Description = "Compact everyday bag",
-                    LongDescription = "Water-resistant nylon, adjustable strap, multiple compartments. Perfect for essentials.",
+                    Description = "Bolso bandolera compacto",
+                    LongDescription = "Nailon resistente al agua, correa ajustable.",
                     Price = 49.99m,
                     Stock = 90,
                     MainImageUrl = "/Resources/Images/Products/bag1.jpg",
@@ -365,8 +342,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "RIBBED BEANIE",
-                    Description = "Classic knit beanie",
-                    LongDescription = "Soft acrylic blend, ribbed texture, fold-over cuff. Warm and stylish.",
+                    Description = "Gorro de punto acanalado clásico",
+                    LongDescription = "Mezcla suave de acrílico, textura acanalada.",
                     Price = 24.99m,
                     Stock = 180,
                     MainImageUrl = "/Resources/Images/Products/beanie1.jpg",
@@ -385,8 +362,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "LEATHER CARDHOLDER",
-                    Description = "Minimalist wallet",
-                    LongDescription = "Genuine leather, 6 card slots, slim profile. Fits front pocket perfectly.",
+                    Description = "Tarjetero minimalista",
+                    LongDescription = "Cuero genuino, 6 ranuras para tarjetas.",
                     Price = 39.99m,
                     Stock = 100,
                     MainImageUrl = "/Resources/Images/Products/wallet1.jpg",
@@ -405,8 +382,8 @@ namespace HoloCrew.Repositories
                 {
                     Id = _nextId++,
                     Name = "CANVAS BELT",
-                    Description = "Military-style web belt",
-                    LongDescription = "Durable canvas webbing, metal D-ring buckle, adjustable length. Versatile accessory.",
+                    Description = "Cinturón de lona estilo militar",
+                    LongDescription = "Tejido de lona duradero, hebilla de metal.",
                     Price = 24.99m,
                     OriginalPrice = 34.99m,
                     Stock = 150,

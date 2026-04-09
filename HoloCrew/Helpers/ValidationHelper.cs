@@ -2,34 +2,32 @@
 using System.Text.RegularExpressions;
 using HoloCrew.Constants;
 
+// Valida emails, contraseñas (mínimo 8 caracteres), teléfonos españoles,
+// códigos postales españoles, nombres (2-100 caracteres) y campos vacíos.
+// Los patrones regex están en AppConstants.
+
 namespace HoloCrew.Helpers
 {
-    /// <summary>
-    /// Helper para validación de formularios
-    /// </summary>
     public static class ValidationHelper
     {
-        // Regex para validación de email
+        // los patrones regex (email, telefono, codigo postal) están definidos en AppConstants
+        // así se pueden cambiar desde un solo sitio si hace falta
         private static readonly Regex EmailRegex = new Regex(
             AppConstants.RegexPatterns.Email,
             RegexOptions.Compiled | RegexOptions.IgnoreCase
         );
 
-        // Regex para validación de teléfono español
         private static readonly Regex PhoneRegex = new Regex(
             AppConstants.RegexPatterns.Phone,
             RegexOptions.Compiled
         );
 
-        // Regex para código postal español
         private static readonly Regex PostalCodeRegex = new Regex(
             AppConstants.RegexPatterns.PostalCode,
             RegexOptions.Compiled
         );
 
-        /// <summary>
-        /// Valida si un email tiene formato correcto
-        /// </summary>
+        // comprueba si el email tiene un formato válido (ejemplo: nombre@dominio.com)
         public static bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -38,24 +36,18 @@ namespace HoloCrew.Helpers
             return EmailRegex.IsMatch(email);
         }
 
-        /// <summary>
-        /// Valida si una contraseña cumple los requisitos mínimos
-        /// ⭐ CORREGIDO: Usa AppConstants.MinPasswordLength por defecto
-        /// </summary>
+        // comprueba si la contraseña tiene la longitud mínima (por defecto usa la constante de AppConstants.MinPasswordLength que son 8 caracteres)
         public static bool IsValidPassword(string password, int minLength = 0)
         {
             if (string.IsNullOrWhiteSpace(password))
                 return false;
 
-            // Si no se especifica minLength, usar la constante
             int effectiveMinLength = minLength > 0 ? minLength : AppConstants.MinPasswordLength;
 
             return password.Length >= effectiveMinLength;
         }
 
-        /// <summary>
-        /// Valida si dos contraseñas coinciden
-        /// </summary>
+        // comprueba que la contraseña y su confirmación sean iguales (para formularios de registro)
         public static bool PasswordsMatch(string password, string confirmPassword)
         {
             if (string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
@@ -64,29 +56,22 @@ namespace HoloCrew.Helpers
             return password == confirmPassword;
         }
 
-        /// <summary>
-        /// Valida si un string no está vacío
-        /// </summary>
+        // comprueba que un texto no esté vacío (para campos obligatorios)
         public static bool IsNotEmpty(string value)
         {
             return !string.IsNullOrWhiteSpace(value);
         }
 
-        /// <summary>
-        /// Valida si un número de teléfono español es válido
-        /// </summary>
+        // comprueba si el teléfono tiene formato español válido (usa el patrón de AppConstants)
         public static bool IsValidPhone(string phone)
         {
             if (string.IsNullOrWhiteSpace(phone))
                 return false;
 
-            // Usar el regex de AppConstants para teléfonos españoles
             return PhoneRegex.IsMatch(phone);
         }
 
-        /// <summary>
-        /// Valida código postal español (5 dígitos, provincias válidas 01-52)
-        /// </summary>
+        // comprueba si el código postal español es válido (5 dígitos, provincias 01-52)
         public static bool IsValidSpanishPostalCode(string postalCode)
         {
             if (string.IsNullOrWhiteSpace(postalCode))
@@ -95,9 +80,7 @@ namespace HoloCrew.Helpers
             return PostalCodeRegex.IsMatch(postalCode);
         }
 
-        /// <summary>
-        /// Valida si un nombre cumple los requisitos de longitud
-        /// </summary>
+        // comprueba que el nombre tenga entre 2 y 100 caracteres (los límites están en AppConstants)
         public static bool IsValidName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

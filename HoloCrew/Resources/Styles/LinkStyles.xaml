@@ -1,14 +1,11 @@
-﻿<!-- ========================================
-     ESTILOS PARA LINKS Y HYPERLINKS
-     Con hover effects
-     ======================================== -->
-
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ========================================
-         HYPERLINK CON HOVER
-         ======================================== -->
+    <!-- Estilos para enlaces y hyperlinks.
+     Se usan con Style="{StaticResource ModernHyperlink}" en un Hyperlink.
+     Al pasar el ratón se subrayan y cambian de color. -->
+
+    <!-- enlace normal con color de acento -->
     <Style x:Key="ModernHyperlink" TargetType="Hyperlink">
         <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
         <Setter Property="TextDecorations" Value="None"/>
@@ -21,9 +18,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ========================================
-         TEXTBLOCK COMO LINK (con Command)
-         ======================================== -->
+    <!-- textblock que funciona como enlace (usa Command en lugar de NavigateUri) -->
     <Style x:Key="LinkTextBlock" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -36,9 +31,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ========================================
-         SECONDARY LINK (gris, menos prominente)
-         ======================================== -->
+    <!-- enlace secundario (gris, menos llamativo) -->
     <Style x:Key="SecondaryLink" TargetType="Hyperlink">
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
         <Setter Property="TextDecorations" Value="None"/>

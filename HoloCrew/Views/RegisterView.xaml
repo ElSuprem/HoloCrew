@@ -8,20 +8,20 @@
              d:DesignHeight="900" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
 
+    <!-- Vista de registro de usuario.
+         Formulario a la izquierda con nombre, email, contraseña, términos.
+         Panel derecho con beneficios del club de miembros.
+         Se conecta con RegisterViewModel. -->
+
     <Border Padding="40,30,40,60">
         <Grid>
             <Grid.ColumnDefinitions>
-                <!-- Left: Form card -->
                 <ColumnDefinition Width="*" MaxWidth="550"/>
-                <!-- Gap -->
                 <ColumnDefinition Width="30"/>
-                <!-- Right: Benefits panel -->
                 <ColumnDefinition Width="*" MaxWidth="500"/>
             </Grid.ColumnDefinitions>
 
-            <!-- ============================================ -->
-            <!-- LEFT: REGISTRATION FORM in white card        -->
-            <!-- ============================================ -->
+            <!-- formulario de registro -->
             <Border Grid.Column="0"
                     Background="{DynamicResource WhitePrimaryBrush}"
                     BorderBrush="{DynamicResource Gray200Brush}"
@@ -29,7 +29,6 @@
                     Padding="50,40">
                 <StackPanel>
 
-                    <!-- Logo -->
                     <TextBlock Text="HOLOCREW" 
                                FontSize="20" 
                                FontWeight="Black" 
@@ -37,7 +36,6 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,30"/>
 
-                    <!-- Title -->
                     <TextBlock Text="JOIN THE CLUB" 
                                FontSize="26"
                                FontWeight="Black"
@@ -49,7 +47,6 @@
                         <Run Text="200 FREE CREDITS" FontWeight="Bold" Foreground="#3B82F6"/>
                     </TextBlock>
 
-                    <!-- Error Message -->
                     <Border Background="#FEF2F2"
                             BorderBrush="#FECACA"
                             BorderThickness="1"
@@ -62,7 +59,7 @@
                                    FontSize="13"/>
                     </Border>
 
-                    <!-- Full Name -->
+                    <!-- nombre completo -->
                     <TextBlock Text="Full Name" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8"/>
                     <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Height="48" Margin="0,0,0,18">
                         <Grid>
@@ -92,7 +89,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- Email -->
+                    <!-- email -->
                     <TextBlock Text="Email Address" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8"/>
                     <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" Height="48" Margin="0,0,0,18">
                         <Grid>
@@ -122,7 +119,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- Password + Confirm side by side -->
+                    <!-- contraseña y confirmación -->
                     <Grid Margin="0,0,0,18">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -167,7 +164,6 @@
 
                     <TextBlock Text="Minimum 6 characters" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,0,20"/>
 
-                    <!-- Terms -->
                     <CheckBox IsChecked="{Binding AcceptTerms}" Margin="0,0,0,25" Cursor="Hand">
                         <TextBlock TextWrapping="Wrap" FontSize="13">
                             <Run Text="I agree to the "/>
@@ -177,7 +173,6 @@
                         </TextBlock>
                     </CheckBox>
 
-                    <!-- Create Account Button -->
                     <Button Command="{Binding RegisterCommand}"
                             Height="52"
                             Cursor="Hand"
@@ -206,7 +201,6 @@
                         <TextBlock Text="CREATE ACCOUNT  →" FontSize="14" FontWeight="Bold" Foreground="White"/>
                     </Button>
 
-                    <!-- Login link -->
                     <TextBlock HorizontalAlignment="Center" FontSize="14">
                         <Run Text="Already have an account? " Foreground="{DynamicResource Gray500Brush}"/>
                         <Hyperlink Command="{Binding NavigateToLoginCommand}"
@@ -220,9 +214,7 @@
                 </StackPanel>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- RIGHT: MEMBER BENEFITS panel (always dark)    -->
-            <!-- ============================================ -->
+            <!-- panel de beneficios (siempre oscuro) -->
             <Border Grid.Column="2"
                     Background="#0A0A0A"
                     Padding="40,40">
@@ -239,7 +231,6 @@
                                Margin="0,0,0,35"
                                TextWrapping="Wrap"/>
 
-                    <!-- Benefit items -->
                     <StackPanel Margin="0,0,0,12">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="20" Height="20" Margin="0,0,12,0">
@@ -290,7 +281,6 @@
                         <TextBlock Text="Available immediately after registration" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="32,4,0,0"/>
                     </StackPanel>
 
-                    <!-- Credits badge (blue like web) -->
                     <Border Background="#3B82F6" Padding="30,25" Margin="0,0,0,25">
                         <StackPanel HorizontalAlignment="Center">
                             <TextBlock Text="200" FontSize="42" FontWeight="Black" Foreground="White" HorizontalAlignment="Center"/>
@@ -299,7 +289,6 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Stats row -->
                     <UniformGrid Columns="3">
                         <Border BorderBrush="{DynamicResource Gray700Brush}" BorderThickness="1" Padding="15,12" Margin="0,0,5,0">
                             <StackPanel HorizontalAlignment="Center">

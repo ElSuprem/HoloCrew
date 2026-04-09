@@ -1,12 +1,11 @@
-﻿<!-- ========================================
-     HOLOCREW - ESTILOS MEGA MENU
-     Estilos para el menú desplegable y links
-     ======================================== -->
-
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- ========== LINK DEL MEGA MENU ========== -->
+    <!-- MENUSTYLES.XAML
+     Estilos para el menú principal, footer, badges, etc.
+     Se usan en el header de navegación y en el mega menu desplegable. -->
+
+    <!-- enlace dentro del mega menu (gris, se pone negro al pasar el ratón) -->
     <Style x:Key="MegaMenuLink" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource Gray600Brush}"/>
         <Setter Property="FontSize" Value="13"/>
@@ -19,7 +18,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ========== LINK DEL FOOTER ========== -->
+    <!-- enlace del footer (gris oscuro, se pone blanco al pasar el ratón) -->
     <Style x:Key="FooterLink" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource Gray400Brush}"/>
         <Setter Property="FontSize" Value="13"/>
@@ -32,7 +31,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ========== CATEGORIA HEADER EN MEGA MENU ========== -->
+    <!-- cabecera de categoría en el mega menu (negrita, se pone roja al pasar el ratón) -->
     <Style x:Key="MegaMenuCategory" TargetType="TextBlock">
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="13"/>
@@ -46,7 +45,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ========== HOVER LINK CON UNDERLINE ========== -->
+    <!-- enlace que se subraya al pasar el ratón -->
     <Style x:Key="HoverUnderlineLink" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource Gray600Brush}"/>
         <Setter Property="FontSize" Value="13"/>
@@ -60,7 +59,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ========== BADGE DE NOTIFICACIÓN ========== -->
+    <!-- badge rojo para notificaciones (punto o número en el header) -->
     <Style x:Key="NotificationBadge" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource RedAccentBrush}"/>
         <Setter Property="CornerRadius" Value="7"/>
@@ -71,7 +70,7 @@
         <Setter Property="Margin" Value="0,5,5,0"/>
     </Style>
 
-    <!-- ========== ICONO DE HEADER ========== -->
+    <!-- botón cuadrado para iconos del header (carrito, usuario, etc.) -->
     <Style x:Key="HeaderIconButton" TargetType="Border">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Width" Value="40"/>
@@ -84,7 +83,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ========== BOTÓN DE MENÚ TOP NAV ========== -->
+    <!-- enlace de la barra de navegación superior -->
     <Style x:Key="TopNavLink" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource WhitePrimaryBrush}"/>
         <Setter Property="FontSize" Value="13"/>

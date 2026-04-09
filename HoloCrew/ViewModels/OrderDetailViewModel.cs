@@ -10,6 +10,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
+// ViewModel de la página de detalle de un pedido.
+// Muestra la información completa del pedido: productos, dirección, pago, tracking, etc.
+// Se conecta con OrderService y NavigationService.
+
 namespace HoloCrew.ViewModels
 {
     public partial class OrderDetailViewModel : ViewModelBase
@@ -151,6 +155,7 @@ namespace HoloCrew.ViewModels
             CanBeCancelled = Order.Status == OrderStatus.Pending || Order.Status == OrderStatus.Confirmed;
         }
 
+        // datos de ejemplo para probar sin base de datos real
         private void LoadMockData()
         {
             OrderNumber = "ORD-2024-001234";
@@ -158,24 +163,8 @@ namespace HoloCrew.ViewModels
 
             OrderItems = new ObservableCollection<OrderItemDisplay>
             {
-                new OrderItemDisplay
-                {
-                    ProductName = "Premium Hoodie - Black",
-                    Size = "M",
-                    Color = "Black",
-                    Quantity = 1,
-                    UnitPrice = 89.99m,
-                    TotalPrice = 89.99m
-                },
-                new OrderItemDisplay
-                {
-                    ProductName = "Classic T-Shirt - White",
-                    Size = "L",
-                    Color = "White",
-                    Quantity = 2,
-                    UnitPrice = 34.99m,
-                    TotalPrice = 69.98m
-                }
+                new OrderItemDisplay { ProductName = "Premium Hoodie - Black", Size = "M", Color = "Black", Quantity = 1, UnitPrice = 89.99m, TotalPrice = 89.99m },
+                new OrderItemDisplay { ProductName = "Classic T-Shirt - White", Size = "L", Color = "White", Quantity = 2, UnitPrice = 34.99m, TotalPrice = 69.98m }
             };
 
             Subtotal = OrderItems.Sum(i => i.TotalPrice);
@@ -294,6 +283,7 @@ namespace HoloCrew.ViewModels
         }
     }
 
+    // producto dentro del pedido (para mostrar en la interfaz)
     public class OrderItemDisplay
     {
         public string ProductName { get; set; }
@@ -304,6 +294,7 @@ namespace HoloCrew.ViewModels
         public decimal TotalPrice { get; set; }
     }
 
+    // evento de seguimiento del pedido
     public class TrackingEvent
     {
         public string EventTitle { get; set; }

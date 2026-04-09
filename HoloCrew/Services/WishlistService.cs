@@ -6,11 +6,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
+// Servicio de wishlist (lista de deseos) del usuario.
+// Permite añadir, quitar, mover productos al carrito, etc.
+// WishlistUpdated avisa a la interfaz cuando hay cambios.
+
 namespace HoloCrew.Services
 {
-    /// <summary>
-    /// Servicio de wishlist funcional
-    /// </summary>
     public class WishlistService : IWishlistService
     {
         private readonly ICartService _cartService;
@@ -29,9 +30,7 @@ namespace HoloCrew.Services
             _wishlistItems = new ObservableCollection<Product>();
         }
 
-        /// <summary>
-        /// Añade un producto usando la referencia directa (mantiene el objeto de la UI)
-        /// </summary>
+        // añade un producto directamente (usando el objeto de la interfaz)
         public async Task AddToWishlistAsync(Product product)
         {
             if (product == null) return;
@@ -44,9 +43,7 @@ namespace HoloCrew.Services
             await Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Añade un producto por ID (carga nueva instancia)
-        /// </summary>
+        // añade un producto por id (lo carga desde el servicio de productos)
         public async Task AddToWishlistAsync(int productId)
         {
             if (_wishlistItems.Any(p => p.Id == productId))
@@ -98,6 +95,7 @@ namespace HoloCrew.Services
             return await Task.FromResult(_wishlistItems.Count);
         }
 
+        // mueve todos los productos de la wishlist al carrito
         public async Task MoveAllToCartAsync(int userId)
         {
             foreach (var product in _wishlistItems.ToList())

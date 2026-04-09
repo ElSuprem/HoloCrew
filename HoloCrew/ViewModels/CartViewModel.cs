@@ -10,6 +10,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
+// ViewModel de la página del carrito de compras.
+// Muestra los productos añadidos, permite cambiar cantidades, quitar productos,
+// aplicar cupones de descuento y proceder al checkout.
+// Se conecta con CartService y NavigationService.
+// Los límites de envío gratis e IVA están en AppConstants.
+
 namespace HoloCrew.ViewModels
 {
     public partial class CartViewModel : ViewModelBase
@@ -172,7 +178,6 @@ namespace HoloCrew.ViewModels
 
             try
             {
-                // Cupones válidos de ejemplo
                 var validCoupons = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase)
                 {
                     { "WELCOME10", 10 },

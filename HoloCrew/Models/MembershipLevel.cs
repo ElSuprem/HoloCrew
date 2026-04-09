@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// Niveles de membresía (Bronce, Plata, Oro, Platino).
+// Cada nivel tiene beneficios: descuento, envío gratis, acceso anticipado, etc.
+// Los usuarios ganan puntos por compras y suben de nivel.
+
 namespace HoloCrew.Models
 {
-    /// <summary>
-    /// Niveles de membresía del HoloCrew Members Club
-    /// </summary>
     public enum MembershipLevel
     {
         None = 0,
@@ -15,57 +16,50 @@ namespace HoloCrew.Models
         Platinum = 4
     }
 
-    /// <summary>
-    /// Información de un nivel de membresía
-    /// </summary>
+    // Beneficios de cada nivel
     public class MembershipTier
     {
         public MembershipLevel Level { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
         public string Color { get; set; }
-        public int PointsRequired { get; set; }
-        public int DiscountPercentage { get; set; }
+        public int PointsRequired { get; set; }        // puntos necesarios para llegar a este nivel
+        public int DiscountPercentage { get; set; }    // % de descuento que da
         public bool FreeShipping { get; set; }
-        public bool EarlyAccess { get; set; }
+        public bool EarlyAccess { get; set; }          // acceso anticipado a lanzamientos
         public bool BirthdayGift { get; set; }
-        public bool ExclusiveProducts { get; set; }
-        public int PointsMultiplier { get; set; } // 1x, 2x, 3x, 4x
+        public bool ExclusiveProducts { get; set; }    // productos solo para este nivel
+        public int PointsMultiplier { get; set; }      // 1x, 2x, 3x puntos por cada euro gastado
         public List<string> Benefits { get; set; } = new();
     }
 
-    /// <summary>
-    /// Información de membresía del usuario
-    /// </summary>
+    // Datos de membresía de un usuario concreto
     public class UserMembership
     {
         public int UserId { get; set; }
         public MembershipLevel CurrentLevel { get; set; }
-        public int TotalPoints { get; set; }
-        public int CurrentLevelPoints { get; set; }
-        public int PointsToNextLevel { get; set; }
+        public int TotalPoints { get; set; }           // todos los puntos acumulados
+        public int CurrentLevelPoints { get; set; }    // puntos que tiene dentro del nivel actual
+        public int PointsToNextLevel { get; set; }     // puntos que le faltan para subir
         public decimal TotalSpent { get; set; }
         public int TotalOrders { get; set; }
         public DateTime MemberSince { get; set; }
         public DateTime? NextLevelDate { get; set; }
 
-        // Propiedades calculadas
-        public double ProgressPercentage { get; set; }
-        public MembershipLevel NextLevel { get; set; }
+        public double ProgressPercentage { get; set; } // porcentaje de progreso hacia el siguiente nivel
+        public MembershipLevel NextLevel { get; set; }  // cuál es el siguiente nivel
     }
 
-    /// <summary>
-    /// Recompensa o beneficio obtenido
-    /// </summary>
+    // Recompensa canjeable con puntos (descuento, producto gratis, etc.)
     public class MembershipReward
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Icon { get; set; }
-        public int PointsCost { get; set; }
-        public MembershipLevel MinimumLevel { get; set; }
-        public bool IsRedeemed { get; set; }
+        public int PointsCost { get; set; }             // cuántos puntos cuesta
+        public MembershipLevel MinimumLevel { get; set; } // nivel mínimo para poder canjearla
+        public bool IsRedeemed { get; set; }            // si el usuario ya la ha canjeado
         public DateTime? RedeemedDate { get; set; }
     }
 }

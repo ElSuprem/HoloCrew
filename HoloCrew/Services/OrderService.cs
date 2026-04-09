@@ -2,11 +2,11 @@
 using HoloCrew.Repositories.Interfaces;
 using HoloCrew.Services.Interfaces;
 
+// Servicio de pedidos. Usa IOrderRepository para guardar y consultar pedidos.
+// Se encarga de crear pedidos, cancelarlos, actualizar estados, y obtener información de tracking.
+
 namespace HoloCrew.Services
 {
-    /// <summary>
-    /// Implementación del servicio de pedidos
-    /// </summary>
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
@@ -23,12 +23,11 @@ namespace HoloCrew.Services
                 return null;
             }
 
-            // Establecer valores iniciales
             order.OrderDate = DateTime.Now;
             order.Status = OrderStatus.Pending;
-            order.EstimatedDeliveryDate = DateTime.Now.AddDays(5); // 5 días de estimación
+            order.EstimatedDeliveryDate = DateTime.Now.AddDays(5); // se estiman 5 días de envío
 
-            // Crear historial inicial
+            // historial inicial del pedido
             order.StatusHistory = new List<OrderStatusHistory>
             {
                 new OrderStatusHistory
@@ -39,9 +38,7 @@ namespace HoloCrew.Services
                 }
             };
 
-            // Guardar en repositorio
             var createdOrder = await _orderRepository.CreateAsync(order);
-
             return createdOrder;
         }
 
@@ -66,13 +63,12 @@ namespace HoloCrew.Services
                     return false;
                 }
 
-                // Solo se puede cancelar si está en Pending o Confirmed
+                // solo se puede cancelar si está pendiente o confirmado (no si ya está enviado o entregado)
                 if (order.Status != OrderStatus.Pending && order.Status != OrderStatus.Confirmed)
                 {
                     return false;
                 }
 
-                // Actualizar estado
                 order.Status = OrderStatus.Cancelled;
                 order.StatusHistory.Add(new OrderStatusHistory
                 {
@@ -97,8 +93,8 @@ namespace HoloCrew.Services
                 return null;
             }
 
-            // TODO: Consultar API de transporte (DHL, FedEx, etc.)
-            // Por ahora, retornar datos mock
+            // en producción se consultaría la API de la empresa de paquetería (DHL, Correos, etc.)
+            // de momento, datos falsos de ejemplo
             return await Task.FromResult(new TrackingInfo
             {
                 TrackingNumber = trackingNumber,

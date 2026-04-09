@@ -1,10 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+
+// Notificación que recibe el usuario (pedidos, promociones, alertas, etc.)
+// TimeAgo muestra cuánto tiempo ha pasado: "5m ago", "2h ago", "3d ago", etc.
 
 namespace HoloCrew.Models
 {
-    /// <summary>
-    /// Modelo de notificación
-    /// </summary>
     public partial class Notification : ObservableObject
     {
         [ObservableProperty]
@@ -29,11 +30,9 @@ namespace HoloCrew.Models
         private bool _isRead;
 
         [ObservableProperty]
-        private string _icon; // Emoji o icono
+        private string _icon; // emoji o icono
 
-        /// <summary>
-        /// Tiempo transcurrido desde la notificación
-        /// </summary>
+        // calcula el texto del tiempo transcurrido
         public string TimeAgo
         {
             get

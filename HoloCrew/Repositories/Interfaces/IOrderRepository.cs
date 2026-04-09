@@ -1,55 +1,20 @@
 ﻿using HoloCrew.Models;
 
+// Repositorio para manejar pedidos (guardar, buscar, actualizar, etc.)
+// Se conecta con el modelo Order y OrderStatus.
+
 namespace HoloCrew.Repositories.Interfaces
 {
-    /// <summary>
-    /// Repositorio para acceso a datos de pedidos
-    /// </summary>
     public interface IOrderRepository
     {
-        /// <summary>
-        /// Crea un nuevo pedido
-        /// </summary>
-        Task<Order> CreateAsync(Order order);
-
-        /// <summary>
-        /// Obtiene todos los pedidos de un usuario
-        /// </summary>
-        Task<List<Order>> GetByUserIdAsync(int userId);
-
-        /// <summary>
-        /// Obtiene un pedido por su ID
-        /// </summary>
-        Task<Order> GetByIdAsync(int id);
-
-        /// <summary>
-        /// Obtiene un pedido por su número de orden
-        /// </summary>
-        Task<Order> GetByOrderNumberAsync(string orderNumber);
-
-        /// <summary>
-        /// Actualiza un pedido existente
-        /// </summary>
-        Task<Order> UpdateAsync(Order order);
-
-        /// <summary>
-        /// Obtiene todos los pedidos (admin)
-        /// </summary>
-        Task<List<Order>> GetAllAsync();
-
-        /// <summary>
-        /// Obtiene pedidos por estado
-        /// </summary>
-        Task<List<Order>> GetByStatusAsync(OrderStatus status);
-
-        /// <summary>
-        /// Obtiene pedidos en un rango de fechas
-        /// </summary>
-        Task<List<Order>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
-
-        /// <summary>
-        /// Elimina un pedido (soft delete)
-        /// </summary>
-        Task<bool> DeleteAsync(int id);
+        Task<Order> CreateAsync(Order order);                           // crear nuevo pedido
+        Task<List<Order>> GetByUserIdAsync(int userId);                 // pedidos de un usuario
+        Task<Order> GetByIdAsync(int id);                               // buscar por id
+        Task<Order> GetByOrderNumberAsync(string orderNumber);         // buscar por número de pedido
+        Task<Order> UpdateAsync(Order order);                           // actualizar un pedido
+        Task<List<Order>> GetAllAsync();                                // todos los pedidos (para admin)
+        Task<List<Order>> GetByStatusAsync(OrderStatus status);         // pedidos por estado (pendiente, enviado, etc.)
+        Task<List<Order>> GetByDateRangeAsync(DateTime startDate, DateTime endDate); // pedidos entre dos fechas
+        Task<bool> DeleteAsync(int id);                                 // borrar pedido (borrado suave, no se elimina del todo)
     }
 }

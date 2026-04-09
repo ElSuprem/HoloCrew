@@ -1,43 +1,18 @@
-﻿namespace HoloCrew.Models
+﻿using System;
+
+// Los distintos tipos de notificación que puede mostrar la app.
+// Cada tipo puede tener un color o icono distinto.
+
+namespace HoloCrew.Models
 {
-    /// <summary>
-    /// Tipos de notificaciones en la aplicación
-    /// </summary>
     public enum NotificationType
     {
-        /// <summary>
-        /// Notificación general o informativa
-        /// </summary>
-        Info,
-
-        /// <summary>
-        /// Notificación relacionada con pedidos
-        /// </summary>
-        Order,
-
-        /// <summary>
-        /// Notificación de promoción o oferta
-        /// </summary>
-        Promotion,
-
-        /// <summary>
-        /// Alerta de precio o stock
-        /// </summary>
-        Alert,
-
-        /// <summary>
-        /// Notificación de éxito
-        /// </summary>
-        Success,
-
-        /// <summary>
-        /// Advertencia
-        /// </summary>
-        Warning,
-
-        /// <summary>
-        /// Error o problema
-        /// </summary>
-        Error
+        Info,       // información general
+        Order,      // relacionada con pedidos
+        Promotion,  // ofertas y descuentos
+        Alert,      // alerta de precio o stock bajo
+        Success,    // algo salió bien
+        Warning,    // advertencia
+        Error       // error o problema
     }
 }
