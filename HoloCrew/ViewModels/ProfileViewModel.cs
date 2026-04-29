@@ -4,14 +4,16 @@ using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 // ViewModel de la página de perfil del usuario.
-// Muestra y edita los datos personales, direcciones guardadas, métodos de pago,
-// preferencias de notificaciones, cambio de contraseña, etc.
-// Se conecta con AuthenticationService y NavigationService.
+// Carga datos reales desde Supabase, permite editarlos, gestiona avatar
+// y muestra los pedidos recientes del usuario.
 
 namespace HoloCrew.ViewModels
 {
@@ -19,98 +21,209 @@ namespace HoloCrew.ViewModels
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly INavigationService _navigationService;
+        private readonly IOrderService _orderService;
+        private readonly IAvatarService _avatarService;
 
         [ObservableProperty]
         private User _user;
 
         [ObservableProperty]
+        private string _userInitials = string.Empty;
+
+        [ObservableProperty]
+        private string _userFullName = string.Empty;
+
+        [ObservableProperty]
+        private string _userEmail = string.Empty;
+
+        [ObservableProperty]
+        private string _avatarUrl = string.Empty;
+
+        [ObservableProperty]
+        private bool _hasAvatar;
+
+        [ObservableProperty]
+        private string _firstName = string.Empty;
+
+        [ObservableProperty]
+        private string _lastName = string.Empty;
+
+        [ObservableProperty]
+        private string _email = string.Empty;
+
+        [ObservableProperty]
+        private string _phone = string.Empty;
+
+        [ObservableProperty]
+        private ObservableCollection<Order> _recentOrders = new();
+
+        [ObservableProperty]
+        private string _currentPassword = string.Empty;
+
+        [ObservableProperty]
+        private string _newPassword = string.Empty;
+
+        [ObservableProperty]
+        private string _confirmNewPassword = string.Empty;
+
+        [ObservableProperty]
+        private string _successMessage = string.Empty;
+
+        [ObservableProperty]
         private bool _isEditing;
-
-        [ObservableProperty]
-        private ObservableCollection<Address> _savedAddresses = new();
-
-        [ObservableProperty]
-        private ObservableCollection<PaymentMethod> _savedPaymentMethods = new();
-
-        [ObservableProperty]
-        private string _currentPassword;
-
-        [ObservableProperty]
-        private string _newPassword;
-
-        [ObservableProperty]
-        private string _confirmNewPassword;
-
-        [ObservableProperty]
-        private NotificationSettings _notificationPreferences;
-
-        [ObservableProperty]
-        private string _successMessage;
 
         public ProfileViewModel(
             IAuthenticationService authenticationService,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IOrderService orderService,
+            IAvatarService avatarService)
         {
             _authenticationService = authenticationService;
             _navigationService = navigationService;
+            _orderService = orderService;
+            _avatarService = avatarService;
 
             Title = AppConstants.Profile.Title;
         }
 
-        public override void OnNavigatedTo(object parameter)
+
+        public override async void OnNavigatedTo(object parameter)
         {
             base.OnNavigatedTo(parameter);
-            LoadUserProfile();
+            await LoadProfileAsync();
+            await LoadRecentOrdersAsync();
         }
 
-        private void LoadUserProfile()
-        {
-            User = _authenticationService.GetCurrentUser();
 
-            if (User != null)
+        private async Task LoadProfileAsync()
+        {
+            await ExecuteAsync(async () =>
             {
-                SavedAddresses = new ObservableCollection<Address>(User.Addresses ?? new List<Address>());
-                SavedPaymentMethods = new ObservableCollection<PaymentMethod>(User.PaymentMethods ?? new List<PaymentMethod>());
-                NotificationPreferences = User.NotificationPreferences ?? new NotificationSettings();
+                User = _authenticationService.GetCurrentUser();
+
+                if (User == null)
+                {
+                    SetEmpty();
+                    return;
+                }
+
+                var (first, last) = SplitFullName(User.FullName);
+
+                FirstName = first;
+                LastName = last;
+                Email = User.Email ?? string.Empty;
+                Phone = User.PhoneNumber ?? string.Empty;
+
+                UserFullName = User.FullName ?? "User";
+                UserEmail = User.Email ?? string.Empty;
+                UserInitials = GetInitials(first, last);
+
+                AvatarUrl = User.ProfileImageUrl ?? string.Empty;
+                HasAvatar = !string.IsNullOrEmpty(AvatarUrl);
+
                 SetSuccess();
-            }
-            else
+                await Task.CompletedTask;
+            });
+        }
+
+
+        private async Task LoadRecentOrdersAsync()
+        {
+            try
             {
-                SetEmpty();
+                if (User == null || string.IsNullOrEmpty(User.Id))
+                    return;
+
+                var orders = await _orderService.GetUserOrdersAsync(User.Id);
+                var recent = orders.Take(5).ToList();
+                RecentOrders = new ObservableCollection<Order>(recent);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Profile] LoadRecentOrders error: {ex.Message}");
             }
         }
 
+
+        // Abre un diálogo de selección de archivo, copia la imagen al almacén local
+        // y actualiza la URL del avatar en BD.
         [RelayCommand]
-        private void EditProfile()
+        private async Task ChangeAvatarAsync()
         {
-            IsEditing = true;
-            ErrorMessage = string.Empty;
-            SuccessMessage = string.Empty;
+            try
+            {
+                var dialog = new OpenFileDialog
+                {
+                    Title = "Select your avatar",
+                    Filter = "Image files (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp",
+                    Multiselect = false
+                };
+
+                var result = dialog.ShowDialog();
+                if (result != true || string.IsNullOrEmpty(dialog.FileName))
+                    return;
+
+                // Subir la imagen (copia local mockup)
+                var newAvatarUrl = await _avatarService.UploadAvatarAsync(dialog.FileName);
+
+                if (string.IsNullOrEmpty(newAvatarUrl))
+                {
+                    ErrorMessage = "Could not save the image. Try another file.";
+                    return;
+                }
+
+                // Persistir la URL en BD
+                var ok = await _authenticationService.UpdateAvatarUrlAsync(newAvatarUrl);
+
+                if (ok)
+                {
+                    AvatarUrl = newAvatarUrl;
+                    HasAvatar = true;
+                    SuccessMessage = "Avatar updated successfully";
+                    SetSuccess();
+                }
+                else
+                {
+                    ErrorMessage = "Could not update avatar in database";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Error changing avatar";
+                System.Diagnostics.Debug.WriteLine($"[Profile] ChangeAvatar error: {ex.Message}");
+            }
         }
 
+
         [RelayCommand]
-        private async Task SaveProfileAsync()
+        private async Task SaveChangesAsync()
         {
-            if (User == null) return;
+            if (string.IsNullOrWhiteSpace(FirstName))
+            {
+                ErrorMessage = "El nombre no puede estar vacío.";
+                return;
+            }
 
             await ExecuteAsync(async () =>
             {
-                await Task.Delay(500);  // simula llamada a la API
+                var ok = await _authenticationService.UpdateProfileAsync(FirstName, LastName, Phone);
 
-                SuccessMessage = AppConstants.Success.ProfileUpdated;
-                IsEditing = false;
-                SetSuccess();
+                if (ok)
+                {
+                    SuccessMessage = AppConstants.Success.ProfileUpdated;
+
+                    UserFullName = $"{FirstName} {LastName}".Trim();
+                    UserInitials = GetInitials(FirstName, LastName);
+
+                    SetSuccess();
+                }
+                else
+                {
+                    ErrorMessage = "No se pudieron guardar los cambios.";
+                }
             }, isRefresh: true);
         }
 
-        [RelayCommand]
-        private void CancelEdit()
-        {
-            IsEditing = false;
-            LoadUserProfile();
-            ErrorMessage = string.Empty;
-            SuccessMessage = string.Empty;
-        }
 
         [RelayCommand]
         private async Task ChangePasswordAsync()
@@ -137,84 +250,40 @@ namespace HoloCrew.ViewModels
 
             await ExecuteAsync(async () =>
             {
-                await Task.Delay(500);  // simula llamada a la API
+                var ok = await _authenticationService.ChangePasswordAsync(CurrentPassword, NewPassword);
 
-                SuccessMessage = AppConstants.Success.PasswordChanged;
-                CurrentPassword = string.Empty;
-                NewPassword = string.Empty;
-                ConfirmNewPassword = string.Empty;
-                SetSuccess();
+                if (ok)
+                {
+                    SuccessMessage = AppConstants.Success.PasswordChanged;
+                    CurrentPassword = string.Empty;
+                    NewPassword = string.Empty;
+                    ConfirmNewPassword = string.Empty;
+                    SetSuccess();
+                }
+                else
+                {
+                    ErrorMessage = "No se pudo cambiar la contraseña.";
+                }
             }, isRefresh: true);
         }
 
-        [RelayCommand]
-        private void AddAddress()
-        {
-            var newAddress = new Address { Label = "New Address" };
-            SavedAddresses.Add(newAddress);
-        }
 
         [RelayCommand]
-        private void RemoveAddress(Address address)
+        private async Task LogoutAsync()
         {
-            if (address != null)
-            {
-                SavedAddresses.Remove(address);
-            }
+            await _authenticationService.LogoutAsync();
+            _navigationService.NavigateTo<HomeViewModel>();
         }
+
 
         [RelayCommand]
-        private void AddPaymentMethod()
-        {
-            var newPayment = new PaymentMethod { Type = PaymentType.CreditCard };
-            SavedPaymentMethods.Add(newPayment);
-        }
+        private void NavigateToPersonalInfo() { }
 
         [RelayCommand]
-        private void RemovePaymentMethod(PaymentMethod paymentMethod)
-        {
-            if (paymentMethod != null)
-            {
-                SavedPaymentMethods.Remove(paymentMethod);
-            }
-        }
+        private void NavigateToAddresses() { }
 
         [RelayCommand]
-        private async Task UpdateNotificationPreferencesAsync()
-        {
-            await ExecuteAsync(async () =>
-            {
-                await Task.Delay(500);  // simula llamada a la API
-
-                SuccessMessage = AppConstants.Success.PreferencesSaved;
-                SetSuccess();
-            }, isRefresh: true);
-        }
-
-        [RelayCommand]
-        private void ViewOrderHistory()
-        {
-            _navigationService.NavigateTo<OrderHistoryViewModel>();
-        }
-
-        // navegación lateral
-        [RelayCommand]
-        private void NavigateToPersonalInfo()
-        {
-            // ya está en la sección de información personal
-        }
-
-        [RelayCommand]
-        private void NavigateToAddresses()
-        {
-            // pendiente: cambiar a la sección de direcciones guardadas
-        }
-
-        [RelayCommand]
-        private void NavigateToPaymentMethods()
-        {
-            // pendiente: cambiar a la sección de métodos de pago
-        }
+        private void NavigateToPaymentMethods() { }
 
         [RelayCommand]
         private void NavigateToOrderHistory()
@@ -229,16 +298,35 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private async Task LogoutAsync()
+        private void ViewOrderDetail(Order order)
         {
-            await _authenticationService.LogoutAsync();
-            _navigationService.NavigateTo<HomeViewModel>();
+            if (order == null) return;
+            _navigationService.NavigateTo<OrderDetailViewModel>(order.Id);
         }
 
-        [RelayCommand]
-        private async Task SaveChangesAsync()
+
+        // ==================== HELPERS ====================
+
+        private (string first, string last) SplitFullName(string? fullName)
         {
-            await SaveProfileAsync();
+            if (string.IsNullOrWhiteSpace(fullName))
+                return (string.Empty, string.Empty);
+
+            var trimmed = fullName.Trim();
+            var firstSpace = trimmed.IndexOf(' ');
+
+            if (firstSpace < 0)
+                return (trimmed, string.Empty);
+
+            return (trimmed.Substring(0, firstSpace), trimmed.Substring(firstSpace + 1));
+        }
+
+        private string GetInitials(string first, string last)
+        {
+            string firstChar = !string.IsNullOrEmpty(first) ? first[0].ToString().ToUpper() : "";
+            string lastChar = !string.IsNullOrEmpty(last) ? last[0].ToString().ToUpper() : "";
+            var initials = (firstChar + lastChar).Trim();
+            return string.IsNullOrEmpty(initials) ? "?" : initials;
         }
     }
 }

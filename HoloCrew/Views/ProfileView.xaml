@@ -31,19 +31,38 @@
                                 Padding="25"
                                 Margin="0,0,0,40">
                             <StackPanel HorizontalAlignment="Center">
-                                <!-- Avatar Circle -->
-                                <Border Width="90" 
-                                        Height="90"
-                                        CornerRadius="45"
-                                        Background="{DynamicResource RedAccentBrush}"
-                                        Margin="0,0,0,20">
-                                    <TextBlock Text="{Binding UserInitials}" 
-                                               FontSize="32"
-                                               FontWeight="Black"
-                                               Foreground="{DynamicResource WhitePrimaryBrush}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
-                                </Border>
+                                <!-- Avatar (imagen si existe, iniciales si no) -->
+                                <Grid Width="90" Height="90" Margin="0,0,0,15">
+                                    <!-- Círculo con iniciales (visible si NO hay avatar) -->
+                                    <Border CornerRadius="45"
+            Background="{DynamicResource RedAccentBrush}"
+            Visibility="{Binding HasAvatar, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                        <TextBlock Text="{Binding UserInitials}" 
+                   FontSize="32"
+                   FontWeight="Black"
+                   Foreground="{DynamicResource WhitePrimaryBrush}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+                                    </Border>
+
+                                    <!-- Imagen del avatar (visible si HAY avatar). Recorte circular. -->
+                                    <Border CornerRadius="45"
+            Visibility="{Binding HasAvatar, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{Binding AvatarUrl}" Stretch="UniformToFill"/>
+                                        </Border.Background>
+                                    </Border>
+                                </Grid>
+
+                                <!-- Botón Change Avatar -->
+                                <Button Content="Change Avatar"
+        Style="{StaticResource TextButton}"
+        Foreground="{DynamicResource Gray400Brush}"
+        FontSize="12"
+        HorizontalAlignment="Center"
+        Cursor="Hand"
+        Margin="0,0,0,15"
+        Command="{Binding ChangeAvatarCommand}"/>
 
                                 <!-- User Name -->
                                 <TextBlock Text="{Binding UserFullName}" 
@@ -301,7 +320,7 @@
                                                     Margin="0,0,40,0">
                                             <TextBlock Style="{StaticResource BodySmall}"
                                                        Foreground="{DynamicResource TextSecondary}">
-                                                <Run Text="{Binding ItemCount}"/>
+                                                <Run Text="{Binding ItemCount, Mode=OneWay}"/>
                                                 <Run Text=" items"/>
                                             </TextBlock>
                                         </StackPanel>

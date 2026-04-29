@@ -4,6 +4,7 @@ using HoloCrew.Constants;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using Supabase.Gotrue.Mfa;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,9 +13,7 @@ using System.Threading.Tasks;
 
 // ViewModel de la página del carrito de compras.
 // Muestra los productos añadidos, permite cambiar cantidades, quitar productos,
-// aplicar cupones de descuento y proceder al checkout.
-// Se conecta con CartService y NavigationService.
-// Los límites de envío gratis e IVA están en AppConstants.
+// aplicar cupones reales (RPC validate_coupon) y proceder al checkout.
 
 namespace HoloCrew.ViewModels
 {
@@ -42,10 +41,10 @@ namespace HoloCrew.ViewModels
         private decimal _total;
 
         [ObservableProperty]
-        private string _couponCode;
+        private string _couponCode = string.Empty;
 
         [ObservableProperty]
-        private string _couponMessage;
+        private string _couponMessage = string.Empty;
 
         [ObservableProperty]
         private bool? _isCouponValid;
@@ -166,6 +165,7 @@ namespace HoloCrew.ViewModels
             }
         }
 
+
         [RelayCommand]
         private async Task ApplyCouponAsync()
         {
@@ -178,35 +178,36 @@ namespace HoloCrew.ViewModels
 
             try
             {
-                var validCoupons = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "WELCOME10", 10 },
-                    { "SAVE20", 20 },
-                    { "HOLOCREW15", 15 }
-                };
+                var result = await _cartService.ApplyCouponAsync(CouponCode);
 
-                if (validCoupons.TryGetValue(CouponCode.Trim(), out decimal discountPercent))
+                IsCouponValid = result.IsValid;
+                CouponMessage = result.Message;
+
+                if (result.IsValid)
                 {
-                    Discount = Subtotal * (discountPercent / 100);
-                    CouponMessage = $"✓ Coupon applied! {discountPercent}% off";
-                    IsCouponValid = true;
-                    CalculateTotals();
+                    Discount = result.DiscountAmount;
+
+                    // Si la RPC nos sobrescribe el envío (ej: cupón de envío gratis), aplicarlo
+                    if (result.NewShippingCost.HasValue)
+                    {
+                        ShippingCost = result.NewShippingCost.Value;
+                    }
                 }
                 else
                 {
                     Discount = 0;
-                    CouponMessage = "✗ Invalid coupon code";
-                    IsCouponValid = false;
-                    CalculateTotals();
                 }
+
+                CalculateTotals();
             }
             catch (Exception ex)
             {
                 CouponMessage = "Error applying coupon";
                 IsCouponValid = false;
-                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[Cart] ApplyCoupon error: {ex.Message}");
             }
         }
+
 
         [RelayCommand]
         private void CheckoutCommand()
@@ -230,7 +231,14 @@ namespace HoloCrew.ViewModels
         private void CalculateTotals()
         {
             Subtotal = CartItems.Sum(item => item.Subtotal);
-            ShippingCost = Subtotal > AppConstants.FreeShippingThreshold ? 0 : AppConstants.DefaultShippingCost;
+
+            // Si el cupón ha sobrescrito el envío, mantenerlo. Si no, calcular normal.
+            if (Discount == 0 || ShippingCost == 0 && Subtotal > AppConstants.FreeShippingThreshold)
+            {
+                ShippingCost = Subtotal > AppConstants.FreeShippingThreshold ? 0 : AppConstants.DefaultShippingCost;
+            }
+            // (si hay descuento aplicado, ShippingCost ya viene del cupón)
+
             Tax = Subtotal * AppConstants.TaxRate;
             Total = Subtotal + ShippingCost + Tax - Discount;
         }

@@ -5,14 +5,13 @@ using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
 using System;
 using System.Collections.ObjectModel;
-using System.DirectoryServices;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 // ViewModel principal de la ventana principal (MainWindow).
 // Gestiona la navegación, barra de búsqueda con live search, carrito, wishlist, usuario, notificaciones.
-// Se conecta con NavigationService, CartService, AuthenticationService, WishlistService, NotificationService, ProductService.
+// Se suscribe al evento AuthStateChanged para actualizar el estado de login en tiempo real.
 
 namespace HoloCrew.ViewModels
 {
@@ -51,7 +50,6 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private bool _isSearchVisible;
 
-        // resultados de búsqueda en vivo
         [ObservableProperty]
         private ObservableCollection<Product> _searchResults = new();
 
@@ -84,12 +82,14 @@ namespace HoloCrew.ViewModels
             _cartService.CartUpdated += OnCartUpdated;
             _wishlistService.WishlistUpdated += OnWishlistUpdated;
             _notificationService.NotificationReceived += OnNotificationReceived;
+            _authenticationService.AuthStateChanged += OnAuthStateChanged;
 
             UpdateAuthenticationState();
             CartItemCount = _cartService.GetCartItemCount();
             UpdateWishlistCount();
             UpdateNotificationCount();
         }
+
 
         // ========== COMANDOS DE NAVEGACIÓN ==========
 
@@ -125,7 +125,6 @@ namespace HoloCrew.ViewModels
             IsSearchVisible = false;
         }
 
-        // muestra/oculta la barra de búsqueda
         [RelayCommand]
         private void ToggleSearch()
         {
@@ -148,7 +147,6 @@ namespace HoloCrew.ViewModels
             SearchResultCount = 0;
         }
 
-        // búsqueda en vivo al escribir
         partial void OnSearchQueryChanged(string value)
         {
             _ = PerformLiveSearchAsync(value);
@@ -173,7 +171,7 @@ namespace HoloCrew.ViewModels
 
             try
             {
-                await Task.Delay(300, token);  // espera 300ms para no buscar en cada letra
+                await Task.Delay(300, token);
                 if (token.IsCancellationRequested) return;
 
                 var results = await _productService.SearchProductsAsync(query);
@@ -277,15 +275,17 @@ namespace HoloCrew.ViewModels
             CloseSearch();
         }
 
+
         // ========== AUTENTICACIÓN ==========
 
         [RelayCommand]
         private async Task LogoutAsync()
         {
             await _authenticationService.LogoutAsync();
-            UpdateAuthenticationState();
+            // OnAuthStateChanged se encargará de actualizar el estado
             _navigationService.NavigateTo<HomeViewModel>();
         }
+
 
         // ========== EVENTOS ==========
 
@@ -303,6 +303,16 @@ namespace HoloCrew.ViewModels
         {
             UpdateNotificationCount();
         }
+
+        // Se dispara desde AuthenticationService tras login, registro o logout.
+        // Refresca el estado de la UI: nombre de usuario, contador de wishlist, carrito.
+        private void OnAuthStateChanged(object? sender, EventArgs e)
+        {
+            UpdateAuthenticationState();
+            UpdateWishlistCount();
+            CartItemCount = _cartService.GetCartItemCount();
+        }
+
 
         // ========== MÉTODOS AUXILIARES ==========
 
@@ -323,7 +333,15 @@ namespace HoloCrew.ViewModels
 
         private async void UpdateWishlistCount()
         {
-            WishlistItemCount = await _wishlistService.GetWishlistCountAsync(1);
+            var user = _authenticationService.GetCurrentUser();
+            if (user != null && !string.IsNullOrEmpty(user.Id))
+            {
+                WishlistItemCount = await _wishlistService.GetWishlistCountAsync(user.Id);
+            }
+            else
+            {
+                WishlistItemCount = 0;
+            }
         }
 
         private void UpdateNotificationCount()

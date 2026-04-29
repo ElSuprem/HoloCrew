@@ -3,23 +3,28 @@ using CommunityToolkit.Mvvm.Input;
 using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 // ViewModel de la página de notificaciones.
-// Muestra la lista de notificaciones, permite filtrar por tipo (todas, no leídas, pedidos, promociones),
-// marcar como leídas, eliminar, y cambiar la configuración de notificaciones.
-// Se conecta con NotificationService y NavigationService.
+// Carga las notificaciones reales del usuario logueado desde Supabase.
+// Permite filtrar (todas, no leídas, pedidos, promociones), marcar como leídas,
+// borrar, y configurar las preferencias de notificaciones.
 
 namespace HoloCrew.ViewModels
 {
     public partial class NotificationsViewModel : ViewModelBase
     {
         private readonly INotificationService _notificationService;
+        private readonly IAuthenticationService _authService;
         private readonly INavigationService _navigationService;
-        private ObservableCollection<Notification> _allNotifications;
+        private List<Notification> _allNotifications = new();
 
         [ObservableProperty]
-        private ObservableCollection<Notification> _notifications;
+        private ObservableCollection<Notification> _notifications = new();
 
         [ObservableProperty]
         private bool _hasUnreadNotifications;
@@ -53,173 +58,171 @@ namespace HoloCrew.ViewModels
 
         public NotificationsViewModel(
             INotificationService notificationService,
+            IAuthenticationService authService,
             INavigationService navigationService)
         {
             _notificationService = notificationService;
+            _authService = authService;
             _navigationService = navigationService;
 
             Title = "Notifications";
-
-            LoadMockNotifications();
-            UpdateCounts();
         }
 
-        // datos de ejemplo para probar sin base de datos real
-        private void LoadMockNotifications()
+
+        public override async void OnNavigatedTo(object parameter)
         {
-            _allNotifications = new ObservableCollection<Notification>
-            {
-                new Notification { Id = 1, Title = "Order Shipped", Message = "Your order #12345 has been shipped and is on its way!", Type = "Order", Icon = "📦", CreatedAt = DateTime.Now.AddMinutes(-30), IsRead = false },
-                new Notification { Id = 2, Title = "Flash Sale Alert", Message = "50% OFF on all hoodies! Limited time offer.", Type = "Promotion", Icon = "🔥", CreatedAt = DateTime.Now.AddHours(-2), IsRead = false },
-                new Notification { Id = 3, Title = "Order Delivered", Message = "Your order #12340 has been delivered successfully.", Type = "Order", Icon = "✅", CreatedAt = DateTime.Now.AddHours(-5), IsRead = true },
-                new Notification { Id = 4, Title = "Price Drop Alert", Message = "CARGO PANTS now €59.99 (was €79.99)", Type = "Alert", Icon = "💰", CreatedAt = DateTime.Now.AddDays(-1), IsRead = false },
-                new Notification { Id = 5, Title = "New Arrivals", Message = "Check out our new winter collection!", Type = "Promotion", Icon = "✨", CreatedAt = DateTime.Now.AddDays(-2), IsRead = true },
-                new Notification { Id = 6, Title = "Welcome to HoloCrew", Message = "Thanks for joining! Here's 10% off your first order: WELCOME10", Type = "Info", Icon = "👋", CreatedAt = DateTime.Now.AddDays(-7), IsRead = true },
-                new Notification { Id = 7, Title = "Order Confirmed", Message = "We've received your order #12345. Preparing for shipment.", Type = "Order", Icon = "🛒", CreatedAt = DateTime.Now.AddDays(-8), IsRead = true }
-            };
-
-            Notifications = new ObservableCollection<Notification>(_allNotifications);
+            base.OnNavigatedTo(parameter);
+            await LoadNotificationsAsync();
         }
+
+
+        // Carga las notificaciones del usuario actual desde Supabase
+        private async Task LoadNotificationsAsync()
+        {
+            try
+            {
+                IsLoading = true;
+
+                var user = _authService.GetCurrentUser();
+                if (user == null || string.IsNullOrEmpty(user.Id))
+                {
+                    _allNotifications = new List<Notification>();
+                    Notifications = new ObservableCollection<Notification>();
+                    UpdateCounts();
+                    return;
+                }
+
+                var items = await _notificationService.GetNotificationsAsync(user.Id);
+                _allNotifications = items;
+
+                ApplyFilter();
+                UpdateCounts();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Notifications] Load error: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
 
         [RelayCommand]
         private void ShowAll()
         {
             CurrentFilter = "All";
-            Notifications = new ObservableCollection<Notification>(_allNotifications);
-            UpdateCounts();
+            ApplyFilter();
         }
+
 
         [RelayCommand]
         private void ShowUnread()
         {
             CurrentFilter = "Unread";
-            Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => !n.IsRead));
-            UpdateCounts();
+            ApplyFilter();
         }
+
 
         [RelayCommand]
         private void ShowOrders()
         {
             CurrentFilter = "Orders";
-            Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => n.Type == "Order"));
-            UpdateCounts();
+            ApplyFilter();
         }
+
 
         [RelayCommand]
         private void ShowPromotions()
         {
             CurrentFilter = "Promotions";
-            Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => n.Type == "Promotion"));
+            ApplyFilter();
+        }
+
+
+        [RelayCommand]
+        private async Task MarkAllAsReadAsync()
+        {
+            var user = _authService.GetCurrentUser();
+            if (user == null || string.IsNullOrEmpty(user.Id)) return;
+
+            await _notificationService.MarkAllAsReadAsync(user.Id);
+
+            // Actualizar caché local para que la UI se refresque al instante
+            foreach (var n in _allNotifications)
+                n.IsRead = true;
+
+            ApplyFilter();
             UpdateCounts();
         }
 
-        [RelayCommand]
-        private void MarkAllAsRead()
-        {
-            var updatedNotifications = new ObservableCollection<Notification>();
-
-            foreach (var notification in _allNotifications)
-            {
-                updatedNotifications.Add(new Notification
-                {
-                    Id = notification.Id,
-                    Title = notification.Title,
-                    Message = notification.Message,
-                    Type = notification.Type,
-                    Icon = notification.Icon,
-                    CreatedAt = notification.CreatedAt,
-                    IsRead = true
-                });
-            }
-
-            _allNotifications = updatedNotifications;
-
-            switch (CurrentFilter)
-            {
-                case "Unread":
-                    Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => !n.IsRead));
-                    break;
-                case "Orders":
-                    Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => n.Type == "Order"));
-                    break;
-                case "Promotions":
-                    Notifications = new ObservableCollection<Notification>(_allNotifications.Where(n => n.Type == "Promotion"));
-                    break;
-                default:
-                    Notifications = new ObservableCollection<Notification>(_allNotifications);
-                    break;
-            }
-
-            UpdateCounts();
-        }
 
         [RelayCommand]
-        private void ClearAll()
+        private async Task ClearAllAsync()
         {
+            // Borramos todas en BD una a una
+            foreach (var n in _allNotifications.ToList())
+            {
+                await _notificationService.DeleteNotificationAsync(n.Id);
+            }
+
             _allNotifications.Clear();
             Notifications.Clear();
             UpdateCounts();
         }
 
+
         [RelayCommand]
-        private void MarkAsRead(Notification notification)
+        private async Task MarkAsReadAsync(Notification notification)
         {
-            if (notification == null) return;
+            if (notification == null || notification.IsRead) return;
 
-            var index = _allNotifications.ToList().FindIndex(n => n.Id == notification.Id);
-            if (index >= 0)
-            {
-                var updatedNotification = new Notification
-                {
-                    Id = notification.Id,
-                    Title = notification.Title,
-                    Message = notification.Message,
-                    Type = notification.Type,
-                    Icon = notification.Icon,
-                    CreatedAt = notification.CreatedAt,
-                    IsRead = true
-                };
+            await _notificationService.MarkAsReadAsync(notification.Id);
 
-                _allNotifications[index] = updatedNotification;
+            // Actualizar caché local
+            var item = _allNotifications.FirstOrDefault(n => n.Id == notification.Id);
+            if (item != null)
+                item.IsRead = true;
 
-                var viewIndex = Notifications.ToList().FindIndex(n => n.Id == notification.Id);
-                if (viewIndex >= 0)
-                {
-                    Notifications[viewIndex] = updatedNotification;
-                }
-            }
+            // Refrescar también la lista visible
+            var viewItem = Notifications.FirstOrDefault(n => n.Id == notification.Id);
+            if (viewItem != null)
+                viewItem.IsRead = true;
 
             UpdateCounts();
         }
 
+
         [RelayCommand]
-        private void DeleteNotification(Notification notification)
+        private async Task DeleteNotificationAsync(Notification notification)
         {
             if (notification == null) return;
 
-            var toRemoveFromAll = _allNotifications.FirstOrDefault(n => n.Id == notification.Id);
-            if (toRemoveFromAll != null)
-            {
-                _allNotifications.Remove(toRemoveFromAll);
-            }
+            await _notificationService.DeleteNotificationAsync(notification.Id);
 
-            var toRemoveFromView = Notifications.FirstOrDefault(n => n.Id == notification.Id);
-            if (toRemoveFromView != null)
-            {
-                Notifications.Remove(toRemoveFromView);
-            }
+            _allNotifications.RemoveAll(n => n.Id == notification.Id);
+            var viewItem = Notifications.FirstOrDefault(n => n.Id == notification.Id);
+            if (viewItem != null)
+                Notifications.Remove(viewItem);
 
             UpdateCounts();
         }
 
+
         [RelayCommand]
-        private void OpenNotification(Notification notification)
+        private async Task OpenNotificationAsync(Notification notification)
         {
             if (notification == null) return;
 
-            MarkAsRead(notification);
+            // Al abrir, la marcamos como leída automáticamente
+            await MarkAsReadAsync(notification);
+
+            // Aquí en el futuro se podría navegar al pedido/producto referenciado
+            // según notification.Type (action_type/action_reference en BD).
             System.Diagnostics.Debug.WriteLine($"Opened notification: {notification.Title}");
         }
+
 
         [RelayCommand]
         private async Task SaveNotificationSettingsAsync()
@@ -227,9 +230,11 @@ namespace HoloCrew.ViewModels
             try
             {
                 IsLoading = true;
-                await Task.Delay(500);  // simula guardado
+                await Task.Delay(300);
 
-                System.Diagnostics.Debug.WriteLine("Notification settings saved!");
+                // Aquí se guardarían las preferencias en BD (en notification_preferences si existe).
+                // De momento solo loguea.
+                System.Diagnostics.Debug.WriteLine("Notification settings saved");
                 System.Diagnostics.Debug.WriteLine($"Email: {EmailNotifications}, Push: {PushNotifications}");
                 System.Diagnostics.Debug.WriteLine($"Orders: {OrderUpdates}, Price: {PriceAlerts}, Promos: {Promotions}");
             }
@@ -238,6 +243,28 @@ namespace HoloCrew.ViewModels
                 IsLoading = false;
             }
         }
+
+
+        // ==================== HELPERS ====================
+
+        // Aplica el filtro actual a la lista de notificaciones
+        private void ApplyFilter()
+        {
+            IEnumerable<Notification> filtered = CurrentFilter switch
+            {
+                "Unread" => _allNotifications.Where(n => !n.IsRead),
+                "Orders" => _allNotifications.Where(n =>
+                    n.Type != null && n.Type.Contains("order", StringComparison.OrdinalIgnoreCase)),
+                "Promotions" => _allNotifications.Where(n =>
+                    n.Type != null &&
+                    (n.Type.Contains("promotion", StringComparison.OrdinalIgnoreCase) ||
+                     n.Type.Contains("sale", StringComparison.OrdinalIgnoreCase))),
+                _ => _allNotifications
+            };
+
+            Notifications = new ObservableCollection<Notification>(filtered);
+        }
+
 
         private void UpdateCounts()
         {

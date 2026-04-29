@@ -68,7 +68,9 @@ namespace HoloCrew.ViewModels
         {
             await ExecuteAsync(async () =>
             {
-                var items = await _wishlistService.GetWishlistAsync(1);
+                var currentUser = _authenticationService.GetCurrentUser();
+                var userId = currentUser?.Id ?? string.Empty;
+                var items = await _wishlistService.GetWishlistAsync(userId);
 
                 WishlistItems = new ObservableCollection<Product>(items);
                 ItemCount = WishlistItems.Count;

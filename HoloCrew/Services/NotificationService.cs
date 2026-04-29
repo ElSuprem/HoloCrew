@@ -1,95 +1,129 @@
 ﻿using HoloCrew.Models;
+using HoloCrew.Repositories.Interfaces;
 using HoloCrew.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-// Servicio de notificaciones con datos en memoria (mock).
-// Permite listar, marcar como leídas, borrar, enviar notificaciones.
-// NotificationReceived avisa cuando llega una notificación nueva.
+// Servicio de notificaciones conectado a Supabase a través del repositorio.
+// Mantiene una caché en memoria para que GetUnreadCount() sea instantáneo (lo llama la UI mucho).
+// La caché se actualiza al hacer login y tras cada operación.
 
 namespace HoloCrew.Services
 {
     public class NotificationService : INotificationService
     {
-        private List<Notification> _notifications = new();
-        private int _nextNotificationId = 1;
+        private readonly INotificationRepository _repository;
+        private readonly IAuthenticationService _authService;
+        private List<Notification> _cache = new();
 
-        public event EventHandler<Notification> NotificationReceived;
+        public event EventHandler<Notification>? NotificationReceived;
 
-        public Task<List<Notification>> GetNotificationsAsync(int userId)
+        public NotificationService(
+            INotificationRepository repository,
+            IAuthenticationService authService)
         {
-            var userNotifications = _notifications
-                .Where(n => n.UserId == userId)
-                .OrderByDescending(n => n.CreatedAt)
-                .ToList();
+            _repository = repository;
+            _authService = authService;
 
-            return Task.FromResult(userNotifications);
+            // Recargamos la caché cuando cambia el estado de auth
+            _authService.AuthStateChanged += async (s, e) => await LoadNotificationsAsync();
         }
 
-        public Task MarkAsReadAsync(int notificationId)
-        {
-            var notification = _notifications.FirstOrDefault(n => n.Id == notificationId);
 
-            if (notification != null)
+        public async Task<List<Notification>> GetNotificationsAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return new List<Notification>();
+
+            var notifications = await _repository.GetByUserIdAsync(userId);
+            _cache = notifications;
+            return notifications;
+        }
+
+
+        public async Task MarkAsReadAsync(int notificationId)
+        {
+            var ok = await _repository.MarkAsReadAsync(notificationId);
+            if (ok)
             {
-                notification.IsRead = true;
+                var item = _cache.FirstOrDefault(n => n.Id == notificationId);
+                if (item != null)
+                    item.IsRead = true;
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task DeleteNotificationAsync(int notificationId)
+
+        public async Task DeleteNotificationAsync(int notificationId)
         {
-            var notification = _notifications.FirstOrDefault(n => n.Id == notificationId);
-
-            if (notification != null)
+            var ok = await _repository.DeleteAsync(notificationId);
+            if (ok)
             {
-                _notifications.Remove(notification);
+                var item = _cache.FirstOrDefault(n => n.Id == notificationId);
+                if (item != null)
+                    _cache.Remove(item);
             }
-
-            return Task.CompletedTask;
         }
+
 
         public int GetUnreadCount()
         {
-            return _notifications.Count(n => !n.IsRead);
+            return _cache.Count(n => !n.IsRead);
         }
+
 
         public void ShowToast(string title, string message, NotificationType type)
         {
-            // de momento solo escribe en la consola de depuración
-            // en producción habría que mostrar un mensaje flotante en la interfaz
+            // Aquí se podría mostrar un toast en pantalla.
+            // De momento solo escribe en la consola de depuración.
             System.Diagnostics.Debug.WriteLine($"[TOAST] {type}: {title} - {message}");
         }
 
-        public Task SendNotificationAsync(int userId, Notification notification)
+
+        public async Task SendNotificationAsync(string userId, Notification notification)
         {
-            notification.Id = _nextNotificationId++;
-            notification.UserId = userId;
-            notification.CreatedAt = DateTime.Now;
-            notification.IsRead = false;
+            if (string.IsNullOrEmpty(userId) || notification == null) return;
 
-            _notifications.Add(notification);
-            OnNotificationReceived(notification);
+            var ok = await _repository.CreateAsync(
+                userId,
+                notification.Type ?? "info",
+                notification.Title ?? string.Empty,
+                notification.Message ?? string.Empty);
 
-            return Task.CompletedTask;
+            if (ok)
+            {
+                // Recargamos la caché para que aparezca la nueva
+                await LoadNotificationsAsync();
+                NotificationReceived?.Invoke(this, notification);
+            }
         }
 
-        public Task MarkAllAsReadAsync(int userId)
-        {
-            var userNotifications = _notifications.Where(n => n.UserId == userId);
 
-            foreach (var notification in userNotifications)
+        public async Task MarkAllAsReadAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return;
+
+            var ok = await _repository.MarkAllAsReadAsync(userId);
+            if (ok)
             {
-                notification.IsRead = true;
+                foreach (var n in _cache)
+                    n.IsRead = true;
+            }
+        }
+
+
+        // Recarga la caché desde BD usando el usuario actualmente logueado.
+        public async Task LoadNotificationsAsync()
+        {
+            var user = _authService.GetCurrentUser();
+            if (user == null || string.IsNullOrEmpty(user.Id))
+            {
+                _cache.Clear();
+                return;
             }
 
-            return Task.CompletedTask;
-        }
-
-        private void OnNotificationReceived(Notification notification)
-        {
-            NotificationReceived?.Invoke(this, notification);
+            _cache = await _repository.GetByUserIdAsync(user.Id);
         }
     }
 }

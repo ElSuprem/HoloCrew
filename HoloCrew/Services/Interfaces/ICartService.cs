@@ -1,4 +1,7 @@
 ﻿using HoloCrew.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // Servicio para manejar el carrito de compras: añadir, quitar, actualizar cantidades, aplicar cupón.
 // Cuando el carrito cambia, lanza el evento CartUpdated para que la interfaz se refresque sola.
@@ -7,16 +10,27 @@ namespace HoloCrew.Services.Interfaces
 {
     public interface ICartService
     {
-        event EventHandler CartUpdated;  // se avisa cuando algo cambia en el carrito
+        event EventHandler CartUpdated;
+        Task AddToCartAsync(Product product, int quantity, string variant = null);
+        Task UpdateQuantityAsync(int cartItemId, int newQuantity);
+        Task RemoveFromCartAsync(int cartItemId);
+        Task ClearCartAsync();
+        Task<List<CartItem>> GetCartItemsAsync();
+        Task<decimal> GetCartTotalAsync();
+        int GetCartItemCount();
+        Task<CouponResult> ApplyCouponAsync(string couponCode);
+        decimal GetCurrentDiscount();
+        string GetAppliedCouponCode();  // para pasar al checkout al pagar
+        Task LoadCartAsync();
+    }
 
-        Task AddToCartAsync(Product product, int quantity, string variant = null);  // añadir producto
-        Task UpdateQuantityAsync(int cartItemId, int newQuantity);                  // cambiar cantidad
-        Task RemoveFromCartAsync(int cartItemId);                                   // quitar un producto
-        Task ClearCartAsync();                                                      // vaciar todo
-        Task<List<CartItem>> GetCartItemsAsync();                                   // lista de productos en el carrito
-        Task<decimal> GetCartTotalAsync();                                          // suma total
-        int GetCartItemCount();                                                     // cuántos productos (sumando cantidades)
-        Task<bool> ApplyCouponAsync(string couponCode);                             // aplicar descuento
-        decimal GetCurrentDiscount();                                               // descuento actual aplicado
+
+    // Resultado de aplicar un cupón a través de la RPC validate_coupon
+    public class CouponResult
+    {
+        public bool IsValid { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public decimal? NewShippingCost { get; set; }
+        public string Message { get; set; } = string.Empty;
     }
 }

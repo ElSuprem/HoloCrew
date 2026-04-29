@@ -163,15 +163,7 @@ namespace HoloCrew.ViewModels
             await ExecuteAsync(async () =>
             {
                 LoadingMessage = "Loading products...";
-                var products = await _productService.GetFeaturedProductsAsync();
-
-                if (products.Count < 20)
-                {
-                    var allProducts = await _productService.SearchProductsAsync("");
-                    if (allProducts.Count > products.Count)
-                        products = allProducts;
-                }
-
+                var products = await _productService.GetAllProductsAsync();
                 SetProducts(products);
             });
         }
@@ -406,17 +398,18 @@ namespace HoloCrew.ViewModels
             }
 
             // 2. categoría
-            if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
+            filtered = SelectedCategory switch
             {
-                filtered = SelectedCategory switch
-                {
-                    "Tops" => filtered.Where(p => p.CategoryId == 2),
-                    "Bottoms" => filtered.Where(p => p.CategoryId == 3),
-                    "Footwear" => filtered.Where(p => p.CategoryId == 4),
-                    "Accessories" => filtered.Where(p => p.CategoryId == 5),
-                    _ => filtered
-                };
-            }
+                // Categorías principales de Supabase: 1=Tops, 2=Bottoms, 3=Footwear, 4=Accessories, 5=Outerwear
+                // Los productos pueden tener category_id directo (raíz) o de subcategoría (10, 12, 20...).
+                // Por convención de la BD: subcategorías de Tops empiezan con 1 (10, 11, 12, 13, 14, 15, 16, 17),
+                // Bottoms con 2 (20-29), Footwear con 3 (30-37), Accessories con 4 (40-49), Outerwear con 5 (50-52).
+                "Tops" => filtered.Where(p => p.CategoryId == 1 || (p.CategoryId >= 10 && p.CategoryId < 20)),
+                "Bottoms" => filtered.Where(p => p.CategoryId == 2 || (p.CategoryId >= 20 && p.CategoryId < 30)),
+                "Footwear" => filtered.Where(p => p.CategoryId == 3 || (p.CategoryId >= 30 && p.CategoryId < 40)),
+                "Accessories" => filtered.Where(p => p.CategoryId == 4 || (p.CategoryId >= 40 && p.CategoryId < 50)),
+                _ => filtered
+            };
 
             // 3. precio
             filtered = filtered.Where(p => p.Price >= MinPrice && p.Price <= MaxPrice);

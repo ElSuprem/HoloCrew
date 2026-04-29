@@ -1,184 +1,205 @@
-﻿using HoloCrew.Models;
+﻿using HoloCrew.Infraestructure.Supabase.Models;
+using HoloCrew.Models;
 using HoloCrew.Repositories.Interfaces;
+using Newtonsoft.Json;
+using PgConstants = Supabase.Postgrest.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// Repositorio de pedidos con datos falsos en memoria (mock).
-// Los datos de ejemplo están en InitializeMockData().
+// Repositorio de pedidos conectado a Supabase.
+// - Crear: usa la RPC create_order_from_cart (transaccional, valida stock, vacía carrito).
+// - Listar: usa la vista orders_with_details (un solo SELECT, ya viene enrichida).
+// - Detalle: hace 2 queries (la orden + sus items).
+// - Cancelar/actualizar estado: queries directas a la tabla orders.
 
 namespace HoloCrew.Repositories
 {
     public class OrderRepository : IOrderRepository
     {
-        private static List<Order> _orders;
-        private static int _nextId = 1;
+        private readonly Supabase.Client _supabase;
 
-        public OrderRepository()
+        public OrderRepository(Supabase.Client supabase)
         {
-            if (_orders == null)
+            _supabase = supabase;
+        }
+
+
+        public async Task<Order?> CreateFromCartAsync(
+             string userId,
+             Address shippingAddress,
+             string paymentMethod,
+            string? couponCode = null)
+        {
+            try
             {
-                InitializeMockData();
-            }
-        }
-
-        public Task<Order> CreateAsync(Order order)
+                var parameters = new Dictionary<string, object>
         {
-            order.Id = _nextId++;
-            order.OrderDate = DateTime.Now;
+            { "p_shipping_address", JsonConvert.SerializeObject(shippingAddress) },
+            { "p_billing_address", JsonConvert.SerializeObject(shippingAddress) },
+            { "p_payment_method", paymentMethod }
+        };
 
-            // por si acaso, que las listas no estén vacías
-            order.Items ??= new List<OrderItem>();
-            order.StatusHistory ??= new List<OrderStatusHistory>();
+                if (!string.IsNullOrEmpty(couponCode))
+                    parameters.Add("p_coupon_code", couponCode);
 
-            _orders.Add(order);
-            return Task.FromResult(order);
-        }
+                // La RPC devuelve la fila completa del pedido recién creado (tipo 'orders')
+                var response = await _supabase.Rpc("create_order_from_cart", parameters);
 
-        public Task<List<Order>> GetByUserIdAsync(int userId)
-        {
-            var userOrders = _orders
-                .Where(o => o.UserId == userId)
-                .OrderByDescending(o => o.OrderDate)
-                .ToList();
-            return Task.FromResult(userOrders);
-        }
-
-        public Task<Order> GetByIdAsync(int id)
-        {
-            var order = _orders.FirstOrDefault(o => o.Id == id);
-            return Task.FromResult(order);
-        }
-
-        public Task<Order> GetByOrderNumberAsync(string orderNumber)
-        {
-            var order = _orders.FirstOrDefault(o => o.OrderNumber == orderNumber);
-            return Task.FromResult(order);
-        }
-
-        public Task<Order> UpdateAsync(Order order)
-        {
-            var existing = _orders.FirstOrDefault(o => o.Id == order.Id);
-            if (existing != null)
-            {
-                var index = _orders.IndexOf(existing);
-                _orders[index] = order;
-                return Task.FromResult(order);
-            }
-            return Task.FromResult<Order>(null);
-        }
-
-        public Task<List<Order>> GetAllAsync()
-        {
-            return Task.FromResult(_orders.OrderByDescending(o => o.OrderDate).ToList());
-        }
-
-        public Task<List<Order>> GetByStatusAsync(OrderStatus status)
-        {
-            var orders = _orders
-                .Where(o => o.Status == status)
-                .OrderByDescending(o => o.OrderDate)
-                .ToList();
-            return Task.FromResult(orders);
-        }
-
-        public Task<List<Order>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
-        {
-            var orders = _orders
-                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate)
-                .OrderByDescending(o => o.OrderDate)
-                .ToList();
-            return Task.FromResult(orders);
-        }
-
-        public Task<bool> DeleteAsync(int id)
-        {
-            var order = _orders.FirstOrDefault(o => o.Id == id);
-            if (order != null)
-            {
-                _orders.Remove(order);
-                return Task.FromResult(true);
-            }
-            return Task.FromResult(false);
-        }
-
-        // datos de ejemplo para probar sin base de datos real
-        private void InitializeMockData()
-        {
-            _orders = new List<Order>
-            {
-                new Order
+                if (response?.Content == null)
                 {
-                    Id = _nextId++,
-                    OrderNumber = "ORD-20241201-00001",
-                    UserId = 1,
-                    Status = OrderStatus.Delivered,
-                    OrderDate = DateTime.Now.AddDays(-15),
-                    EstimatedDeliveryDate = DateTime.Now.AddDays(-10),
-                    DeliveredDate = DateTime.Now.AddDays(-12),
-                    Subtotal = 729.98m,
-                    ShippingCost = 0m,
-                    Tax = 153.30m,
-                    Discount = 0m,
-                    Total = 883.28m,
-                    TrackingNumber = "ES123456789",
-                    Items = new List<OrderItem>
-                    {
-                        new OrderItem { Id = 1, ProductId = 1, Quantity = 1, UnitPrice = 699.99m },
-                        new OrderItem { Id = 2, ProductId = 4, Quantity = 1, UnitPrice = 29.99m }
-                    },
-                    ShippingAddress = new Address
-                    {
-                        FullName = "Juan Pérez",
-                        AddressLine1 = "Calle Mayor 123",
-                        City = "Madrid",
-                        PostalCode = "28001",
-                        Country = "España"
-                    },
-                    StatusHistory = new List<OrderStatusHistory>
-                    {
-                        new OrderStatusHistory { Status = OrderStatus.Pending, Timestamp = DateTime.Now.AddDays(-15), Note = "Pedido creado" },
-                        new OrderStatusHistory { Status = OrderStatus.Confirmed, Timestamp = DateTime.Now.AddDays(-15).AddHours(2), Note = "Pedido confirmado" },
-                        new OrderStatusHistory { Status = OrderStatus.Processing, Timestamp = DateTime.Now.AddDays(-14), Note = "Preparando envío" },
-                        new OrderStatusHistory { Status = OrderStatus.Shipped, Timestamp = DateTime.Now.AddDays(-13), Note = "Enviado" },
-                        new OrderStatusHistory { Status = OrderStatus.Delivered, Timestamp = DateTime.Now.AddDays(-12), Note = "Entregado" }
-                    }
-                },
-                new Order
-                {
-                    Id = _nextId++,
-                    OrderNumber = "ORD-20241125-00002",
-                    UserId = 1,
-                    Status = OrderStatus.Shipped,
-                    OrderDate = DateTime.Now.AddDays(-5),
-                    EstimatedDeliveryDate = DateTime.Now.AddDays(2),
-                    Subtotal = 279.99m,
-                    ShippingCost = 5.99m,
-                    Tax = 58.80m,
-                    Discount = 0m,
-                    Total = 344.78m,
-                    TrackingNumber = "ES987654321",
-                    Items = new List<OrderItem>
-                    {
-                        new OrderItem { Id = 3, ProductId = 2, Quantity = 1, UnitPrice = 279.99m }
-                    },
-                    ShippingAddress = new Address
-                    {
-                        FullName = "Juan Pérez",
-                        AddressLine1 = "Calle Mayor 123",
-                        City = "Madrid",
-                        PostalCode = "28001",
-                        Country = "España"
-                    },
-                    StatusHistory = new List<OrderStatusHistory>
-                    {
-                        new OrderStatusHistory { Status = OrderStatus.Pending, Timestamp = DateTime.Now.AddDays(-5), Note = "Pedido creado" },
-                        new OrderStatusHistory { Status = OrderStatus.Confirmed, Timestamp = DateTime.Now.AddDays(-5).AddHours(1), Note = "Pedido confirmado" },
-                        new OrderStatusHistory { Status = OrderStatus.Processing, Timestamp = DateTime.Now.AddDays(-4), Note = "Preparando envío" },
-                        new OrderStatusHistory { Status = OrderStatus.Shipped, Timestamp = DateTime.Now.AddDays(-3), Note = "Enviado" }
-                    }
+                    System.Diagnostics.Debug.WriteLine("[Order] CreateFromCart: respuesta vacía");
+                    return null;
                 }
-            };
+
+                var rawContent = response.Content.Trim();
+
+                // Deserializar la respuesta como un OrderDto (la RPC devuelve la fila completa)
+                OrderDto? createdOrderDto = null;
+                try
+                {
+                    createdOrderDto = JsonConvert.DeserializeObject<OrderDto>(rawContent);
+                }
+                catch
+                {
+                    // Por si devuelve la fila envuelta en un array
+                    try
+                    {
+                        var array = JsonConvert.DeserializeObject<List<OrderDto>>(rawContent);
+                        createdOrderDto = array?.FirstOrDefault();
+                    }
+                    catch { }
+                }
+
+                if (createdOrderDto == null || createdOrderDto.Id <= 0)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Order] CreateFromCart: no se pudo deserializar. Raw: {rawContent}");
+                    return null;
+                }
+
+                // Cargar los items del pedido recién creado para tener todos los datos
+                var itemsResponse = await _supabase
+                    .From<OrderItemDto>()
+                    .Where(i => i.OrderId == createdOrderDto.Id)
+                    .Get();
+
+                return createdOrderDto.ToOrder(itemsResponse.Models);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Order] CreateFromCart error: {ex.Message}");
+                return null;
+            }
+        }
+
+
+        public async Task<List<Order>> GetByUserIdAsync(string userId)
+        {
+            try
+            {
+                if (!Guid.TryParse(userId, out var userGuid))
+                    return new List<Order>();
+
+                var response = await _supabase
+                    .From<OrderDetailDto>()
+                    .Where(o => o.UserId == userGuid)
+                    .Order("order_date", PgConstants.Ordering.Descending)
+                    .Get();
+
+                return response.Models
+                    .Select(o => o.ToOrder())
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Order] GetByUser error: {ex.Message}");
+                return new List<Order>();
+            }
+        }
+
+
+        public async Task<Order?> GetByIdAsync(int id)
+        {
+            try
+            {
+                var orderResponse = await _supabase
+                    .From<OrderDto>()
+                    .Where(o => o.Id == id)
+                    .Single();
+
+                if (orderResponse == null)
+                    return null;
+
+                // Cargar los items del pedido
+                var itemsResponse = await _supabase
+                    .From<OrderItemDto>()
+                    .Where(i => i.OrderId == id)
+                    .Get();
+
+                return orderResponse.ToOrder(itemsResponse.Models);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Order] GetById error: {ex.Message}");
+                return null;
+            }
+        }
+
+
+        public async Task<Order?> GetByOrderNumberAsync(string orderNumber)
+        {
+            try
+            {
+                var orderResponse = await _supabase
+                    .From<OrderDto>()
+                    .Where(o => o.OrderNumber == orderNumber)
+                    .Single();
+
+                if (orderResponse == null)
+                    return null;
+
+                var itemsResponse = await _supabase
+                    .From<OrderItemDto>()
+                    .Where(i => i.OrderId == orderResponse.Id)
+                    .Get();
+
+                return orderResponse.ToOrder(itemsResponse.Models);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Order] GetByOrderNumber error: {ex.Message}");
+                return null;
+            }
+        }
+
+
+        public async Task<bool> CancelAsync(int orderId)
+        {
+            return await UpdateStatusAsync(orderId, OrderStatus.Cancelled);
+        }
+
+
+        public async Task<bool> UpdateStatusAsync(int orderId, OrderStatus newStatus)
+        {
+            try
+            {
+                var statusString = OrderDto.StatusToString(newStatus);
+
+                await _supabase
+                    .From<OrderDto>()
+                    .Where(o => o.Id == orderId)
+                    .Set(o => o.Status, statusString)
+                    .Update();
+
+                // El trigger log_order_status_change registrará el cambio en el historial automáticamente.
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Order] UpdateStatus error: {ex.Message}");
+                return false;
+            }
         }
     }
 }

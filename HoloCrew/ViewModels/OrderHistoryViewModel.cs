@@ -5,13 +5,15 @@ using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 // ViewModel del historial de pedidos del usuario.
-// Muestra todos los pedidos, permite filtrar por estado y ver el detalle de cada uno.
-// Se conecta con OrderService, AuthenticationService y NavigationService.
+// Muestra todos los pedidos del usuario actual desde Supabase, permite filtrar por estado
+// y rango de fechas, y ver el detalle de cada pedido. También calcula stats globales
+// (total pedidos, total gastado, valor medio).
 
 namespace HoloCrew.ViewModels
 {
@@ -21,19 +23,50 @@ namespace HoloCrew.ViewModels
         private readonly IAuthenticationService _authenticationService;
         private readonly INavigationService _navigationService;
 
+        // Lista completa cargada desde BD (no se filtra)
+        private List<Order> _allOrders = new();
+
+        // Lista que se muestra en la UI (filtrada)
         [ObservableProperty]
         private ObservableCollection<Order> _orders = new();
 
         [ObservableProperty]
-        private ObservableCollection<Order> _filteredOrders = new();
-
-        [ObservableProperty]
-        private OrderStatus? _selectedStatusFilter;
-
-        [ObservableProperty]
         private bool _hasOrders;
 
-        public List<OrderStatus> AvailableStatuses { get; } = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().ToList();
+        // ====== FILTROS ======
+
+        // Opciones del desplegable de estado: "All", "Pending", "Confirmed", etc.
+        public ObservableCollection<string> FilterOptions { get; } = new()
+        {
+            "All",
+            "Pending",
+            "Confirmed",
+            "Processing",
+            "Shipped",
+            "Delivered",
+            "Cancelled",
+            "Refunded"
+        };
+
+        [ObservableProperty]
+        private string _selectedFilter = "All";
+
+        [ObservableProperty]
+        private DateTime? _startDate;
+
+        [ObservableProperty]
+        private DateTime? _endDate;
+
+        // ====== STATS ======
+
+        [ObservableProperty]
+        private int _totalOrders;
+
+        [ObservableProperty]
+        private decimal _totalSpent;
+
+        [ObservableProperty]
+        private decimal _averageOrderValue;
 
         public OrderHistoryViewModel(
             IOrderService orderService,
@@ -50,11 +83,13 @@ namespace HoloCrew.ViewModels
             EmptyActionText = AppConstants.Empty.OrdersAction;
         }
 
+
         public override async void OnNavigatedTo(object parameter)
         {
             base.OnNavigatedTo(parameter);
             await LoadOrdersAsync();
         }
+
 
         [RelayCommand]
         private async Task LoadOrdersAsync()
@@ -62,24 +97,25 @@ namespace HoloCrew.ViewModels
             await ExecuteAsync(async () =>
             {
                 var currentUser = _authenticationService.GetCurrentUser();
-                if (currentUser != null)
-                {
-                    var orders = await _orderService.GetUserOrdersAsync(currentUser.Id);
-                    Orders = new ObservableCollection<Order>(orders.OrderByDescending(o => o.OrderDate));
-                    FilteredOrders = new ObservableCollection<Order>(Orders);
-                    HasOrders = Orders.Any();
-
-                    if (HasOrders)
-                        SetSuccess();
-                    else
-                        SetEmpty();
-                }
-                else
+                if (currentUser == null)
                 {
                     SetEmpty();
+                    return;
                 }
+
+                var orders = await _orderService.GetUserOrdersAsync(currentUser.Id);
+                _allOrders = orders.OrderByDescending(o => o.OrderDate).ToList();
+
+                ApplyFiltersInternal();
+                CalculateStats();
+
+                if (HasOrders)
+                    SetSuccess();
+                else
+                    SetEmpty();
             });
         }
+
 
         [RelayCommand]
         private void ViewOrderDetail(Order order)
@@ -88,42 +124,23 @@ namespace HoloCrew.ViewModels
             _navigationService.NavigateTo<OrderDetailViewModel>(order.Id);
         }
 
-        [RelayCommand]
-        private async Task ReorderAsync(Order order)
-        {
-            if (order == null) return;
-
-            try
-            {
-                // pendiente: añadir los productos al carrito
-                _navigationService.NavigateTo<CartViewModel>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
-            }
-        }
 
         [RelayCommand]
         private void ApplyFilters()
         {
-            if (SelectedStatusFilter.HasValue)
-            {
-                var filtered = Orders.Where(o => o.Status == SelectedStatusFilter.Value).ToList();
-                FilteredOrders = new ObservableCollection<Order>(filtered);
-            }
-            else
-            {
-                FilteredOrders = new ObservableCollection<Order>(Orders);
-            }
+            ApplyFiltersInternal();
         }
+
 
         [RelayCommand]
         private void ClearFilter()
         {
-            SelectedStatusFilter = null;
-            FilteredOrders = new ObservableCollection<Order>(Orders);
+            SelectedFilter = "All";
+            StartDate = null;
+            EndDate = null;
+            ApplyFiltersInternal();
         }
+
 
         [RelayCommand]
         private void BrowseProducts()
@@ -131,10 +148,50 @@ namespace HoloCrew.ViewModels
             _navigationService.NavigateTo<ProductCatalogViewModel>();
         }
 
+
         [RelayCommand]
         private void EmptyAction()
         {
             BrowseProducts();
+        }
+
+
+        // ==================== HELPERS ====================
+
+        // Aplica los filtros activos sobre _allOrders y actualiza Orders.
+        private void ApplyFiltersInternal()
+        {
+            IEnumerable<Order> filtered = _allOrders;
+
+            // Filtro por estado
+            if (!string.IsNullOrEmpty(SelectedFilter) && SelectedFilter != "All")
+            {
+                if (Enum.TryParse<OrderStatus>(SelectedFilter, true, out var status))
+                {
+                    filtered = filtered.Where(o => o.Status == status);
+                }
+            }
+
+            // Filtro por rango de fechas
+            if (StartDate.HasValue)
+                filtered = filtered.Where(o => o.OrderDate.Date >= StartDate.Value.Date);
+
+            if (EndDate.HasValue)
+                filtered = filtered.Where(o => o.OrderDate.Date <= EndDate.Value.Date);
+
+            Orders = new ObservableCollection<Order>(filtered);
+            HasOrders = Orders.Any();
+        }
+
+
+        // Calcula stats sobre TODOS los pedidos (no filtrados)
+        private void CalculateStats()
+        {
+            TotalOrders = _allOrders.Count;
+            TotalSpent = _allOrders.Sum(o => o.Total);
+            AverageOrderValue = TotalOrders > 0
+                ? TotalSpent / TotalOrders
+                : 0m;
         }
     }
 }

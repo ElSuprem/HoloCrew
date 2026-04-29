@@ -1,405 +1,239 @@
-﻿using HoloCrew.Models;
+﻿using HoloCrew.Infraestructure.Supabase.Models;
+using HoloCrew.Models;
 using HoloCrew.Repositories.Interfaces;
+using PgConstants = Supabase.Postgrest.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// Repositorio de productos con datos falsos en memoria (mock).
-// Las categorías son: 1=Tops, 2=Bottoms, 3=Footwear, 4=Accessories.
-// Los datos de ejemplo están en InitializeMockData().
+// Repositorio de productos conectado a Supabase.
+// Lee de las tablas: products, product_images, product_sizes, product_colors.
+// Convierte los DTOs a modelos Product que consumen los ViewModels.
 
 namespace HoloCrew.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private static List<Product> _products;
-        private static int _nextId = 1;
+        private readonly Supabase.Client _supabase;
 
-        public ProductRepository()
+        public ProductRepository(Supabase.Client supabase)
         {
-            if (_products == null)
+            _supabase = supabase;
+        }
+
+
+        public async Task<List<Product>> GetAllAsync()
+        {
+            // Solo productos activos
+            var productsResponse = await _supabase
+                .From<ProductDto>()
+                .Where(p => p.IsActive == true)
+                .Order("created_at", PgConstants.Ordering.Descending)
+                .Get();
+
+            var products = productsResponse.Models;
+            if (products.Count == 0)
+                return new List<Product>();
+
+            // Cargamos en paralelo imágenes, tallas y colores de todos los productos
+            // para evitar N+1 queries.
+            var productIds = products.Select(p => p.Id).ToList();
+
+            var imagesTask = _supabase.From<ProductImageDto>()
+                .Filter("product_id", PgConstants.Operator.In, productIds)
+                .Get();
+
+            var sizesTask = _supabase.From<ProductSizeDto>()
+                .Filter("product_id", PgConstants.Operator.In, productIds)
+                .Get();
+
+            var colorsTask = _supabase.From<ProductColorDto>()
+                .Filter("product_id", PgConstants.Operator.In, productIds)
+                .Get();
+
+            await Task.WhenAll(imagesTask, sizesTask, colorsTask);
+
+            var images = imagesTask.Result.Models;
+            var sizes = sizesTask.Result.Models;
+            var colors = colorsTask.Result.Models;
+
+            return products
+                .Select(p => p.ToProduct(images, sizes, colors))
+                .ToList();
+        }
+
+
+        public async Task<Product?> GetByIdAsync(int id)
+        {
+            var productResponse = await _supabase
+                .From<ProductDto>()
+                .Where(p => p.Id == id)
+                .Single();
+
+            if (productResponse == null)
+                return null;
+
+            // Cargamos imágenes, tallas y colores de este producto en paralelo
+            var imagesTask = _supabase.From<ProductImageDto>()
+                .Where(i => i.ProductId == id)
+                .Order("sort_order", PgConstants.Ordering.Ascending)
+                .Get();
+
+            var sizesTask = _supabase.From<ProductSizeDto>()
+                .Where(s => s.ProductId == id)
+                .Get();
+
+            var colorsTask = _supabase.From<ProductColorDto>()
+                .Where(c => c.ProductId == id)
+                .Get();
+
+            await Task.WhenAll(imagesTask, sizesTask, colorsTask);
+
+            return productResponse.ToProduct(
+                imagesTask.Result.Models,
+                sizesTask.Result.Models,
+                colorsTask.Result.Models);
+        }
+
+
+        public async Task<List<Product>> GetByCategoryAsync(int categoryId)
+        {
+            // Primero buscamos la categoría y todas sus descendientes (usando ltree de Postgres).
+            // Si pasan id=1 (Tops), nos devuelve también 10, 11, 12, 13 (T-Shirts, Shirts, Hoodies, Sweatshirts).
+            var allCategories = await _supabase
+                .From<CategoryDto>()
+                .Where(c => c.IsActive == true)
+                .Get();
+
+            // Buscamos la categoría pedida
+            var rootCategory = allCategories.Models.FirstOrDefault(c => c.Id == categoryId);
+            if (rootCategory == null)
+                return new List<Product>();
+
+            // Recopilamos todos los IDs: el de la categoría y los de sus hijas (recursivamente)
+            var categoryIds = GetDescendantIds(rootCategory.Id, allCategories.Models);
+
+            // Ahora pedimos los productos cuya categoría esté en esa lista
+            var productsResponse = await _supabase
+                .From<ProductDto>()
+                .Where(p => p.IsActive == true)
+                .Filter("category_id", PgConstants.Operator.In, categoryIds)
+                .Get();
+
+            return await EnrichProductsAsync(productsResponse.Models);
+        }
+
+
+        // Helper: dado un id de categoría, devuelve [su_id] + ids de todos sus descendientes.
+        private List<int> GetDescendantIds(int rootId, List<CategoryDto> allCategories)
+        {
+            var result = new List<int> { rootId };
+            var children = allCategories.Where(c => c.ParentId == rootId).ToList();
+            foreach (var child in children)
             {
-                InitializeMockData();
+                result.AddRange(GetDescendantIds(child.Id, allCategories));
             }
+            return result;
         }
 
-        public Task<List<Product>> GetAllAsync()
-        {
-            return Task.FromResult(_products.ToList());
-        }
 
-        public Task<Product> GetByIdAsync(int id)
-        {
-            var product = _products.FirstOrDefault(p => p.Id == id);
-            return Task.FromResult(product);
-        }
-
-        public Task<List<Product>> GetByCategoryAsync(int categoryId)
-        {
-            var products = _products.Where(p => p.CategoryId == categoryId).ToList();
-            return Task.FromResult(products);
-        }
-
-        public Task<List<Product>> SearchAsync(string query)
+        public async Task<List<Product>> SearchAsync(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
-            {
-                return Task.FromResult(new List<Product>());
-            }
+                return new List<Product>();
 
-            var lowerQuery = query.ToLower();
-            var results = _products
-                .Where(p => p.Name.ToLower().Contains(lowerQuery) ||
-                           (p.Description != null && p.Description.ToLower().Contains(lowerQuery)))
-                .ToList();
+            // Búsqueda por coincidencia parcial en el nombre (case insensitive).
+            // Más adelante podríamos cambiar esto para usar el search_vector
+            // y aprovechar el full-text search de PostgreSQL.
+            var productsResponse = await _supabase
+                .From<ProductDto>()
+                .Where(p => p.IsActive == true)
+                .Filter("name", PgConstants.Operator.ILike, $"%{query}%")
+                .Get();
 
-            return Task.FromResult(results);
+            return await EnrichProductsAsync(productsResponse.Models);
         }
+
+
+        public async Task<List<Product>> GetFeaturedAsync()
+        {
+            var productsResponse = await _supabase
+                .From<ProductDto>()
+                .Where(p => p.IsActive == true)
+                .Where(p => p.IsFeatured == true)
+                .Get();
+
+            return await EnrichProductsAsync(productsResponse.Models);
+        }
+
+
+        public async Task<List<Product>> GetNewProductsAsync()
+        {
+            var productsResponse = await _supabase
+                .From<ProductDto>()
+                .Where(p => p.IsActive == true)
+                .Where(p => p.IsNew == true)
+                .Order("created_at", PgConstants.Ordering.Descending)
+                .Get();
+
+            return await EnrichProductsAsync(productsResponse.Models);
+        }
+
+
+        // Estos tres métodos los tienes en la interfaz pero la creación/edición/borrado
+        // de productos NO la hace el cliente desde el WPF (RLS lo bloquea), sino
+        // un admin desde el dashboard de Supabase. Los dejamos preparados pero
+        // lanzando NotImplementedException de momento.
 
         public Task<Product> CreateAsync(Product product)
         {
-            product.Id = _nextId++;
-            product.CreatedAt = DateTime.Now;
-            product.UpdatedAt = DateTime.Now;
-            _products.Add(product);
-            return Task.FromResult(product);
+            throw new NotImplementedException(
+                "La creación de productos se hace desde el dashboard de Supabase, no desde el cliente.");
         }
 
         public Task<Product> UpdateAsync(Product product)
         {
-            var existing = _products.FirstOrDefault(p => p.Id == product.Id);
-            if (existing != null)
-            {
-                var index = _products.IndexOf(existing);
-                product.UpdatedAt = DateTime.Now;
-                _products[index] = product;
-                return Task.FromResult(product);
-            }
-            return Task.FromResult<Product>(null);
+            throw new NotImplementedException(
+                "La actualización de productos se hace desde el dashboard de Supabase, no desde el cliente.");
         }
 
         public Task<bool> DeleteAsync(int id)
         {
-            var product = _products.FirstOrDefault(p => p.Id == id);
-            if (product != null)
-            {
-                _products.Remove(product);
-                return Task.FromResult(true);
-            }
-            return Task.FromResult(false);
+            throw new NotImplementedException(
+                "El borrado de productos se hace desde el dashboard de Supabase, no desde el cliente.");
         }
 
-        public Task<List<Product>> GetFeaturedAsync()
+
+        // Helper privado: dada una lista de ProductDto, carga sus imágenes/tallas/colores
+        // y devuelve la lista de Product completa.
+        private async Task<List<Product>> EnrichProductsAsync(List<ProductDto> products)
         {
-            var featured = _products.Where(p => p.IsFeatured).ToList();
-            return Task.FromResult(featured);
-        }
+            if (products.Count == 0)
+                return new List<Product>();
 
-        public Task<List<Product>> GetNewProductsAsync()
-        {
-            var newProducts = _products.Where(p => p.IsNew).OrderByDescending(p => p.CreatedAt).ToList();
-            return Task.FromResult(newProducts);
-        }
+            var productIds = products.Select(p => p.Id).ToList();
 
-        // productos de ejemplo para probar sin base de datos real
-        private void InitializeMockData()
-        {
-            _products = new List<Product>
-            {
-                // ========== TOPS (CategoryId = 1) ==========
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "PREMIUM LOGO TEE",
-                    Description = "Camiseta básica de algodón con logo bordado",
-                    LongDescription = "Camiseta 100% algodón. Corte relajado, cuello redondo acanalado.",
-                    Price = 34.99m,
-                    OriginalPrice = 44.99m,
-                    Stock = 150,
-                    MainImageUrl = "/Resources/Images/Products/tee1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/tee1.jpg", "/Resources/Images/Products/tee1-2.jpg" },
-                    CategoryId = 1,
-                    Category = new Category { Id = 1, Name = "Tops" },
-                    AverageRating = 4.5,
-                    ReviewCount = 234,
-                    IsFeatured = true,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-3),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "OVERSIZED HOODIE",
-                    Description = "Sudadera con capucha oversized",
-                    LongDescription = "Mezcla de algodón 450GSM con corte oversize.",
-                    Price = 79.99m,
-                    Stock = 85,
-                    MainImageUrl = "/Resources/Images/Products/hoodie1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/hoodie1.jpg" },
-                    CategoryId = 1,
-                    Category = new Category { Id = 1, Name = "Tops" },
-                    AverageRating = 4.8,
-                    ReviewCount = 312,
-                    IsFeatured = true,
-                    IsNew = true,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddDays(-15),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "CREWNECK SWEATSHIRT",
-                    Description = "Sudadera clásica con cuello redondo",
-                    LongDescription = "Interior de felpa suave, puños y dobladillo acanalados.",
-                    Price = 64.99m,
-                    OriginalPrice = 79.99m,
-                    Stock = 95,
-                    MainImageUrl = "/Resources/Images/Products/crew1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/crew1.jpg" },
-                    CategoryId = 1,
-                    Category = new Category { Id = 1, Name = "Tops" },
-                    AverageRating = 4.6,
-                    ReviewCount = 178,
-                    IsFeatured = false,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-2),
-                    UpdatedAt = DateTime.Now
-                },
+            var imagesTask = _supabase.From<ProductImageDto>()
+                .Filter("product_id", PgConstants.Operator.In, productIds)
+                .Get();
 
-                // ========== BOTTOMS (CategoryId = 2) ==========
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "TACTICAL CARGO PANTS",
-                    Description = "Pantalón cargo estilo militar",
-                    LongDescription = "Tela ripstop duradera, múltiples bolsillos.",
-                    Price = 89.99m,
-                    Stock = 65,
-                    MainImageUrl = "/Resources/Images/Products/cargo1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/cargo1.jpg" },
-                    CategoryId = 2,
-                    Category = new Category { Id = 2, Name = "Bottoms" },
-                    AverageRating = 4.7,
-                    ReviewCount = 267,
-                    IsFeatured = true,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-1),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "SLIM FIT DENIM",
-                    Description = "Vaqueros negros ajustados clásicos",
-                    LongDescription = "Denim elástico para mayor comodidad.",
-                    Price = 69.99m,
-                    Stock = 100,
-                    MainImageUrl = "/Resources/Images/Products/jeans1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/jeans1.jpg" },
-                    CategoryId = 2,
-                    Category = new Category { Id = 2, Name = "Bottoms" },
-                    AverageRating = 4.5,
-                    ReviewCount = 189,
-                    IsFeatured = false,
-                    IsNew = true,
-                    Gender = "Men",
-                    CreatedAt = DateTime.Now.AddDays(-10),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "TECH JOGGERS",
-                    Description = "Joggers de alto rendimiento",
-                    LongDescription = "Tejido que absorbe la humedad, bolsillos con cremallera.",
-                    Price = 59.99m,
-                    OriginalPrice = 74.99m,
-                    Stock = 120,
-                    MainImageUrl = "/Resources/Images/Products/jogger1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/jogger1.jpg" },
-                    CategoryId = 2,
-                    Category = new Category { Id = 2, Name = "Bottoms" },
-                    AverageRating = 4.6,
-                    ReviewCount = 223,
-                    IsFeatured = true,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-2),
-                    UpdatedAt = DateTime.Now
-                },
+            var sizesTask = _supabase.From<ProductSizeDto>()
+                .Filter("product_id", PgConstants.Operator.In, productIds)
+                .Get();
 
-                // ========== FOOTWEAR (CategoryId = 3) ==========
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "ARMBO LOW WHITE",
-                    Description = "Zapatillas de cuero minimalistas",
-                    LongDescription = "Cuero de primera calidad, plantilla acolchada.",
-                    Price = 129.99m,
-                    Stock = 55,
-                    MainImageUrl = "/Resources/Images/Products/sneaker1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/sneaker1.jpg" },
-                    CategoryId = 3,
-                    Category = new Category { Id = 3, Name = "Footwear" },
-                    AverageRating = 4.8,
-                    ReviewCount = 345,
-                    IsFeatured = true,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-4),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "HIGH-TOP CANVAS",
-                    Description = "Caña alta de lona clásicas",
-                    LongDescription = "Parte superior de lona duradera, suela de goma vulcanizada.",
-                    Price = 79.99m,
-                    OriginalPrice = 99.99m,
-                    Stock = 80,
-                    MainImageUrl = "/Resources/Images/Products/hightop1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/hightop1.jpg" },
-                    CategoryId = 3,
-                    Category = new Category { Id = 3, Name = "Footwear" },
-                    AverageRating = 4.6,
-                    ReviewCount = 198,
-                    IsFeatured = false,
-                    IsNew = true,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddDays(-7),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "CHUNKY RUNNER",
-                    Description = "Zapatillas Chunky retro",
-                    LongDescription = "Suela de espuma multicapa, parte superior de malla y ante.",
-                    Price = 149.99m,
-                    Stock = 40,
-                    MainImageUrl = "/Resources/Images/Products/chunky1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/chunky1.jpg" },
-                    CategoryId = 3,
-                    Category = new Category { Id = 3, Name = "Footwear" },
-                    AverageRating = 4.5,
-                    ReviewCount = 156,
-                    IsFeatured = true,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-2),
-                    UpdatedAt = DateTime.Now
-                },
+            var colorsTask = _supabase.From<ProductColorDto>()
+                .Filter("product_id", PgConstants.Operator.In, productIds)
+                .Get();
 
-                // ========== ACCESSORIES (CategoryId = 4) ==========
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "LOGO BASEBALL CAP",
-                    Description = "Gorra clásica de 6 paneles",
-                    LongDescription = "Correa ajustable, logo bordado, visera curva.",
-                    Price = 29.99m,
-                    Stock = 200,
-                    MainImageUrl = "/Resources/Images/Products/cap1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/cap1.jpg" },
-                    CategoryId = 4,
-                    Category = new Category { Id = 4, Name = "Accessories" },
-                    AverageRating = 4.7,
-                    ReviewCount = 456,
-                    IsFeatured = true,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-5),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "CROSSBODY BAG",
-                    Description = "Bolso bandolera compacto",
-                    LongDescription = "Nailon resistente al agua, correa ajustable.",
-                    Price = 49.99m,
-                    Stock = 90,
-                    MainImageUrl = "/Resources/Images/Products/bag1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/bag1.jpg" },
-                    CategoryId = 4,
-                    Category = new Category { Id = 4, Name = "Accessories" },
-                    AverageRating = 4.6,
-                    ReviewCount = 234,
-                    IsFeatured = false,
-                    IsNew = true,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddDays(-5),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "RIBBED BEANIE",
-                    Description = "Gorro de punto acanalado clásico",
-                    LongDescription = "Mezcla suave de acrílico, textura acanalada.",
-                    Price = 24.99m,
-                    Stock = 180,
-                    MainImageUrl = "/Resources/Images/Products/beanie1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/beanie1.jpg" },
-                    CategoryId = 4,
-                    Category = new Category { Id = 4, Name = "Accessories" },
-                    AverageRating = 4.6,
-                    ReviewCount = 478,
-                    IsFeatured = false,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-6),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "LEATHER CARDHOLDER",
-                    Description = "Tarjetero minimalista",
-                    LongDescription = "Cuero genuino, 6 ranuras para tarjetas.",
-                    Price = 39.99m,
-                    Stock = 100,
-                    MainImageUrl = "/Resources/Images/Products/wallet1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/wallet1.jpg" },
-                    CategoryId = 4,
-                    Category = new Category { Id = 4, Name = "Accessories" },
-                    AverageRating = 4.7,
-                    ReviewCount = 298,
-                    IsFeatured = true,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-3),
-                    UpdatedAt = DateTime.Now
-                },
-                new Product
-                {
-                    Id = _nextId++,
-                    Name = "CANVAS BELT",
-                    Description = "Cinturón de lona estilo militar",
-                    LongDescription = "Tejido de lona duradero, hebilla de metal.",
-                    Price = 24.99m,
-                    OriginalPrice = 34.99m,
-                    Stock = 150,
-                    MainImageUrl = "/Resources/Images/Products/belt1.jpg",
-                    ImageUrls = new List<string> { "/Resources/Images/Products/belt1.jpg" },
-                    CategoryId = 4,
-                    Category = new Category { Id = 4, Name = "Accessories" },
-                    AverageRating = 4.5,
-                    ReviewCount = 167,
-                    IsFeatured = false,
-                    IsNew = false,
-                    Gender = "Unisex",
-                    CreatedAt = DateTime.Now.AddMonths(-4),
-                    UpdatedAt = DateTime.Now
-                }
-            };
+            await Task.WhenAll(imagesTask, sizesTask, colorsTask);
+
+            return products
+                .Select(p => p.ToProduct(
+                    imagesTask.Result.Models,
+                    sizesTask.Result.Models,
+                    colorsTask.Result.Models))
+                .ToList();
         }
     }
 }

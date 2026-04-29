@@ -9,18 +9,18 @@ namespace HoloCrew.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = string.Empty;   // UUID de Supabase Auth
         public string FullName { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }           // se guarda encriptada
+        public string Password { get; set; }           // ya no se usa con Supabase Auth
         public string PhoneNumber { get; set; }
         public string ProfileImageUrl { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime? LastLoginAt { get; set; }     // cuándo inició sesión por última vez
-        public List<Address> Addresses { get; set; }   // direcciones guardadas
-        public List<PaymentMethod> PaymentMethods { get; set; } // tarjetas guardadas
-        public NotificationSettings NotificationPreferences { get; set; } // qué notificaciones quiere
+        public DateTime? LastLoginAt { get; set; }
+        public List<Address> Addresses { get; set; }
+        public List<PaymentMethod> PaymentMethods { get; set; }
+        public NotificationSettings NotificationPreferences { get; set; }
     }
 
     // Configuración de la app: modo oscuro, idioma, notificaciones, privacidad, etc.
@@ -28,17 +28,14 @@ namespace HoloCrew.Models
     {
         public bool IsDarkMode { get; set; } = false;
         public string SelectedLanguage { get; set; } = "Español";
-
         public bool NotificationsEnabled { get; set; } = true;
         public bool EmailNotifications { get; set; } = true;
         public bool PushNotifications { get; set; } = true;
         public bool OrderUpdates { get; set; } = true;
         public bool PromotionalEmails { get; set; } = false;
-
         public bool DataCollectionEnabled { get; set; } = true;
         public bool PersonalizedAds { get; set; } = false;
         public bool ShareDataWithPartners { get; set; } = false;
-
         public DateTime LastUpdated { get; set; } = DateTime.Now;
     }
 }

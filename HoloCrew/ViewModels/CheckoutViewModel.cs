@@ -5,13 +5,16 @@ using HoloCrew.Models;
 using HoloCrew.Services.Interfaces;
 using HoloCrew.ViewModels.Base;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 // ViewModel de la página de checkout (finalizar compra).
 // Tiene 3 pasos: dirección de envío, método de pago, resumen del pedido.
-// Se conecta con OrderService, CartService, AuthenticationService y NavigationService.
+// Al confirmar, llama a OrderService.CreateOrderFromCartAsync que invoca la RPC
+// create_order_from_cart de Supabase (transaccional). Si hay un cupón aplicado en el
+// carrito, se pasa también al pedido.
 
 namespace HoloCrew.ViewModels
 {
@@ -178,34 +181,37 @@ namespace HoloCrew.ViewModels
                 IsProcessing = true;
                 CanCompleteOrder = false;
 
-                var order = new Order
+                // Determinar el método de pago elegido
+                var paymentMethodString = SelectedPaymentMethod?.Type switch
                 {
-                    UserId = _authenticationService.GetCurrentUser()?.Id ?? 0,
-                    OrderNumber = GenerateOrderNumber(),
-                    Items = OrderItems.Select(ci => new OrderItem
-                    {
-                        ProductId = ci.ProductId,
-                        Quantity = ci.Quantity,
-                        UnitPrice = ci.UnitPrice,
-                        SelectedVariant = ci.SelectedVariant
-                    }).ToList(),
-                    ShippingAddress = ShippingAddress,
-                    PaymentMethod = SelectedPaymentMethod,
-                    Status = OrderStatus.Pending,
-                    OrderDate = DateTime.Now,
-                    Total = OrderTotal
+                    PaymentType.CreditCard => "credit_card",
+                    PaymentType.DebitCard => "debit_card",
+                    PaymentType.PayPal => "paypal",
+                    _ => "credit_card"
                 };
 
-                var createdOrder = await _orderService.CreateOrderAsync(order);
+                // Si hay un cupón aplicado en el carrito, lo pasamos al pedido
+                var couponCode = _cartService.GetAppliedCouponCode();
+                var couponToSend = string.IsNullOrEmpty(couponCode) ? null : couponCode;
+
+                var createdOrder = await _orderService.CreateOrderFromCartAsync(
+                    ShippingAddress,
+                    paymentMethodString,
+                    couponToSend);
 
                 if (createdOrder != null)
                 {
-                    await _cartService.ClearCartAsync();
                     _navigationService.NavigateTo<OrderDetailViewModel>(createdOrder.Id);
+                }
+                else
+                {
+                    SetError(AppConstants.Errors.PaymentFailed);
+                    CanCompleteOrder = true;
                 }
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[Checkout] Error: {ex.Message}");
                 SetError(AppConstants.Errors.PaymentFailed);
                 CanCompleteOrder = true;
             }
@@ -249,11 +255,6 @@ namespace HoloCrew.ViewModels
                 PaymentMethod = SelectedPaymentMethod,
                 Total = OrderTotal
             };
-        }
-
-        private string GenerateOrderNumber()
-        {
-            return $"ORD-{DateTime.Now:yyyyMMdd}-{DateTime.Now.Ticks % 100000:D5}";
         }
     }
 }

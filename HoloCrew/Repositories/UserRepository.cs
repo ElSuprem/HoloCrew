@@ -5,78 +5,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// Repositorio de usuarios con datos falsos en memoria (mock).
-// Guarda usuarios, direcciones, métodos de pago y preferencias.
-// La contraseña se guarda sin encriptar en los datos mock (en producción habría que encriptarla).
+// Repositorio de usuarios.
+// Con Supabase, la mayoría de las operaciones de auth las hace AuthenticationService.
+// Este repositorio mantiene una caché en memoria de usuarios consultados,
+// para casos donde los ViewModels lo inyecten directamente.
+// Las operaciones reales contra BD se delegan a AuthenticationService o a
+// queries directas con Supabase.Client cuando sea necesario.
 
 namespace HoloCrew.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private static List<User> _users;
-        private static int _nextId = 1;
+        private static readonly List<User> _cachedUsers = new();
 
-        public UserRepository()
+        public Task<User?> GetByIdAsync(string id)
         {
-            if (_users == null)
-            {
-                InitializeMockData();
-            }
+            var user = _cachedUsers.FirstOrDefault(u => u.Id == id);
+            return Task.FromResult<User?>(user);
         }
 
-        public Task<User> GetByIdAsync(int id)
+        public Task<User?> GetByEmailAsync(string email)
         {
-            var user = _users.FirstOrDefault(u => u.Id == id);
-            return Task.FromResult(user);
-        }
-
-        public Task<User> GetByEmailAsync(string email)
-        {
-            var user = _users.FirstOrDefault(u =>
+            var user = _cachedUsers.FirstOrDefault(u =>
+                u.Email != null &&
                 u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-            return Task.FromResult(user);
+            return Task.FromResult<User?>(user);
         }
 
-        public Task<User> CreateAsync(User user)
+        public Task<User?> CreateAsync(User user)
         {
-            user.Id = _nextId++;
+            // Las creaciones reales pasan por AuthenticationService.RegisterAsync
+            // (que llama a Supabase Auth). Aquí solo cacheamos.
+            if (string.IsNullOrEmpty(user.Id))
+                user.Id = Guid.NewGuid().ToString();
             user.CreatedAt = DateTime.Now;
-
-            // por si acaso, que las listas no estén vacías
-            user.Addresses ??= new List<Address>();
-            user.PaymentMethods ??= new List<PaymentMethod>();
-            user.NotificationPreferences ??= new NotificationSettings
-            {
-                OrderUpdatesEnabled = true,
-                PromotionsEnabled = true,
-                NewProductsEnabled = true,
-                PriceAlertsEnabled = false,
-                EmailNotificationsEnabled = true,
-                PushNotificationsEnabled = true
-            };
-
-            _users.Add(user);
-            return Task.FromResult(user);
+            _cachedUsers.Add(user);
+            return Task.FromResult<User?>(user);
         }
 
-        public Task<User> UpdateAsync(User user)
+        public Task<User?> UpdateAsync(User user)
         {
-            var existing = _users.FirstOrDefault(u => u.Id == user.Id);
+            var existing = _cachedUsers.FirstOrDefault(u => u.Id == user.Id);
             if (existing != null)
             {
-                var index = _users.IndexOf(existing);
-                _users[index] = user;
-                return Task.FromResult(user);
+                var index = _cachedUsers.IndexOf(existing);
+                _cachedUsers[index] = user;
+                return Task.FromResult<User?>(user);
             }
-            return Task.FromResult<User>(null);
+            return Task.FromResult<User?>(null);
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public Task<bool> DeleteAsync(string id)
         {
-            var user = _users.FirstOrDefault(u => u.Id == id);
+            var user = _cachedUsers.FirstOrDefault(u => u.Id == id);
             if (user != null)
             {
-                _users.Remove(user);
+                _cachedUsers.Remove(user);
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
@@ -84,18 +68,20 @@ namespace HoloCrew.Repositories
 
         public Task<bool> EmailExistsAsync(string email)
         {
-            var exists = _users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            var exists = _cachedUsers.Any(u =>
+                u.Email != null &&
+                u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
             return Task.FromResult(exists);
         }
 
         public Task<List<User>> GetAllAsync()
         {
-            return Task.FromResult(_users.ToList());
+            return Task.FromResult(_cachedUsers.ToList());
         }
 
-        public Task UpdateLastLoginAsync(int userId)
+        public Task UpdateLastLoginAsync(string userId)
         {
-            var user = _users.FirstOrDefault(u => u.Id == userId);
+            var user = _cachedUsers.FirstOrDefault(u => u.Id == userId);
             if (user != null)
             {
                 user.LastLoginAt = DateTime.Now;
@@ -103,90 +89,10 @@ namespace HoloCrew.Repositories
             return Task.CompletedTask;
         }
 
-        // comprueba si el email y la contraseña son correctos
-        public Task<User> ValidateCredentialsAsync(string email, string password)
+        public Task<User?> ValidateCredentialsAsync(string email, string password)
         {
-            var user = _users.FirstOrDefault(u =>
-                u.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-                u.Password == password); // en producción habría que comparar la contraseña encriptada
-
-            return Task.FromResult(user);
-        }
-
-        // datos de ejemplo para probar sin base de datos real
-        private void InitializeMockData()
-        {
-            _users = new List<User>
-            {
-                new User
-                {
-                    Id = _nextId++,
-                    FullName = "Juan Pérez",
-                    Email = "juan@example.com",
-                    Password = "demo123",
-                    PhoneNumber = "+34 600 123 456",
-                    DateOfBirth = new DateTime(1990, 5, 15),
-                    CreatedAt = DateTime.Now.AddYears(-2),
-                    Addresses = new List<Address>
-                    {
-                        new Address
-                        {
-                            Id = 1,
-                            Label = "Casa",
-                            FullName = "Juan Pérez",
-                            PhoneNumber = "+34 600 123 456",
-                            AddressLine1 = "Calle Mayor 123",
-                            City = "Madrid",
-                            State = "Madrid",
-                            PostalCode = "28001",
-                            Country = "España",
-                            IsDefault = true
-                        }
-                    },
-                    PaymentMethods = new List<PaymentMethod>
-                    {
-                        new PaymentMethod
-                        {
-                            Id = 1,
-                            Type = PaymentType.CreditCard,
-                            CardholderName = "Juan Pérez",
-                            CardNumberMasked = "**** **** **** 1234",
-                            ExpirationDate = "12/25",
-                            IsDefault = true
-                        }
-                    },
-                    NotificationPreferences = new NotificationSettings
-                    {
-                        OrderUpdatesEnabled = true,
-                        PromotionsEnabled = true,
-                        NewProductsEnabled = true,
-                        PriceAlertsEnabled = false,
-                        EmailNotificationsEnabled = true,
-                        PushNotificationsEnabled = true
-                    }
-                },
-                new User
-                {
-                    Id = _nextId++,
-                    FullName = "María García",
-                    Email = "maria@example.com",
-                    Password = "demo123",
-                    PhoneNumber = "+34 600 654 321",
-                    DateOfBirth = new DateTime(1985, 8, 22),
-                    CreatedAt = DateTime.Now.AddYears(-1),
-                    Addresses = new List<Address>(),
-                    PaymentMethods = new List<PaymentMethod>(),
-                    NotificationPreferences = new NotificationSettings
-                    {
-                        OrderUpdatesEnabled = true,
-                        PromotionsEnabled = false,
-                        NewProductsEnabled = true,
-                        PriceAlertsEnabled = true,
-                        EmailNotificationsEnabled = true,
-                        PushNotificationsEnabled = false
-                    }
-                }
-            };
+            // Las validaciones reales pasan por AuthenticationService.LoginAsync.
+            return Task.FromResult<User?>(null);
         }
     }
 }

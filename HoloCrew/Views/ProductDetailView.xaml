@@ -277,7 +277,7 @@
                                 <Border Background="#DCFCE7" Padding="10,5" Margin="15,0,0,0" VerticalAlignment="Center"
                                         Visibility="{Binding Product.HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <TextBlock Foreground="#16A34A" FontSize="13" FontWeight="SemiBold">
-                                        <Run Text="Save €"/><Run Text="{Binding Product.DiscountAmount, Mode=OneWay, StringFormat='{}{0:N2}'}"/>
+                                        <Run Text="Save €"/><Run Text="{Binding Product.Savings, Mode=OneWay, StringFormat='{}{0:N2}'}"/>
                                     </TextBlock>
                                 </Border>
                             </StackPanel>

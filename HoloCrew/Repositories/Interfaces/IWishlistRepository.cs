@@ -1,17 +1,20 @@
 ﻿using HoloCrew.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-// Repositorio para la lista de deseos (wishlist) del usuario.
-// Guarda qué productos ha marcado cada usuario.
+// Repositorio para gestionar la lista de deseos (wishlist).
+// Define las operaciones básicas: añadir, quitar, listar y comprobar.
+// La implementación real conectará con la tabla wishlist_items de Supabase.
 
 namespace HoloCrew.Repositories.Interfaces
 {
     public interface IWishlistRepository
     {
-        Task<bool> AddProductAsync(int userId, int productId);       // añadir a favoritos
-        Task<bool> RemoveProductAsync(int userId, int productId);    // quitar de favoritos
-        Task<List<int>> GetProductIdsAsync(int userId);              // sacar todos los ids de productos favoritos
-        Task<bool> ContainsProductAsync(int userId, int productId);  // comprobar si ya está en favoritos
-        Task<bool> ClearAsync(int userId);                           // vaciar toda la wishlist
-        Task<int> GetCountAsync(int userId);                         // cuántos productos tiene en favoritos
+        Task<List<Product>> GetByUserIdAsync(string userId);
+        Task<bool> AddAsync(string userId, int productId);
+        Task<bool> RemoveAsync(string userId, int productId);
+        Task<bool> ExistsAsync(string userId, int productId);
+        Task<int> CountAsync(string userId);
+        Task ClearAsync(string userId);
     }
 }

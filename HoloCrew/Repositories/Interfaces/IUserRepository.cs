@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 // Repositorio para acceder a los datos de usuarios.
-// Operaciones: buscar por id o email, crear, actualizar, borrar, comprobar si existe el email, etc.
+// Con Supabase Auth la mayoría de operaciones (login, registro) las hace
+// AuthenticationService directamente. Este repositorio queda como
+// helper para casos puntuales (búsquedas, listado, etc.).
 
 namespace HoloCrew.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User> GetByIdAsync(int id);
-        Task<User> GetByEmailAsync(string email);
-        Task<User> CreateAsync(User user);
-        Task<User> UpdateAsync(User user);
-        Task<bool> DeleteAsync(int id);
-        Task<bool> EmailExistsAsync(string email);                 // para no duplicar emails al registrarse
-        Task<List<User>> GetAllAsync();                            // solo para admin
-        Task UpdateLastLoginAsync(int userId);                     // guarda cuándo inició sesión
-        Task<User> ValidateCredentialsAsync(string email, string password); // comprueba email y contraseña
+        Task<User?> GetByIdAsync(string id);
+        Task<User?> GetByEmailAsync(string email);
+        Task<User?> CreateAsync(User user);
+        Task<User?> UpdateAsync(User user);
+        Task<bool> DeleteAsync(string id);
+        Task<bool> EmailExistsAsync(string email);
+        Task<List<User>> GetAllAsync();
+        Task UpdateLastLoginAsync(string userId);
+        Task<User?> ValidateCredentialsAsync(string email, string password);
     }
 }

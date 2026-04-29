@@ -2,7 +2,8 @@
 using System;
 
 // Notificación que recibe el usuario (pedidos, promociones, alertas, etc.)
-// TimeAgo muestra cuánto tiempo ha pasado: "5m ago", "2h ago", "3d ago", etc.
+// UserId es UUID de Supabase Auth.
+// TimeAgo calcula el tiempo transcurrido en formato "5m ago", "2h ago", etc.
 
 namespace HoloCrew.Models
 {
@@ -12,16 +13,16 @@ namespace HoloCrew.Models
         private int _id;
 
         [ObservableProperty]
-        private int _userId;
+        private string _userId = string.Empty;  // UUID
 
         [ObservableProperty]
-        private string _title;
+        private string _title = string.Empty;
 
         [ObservableProperty]
-        private string _message;
+        private string _message = string.Empty;
 
         [ObservableProperty]
-        private string _type; // "Order", "Promotion", "Alert", "Info"
+        private string _type = string.Empty; // "order_status", "promotion", "wishlist_sale", etc.
 
         [ObservableProperty]
         private DateTime _createdAt;
@@ -30,15 +31,13 @@ namespace HoloCrew.Models
         private bool _isRead;
 
         [ObservableProperty]
-        private string _icon; // emoji o icono
+        private string _icon = string.Empty;
 
-        // calcula el texto del tiempo transcurrido
         public string TimeAgo
         {
             get
             {
                 var timeSpan = DateTime.Now - CreatedAt;
-
                 if (timeSpan.TotalMinutes < 1)
                     return "Just now";
                 if (timeSpan.TotalMinutes < 60)
@@ -49,7 +48,6 @@ namespace HoloCrew.Models
                     return $"{(int)timeSpan.TotalDays}d ago";
                 if (timeSpan.TotalDays < 30)
                     return $"{(int)(timeSpan.TotalDays / 7)}w ago";
-
                 return CreatedAt.ToString("MMM dd");
             }
         }

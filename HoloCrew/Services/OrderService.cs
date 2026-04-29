@@ -1,100 +1,88 @@
 ﻿using HoloCrew.Models;
 using HoloCrew.Repositories.Interfaces;
 using HoloCrew.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-// Servicio de pedidos. Usa IOrderRepository para guardar y consultar pedidos.
-// Se encarga de crear pedidos, cancelarlos, actualizar estados, y obtener información de tracking.
+// Servicio de pedidos. Delega en el OrderRepository conectado a Supabase.
+// La creación usa la RPC create_order_from_cart que es transaccional.
 
 namespace HoloCrew.Services
 {
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IAuthenticationService _authService;
+        private readonly ICartService _cartService;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(
+            IOrderRepository orderRepository,
+            IAuthenticationService authService,
+            ICartService cartService)
         {
             _orderRepository = orderRepository;
+            _authService = authService;
+            _cartService = cartService;
         }
 
-        public async Task<Order> CreateOrderAsync(Order order)
+
+        public async Task<Order?> CreateOrderFromCartAsync(
+            Address shippingAddress,
+            string paymentMethod,
+            string? couponCode = null)
         {
-            if (order == null)
-            {
+            var user = _authService.GetCurrentUser();
+            if (user == null || string.IsNullOrEmpty(user.Id))
                 return null;
+
+            var order = await _orderRepository.CreateFromCartAsync(
+                user.Id,
+                shippingAddress,
+                paymentMethod,
+                couponCode);
+
+            if (order != null)
+            {
+                // Tras crear el pedido, recargamos el carrito (que la BD ya vació)
+                await _cartService.LoadCartAsync();
             }
 
-            order.OrderDate = DateTime.Now;
-            order.Status = OrderStatus.Pending;
-            order.EstimatedDeliveryDate = DateTime.Now.AddDays(5); // se estiman 5 días de envío
-
-            // historial inicial del pedido
-            order.StatusHistory = new List<OrderStatusHistory>
-            {
-                new OrderStatusHistory
-                {
-                    Status = OrderStatus.Pending,
-                    Timestamp = DateTime.Now,
-                    Note = "Pedido creado"
-                }
-            };
-
-            var createdOrder = await _orderRepository.CreateAsync(order);
-            return createdOrder;
+            return order;
         }
 
-        public async Task<List<Order>> GetUserOrdersAsync(int userId)
+
+        public async Task<List<Order>> GetUserOrdersAsync(string userId)
         {
             return await _orderRepository.GetByUserIdAsync(userId);
         }
 
-        public async Task<Order> GetOrderByIdAsync(int orderId)
+
+        public async Task<Order?> GetOrderByIdAsync(int orderId)
         {
             return await _orderRepository.GetByIdAsync(orderId);
         }
 
+
         public async Task<bool> CancelOrderAsync(int orderId)
         {
-            try
-            {
-                var order = await _orderRepository.GetByIdAsync(orderId);
-
-                if (order == null)
-                {
-                    return false;
-                }
-
-                // solo se puede cancelar si está pendiente o confirmado (no si ya está enviado o entregado)
-                if (order.Status != OrderStatus.Pending && order.Status != OrderStatus.Confirmed)
-                {
-                    return false;
-                }
-
-                order.Status = OrderStatus.Cancelled;
-                order.StatusHistory.Add(new OrderStatusHistory
-                {
-                    Status = OrderStatus.Cancelled,
-                    Timestamp = DateTime.Now,
-                    Note = "Pedido cancelado por el usuario"
-                });
-
-                await _orderRepository.UpdateAsync(order);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return await _orderRepository.CancelAsync(orderId);
         }
 
-        public async Task<TrackingInfo> GetTrackingInfoAsync(string trackingNumber)
-        {
-            if (string.IsNullOrWhiteSpace(trackingNumber))
-            {
-                return null;
-            }
 
-            // en producción se consultaría la API de la empresa de paquetería (DHL, Correos, etc.)
-            // de momento, datos falsos de ejemplo
+        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus newStatus)
+        {
+            return await _orderRepository.UpdateStatusAsync(orderId, newStatus);
+        }
+
+
+        public async Task<TrackingInfo?> GetTrackingInfoAsync(string trackingNumber)
+        {
+            // La integración real con la API de la empresa de mensajería (DHL, Correos, etc.)
+            // se haría aquí. De momento, datos de ejemplo.
+            if (string.IsNullOrWhiteSpace(trackingNumber))
+                return null;
+
             return await Task.FromResult(new TrackingInfo
             {
                 TrackingNumber = trackingNumber,
@@ -123,43 +111,13 @@ namespace HoloCrew.Services
             });
         }
 
-        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus newStatus)
-        {
-            try
-            {
-                var order = await _orderRepository.GetByIdAsync(orderId);
-
-                if (order == null)
-                {
-                    return false;
-                }
-
-                order.Status = newStatus;
-                order.StatusHistory.Add(new OrderStatusHistory
-                {
-                    Status = newStatus,
-                    Timestamp = DateTime.Now,
-                    Note = $"Estado actualizado a {newStatus}"
-                });
-
-                if (newStatus == OrderStatus.Delivered)
-                {
-                    order.DeliveredDate = DateTime.Now;
-                }
-
-                await _orderRepository.UpdateAsync(order);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
 
         public async Task<List<OrderStatusHistory>> GetOrderStatusHistoryAsync(int orderId)
         {
-            var order = await _orderRepository.GetByIdAsync(orderId);
-            return order?.StatusHistory ?? new List<OrderStatusHistory>();
+            // El historial está en la tabla order_status_history.
+            // Si quieres mostrarlo en la UI lo implementamos como DTO en otro paso.
+            // De momento devolvemos lista vacía.
+            return await Task.FromResult(new List<OrderStatusHistory>());
         }
     }
 }

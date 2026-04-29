@@ -11,220 +11,205 @@
         <StackPanel>
             <!-- Header -->
             <TextBlock Text="ORDER HISTORY" 
-                           Style="{StaticResource HeadingLarge}"
-                           Margin="0,0,0,40" />
+                       Style="{StaticResource HeadingLarge}"
+                       Margin="0,0,0,40" />
 
             <!-- Filtros -->
             <Border Background="{DynamicResource Gray100Brush}"
-                        Padding="30,25"
-                        Margin="0,0,0,40">
+                    Padding="35,28"
+                    Margin="0,0,0,40">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="180"/>
                         <ColumnDefinition Width="20"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="180"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Filter by Status -->
+                    <!-- STATUS -->
                     <TextBlock Grid.Column="0"
-                                   Text="STATUS:" 
-                                   Style="{StaticResource BodyMedium}"
-                                   FontWeight="SemiBold"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,15,0"/>
+                               Text="STATUS:" 
+                               Style="{StaticResource BodyMedium}"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="0,0,15,0"/>
 
                     <ComboBox Grid.Column="1"
-                                  ItemsSource="{Binding FilterOptions}"
-                                  SelectedItem="{Binding SelectedFilter}"
-                                  Height="45"
-                                  Padding="15,0"
-                                  FontSize="14"/>
+                              ItemsSource="{Binding FilterOptions}"
+                              SelectedItem="{Binding SelectedFilter}"
+                              Height="48"
+                              VerticalContentAlignment="Center"
+                              Padding="15,0"
+                              FontSize="14"/>
 
-                    <!-- From Date -->
+                    <!-- FROM -->
                     <TextBlock Grid.Column="3"
-                                   Text="FROM:" 
-                                   Style="{StaticResource BodyMedium}"
-                                   FontWeight="SemiBold"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,15,0"/>
+                               Text="FROM:" 
+                               Style="{StaticResource BodyMedium}"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="0,0,15,0"/>
 
                     <DatePicker Grid.Column="4"
-                                    SelectedDate="{Binding StartDate}"
-                                    Height="45"
-                                    Padding="15,0"
-                                    FontSize="14"/>
+                                SelectedDate="{Binding StartDate}"
+                                Height="48"
+                                VerticalContentAlignment="Center"
+                                Padding="12,0,8,0"
+                                FontSize="14"/>
 
-                    <!-- To Date -->
+                    <!-- TO -->
                     <TextBlock Grid.Column="6"
-                                   Text="TO:" 
-                                   Style="{StaticResource BodyMedium}"
-                                   FontWeight="SemiBold"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,15,0"/>
+                               Text="TO:" 
+                               Style="{StaticResource BodyMedium}"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="0,0,15,0"/>
 
                     <DatePicker Grid.Column="7"
-                                    SelectedDate="{Binding EndDate}"
-                                    Height="45"
-                                    Padding="15,0"
-                                    FontSize="14"/>
+                                SelectedDate="{Binding EndDate}"
+                                Height="48"
+                                VerticalContentAlignment="Center"
+                                Padding="12,0,8,0"
+                                FontSize="14"/>
 
-                    <!-- Apply Button -->
+                    <!-- APPLY (alineado a la derecha gracias a Width=*) -->
                     <Button Grid.Column="9"
-                                Content="APPLY" 
-                                Style="{StaticResource PrimaryButton}"
-                                FontSize="13"
-                                Padding="25,12"
-                                Command="{Binding ApplyFiltersCommand}"/>
+                            Content="APPLY" 
+                            Style="{StaticResource PrimaryButton}"
+                            FontSize="13"
+                            Padding="32,14"
+                            Height="48"
+                            Command="{Binding ApplyFiltersCommand}"/>
                 </Grid>
             </Border>
 
             <!-- Empty State -->
             <Border Background="{DynamicResource Gray100Brush}"
-                        Padding="60,80"
-                        Visibility="{Binding HasOrders, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    Padding="60,80"
+                    Visibility="{Binding HasOrders, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <StackPanel HorizontalAlignment="Center">
                     <TextBlock Text="" 
-                                   FontSize="100"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,30" />
+                               FontSize="100"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,30" />
                     <TextBlock Text="NO ORDERS YET" 
-                                   Style="{StaticResource HeadingMedium}"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,15"/>
+                               Style="{StaticResource HeadingMedium}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,15"/>
                     <TextBlock Text="You haven't placed any orders yet" 
-                                   Style="{StaticResource BodyLarge}"
-                                   Foreground="{DynamicResource TextSecondary}"
-                                   TextAlignment="Center"
-                                   Margin="0,0,0,30"/>
+                               Style="{StaticResource BodyLarge}"
+                               Foreground="{DynamicResource TextSecondary}"
+                               TextAlignment="Center"
+                               Margin="0,0,0,30"/>
                     <Button Content="START SHOPPING" 
-                                Style="{StaticResource PrimaryButton}"
-                                Command="{Binding BrowseProductsCommand}"/>
+                            Style="{StaticResource PrimaryButton}"
+                            Command="{Binding BrowseProductsCommand}"/>
                 </StackPanel>
             </Border>
 
             <!-- Orders List -->
             <ItemsControl ItemsSource="{Binding Orders}"
-                              Visibility="{Binding HasOrders, Converter={StaticResource BooleanToVisibilityConverter}}">
+                          Visibility="{Binding HasOrders, Converter={StaticResource BoolToVisibilityConverter}}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Background="{DynamicResource WhitePrimaryBrush}"
-                                    BorderBrush="{DynamicResource BorderDefault}"
-                                    BorderThickness="1"
-                                    Padding="30"
-                                    Margin="0,0,0,20"
-                                    Cursor="Hand">
+                                BorderBrush="{DynamicResource BorderDefault}"
+                                BorderThickness="1"
+                                Padding="35,28"
+                                Margin="0,0,0,18"
+                                Cursor="Hand">
                             <Border.InputBindings>
                                 <MouseBinding Command="{Binding DataContext.ViewOrderDetailCommand, 
-                                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                  CommandParameter="{Binding}"
-                                                  MouseAction="LeftClick"/>
+                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              CommandParameter="{Binding}"
+                                              MouseAction="LeftClick"/>
                             </Border.InputBindings>
 
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="15"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                            <!-- Una sola fila con todo centrado verticalmente -->
+                            <Grid VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                                <!-- Row 1: Header -->
-                                <Grid Grid.Row="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                                <!-- Order Number & Date -->
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock Style="{StaticResource SubtitleLarge}"
+                                               FontWeight="Bold">
+                                        <Run Text="ORDER #"/>
+                                        <Run Text="{Binding OrderNumber, Mode=OneWay}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding OrderDate, StringFormat='MMMM dd, yyyy'}"
+                                               Style="{StaticResource BodyMedium}"
+                                               Foreground="{DynamicResource TextSecondary}"
+                                               Margin="0,5,0,0"/>
+                                </StackPanel>
 
-                                    <!-- Order Number & Date -->
-                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                        <TextBlock Style="{StaticResource SubtitleLarge}"
-                                                       FontWeight="Bold">
-                                                <Run Text="ORDER #"/>
-                                                <Run Text="{Binding OrderNumber}"/>
-                                        </TextBlock>
-                                        <TextBlock Text="{Binding OrderDate, StringFormat='MMMM dd, yyyy'}"
-                                                       Style="{StaticResource BodyMedium}"
-                                                       Foreground="{DynamicResource TextSecondary}"
-                                                       Margin="0,5,0,0"/>
-                                    </StackPanel>
+                                <!-- Items count -->
+                                <StackPanel Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,30,0">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               Style="{StaticResource SubtitleLarge}"
+                                               FontWeight="Bold">
+                                        <Run Text="{Binding ItemCount, Mode=OneWay}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="ITEMS"
+                                               Style="{StaticResource Caption}"
+                                               Foreground="{DynamicResource TextSecondary}"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,3,0,0"/>
+                                </StackPanel>
 
-                                    <!-- Total -->
-                                    <TextBlock Grid.Column="1"
-                                                   Text="{Binding Total, StringFormat='{}{0:N2}€'}"
-                                                   Style="{StaticResource HeadingSmall}"
-                                                   VerticalAlignment="Center"
-                                                   Margin="0,0,30,0"/>
+                                <!-- Status Badge -->
+                                <Border Grid.Column="2"
+                                        Background="#1A1A1A"
+                                        Padding="18,10"
+                                        VerticalAlignment="Center"
+                                        Margin="0,0,30,0">
+                                    <TextBlock Text="{Binding Status, Mode=OneWay}"
+                                               Style="{StaticResource Caption}"
+                                               FontWeight="Bold"
+                                               Foreground="{DynamicResource WhitePrimaryBrush}"/>
+                                </Border>
 
-                                    <!-- Status Badge -->
-                                    <Border Grid.Column="2"
-                                                Background="{Binding StatusColor}"
-                                                Padding="15,8"
-                                                VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding StatusText}"
-                                                       Style="{StaticResource Caption}"
-                                                       FontWeight="Bold"
-                                                       Foreground="{DynamicResource WhitePrimaryBrush}"/>
-                                    </Border>
-                                </Grid>
+                                <!-- Total -->
+                                <TextBlock Grid.Column="3"
+                                           Text="{Binding Total, StringFormat='{}{0:N2}€'}"
+                                           Style="{StaticResource HeadingSmall}"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,30,0"/>
 
-                                <!-- Row 2: Divider -->
-                                <Border Grid.Row="1"/>
-
-                                <!-- Row 3: Items Info & Actions -->
-                                <Grid Grid.Row="2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Items Info -->
-                                    <StackPanel Grid.Column="0" 
-                                                    Orientation="Horizontal"
-                                                    VerticalAlignment="Center">
-                                        <TextBlock Style="{StaticResource BodyMedium}"
-                                                       Foreground="{DynamicResource TextSecondary}">
-                                                <Run Text="{Binding ItemCount}"/>
-                                                <Run Text=" items"/>
-                                        </TextBlock>
-                                        <TextBlock Text="•" 
-                                                       Style="{StaticResource BodyMedium}"
-                                                       Foreground="{DynamicResource Gray300Brush}"
-                                                       Margin="10,0"/>
-                                        <TextBlock Text="{Binding ShippingAddress}"
-                                                       Style="{StaticResource BodyMedium}"
-                                                       Foreground="{DynamicResource TextSecondary}"
-                                                       TextTrimming="CharacterEllipsis"
-                                                       MaxWidth="400"/>
-                                    </StackPanel>
-
-                                    <!-- View Details Button -->
-                                    <Button Grid.Column="1"
-                                                Content="VIEW DETAILS →" 
-                                                Style="{StaticResource TextButton}"
-                                                FontSize="13"
-                                                FontWeight="Bold"
-                                                Command="{Binding DataContext.ViewOrderDetailCommand, 
-                                                          RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"/>
-                                </Grid>
+                                <!-- View Details -->
+                                <Button Grid.Column="4"
+                                        Content="VIEW DETAILS →"
+                                        Style="{StaticResource TextButton}"
+                                        FontSize="13"
+                                        FontWeight="Bold"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding DataContext.ViewOrderDetailCommand, 
+                                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <!-- Stats Summary (optional) -->
+            <!-- Stats Summary -->
             <Border Background="{DynamicResource Gray100Brush}"
-                        Padding="40,30"
-                        Margin="0,20,0,0"
-                        Visibility="{Binding HasOrders, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Padding="40,35"
+                    Margin="0,30,0,0"
+                    Visibility="{Binding HasOrders, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -235,37 +220,37 @@
                     <!-- Total Orders -->
                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding TotalOrders}"
-                                       Style="{StaticResource HeadingLarge}"
-                                       HorizontalAlignment="Center"/>
+                                   Style="{StaticResource HeadingLarge}"
+                                   HorizontalAlignment="Center"/>
                         <TextBlock Text="TOTAL ORDERS" 
-                                       Style="{StaticResource Caption}"
-                                       Foreground="{DynamicResource TextSecondary}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,5,0,0"/>
+                                   Style="{StaticResource Caption}"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,0"/>
                     </StackPanel>
 
                     <!-- Total Spent -->
                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding TotalSpent, StringFormat='{}{0:N2}€'}"
-                                       Style="{StaticResource HeadingLarge}"
-                                       HorizontalAlignment="Center"/>
+                                   Style="{StaticResource HeadingLarge}"
+                                   HorizontalAlignment="Center"/>
                         <TextBlock Text="TOTAL SPENT" 
-                                       Style="{StaticResource Caption}"
-                                       Foreground="{DynamicResource TextSecondary}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,5,0,0"/>
+                                   Style="{StaticResource Caption}"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,0"/>
                     </StackPanel>
 
                     <!-- Avg Order Value -->
                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding AverageOrderValue, StringFormat='{}{0:N2}€'}"
-                                       Style="{StaticResource HeadingLarge}"
-                                       HorizontalAlignment="Center"/>
+                                   Style="{StaticResource HeadingLarge}"
+                                   HorizontalAlignment="Center"/>
                         <TextBlock Text="AVG ORDER VALUE" 
-                                       Style="{StaticResource Caption}"
-                                       Foreground="{DynamicResource TextSecondary}"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,5,0,0"/>
+                                   Style="{StaticResource Caption}"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,0"/>
                     </StackPanel>
                 </Grid>
             </Border>
