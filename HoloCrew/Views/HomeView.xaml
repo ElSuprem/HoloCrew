@@ -14,44 +14,49 @@
         <!-- HERO BANNER - Centered like web              -->
         <!-- ============================================ -->
         <!-- HERO: Always dark regardless of theme -->
-        <Border Height="650" Background="#0A0A0A">
+        <Border Height="650" Background="#0A0A0A" ClipToBounds="True">
             <Grid>
-                <!-- Background placeholder (will be image in Phase 2) -->
-                <Border Background="#1A1A1A" Opacity="0.6"/>
+                <!-- Imagen real del banner hero (debajo del overlay) -->
+                <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/bannerlanding.png"
+                     Stretch="Fill"/>
 
-                <!-- Gradient overlay for text readability -->
+                <!-- Overlay sutil para legibilidad del texto (no oscurece tanto como antes) -->
                 <Border>
                     <Border.Background>
-                        <RadialGradientBrush Center="0.5,0.5" RadiusX="0.8" RadiusY="0.8">
-                            <GradientStop Color="#60000000" Offset="0"/>
-                            <GradientStop Color="#CC000000" Offset="1"/>
-                        </RadialGradientBrush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#40000000" Offset="0"/>
+                            <GradientStop Color="#60000000" Offset="1"/>
+                        </LinearGradientBrush>
                     </Border.Background>
                 </Border>
 
                 <!-- Hero Content - CENTERED like the web -->
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="700">
                     <TextBlock Text="RISE WITH THE CREW"
-                               FontSize="64"
-                               FontWeight="Black"
-                               Foreground="White"
-                               HorizontalAlignment="Center"
-                               TextAlignment="Center"
-                               Margin="0,0,0,40"/>
+                       FontSize="64"
+                       FontWeight="Black"
+                       Foreground="White"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center"
+                       Margin="0,0,0,40">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="20" ShadowDepth="0"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
 
                     <!-- CTA Button - White outline like the web -->
                     <Border Background="White"
-                            HorizontalAlignment="Center"
-                            Padding="50,18"
-                            Cursor="Hand">
+                    HorizontalAlignment="Center"
+                    Padding="50,18"
+                    Cursor="Hand">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCatalogCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
                         <TextBlock Text="SHOP NOW"
-                                   FontSize="15"
-                                   FontWeight="Bold"
-                                   Foreground="Black"
-                                   HorizontalAlignment="Center"/>
+                           FontSize="15"
+                           FontWeight="Bold"
+                           Foreground="Black"
+                           HorizontalAlignment="Center"/>
                     </Border>
                 </StackPanel>
             </Grid>
@@ -130,11 +135,13 @@
                 <Border Height="550" Cursor="Hand" Margin="0,0,1,0">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
-                                      Command="{Binding NavigateToCategoryCommand}"
-                                      CommandParameter="tops"/>
+                      Command="{Binding NavigateToCategoryCommand}"
+                      CommandParameter="tops"/>
                     </Border.InputBindings>
                     <Grid>
                         <Border Background="#1A1A1A"/>
+                        <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/tops.png"
+                             Stretch="Fill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -145,28 +152,28 @@
                         </Border>
                         <!-- Discount badge -->
                         <Border Background="{DynamicResource RedAccentBrush}"
-                                Padding="16,8"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Margin="0,20,20,0">
+                Padding="16,8"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,20,20,0">
                             <TextBlock Text="-75%" Foreground="White" FontSize="15" FontWeight="Bold"/>
                         </Border>
                         <!-- Category info -->
                         <StackPanel VerticalAlignment="Bottom" Margin="35,0,35,35">
                             <TextBlock Text="TOPS"
-                                       FontSize="32"
-                                       FontWeight="Black"
-                                       Foreground="White"
-                                       Margin="0,0,0,5"/>
+                       FontSize="32"
+                       FontWeight="Black"
+                       Foreground="White"
+                       Margin="0,0,0,5"/>
                             <TextBlock Text="UP TO 75% OFF"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       Foreground="White"
-                                       Margin="0,0,0,20"/>
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       Margin="0,0,0,20"/>
                             <Border Background="White"
-                                    HorizontalAlignment="Left"
-                                    Padding="28,12"
-                                    Cursor="Hand">
+                    HorizontalAlignment="Left"
+                    Padding="28,12"
+                    Cursor="Hand">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="OFFERS" FontSize="13" FontWeight="Bold" Foreground="Black"/>
                                     <TextBlock Text="  →" FontSize="13" FontWeight="Bold" Foreground="Black"/>
@@ -180,11 +187,13 @@
                 <Border Height="550" Cursor="Hand" Margin="0,0,1,0">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
-                                      Command="{Binding NavigateToCategoryCommand}"
-                                      CommandParameter="bottoms"/>
+                      Command="{Binding NavigateToCategoryCommand}"
+                      CommandParameter="bottoms"/>
                     </Border.InputBindings>
                     <Grid>
                         <Border Background="#2A2A2A"/>
+                        <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/bottons.png"
+                             Stretch="Fill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -194,27 +203,27 @@
                             </Border.Background>
                         </Border>
                         <Border Background="{DynamicResource RedAccentBrush}"
-                                Padding="16,8"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Margin="0,20,20,0">
+                Padding="16,8"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,20,20,0">
                             <TextBlock Text="-70%" Foreground="White" FontSize="15" FontWeight="Bold"/>
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Margin="35,0,35,35">
                             <TextBlock Text="BOTTOMS"
-                                       FontSize="32"
-                                       FontWeight="Black"
-                                       Foreground="White"
-                                       Margin="0,0,0,5"/>
+                       FontSize="32"
+                       FontWeight="Black"
+                       Foreground="White"
+                       Margin="0,0,0,5"/>
                             <TextBlock Text="UP TO 70% OFF"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       Foreground="White"
-                                       Margin="0,0,0,20"/>
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       Margin="0,0,0,20"/>
                             <Border Background="White"
-                                    HorizontalAlignment="Left"
-                                    Padding="28,12"
-                                    Cursor="Hand">
+                    HorizontalAlignment="Left"
+                    Padding="28,12"
+                    Cursor="Hand">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="OFFERS" FontSize="13" FontWeight="Bold" Foreground="Black"/>
                                     <TextBlock Text="  →" FontSize="13" FontWeight="Bold" Foreground="Black"/>
@@ -228,11 +237,13 @@
                 <Border Height="550" Cursor="Hand">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
-                                      Command="{Binding NavigateToCategoryCommand}"
-                                      CommandParameter="accessories"/>
+                      Command="{Binding NavigateToCategoryCommand}"
+                      CommandParameter="accessories"/>
                     </Border.InputBindings>
                     <Grid>
                         <Border Background="#151515"/>
+                        <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/accessories.png"
+                             Stretch="Fill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -242,27 +253,27 @@
                             </Border.Background>
                         </Border>
                         <Border Background="{DynamicResource RedAccentBrush}"
-                                Padding="16,8"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Margin="0,20,20,0">
+                Padding="16,8"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,20,20,0">
                             <TextBlock Text="-50%" Foreground="White" FontSize="15" FontWeight="Bold"/>
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Margin="35,0,35,35">
                             <TextBlock Text="ACCESSORIES"
-                                       FontSize="32"
-                                       FontWeight="Black"
-                                       Foreground="White"
-                                       Margin="0,0,0,5"/>
+                       FontSize="32"
+                       FontWeight="Black"
+                       Foreground="White"
+                       Margin="0,0,0,5"/>
                             <TextBlock Text="UP TO 50% OFF"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       Foreground="White"
-                                       Margin="0,0,0,20"/>
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       Margin="0,0,0,20"/>
                             <Border Background="White"
-                                    HorizontalAlignment="Left"
-                                    Padding="28,12"
-                                    Cursor="Hand">
+                    HorizontalAlignment="Left"
+                    Padding="28,12"
+                    Cursor="Hand">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="OFFERS" FontSize="13" FontWeight="Bold" Foreground="Black"/>
                                     <TextBlock Text="  →" FontSize="13" FontWeight="Bold" Foreground="Black"/>
@@ -517,7 +528,7 @@
         <!-- BLACK WEEK BANNER                            -->
         <!-- ============================================ -->
         <!-- BLACK WEEK BANNER: Always dark -->
-        <Border Background="#0A0A0A" Padding="80,50" Cursor="Hand">
+        <Border Height="280" Background="#0A0A0A" Cursor="Hand" ClipToBounds="True">
             <Border.InputBindings>
                 <MouseBinding Command="{Binding NavigateToBlackWeekCommand}" MouseAction="LeftClick"/>
             </Border.InputBindings>
@@ -527,33 +538,43 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                <!-- Imagen de fondo (cubre todo el Grid) -->
+                <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/blackweek-banner.jpg"
+                     Stretch="Fill"
+                     Grid.ColumnSpan="2"/>
+
+                <!-- Overlay para legibilidad -->
+                <Border Background="#0A0A0A" Opacity="0.55" Grid.ColumnSpan="2"/>
+
+                <!-- Contenido textual -->
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="80,0,0,0">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <Border Background="{DynamicResource RedAccentBrush}" Padding="10,5">
                             <TextBlock Text="LIMITED TIME" Foreground="White" FontSize="11" FontWeight="Bold"/>
                         </Border>
                     </StackPanel>
                     <TextBlock Text="BLACK WEEK"
-                               FontSize="48"
-                               FontWeight="Black"
-                               Foreground="White"
-                               Margin="0,0,0,10"/>
+                       FontSize="48"
+                       FontWeight="Black"
+                       Foreground="White"
+                       Margin="0,0,0,10"/>
                     <TextBlock Text="Up to 50% off on selected items. Don't miss out on our biggest sale of the year."
-                               FontSize="16"
-                               Foreground="{DynamicResource Gray400Brush}"
-                               MaxWidth="500"
-                               TextWrapping="Wrap"/>
+                       FontSize="16"
+                       Foreground="{DynamicResource Gray400Brush}"
+                       MaxWidth="500"
+                       TextWrapping="Wrap"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
-                        Content="SHOP SALE"
-                        Style="{StaticResource OutlineButton}"
-                        BorderBrush="White"
-                        Foreground="White"
-                        Padding="40,16"
-                        FontSize="14"
-                        VerticalAlignment="Center"
-                        Command="{Binding NavigateToBlackWeekCommand}"/>
+                Content="SHOP SALE"
+                Style="{StaticResource OutlineButton}"
+                BorderBrush="White"
+                Foreground="White"
+                Padding="40,16"
+                FontSize="14"
+                VerticalAlignment="Center"
+                Margin="0,0,80,0"
+                Command="{Binding NavigateToBlackWeekCommand}"/>
             </Grid>
         </Border>
 
@@ -572,6 +593,8 @@
                     </Border.InputBindings>
                     <Grid>
                         <Border Background="#1A1A1A"/>
+                        <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/newarrivals.png"
+                             Stretch="Fill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -603,6 +626,8 @@
                     </Border.InputBindings>
                     <Grid>
                         <Border Background="#2A2A2A"/>
+                        <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/newdenims.png"
+                             Stretch="Fill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -636,11 +661,13 @@
                 <Border Height="500" Cursor="Hand" Margin="0,0,1,0">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
-                                      Command="{Binding NavigateToCategoryCommand}"
-                                      CommandParameter="outerwear"/>
+                      Command="{Binding NavigateToCategoryCommand}"
+                      CommandParameter="outerwear"/>
                     </Border.InputBindings>
                     <Grid>
                         <Border Background="#111111"/>
+                        <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/outerwear.png"
+                             Stretch="Fill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -651,14 +678,14 @@
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Margin="40,0,40,50">
                             <TextBlock Text="OUTERWEAR"
-                                       FontSize="36"
-                                       FontWeight="Black"
-                                       Foreground="White"
-                                       Margin="0,0,0,5"/>
+                       FontSize="36"
+                       FontWeight="Black"
+                       Foreground="White"
+                       Margin="0,0,0,5"/>
                             <TextBlock Text="SHOP NOW"
-                                       FontSize="16"
-                                       FontWeight="SemiBold"
-                                       Foreground="{DynamicResource Gray300Brush}"/>
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource Gray300Brush}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -672,6 +699,8 @@
                     </Border.InputBindings>
                     <Grid>
                         <Border Background="#0D0D0D"/>
+                        <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/footwear.png"
+                             Stretch="Fill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
