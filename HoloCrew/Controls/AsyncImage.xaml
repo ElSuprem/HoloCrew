@@ -1,0 +1,8 @@
+﻿<UserControl x:Class="HoloCrew.Controls.AsyncImage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             IsHitTestVisible="False">
+    <Image x:Name="ImageElement"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"/>
+</UserControl>

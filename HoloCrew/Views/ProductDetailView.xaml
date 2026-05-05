@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:HoloCrew.Controls"
              mc:Ignorable="d"
              d:DesignHeight="1200" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
@@ -46,64 +47,14 @@
                             </Grid.RowDefinitions>
 
                             <!-- Main Image -->
-                            <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" Height="600">
+                            <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" Height="600" ClipToBounds="True">
                                 <Grid>
-                                    <TextBlock Text="" FontSize="80" Opacity="0.15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-                                    <!-- Indicador de imagen actual (dots) -->
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
-                                        <Ellipse Width="10" Height="10" Margin="3">
-                                            <Ellipse.Style>
-                                                <Style TargetType="Ellipse">
-                                                    <Setter Property="Fill" Value="#50000000"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding SelectedImageIndex}" Value="0">
-                                                            <Setter Property="Fill" Value="{DynamicResource BlackPrimaryBrush}"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Ellipse.Style>
-                                        </Ellipse>
-                                        <Ellipse Width="10" Height="10" Margin="3">
-                                            <Ellipse.Style>
-                                                <Style TargetType="Ellipse">
-                                                    <Setter Property="Fill" Value="#50000000"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding SelectedImageIndex}" Value="1">
-                                                            <Setter Property="Fill" Value="{DynamicResource BlackPrimaryBrush}"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Ellipse.Style>
-                                        </Ellipse>
-                                        <Ellipse Width="10" Height="10" Margin="3">
-                                            <Ellipse.Style>
-                                                <Style TargetType="Ellipse">
-                                                    <Setter Property="Fill" Value="#50000000"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding SelectedImageIndex}" Value="2">
-                                                            <Setter Property="Fill" Value="{DynamicResource BlackPrimaryBrush}"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Ellipse.Style>
-                                        </Ellipse>
-                                        <Ellipse Width="10" Height="10" Margin="3">
-                                            <Ellipse.Style>
-                                                <Style TargetType="Ellipse">
-                                                    <Setter Property="Fill" Value="#50000000"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding SelectedImageIndex}" Value="3">
-                                                            <Setter Property="Fill" Value="{DynamicResource BlackPrimaryBrush}"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Ellipse.Style>
-                                        </Ellipse>
-                                    </StackPanel>
+                                    <!-- Imagen principal: bindeada a SelectedImage del VM -->
+                                    <controls:AsyncImage Source="{Binding SelectedImage}"/>
 
                                     <!-- Badges -->
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20"
+                                                IsHitTestVisible="False">
                                         <Border Background="{DynamicResource BlackPrimaryBrush}" Padding="14,8" Margin="0,0,8,0"
                                                 Visibility="{Binding Product.IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
                                             <TextBlock Text="NEW" Foreground="White" FontSize="11" FontWeight="Bold"/>
@@ -117,7 +68,8 @@
                                     </StackPanel>
 
                                     <!-- Wishlist Button -->
-                                    <Button Command="{Binding ToggleWishlistCommand}" Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20" Cursor="Hand">
+                                    <Button Command="{Binding ToggleWishlistCommand}" Width="50" Height="50"
+                                            HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20" Cursor="Hand">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                                 <Border Background="White" CornerRadius="25">
@@ -140,114 +92,49 @@
                                             </ControlTemplate>
                                         </Button.Template>
                                     </Button>
-
-                                    <!-- Navigation Arrow Left -->
-                                    <Button Command="{Binding PreviousImageCommand}" Width="45" Height="45" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0" Cursor="Hand">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Background="White" CornerRadius="22.5" Opacity="0.9">
-                                                    <TextBlock Text="‹" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,2"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                    </Button>
-
-                                    <!-- Navigation Arrow Right -->
-                                    <Button Command="{Binding NextImageCommand}" Width="45" Height="45" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15,0" Cursor="Hand">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Background="White" CornerRadius="22.5" Opacity="0.9">
-                                                    <TextBlock Text="›" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,0,0,2"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                    </Button>
                                 </Grid>
                             </Border>
 
-                            <!-- Thumbnails - Simple con índices fijos -->
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,15,0,0">
-                                <Button Command="{Binding SelectImageCommand}" CommandParameter="0" Width="90" Height="90" Margin="0,0,10,0" Cursor="Hand">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="border" Background="{DynamicResource Gray100Brush}" BorderThickness="2">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SelectedImageIndex}" Value="0">
-                                                                <Setter Property="BorderBrush" Value="{DynamicResource BlackPrimaryBrush}"/>
-                                                                <Setter Property="BorderThickness" Value="3"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                                <TextBlock Text="1" FontSize="20" FontWeight="Bold" Opacity="0.4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                                <Button Command="{Binding SelectImageCommand}" CommandParameter="1" Width="90" Height="90" Margin="0,0,10,0" Cursor="Hand">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="border" Background="{DynamicResource Gray100Brush}" BorderThickness="2">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SelectedImageIndex}" Value="1">
-                                                                <Setter Property="BorderBrush" Value="{DynamicResource BlackPrimaryBrush}"/>
-                                                                <Setter Property="BorderThickness" Value="3"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                                <TextBlock Text="2" FontSize="20" FontWeight="Bold" Opacity="0.4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                                <Button Command="{Binding SelectImageCommand}" CommandParameter="2" Width="90" Height="90" Margin="0,0,10,0" Cursor="Hand">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="border" Background="{DynamicResource Gray100Brush}" BorderThickness="2">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SelectedImageIndex}" Value="2">
-                                                                <Setter Property="BorderBrush" Value="{DynamicResource BlackPrimaryBrush}"/>
-                                                                <Setter Property="BorderThickness" Value="3"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                                <TextBlock Text="3" FontSize="20" FontWeight="Bold" Opacity="0.4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                                <Button Command="{Binding SelectImageCommand}" CommandParameter="3" Width="90" Height="90" Margin="0,0,10,0" Cursor="Hand">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="border" Background="{DynamicResource Gray100Brush}" BorderThickness="2">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SelectedImageIndex}" Value="3">
-                                                                <Setter Property="BorderBrush" Value="{DynamicResource BlackPrimaryBrush}"/>
-                                                                <Setter Property="BorderThickness" Value="3"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                                <TextBlock Text="4" FontSize="20" FontWeight="Bold" Opacity="0.4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                            </StackPanel>
+                            <!-- Thumbnails: ItemsControl real sobre Images del VM -->
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding Images}" Margin="0,15,0,0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Command="{Binding DataContext.SelectImageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Cursor="Hand"
+                                                Margin="0,0,10,0"
+                                                Padding="0"
+                                                BorderThickness="0"
+                                                Background="Transparent">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Width="90" Height="90"
+                                                            Background="{DynamicResource Gray100Brush}"
+                                                            ClipToBounds="True"
+                                                            BorderThickness="3">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border">
+                                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                        <Setter Property="BorderBrush" Value="{DynamicResource BlackPrimaryBrush}"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <controls:AsyncImage Source="{Binding Url}"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </Grid>
 
                         <!-- RIGHT: PRODUCT INFO -->
@@ -334,13 +221,6 @@
                                     <TextBlock FontSize="13" FontWeight="SemiBold">
                                         <Run Text="Size: "/><Run Text="{Binding SelectedSize}" FontWeight="Normal"/>
                                     </TextBlock>
-                                    <Button Command="{Binding ToggleSizeGuideCommand}" HorizontalAlignment="Right" Cursor="Hand">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <TextBlock Text="Size Guide" FontSize="13" Foreground="{DynamicResource Gray600Brush}" TextDecorations="Underline"/>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                    </Button>
                                 </Grid>
                                 <ItemsControl ItemsSource="{Binding AvailableSizes}">
                                     <ItemsControl.ItemsPanel>
@@ -373,7 +253,7 @@
                                                                     </Style.Triggers>
                                                                 </Style>
                                                             </Border.Style>
-                                                            <TextBlock x:Name="txt" Text="{Binding Size}" FontSize="13" FontWeight="SemiBold"
+                                                            <TextBlock Text="{Binding Size}" FontSize="13" FontWeight="SemiBold"
                                                                        HorizontalAlignment="Center" VerticalAlignment="Center">
                                                                 <TextBlock.Style>
                                                                     <Style TargetType="TextBlock">
@@ -396,59 +276,6 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-
-                                <!-- Size Guide Popup -->
-                                <Border Margin="0,15,0,0" Background="{DynamicResource Gray50Brush}" Padding="20"
-                                        Visibility="{Binding IsSizeGuideOpen, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <StackPanel>
-                                        <TextBlock Text="SIZE GUIDE" FontSize="14" FontWeight="Bold" Margin="0,0,0,15"/>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="60"/>
-                                                <ColumnDefinition Width="80"/>
-                                                <ColumnDefinition Width="80"/>
-                                                <ColumnDefinition Width="80"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="30"/>
-                                                <RowDefinition Height="25"/>
-                                                <RowDefinition Height="25"/>
-                                                <RowDefinition Height="25"/>
-                                                <RowDefinition Height="25"/>
-                                                <RowDefinition Height="25"/>
-                                                <RowDefinition Height="25"/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Size" FontWeight="SemiBold" FontSize="12"/>
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="Chest (cm)" FontWeight="SemiBold" FontSize="12"/>
-                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="Length (cm)" FontWeight="SemiBold" FontSize="12"/>
-                                            <TextBlock Grid.Row="0" Grid.Column="3" Text="Sleeve (cm)" FontWeight="SemiBold" FontSize="12"/>
-                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="XS" FontSize="12"/>
-                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="86-91" FontSize="12"/>
-                                            <TextBlock Grid.Row="1" Grid.Column="2" Text="66" FontSize="12"/>
-                                            <TextBlock Grid.Row="1" Grid.Column="3" Text="61" FontSize="12"/>
-                                            <TextBlock Grid.Row="2" Grid.Column="0" Text="S" FontSize="12"/>
-                                            <TextBlock Grid.Row="2" Grid.Column="1" Text="91-96" FontSize="12"/>
-                                            <TextBlock Grid.Row="2" Grid.Column="2" Text="69" FontSize="12"/>
-                                            <TextBlock Grid.Row="2" Grid.Column="3" Text="63" FontSize="12"/>
-                                            <TextBlock Grid.Row="3" Grid.Column="0" Text="M" FontSize="12"/>
-                                            <TextBlock Grid.Row="3" Grid.Column="1" Text="96-101" FontSize="12"/>
-                                            <TextBlock Grid.Row="3" Grid.Column="2" Text="72" FontSize="12"/>
-                                            <TextBlock Grid.Row="3" Grid.Column="3" Text="65" FontSize="12"/>
-                                            <TextBlock Grid.Row="4" Grid.Column="0" Text="L" FontSize="12"/>
-                                            <TextBlock Grid.Row="4" Grid.Column="1" Text="101-106" FontSize="12"/>
-                                            <TextBlock Grid.Row="4" Grid.Column="2" Text="75" FontSize="12"/>
-                                            <TextBlock Grid.Row="4" Grid.Column="3" Text="67" FontSize="12"/>
-                                            <TextBlock Grid.Row="5" Grid.Column="0" Text="XL" FontSize="12"/>
-                                            <TextBlock Grid.Row="5" Grid.Column="1" Text="106-111" FontSize="12"/>
-                                            <TextBlock Grid.Row="5" Grid.Column="2" Text="78" FontSize="12"/>
-                                            <TextBlock Grid.Row="5" Grid.Column="3" Text="69" FontSize="12"/>
-                                            <TextBlock Grid.Row="6" Grid.Column="0" Text="XXL" FontSize="12"/>
-                                            <TextBlock Grid.Row="6" Grid.Column="1" Text="111-116" FontSize="12"/>
-                                            <TextBlock Grid.Row="6" Grid.Column="2" Text="81" FontSize="12"/>
-                                            <TextBlock Grid.Row="6" Grid.Column="3" Text="71" FontSize="12"/>
-                                        </Grid>
-                                    </StackPanel>
-                                </Border>
                             </StackPanel>
 
                             <!-- QUANTITY SELECTOR -->
@@ -551,237 +378,6 @@
                 </Grid>
             </Border>
 
-            <!-- REVIEWS SECTION -->
-            <Border Padding="80,60" Background="{DynamicResource WhitePrimaryBrush}">
-                <StackPanel>
-                    <Grid Margin="0,0,0,30">
-                        <TextBlock Text="CUSTOMER REVIEWS" FontSize="22" FontWeight="Bold"/>
-                        <Button Command="{Binding ToggleWriteReviewCommand}" HorizontalAlignment="Right" Cursor="Hand">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{DynamicResource BlackPrimaryBrush}" Padding="20,12">
-                                        <TextBlock Text="WRITE A REVIEW" Foreground="White" FontSize="13" FontWeight="Bold"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                    </Grid>
-
-                    <!-- Write Review Form -->
-                    <Border Background="{DynamicResource Gray50Brush}" Padding="25" Margin="0,0,0,30"
-                            Visibility="{Binding IsWriteReviewOpen, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <StackPanel>
-                            <TextBlock Text="Write Your Review" FontSize="16" FontWeight="Bold" Margin="0,0,0,20"/>
-                            <TextBlock Text="Rating" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                <Button Command="{Binding SetReviewRatingCommand}" CommandParameter="1" Cursor="Hand" Margin="0,0,5,0">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <TextBlock Text="★" FontSize="24">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Foreground" Value="{DynamicResource Gray300Brush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="1">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="2">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="3">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="4">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="5">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style></TextBlock>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                                <Button Command="{Binding SetReviewRatingCommand}" CommandParameter="2" Cursor="Hand" Margin="0,0,5,0">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <TextBlock Text="★" FontSize="24">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Foreground" Value="{DynamicResource Gray300Brush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="2">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="3">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="4">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="5">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style></TextBlock>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                                <Button Command="{Binding SetReviewRatingCommand}" CommandParameter="3" Cursor="Hand" Margin="0,0,5,0">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <TextBlock Text="★" FontSize="24">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Foreground" Value="{DynamicResource Gray300Brush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="3">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="4">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="5">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style></TextBlock>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                                <Button Command="{Binding SetReviewRatingCommand}" CommandParameter="4" Cursor="Hand" Margin="0,0,5,0">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <TextBlock Text="★" FontSize="24">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Foreground" Value="{DynamicResource Gray300Brush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="4">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="5">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style></TextBlock>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                                <Button Command="{Binding SetReviewRatingCommand}" CommandParameter="5" Cursor="Hand">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <TextBlock Text="★" FontSize="24">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Foreground" Value="{DynamicResource Gray300Brush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding NewReviewRating}" Value="5">
-                                                                <Setter Property="Foreground" Value="#FBBF24"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style></TextBlock>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                            </StackPanel>
-                            <TextBlock Text="Title" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                            <TextBox Text="{Binding NewReviewTitle, UpdateSourceTrigger=PropertyChanged}" Height="40" Padding="12,10" FontSize="14" Margin="0,0,0,15"/>
-                            <TextBlock Text="Review" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                            <TextBox Text="{Binding NewReviewText, UpdateSourceTrigger=PropertyChanged}" Height="100" Padding="12,10" FontSize="14" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,20"/>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="SUBMIT REVIEW" Style="{StaticResource PrimaryButton}" Padding="25,12" Command="{Binding SubmitReviewCommand}"/>
-                                <Button Content="CANCEL" Style="{StaticResource OutlineButton}" Padding="25,12" Margin="15,0,0,0" Command="{Binding ToggleWriteReviewCommand}"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Rating Summary -->
-                    <Grid Margin="0,0,0,40">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Margin="0,0,60,0" HorizontalAlignment="Center">
-                            <TextBlock Text="{Binding Product.AverageRating, StringFormat='{}{0:N1}'}" FontSize="64" FontWeight="Bold" HorizontalAlignment="Center"/>
-                            <TextBlock Text="★★★★★" Foreground="#FBBF24" FontSize="24" HorizontalAlignment="Center" Margin="0,5,0,10"/>
-                            <TextBlock HorizontalAlignment="Center" FontSize="14" Foreground="{DynamicResource Gray500Brush}">
-                                <Run Text="Based on "/><Run Text="{Binding Product.ReviewCount, Mode=OneWay}"/><Run Text=" reviews"/>
-                            </TextBlock>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                <TextBlock Text="5 ★" Width="40" FontSize="13"/>
-                                <Border Width="300" Height="8" Background="{DynamicResource Gray200Brush}" Margin="10,0">
-                                    <Border Background="#FBBF24" Width="210" HorizontalAlignment="Left"/>
-                                </Border>
-                                <TextBlock Text="70%" FontSize="13" Foreground="{DynamicResource Gray500Brush}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                <TextBlock Text="4 ★" Width="40" FontSize="13"/>
-                                <Border Width="300" Height="8" Background="{DynamicResource Gray200Brush}" Margin="10,0">
-                                    <Border Background="#FBBF24" Width="60" HorizontalAlignment="Left"/>
-                                </Border>
-                                <TextBlock Text="20%" FontSize="13" Foreground="{DynamicResource Gray500Brush}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                <TextBlock Text="3 ★" Width="40" FontSize="13"/>
-                                <Border Width="300" Height="8" Background="{DynamicResource Gray200Brush}" Margin="10,0">
-                                    <Border Background="#FBBF24" Width="15" HorizontalAlignment="Left"/>
-                                </Border>
-                                <TextBlock Text="5%" FontSize="13" Foreground="{DynamicResource Gray500Brush}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                <TextBlock Text="2 ★" Width="40" FontSize="13"/>
-                                <Border Width="300" Height="8" Background="{DynamicResource Gray200Brush}" Margin="10,0">
-                                    <Border Background="#FBBF24" Width="15" HorizontalAlignment="Left"/>
-                                </Border>
-                                <TextBlock Text="5%" FontSize="13" Foreground="{DynamicResource Gray500Brush}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="1 ★" Width="40" FontSize="13"/>
-                                <Border Width="300" Height="8" Background="{DynamicResource Gray200Brush}" Margin="10,0">
-                                    <Border Background="#FBBF24" Width="0" HorizontalAlignment="Left"/>
-                                </Border>
-                                <TextBlock Text="0%" FontSize="13" Foreground="{DynamicResource Gray500Brush}"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- Sample Reviews -->
-                    <Border BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,1,0,0" Padding="0,30,0,0">
-                        <StackPanel>
-                            <Border Margin="0,0,0,25">
-                                <StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <TextBlock Text="★★★★★" Foreground="#FBBF24" FontSize="14"/>
-                                        <TextBlock Text="Amazing quality!" FontWeight="SemiBold" FontSize="14" Margin="15,0,0,0"/>
-                                    </StackPanel>
-                                    <TextBlock Text="The fabric is incredibly soft and the fit is perfect. Definitely ordering more colors!" FontSize="14" Foreground="{DynamicResource Gray600Brush}" TextWrapping="Wrap" Margin="0,0,0,10"/>
-                                    <TextBlock Text="Carlos M. - December 2024" FontSize="12" Foreground="{DynamicResource Gray400Brush}"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Margin="0,0,0,25" BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="0,1,0,0" Padding="0,25,0,0">
-                                <StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <TextBlock Text="★★★★☆" Foreground="#FBBF24" FontSize="14"/>
-                                        <TextBlock Text="Great hoodie" FontWeight="SemiBold" FontSize="14" Margin="15,0,0,0"/>
-                                    </StackPanel>
-                                    <TextBlock Text="Very comfortable and warm. Shipping was fast. Only giving 4 stars because I wish there were more color options." FontSize="14" Foreground="{DynamicResource Gray600Brush}" TextWrapping="Wrap" Margin="0,0,0,10"/>
-                                    <TextBlock Text="Maria L. - November 2024" FontSize="12" Foreground="{DynamicResource Gray400Brush}"/>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                    <Button Content="Load More Reviews" Style="{StaticResource OutlineButton}" HorizontalAlignment="Center" Padding="40,14" Margin="0,20,0,0"/>
-                </StackPanel>
-            </Border>
-
             <!-- RELATED PRODUCTS -->
             <Border Padding="80,60" Background="{DynamicResource Gray50Brush}">
                 <StackPanel>
@@ -796,15 +392,17 @@
                             <DataTemplate>
                                 <Border Background="{DynamicResource WhitePrimaryBrush}" Margin="10" Cursor="Hand">
                                     <Border.InputBindings>
-                                        <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.ViewRelatedProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                                        <MouseBinding MouseAction="LeftClick"
+                                                      Command="{Binding DataContext.ViewRelatedProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                      CommandParameter="{Binding}"/>
                                     </Border.InputBindings>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="280"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}">
-                                            <TextBlock Text="" FontSize="36" Opacity="0.2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" ClipToBounds="True">
+                                            <controls:AsyncImage Source="{Binding MainImageUrl}"/>
                                         </Border>
                                         <StackPanel Grid.Row="1" Margin="15">
                                             <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>

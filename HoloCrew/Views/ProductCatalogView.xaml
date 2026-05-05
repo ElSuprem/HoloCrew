@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:HoloCrew.Controls"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
@@ -34,9 +35,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- ============================================ -->
-            <!-- CATEGORY TITLE - Centered like web           -->
-            <!-- ============================================ -->
+            <!-- CATEGORY TITLE -->
             <Border Grid.Row="0" Background="{DynamicResource WhitePrimaryBrush}" Padding="0,35,0,20">
                 <TextBlock Text="{Binding CurrentCategoryName}" 
                            FontSize="32"
@@ -44,11 +43,7 @@
                            HorizontalAlignment="Center"/>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- HORIZONTAL FILTER BAR                        -->
-            <!-- Left: checkboxes | Center: category pills + sort -->
-            <!-- Right: product count                         -->
-            <!-- ============================================ -->
+            <!-- HORIZONTAL FILTER BAR -->
             <Border Grid.Row="1" 
                     Background="{DynamicResource WhitePrimaryBrush}" 
                     BorderBrush="{DynamicResource Gray200Brush}"
@@ -265,11 +260,8 @@
                 </Grid>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- PRODUCTS GRID - Full width                   -->
-            <!-- ============================================ -->
+            <!-- PRODUCTS GRID -->
             <Grid Grid.Row="2" Background="{DynamicResource WhitePrimaryBrush}">
-                <!-- Products -->
                 <ItemsControl ItemsSource="{Binding FilteredProducts}" Margin="50,30,50,60">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -289,13 +281,16 @@
                                     </Grid.RowDefinitions>
 
                                     <!-- Image area -->
-                                    <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}">
+                                    <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" ClipToBounds="True">
                                         <Border.InputBindings>
                                             <MouseBinding MouseAction="LeftClick" 
                                                           Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                                           CommandParameter="{Binding}"/>
                                         </Border.InputBindings>
                                         <Grid>
+                                            <!-- Imagen del producto -->
+                                            <controls:AsyncImage Source="{Binding MainImageUrl}"/>
+
                                             <!-- Badges -->
                                             <StackPanel Orientation="Horizontal" 
                                                         HorizontalAlignment="Left" 

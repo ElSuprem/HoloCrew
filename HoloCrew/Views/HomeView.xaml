@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:HoloCrew.Controls"
              mc:Ignorable="d"
              d:DesignHeight="3500" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
@@ -30,7 +31,7 @@
 
                 <!-- Hero Content - CENTERED like the web -->
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="700">
-                    <TextBlock Text="RISE WITH THE CREW" 
+                    <TextBlock Text="RISE WITH THE CREW"
                                FontSize="64"
                                FontWeight="Black"
                                Foreground="White"
@@ -39,16 +40,16 @@
                                Margin="0,0,0,40"/>
 
                     <!-- CTA Button - White outline like the web -->
-                    <Border Background="White" 
-                            HorizontalAlignment="Center" 
-                            Padding="50,18" 
+                    <Border Background="White"
+                            HorizontalAlignment="Center"
+                            Padding="50,18"
                             Cursor="Hand">
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding NavigateToCatalogCommand}" MouseAction="LeftClick"/>
                         </Border.InputBindings>
-                        <TextBlock Text="SHOP NOW" 
-                                   FontSize="15" 
-                                   FontWeight="Bold" 
+                        <TextBlock Text="SHOP NOW"
+                                   FontSize="15"
+                                   FontWeight="Bold"
                                    Foreground="Black"
                                    HorizontalAlignment="Center"/>
                     </Border>
@@ -60,7 +61,7 @@
         <!-- BENEFITS BAR - 3 columns, centered icons     -->
         <!-- Matching web: Return / Free Shipping / World -->
         <!-- ============================================ -->
-        <Border Background="{DynamicResource WhitePrimaryBrush}" 
+        <Border Background="{DynamicResource WhitePrimaryBrush}"
                 BorderBrush="{DynamicResource Gray200Brush}"
                 BorderThickness="0,0,0,1"
                 Padding="80,45">
@@ -68,51 +69,51 @@
                 <!-- 14 Days Return Policy -->
                 <StackPanel HorizontalAlignment="Center">
                     <Viewbox Width="42" Height="42" Margin="0,0,0,16">
-                        <Path Data="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" 
+                        <Path Data="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
                               Fill="{DynamicResource BlackPrimaryBrush}"/>
                     </Viewbox>
-                    <TextBlock Text="14 DAYS RETURN POLICY" 
-                               FontSize="14" 
-                               FontWeight="Bold" 
+                    <TextBlock Text="14 DAYS RETURN POLICY"
+                               FontSize="14"
+                               FontWeight="Bold"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,6"/>
-                    <TextBlock Text="Free returns within 14 days" 
-                               FontSize="13" 
-                               Foreground="{DynamicResource Gray500Brush}" 
+                    <TextBlock Text="Free returns within 14 days"
+                               FontSize="13"
+                               Foreground="{DynamicResource Gray500Brush}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- Free Shipping -->
                 <StackPanel HorizontalAlignment="Center">
                     <Viewbox Width="42" Height="42" Margin="0,0,0,16">
-                        <Path Data="M18 18.5a1.5 1.5 0 0 1-1.5-1.5 1.5 1.5 0 0 1 1.5-1.5 1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5zm1.5-9H17V12h4.46L19.5 9.5zM6 18.5A1.5 1.5 0 0 1 4.5 17 1.5 1.5 0 0 1 6 15.5 1.5 1.5 0 0 1 7.5 17 1.5 1.5 0 0 1 6 18.5zM20 8l3 4v5h-2a3 3 0 0 1-3 3 3 3 0 0 1-3-3H9a3 3 0 0 1-3 3 3 3 0 0 1-3-3H1V6c0-1.11.89-2 2-2h14v4h3z" 
+                        <Path Data="M18 18.5a1.5 1.5 0 0 1-1.5-1.5 1.5 1.5 0 0 1 1.5-1.5 1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5zm1.5-9H17V12h4.46L19.5 9.5zM6 18.5A1.5 1.5 0 0 1 4.5 17 1.5 1.5 0 0 1 6 15.5 1.5 1.5 0 0 1 7.5 17 1.5 1.5 0 0 1 6 18.5zM20 8l3 4v5h-2a3 3 0 0 1-3 3 3 3 0 0 1-3-3H9a3 3 0 0 1-3 3 3 3 0 0 1-3-3H1V6c0-1.11.89-2 2-2h14v4h3z"
                               Fill="{DynamicResource BlackPrimaryBrush}"/>
                     </Viewbox>
-                    <TextBlock Text="FREE SHIPPING OVER 50€" 
-                               FontSize="14" 
-                               FontWeight="Bold" 
+                    <TextBlock Text="FREE SHIPPING OVER 50€"
+                               FontSize="14"
+                               FontWeight="Bold"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,6"/>
-                    <TextBlock Text="Free shipping on orders over 50€" 
-                               FontSize="13" 
-                               Foreground="{DynamicResource Gray500Brush}" 
+                    <TextBlock Text="Free shipping on orders over 50€"
+                               FontSize="13"
+                               Foreground="{DynamicResource Gray500Brush}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- Worldwide Shipping -->
                 <StackPanel HorizontalAlignment="Center">
                     <Viewbox Width="42" Height="42" Margin="0,0,0,16">
-                        <Path Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" 
+                        <Path Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
                               Fill="{DynamicResource BlackPrimaryBrush}"/>
                     </Viewbox>
-                    <TextBlock Text="WORLDWIDE SHIPPING" 
-                               FontSize="14" 
-                               FontWeight="Bold" 
+                    <TextBlock Text="WORLDWIDE SHIPPING"
+                               FontSize="14"
+                               FontWeight="Bold"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,6"/>
-                    <TextBlock Text="We ship to all countries" 
-                               FontSize="13" 
-                               Foreground="{DynamicResource Gray500Brush}" 
+                    <TextBlock Text="We ship to all countries"
+                               FontSize="13"
+                               Foreground="{DynamicResource Gray500Brush}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
             </UniformGrid>
@@ -128,8 +129,8 @@
                 <!-- TOPS -->
                 <Border Height="550" Cursor="Hand" Margin="0,0,1,0">
                     <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding NavigateToCategoryCommand}" 
+                        <MouseBinding MouseAction="LeftClick"
+                                      Command="{Binding NavigateToCategoryCommand}"
                                       CommandParameter="tops"/>
                     </Border.InputBindings>
                     <Grid>
@@ -143,28 +144,28 @@
                             </Border.Background>
                         </Border>
                         <!-- Discount badge -->
-                        <Border Background="{DynamicResource RedAccentBrush}" 
-                                Padding="16,8" 
-                                HorizontalAlignment="Right" 
-                                VerticalAlignment="Top" 
+                        <Border Background="{DynamicResource RedAccentBrush}"
+                                Padding="16,8"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
                                 Margin="0,20,20,0">
                             <TextBlock Text="-75%" Foreground="White" FontSize="15" FontWeight="Bold"/>
                         </Border>
                         <!-- Category info -->
                         <StackPanel VerticalAlignment="Bottom" Margin="35,0,35,35">
-                            <TextBlock Text="TOPS" 
-                                       FontSize="32" 
-                                       FontWeight="Black" 
+                            <TextBlock Text="TOPS"
+                                       FontSize="32"
+                                       FontWeight="Black"
                                        Foreground="White"
                                        Margin="0,0,0,5"/>
-                            <TextBlock Text="UP TO 75% OFF" 
-                                       FontSize="18" 
-                                       FontWeight="Bold" 
+                            <TextBlock Text="UP TO 75% OFF"
+                                       FontSize="18"
+                                       FontWeight="Bold"
                                        Foreground="White"
                                        Margin="0,0,0,20"/>
-                            <Border Background="White" 
-                                    HorizontalAlignment="Left" 
-                                    Padding="28,12" 
+                            <Border Background="White"
+                                    HorizontalAlignment="Left"
+                                    Padding="28,12"
                                     Cursor="Hand">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="OFFERS" FontSize="13" FontWeight="Bold" Foreground="Black"/>
@@ -178,8 +179,8 @@
                 <!-- BOTTOMS -->
                 <Border Height="550" Cursor="Hand" Margin="0,0,1,0">
                     <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding NavigateToCategoryCommand}" 
+                        <MouseBinding MouseAction="LeftClick"
+                                      Command="{Binding NavigateToCategoryCommand}"
                                       CommandParameter="bottoms"/>
                     </Border.InputBindings>
                     <Grid>
@@ -192,27 +193,27 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
-                        <Border Background="{DynamicResource RedAccentBrush}" 
-                                Padding="16,8" 
-                                HorizontalAlignment="Right" 
-                                VerticalAlignment="Top" 
+                        <Border Background="{DynamicResource RedAccentBrush}"
+                                Padding="16,8"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
                                 Margin="0,20,20,0">
                             <TextBlock Text="-70%" Foreground="White" FontSize="15" FontWeight="Bold"/>
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Margin="35,0,35,35">
-                            <TextBlock Text="BOTTOMS" 
-                                       FontSize="32" 
-                                       FontWeight="Black" 
+                            <TextBlock Text="BOTTOMS"
+                                       FontSize="32"
+                                       FontWeight="Black"
                                        Foreground="White"
                                        Margin="0,0,0,5"/>
-                            <TextBlock Text="UP TO 70% OFF" 
-                                       FontSize="18" 
-                                       FontWeight="Bold" 
+                            <TextBlock Text="UP TO 70% OFF"
+                                       FontSize="18"
+                                       FontWeight="Bold"
                                        Foreground="White"
                                        Margin="0,0,0,20"/>
-                            <Border Background="White" 
-                                    HorizontalAlignment="Left" 
-                                    Padding="28,12" 
+                            <Border Background="White"
+                                    HorizontalAlignment="Left"
+                                    Padding="28,12"
                                     Cursor="Hand">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="OFFERS" FontSize="13" FontWeight="Bold" Foreground="Black"/>
@@ -226,8 +227,8 @@
                 <!-- ACCESSORIES -->
                 <Border Height="550" Cursor="Hand">
                     <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding NavigateToCategoryCommand}" 
+                        <MouseBinding MouseAction="LeftClick"
+                                      Command="{Binding NavigateToCategoryCommand}"
                                       CommandParameter="accessories"/>
                     </Border.InputBindings>
                     <Grid>
@@ -240,27 +241,27 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
-                        <Border Background="{DynamicResource RedAccentBrush}" 
-                                Padding="16,8" 
-                                HorizontalAlignment="Right" 
-                                VerticalAlignment="Top" 
+                        <Border Background="{DynamicResource RedAccentBrush}"
+                                Padding="16,8"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
                                 Margin="0,20,20,0">
                             <TextBlock Text="-50%" Foreground="White" FontSize="15" FontWeight="Bold"/>
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Margin="35,0,35,35">
-                            <TextBlock Text="ACCESSORIES" 
-                                       FontSize="32" 
-                                       FontWeight="Black" 
+                            <TextBlock Text="ACCESSORIES"
+                                       FontSize="32"
+                                       FontWeight="Black"
                                        Foreground="White"
                                        Margin="0,0,0,5"/>
-                            <TextBlock Text="UP TO 50% OFF" 
-                                       FontSize="18" 
-                                       FontWeight="Bold" 
+                            <TextBlock Text="UP TO 50% OFF"
+                                       FontSize="18"
+                                       FontWeight="Bold"
                                        Foreground="White"
                                        Margin="0,0,0,20"/>
-                            <Border Background="White" 
-                                    HorizontalAlignment="Left" 
-                                    Padding="28,12" 
+                            <Border Background="White"
+                                    HorizontalAlignment="Left"
+                                    Padding="28,12"
                                     Cursor="Hand">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="OFFERS" FontSize="13" FontWeight="Bold" Foreground="Black"/>
@@ -279,7 +280,7 @@
         <!-- ============================================ -->
         <Border Padding="80,60" Background="{DynamicResource WhitePrimaryBrush}">
             <StackPanel>
-                <TextBlock Text="DISCOVER BY CATEGORY" 
+                <TextBlock Text="DISCOVER BY CATEGORY"
                            FontSize="36"
                            FontWeight="Black"
                            HorizontalAlignment="Center"
@@ -338,11 +339,11 @@
             <StackPanel>
                 <!-- Header -->
                 <Grid Margin="0,0,0,40">
-                    <TextBlock Text="BEST SELLERS" 
+                    <TextBlock Text="BEST SELLERS"
                                FontSize="32"
                                FontWeight="Black"
                                HorizontalAlignment="Left"/>
-                    <TextBlock Text="VIEW ALL BEST SELLERS  →" 
+                    <TextBlock Text="VIEW ALL BEST SELLERS  →"
                                FontSize="14"
                                FontWeight="SemiBold"
                                Foreground="{DynamicResource BlackPrimaryBrush}"
@@ -368,25 +369,30 @@
                             <Border Background="{DynamicResource WhitePrimaryBrush}"
                                     Margin="10"
                                     Cursor="Hand">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick"
+                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                  CommandParameter="{Binding}"/>
+                                </Border.InputBindings>
+
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="320"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <!-- Image placeholder -->
-                                    <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}">
-                                        <Border.InputBindings>
-                                            <MouseBinding MouseAction="LeftClick" 
-                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                          CommandParameter="{Binding}"/>
-                                        </Border.InputBindings>
+                                    <!-- IMAGE AREA con overlays -->
+                                    <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" ClipToBounds="True">
                                         <Grid>
-                                            <!-- Badges -->
-                                            <StackPanel Orientation="Horizontal" 
-                                                        HorizontalAlignment="Left" 
+                                            <!-- Imagen del producto -->
+                                            <controls:AsyncImage Source="{Binding MainImageUrl}"/>
+
+                                            <!-- Badges (no atrapan clicks) -->
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Left"
                                                         VerticalAlignment="Top"
-                                                        Margin="12">
+                                                        Margin="12"
+                                                        IsHitTestVisible="False">
                                                 <Border Background="{DynamicResource BlackPrimaryBrush}"
                                                         Padding="10,5"
                                                         Margin="0,0,5,0"
@@ -438,7 +444,7 @@
                                                 </Button.Template>
                                             </Button>
 
-                                            <!-- Quick Add -->
+                                            <!-- Quick Add (hover) -->
                                             <Button Background="#0A0A0A"
                                                     BorderThickness="0"
                                                     Height="42"
@@ -446,6 +452,7 @@
                                                     Opacity="0"
                                                     x:Name="QuickAdd"
                                                     Cursor="Hand"
+                                                    Panel.ZIndex="50"
                                                     Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}">
                                                 <TextBlock Text="ADD TO CART"
@@ -458,20 +465,14 @@
                                         </Grid>
                                     </Border>
 
-                                    <!-- Info -->
+                                    <!-- INFO -->
                                     <StackPanel Grid.Row="1" Margin="0,15,0,0">
-                                        <StackPanel.InputBindings>
-                                            <MouseBinding MouseAction="LeftClick" 
-                                                          Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                          CommandParameter="{Binding}"/>
-                                        </StackPanel.InputBindings>
-                                        <TextBlock Text="{Binding Name}" 
+                                        <TextBlock Text="{Binding Name}"
                                                    FontSize="13"
                                                    FontWeight="SemiBold"
-                                                   TextTrimming="CharacterEllipsis"
-                                                  />
+                                                   TextTrimming="CharacterEllipsis"/>
                                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                            <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
+                                            <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}"
                                                        FontSize="15"
                                                        FontWeight="Bold"/>
                                             <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
@@ -484,7 +485,7 @@
                                     </StackPanel>
                                 </Grid>
 
-                                <!-- Hover trigger for Quick Add -->
+                                <!-- Hover trigger para Quick Add -->
                                 <Border.Triggers>
                                     <EventTrigger RoutedEvent="MouseEnter">
                                         <BeginStoryboard>
@@ -532,9 +533,9 @@
                             <TextBlock Text="LIMITED TIME" Foreground="White" FontSize="11" FontWeight="Bold"/>
                         </Border>
                     </StackPanel>
-                    <TextBlock Text="BLACK WEEK" 
-                               FontSize="48" 
-                               FontWeight="Black" 
+                    <TextBlock Text="BLACK WEEK"
+                               FontSize="48"
+                               FontWeight="Black"
                                Foreground="White"
                                Margin="0,0,0,10"/>
                     <TextBlock Text="Up to 50% off on selected items. Don't miss out on our biggest sale of the year."
@@ -544,8 +545,8 @@
                                TextWrapping="Wrap"/>
                 </StackPanel>
 
-                <Button Grid.Column="1" 
-                        Content="SHOP SALE" 
+                <Button Grid.Column="1"
+                        Content="SHOP SALE"
                         Style="{StaticResource OutlineButton}"
                         BorderBrush="White"
                         Foreground="White"
@@ -565,8 +566,8 @@
                 <!-- NEW ARRIVALS -->
                 <Border Height="500" Cursor="Hand" Margin="0,0,1,0">
                     <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding NavigateToCategoryCommand}" 
+                        <MouseBinding MouseAction="LeftClick"
+                                      Command="{Binding NavigateToCategoryCommand}"
                                       CommandParameter="new"/>
                     </Border.InputBindings>
                     <Grid>
@@ -580,12 +581,12 @@
                             </Border.Background>
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Margin="40,0,40,50">
-                            <TextBlock Text="NEW ARRIVALS" 
-                                       FontSize="36" 
-                                       FontWeight="Black" 
+                            <TextBlock Text="NEW ARRIVALS"
+                                       FontSize="36"
+                                       FontWeight="Black"
                                        Foreground="White"
                                        Margin="0,0,0,5"/>
-                            <TextBlock Text="SHOP NOW" 
+                            <TextBlock Text="SHOP NOW"
                                        FontSize="16"
                                        FontWeight="SemiBold"
                                        Foreground="{DynamicResource Gray300Brush}"/>
@@ -596,8 +597,8 @@
                 <!-- NEW DENIMS -->
                 <Border Height="500" Cursor="Hand">
                     <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding NavigateToCategoryCommand}" 
+                        <MouseBinding MouseAction="LeftClick"
+                                      Command="{Binding NavigateToCategoryCommand}"
                                       CommandParameter="denims"/>
                     </Border.InputBindings>
                     <Grid>
@@ -611,12 +612,12 @@
                             </Border.Background>
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Margin="40,0,40,50">
-                            <TextBlock Text="NEW DENIMS" 
-                                       FontSize="36" 
-                                       FontWeight="Black" 
+                            <TextBlock Text="NEW DENIMS"
+                                       FontSize="36"
+                                       FontWeight="Black"
                                        Foreground="White"
                                        Margin="0,0,0,5"/>
-                            <TextBlock Text="SHOP NOW" 
+                            <TextBlock Text="SHOP NOW"
                                        FontSize="16"
                                        FontWeight="SemiBold"
                                        Foreground="{DynamicResource Gray300Brush}"/>
@@ -634,8 +635,8 @@
                 <!-- OUTERWEAR -->
                 <Border Height="500" Cursor="Hand" Margin="0,0,1,0">
                     <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding NavigateToCategoryCommand}" 
+                        <MouseBinding MouseAction="LeftClick"
+                                      Command="{Binding NavigateToCategoryCommand}"
                                       CommandParameter="outerwear"/>
                     </Border.InputBindings>
                     <Grid>
@@ -649,12 +650,12 @@
                             </Border.Background>
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Margin="40,0,40,50">
-                            <TextBlock Text="OUTERWEAR" 
-                                       FontSize="36" 
-                                       FontWeight="Black" 
+                            <TextBlock Text="OUTERWEAR"
+                                       FontSize="36"
+                                       FontWeight="Black"
                                        Foreground="White"
                                        Margin="0,0,0,5"/>
-                            <TextBlock Text="SHOP NOW" 
+                            <TextBlock Text="SHOP NOW"
                                        FontSize="16"
                                        FontWeight="SemiBold"
                                        Foreground="{DynamicResource Gray300Brush}"/>
@@ -665,8 +666,8 @@
                 <!-- FOOTWEAR -->
                 <Border Height="500" Cursor="Hand">
                     <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding NavigateToCategoryCommand}" 
+                        <MouseBinding MouseAction="LeftClick"
+                                      Command="{Binding NavigateToCategoryCommand}"
                                       CommandParameter="footwear"/>
                     </Border.InputBindings>
                     <Grid>
@@ -680,12 +681,12 @@
                             </Border.Background>
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Margin="40,0,40,50">
-                            <TextBlock Text="FOOTWEAR" 
-                                       FontSize="36" 
-                                       FontWeight="Black" 
+                            <TextBlock Text="FOOTWEAR"
+                                       FontSize="36"
+                                       FontWeight="Black"
                                        Foreground="White"
                                        Margin="0,0,0,5"/>
-                            <TextBlock Text="SHOP NOW" 
+                            <TextBlock Text="SHOP NOW"
                                        FontSize="16"
                                        FontWeight="SemiBold"
                                        Foreground="{DynamicResource Gray300Brush}"/>
@@ -701,11 +702,11 @@
         <Border Padding="80,60,80,70" Background="{DynamicResource WhitePrimaryBrush}">
             <StackPanel>
                 <Grid Margin="0,0,0,40">
-                    <TextBlock Text="WINTER ESSENTIALS" 
+                    <TextBlock Text="WINTER ESSENTIALS"
                                FontSize="32"
                                FontWeight="Black"
                                HorizontalAlignment="Left"/>
-                    <TextBlock Text="VIEW ALL  →" 
+                    <TextBlock Text="VIEW ALL  →"
                                FontSize="14"
                                FontWeight="SemiBold"
                                Foreground="{DynamicResource BlackPrimaryBrush}"
@@ -729,8 +730,8 @@
                         <DataTemplate>
                             <Border Background="{DynamicResource WhitePrimaryBrush}" Margin="10" Cursor="Hand">
                                 <Border.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick" 
-                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                    <MouseBinding MouseAction="LeftClick"
+                                                  Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                   CommandParameter="{Binding}"/>
                                 </Border.InputBindings>
                                 <Grid>
@@ -738,7 +739,9 @@
                                         <RowDefinition Height="320"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}"/>
+                                    <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" ClipToBounds="True">
+                                        <controls:AsyncImage Source="{Binding MainImageUrl}"/>
+                                    </Border>
                                     <StackPanel Grid.Row="1" Margin="0,15,0,0">
                                         <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
                                         <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" FontSize="15" FontWeight="Bold" Margin="0,8,0,0"/>
@@ -763,7 +766,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock Text="JOIN THE CREW" 
+                    <TextBlock Text="JOIN THE CREW"
                                FontSize="36"
                                FontWeight="Black"
                                Foreground="White"
@@ -781,8 +784,8 @@
                     <Border Background="White" Height="50" Margin="0,0,0,12">
                         <Grid>
                             <TextBox Text="{Binding NewsletterEmail, UpdateSourceTrigger=PropertyChanged}"
-                                     Background="Transparent" 
-                                     BorderThickness="0" 
+                                     Background="Transparent"
+                                     BorderThickness="0"
                                      VerticalAlignment="Center"
                                      VerticalContentAlignment="Center"
                                      Padding="18,0"
@@ -849,7 +852,7 @@
         <!-- ============================================ -->
         <!-- FOOTER - Like the web version                -->
         <!-- ============================================ -->
-        <Border Background="{DynamicResource BlackPrimaryBrush}" 
+        <Border Background="{DynamicResource BlackPrimaryBrush}"
                 Padding="80,60,80,40"
                 BorderBrush="#2E2E2E"
                 BorderThickness="0,1,0,0">
@@ -865,10 +868,10 @@
 
                     <!-- Brand -->
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="HOLOCREW" 
-                                   FontSize="22" 
-                                   FontWeight="Black" 
-                                   Foreground="White" 
+                        <TextBlock Text="HOLOCREW"
+                                   FontSize="22"
+                                   FontWeight="Black"
+                                   Foreground="White"
                                    FontStyle="Italic"
                                    Margin="0,0,0,15"/>
                         <TextBlock Text="Premium streetwear for the modern generation."
@@ -900,10 +903,10 @@
 
                     <!-- Payment Methods -->
                     <StackPanel Grid.Column="1">
-                        <TextBlock Text="PAYMENT METHODS" 
-                                   FontSize="14" 
-                                   FontWeight="Bold" 
-                                   Foreground="White" 
+                        <TextBlock Text="PAYMENT METHODS"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="White"
                                    Margin="0,0,0,20"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <Viewbox Width="18" Height="18" Margin="0,0,10,0">
@@ -927,10 +930,10 @@
 
                     <!-- Quick Links -->
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="QUICK LINKS" 
-                                   FontSize="14" 
-                                   FontWeight="Bold" 
-                                   Foreground="White" 
+                        <TextBlock Text="QUICK LINKS"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="White"
                                    Margin="0,0,0,20"/>
                         <TextBlock Text="New Arrivals" FontSize="13" Foreground="{DynamicResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
                         <TextBlock Text="Special Offers" FontSize="13" Foreground="{DynamicResource Gray400Brush}" Margin="0,0,0,10" Cursor="Hand"/>
@@ -942,10 +945,10 @@
 
                     <!-- Contact -->
                     <StackPanel Grid.Column="3">
-                        <TextBlock Text="CONTACT" 
-                                   FontSize="14" 
-                                   FontWeight="Bold" 
-                                   Foreground="White" 
+                        <TextBlock Text="CONTACT"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="White"
                                    Margin="0,0,0,20"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <Viewbox Width="16" Height="16" Margin="0,0,10,0">
@@ -992,8 +995,8 @@
                 <!-- Copyright -->
                 <Border BorderBrush="#2E2E2E" BorderThickness="0,1,0,0" Padding="0,20,0,0">
                     <Grid>
-                        <TextBlock Text="© 2025 HoloCrew. All rights reserved." 
-                                   FontSize="12" 
+                        <TextBlock Text="© 2025 HoloCrew. All rights reserved."
+                                   FontSize="12"
                                    Foreground="{DynamicResource Gray500Brush}"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <TextBlock Text="Terms &amp; Conditions" FontSize="12" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,20,0" Cursor="Hand"/>

@@ -29,14 +29,16 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private Product _product;
 
+        // URL de la imagen actualmente mostrada en grande (bindea contra el converter)
         [ObservableProperty]
-        private string _selectedImage;
+        private string _selectedImage = string.Empty;
 
         [ObservableProperty]
         private int _selectedImageIndex = 0;
 
+        // Lista de miniaturas reales del producto (cada una sabe si está seleccionada)
         [ObservableProperty]
-        private ObservableCollection<string> _images = new();
+        private ObservableCollection<ProductImageItem> _images = new();
 
         [ObservableProperty]
         private int _quantity = 1;
@@ -115,15 +117,35 @@ namespace HoloCrew.ViewModels
 
                 if (Product != null)
                 {
-                    // imágenes del producto (asegurar que haya al menos 4)
-                    var imageList = Product.ImageUrls?.ToList() ?? new List<string>();
-                    while (imageList.Count < 4)
+                    // Imágenes reales del producto. Sin placeholders rotos: si solo hay 1
+                    // se muestra 1, si hay 5 se muestran 5. Si por algún motivo ImageUrls
+                    // viene vacío, usamos MainImageUrl como fallback para no dejar la
+                    // galería en blanco.
+                    var imageList = Product.ImageUrls?
+                                        .Where(u => !string.IsNullOrWhiteSpace(u))
+                                        .Distinct()
+                                        .ToList()
+                                    ?? new List<string>();
+
+                    if (imageList.Count == 0 && !string.IsNullOrWhiteSpace(Product.MainImageUrl))
                     {
-                        imageList.Add($"placeholder{imageList.Count + 1}");
+                        imageList.Add(Product.MainImageUrl);
                     }
-                    Images = new ObservableCollection<string>(imageList.Take(4));
-                    SelectedImage = Images.FirstOrDefault() ?? "placeholder1";
+
+                    Images.Clear();
+                    for (int i = 0; i < imageList.Count; i++)
+                    {
+                        Images.Add(new ProductImageItem
+                        {
+                            Url = imageList[i],
+                            IsSelected = i == 0
+                        });
+                    }
+
                     SelectedImageIndex = 0;
+                    SelectedImage = imageList.FirstOrDefault()
+                                    ?? Product.MainImageUrl
+                                    ?? string.Empty;
 
                     SetupAvailableColors();
                     SetupAvailableSizes();
@@ -286,8 +308,7 @@ namespace HoloCrew.ViewModels
             if (Images.Count == 0) return;
 
             SelectedImageIndex = (SelectedImageIndex + 1) % Images.Count;
-            SelectedImage = Images[SelectedImageIndex];
-            UpdateThumbnailSelection();
+            ApplyImageSelection();
         }
 
         [RelayCommand]
@@ -297,30 +318,48 @@ namespace HoloCrew.ViewModels
 
             SelectedImageIndex = SelectedImageIndex - 1;
             if (SelectedImageIndex < 0) SelectedImageIndex = Images.Count - 1;
-            SelectedImage = Images[SelectedImageIndex];
-            UpdateThumbnailSelection();
+            ApplyImageSelection();
         }
 
+        // Acepta tanto el item completo (cuando viene del ItemsControl de miniaturas)
+        // como un índice (int o string) por compatibilidad con código previo.
         [RelayCommand]
-        private void SelectImage(object indexObj)
+        private void SelectImage(object parameter)
         {
-            int index = 0;
-            if (indexObj is int i)
+            int index = -1;
+
+            if (parameter is ProductImageItem item)
+            {
+                index = Images.IndexOf(item);
+            }
+            else if (parameter is int i)
+            {
                 index = i;
-            else if (indexObj is string s && int.TryParse(s, out int parsed))
+            }
+            else if (parameter is string s && int.TryParse(s, out int parsed))
+            {
                 index = parsed;
+            }
 
             if (index >= 0 && index < Images.Count)
             {
                 SelectedImageIndex = index;
-                SelectedImage = Images[index];
-                UpdateThumbnailSelection();
+                ApplyImageSelection();
             }
         }
 
-        private void UpdateThumbnailSelection()
+        // Sincroniza el flag IsSelected de cada miniatura y actualiza la imagen grande.
+        private void ApplyImageSelection()
         {
-            OnPropertyChanged(nameof(SelectedImageIndex));
+            for (int i = 0; i < Images.Count; i++)
+            {
+                Images[i].IsSelected = i == SelectedImageIndex;
+            }
+
+            if (SelectedImageIndex >= 0 && SelectedImageIndex < Images.Count)
+            {
+                SelectedImage = Images[SelectedImageIndex].Url;
+            }
         }
 
         #endregion
@@ -449,6 +488,16 @@ namespace HoloCrew.ViewModels
     }
 
     #region Helper Classes
+
+    // miniatura del producto (URL + flag de seleccionada para el highlight de la galería)
+    public partial class ProductImageItem : ObservableObject
+    {
+        [ObservableProperty]
+        private string _url = string.Empty;
+
+        [ObservableProperty]
+        private bool _isSelected;
+    }
 
     // opción de color para la interfaz (nombre, código hex, si está seleccionado)
     public partial class ColorOption : ObservableObject

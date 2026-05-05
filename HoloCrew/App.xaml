@@ -26,6 +26,7 @@
             <converters:DateFormatConverter x:Key="DateFormatConverter" />
             <converters:StatusToColourConverter x:Key="StatusToColourConverter" />
             <converters:SelectedButtonTextConverter x:Key="SelectedButtonTextConverter" />
+            
 
             <!-- converter nativo de WPF -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
