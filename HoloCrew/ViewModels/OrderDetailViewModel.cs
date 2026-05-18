@@ -112,11 +112,14 @@ namespace HoloCrew.ViewModels
             OrderNumber = Order.OrderNumber ?? $"ORD-{Order.Id:D6}";
             OrderDate = Order.OrderDate;
 
+            // Construimos los items para mostrar. La talla y el color reales se cogen
+            // directamente del OrderItem (columnas size y color de la BBDD), no de
+            // un string concatenado ni de valores hardcoded.
             var displayItems = Order.Items?.Select(i => new OrderItemDisplay
             {
                 ProductName = i.Product?.Name ?? "Product",
-                Size = i.SelectedVariant ?? "M",
-                Color = "Black",
+                Size = string.IsNullOrWhiteSpace(i.Size) ? "—" : i.Size,
+                Color = string.IsNullOrWhiteSpace(i.Color) ? "—" : i.Color,
                 Quantity = i.Quantity,
                 UnitPrice = i.UnitPrice,
                 TotalPrice = i.Subtotal,
@@ -143,7 +146,21 @@ namespace HoloCrew.ViewModels
 
             if (Order.PaymentMethod != null)
             {
-                PaymentMethod = $"{Order.PaymentMethod.Type} {Order.PaymentMethod.CardNumberMasked}";
+                // Convertimos el enum a un texto legible para la UI.
+                // CreditCard → "Visa", PayPal → "PayPal", etc. Es lo que el usuario espera ver.
+                var typeText = Order.PaymentMethod.Type switch
+                {
+                    Models.PaymentType.CreditCard => "Visa",
+                    Models.PaymentType.DebitCard => "Debit Card",
+                    Models.PaymentType.PayPal => "PayPal",
+                    Models.PaymentType.BankTransfer => "Bank Transfer",
+                    Models.PaymentType.CashOnDelivery => "Cash on Delivery",
+                    _ => "Card"
+                };
+
+                PaymentMethod = string.IsNullOrWhiteSpace(Order.PaymentMethod.CardNumberMasked)
+                    ? typeText
+                    : $"{typeText} {Order.PaymentMethod.CardNumberMasked}";
             }
             else
             {
@@ -253,16 +270,75 @@ namespace HoloCrew.ViewModels
             _navigationService.NavigateTo<OrderHistoryViewModel>();
         }
 
+        // Muestra info de tracking del paquete. Si aún no se ha enviado, informa de ello.
+        // Si tiene tracking number, muestra carrier y datos. En producción abriría la
+        // web del transportista, aquí lo dejamos como info estática.
         [RelayCommand]
         private void TrackPackage()
         {
-            System.Diagnostics.Debug.WriteLine($"Tracking: {Order?.TrackingNumber ?? "Mock"}");
+            string trackingNumber = Order?.TrackingNumber ?? string.Empty;
+
+            string message;
+            string title = "Package Tracking";
+
+            if (string.IsNullOrWhiteSpace(trackingNumber))
+            {
+                message = $"Your order #{OrderNumber} has not been shipped yet.\n\n"
+                        + $"Current status: {StatusText}\n"
+                        + $"Estimated delivery: {EstimatedDelivery:MMMM dd, yyyy}\n\n"
+                        + "You will receive an email with tracking information once your order ships.";
+            }
+            else
+            {
+                message = $"Tracking number: {trackingNumber}\n"
+                        + $"Carrier: DHL Express\n\n"
+                        + $"Current status: {StatusText}\n"
+                        + $"Estimated delivery: {EstimatedDelivery:MMMM dd, yyyy}\n\n"
+                        + "In a production environment, this would open the carrier's tracking page in your browser.";
+            }
+
+            System.Windows.MessageBox.Show(
+                message,
+                title,
+                System.Windows.MessageBoxButton.OK,
+                System.Windows.MessageBoxImage.Information);
         }
 
+        // Abre el cliente de email predeterminado con un mailto pre-rellenado.
+        // Incluye datos del pedido (número, fecha, estado) para que el usuario no
+        // tenga que escribirlo manualmente.
         [RelayCommand]
         private void ContactSupport()
         {
-            System.Diagnostics.Debug.WriteLine("Contact support");
+            try
+            {
+                string supportEmail = "support@holocrew.com";
+                string subject = Uri.EscapeDataString($"Help with order #{OrderNumber}");
+                string body = Uri.EscapeDataString(
+                    $"Hello HoloCrew support team,\n\n"
+                    + $"I need help with my order:\n"
+                    + $"Order number: {OrderNumber}\n"
+                    + $"Order date: {OrderDate:MMMM dd, yyyy}\n"
+                    + $"Status: {StatusText}\n\n"
+                    + $"My question / issue:\n\n");
+
+                string mailto = $"mailto:{supportEmail}?subject={subject}&body={body}";
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = mailto,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[ContactSupport] Error: {ex.Message}");
+                System.Windows.MessageBox.Show(
+                    "Could not open the email client. Please contact support@holocrew.com directly.",
+                    "Contact Support",
+                    System.Windows.MessageBoxButton.OK,
+                    System.Windows.MessageBoxImage.Warning);
+            }
         }
 
         [RelayCommand]

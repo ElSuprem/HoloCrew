@@ -44,8 +44,8 @@ namespace HoloCrew.Models
 
         // variantes
         public string Gender { get; set; } = "Unisex";
-        public List<string> AvailableSizes { get; set; } = new List<string> { "S", "M", "L", "XL" };
-        public List<string> AvailableColors { get; set; } = new List<string> { "Black", "White" };
+        public List<string> AvailableSizes { get; set; } = new List<string>();
+        public List<string> AvailableColors { get; set; } = new List<string>();
         public string Color { get; set; } = string.Empty;
 
         // Stock detallado por talla. Clave = talla ("XS", "S", "M", ...), valor = unidades disponibles.

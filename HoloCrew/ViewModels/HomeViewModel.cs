@@ -127,12 +127,22 @@ namespace HoloCrew.ViewModels
         {
             _navigationService.NavigateTo<ProductCatalogViewModel>("softs");
         }
-
         [RelayCommand]
         private async Task AddToCartAsync(Product product)
         {
             if (product == null) return;
 
+            // Si el producto tiene varias tallas, no podemos añadirlo directo desde el QuickAdd:
+            // habría que saber qué talla quiere el usuario. Lo enviamos al detalle del producto
+            // para que elija. Este es el comportamiento estándar de cualquier e-commerce
+            // serio (Zara, Nike, Adidas hacen exactamente esto).
+            if (product.AvailableSizes != null && product.AvailableSizes.Count > 0)
+            {
+                _navigationService.NavigateTo<ProductDetailViewModel>(product.Id);
+                return;
+            }
+
+            // Producto sin tallas (ej: accesorio, rug, ring) → añadimos directo.
             try
             {
                 await _cartService.AddToCartAsync(product, 1);

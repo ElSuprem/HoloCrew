@@ -3,12 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:HoloCrew.Controls"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
 
     <!-- Vista de la lista de deseos (wishlist).
-         Muestra los productos guardados como favoritos, permite eliminarlos o añadirlos al carrito.
+         Muestra los productos guardados como favoritos, permite eliminarlos, añadirlos
+         al carrito (que les lleva al detalle si tienen tallas), o navegar al detalle del producto.
          Se conecta con WishlistViewModel. -->
 
     <Grid>
@@ -88,10 +90,39 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <!-- imagen -->
-                                    <Rectangle Grid.Row="0" Fill="{DynamicResource Gray200Brush}"/>
+                                    <!-- imagen del producto (click para ver detalle) -->
+                                    <Border Grid.Row="0"
+                                            Background="{DynamicResource Gray100Brush}"
+                                            ClipToBounds="True"
+                                            Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          CommandParameter="{Binding}"
+                                                          MouseAction="LeftClick"/>
+                                        </Border.InputBindings>
+                                        <Grid>
+                                            <controls:AsyncImage Source="{Binding MainImageUrl}"
+                                                                 Stretch="UniformToFill"/>
 
-                                    <!-- botón eliminar -->
+                                            <!-- Overlay SOLD OUT cuando el producto está agotado -->
+                                            <Border Background="#CCFFFFFF"
+                                                    Visibility="{Binding IsCompletelyOutOfStock, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    IsHitTestVisible="False"
+                                                    Panel.ZIndex="100">
+                                                <Border Background="#0A0A0A"
+                                                        Padding="20,8"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+                                                    <TextBlock Text="SOLD OUT"
+                                                               Foreground="White"
+                                                               FontSize="14"
+                                                               FontWeight="Bold"/>
+                                                </Border>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- botón eliminar (encima de la imagen) -->
                                     <Border Grid.Row="0"
                                             Background="{DynamicResource WhitePrimaryBrush}"
                                             Width="40" Height="40"
@@ -99,7 +130,11 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top"
                                             Margin="15"
-                                            Cursor="Hand">
+                                            Cursor="Hand"
+                                            Panel.ZIndex="200">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="Black" Opacity="0.15" BlurRadius="8" ShadowDepth="2"/>
+                                        </Border.Effect>
                                         <Border.InputBindings>
                                             <MouseBinding Command="{Binding DataContext.RemoveFromWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                           CommandParameter="{Binding}"
@@ -118,7 +153,14 @@
                                                        FontSize="16"
                                                        FontWeight="SemiBold"
                                                        TextTrimming="CharacterEllipsis"
-                                                       Margin="0,0,0,8"/>
+                                                       Margin="0,0,0,8"
+                                                       Cursor="Hand">
+                                                <TextBlock.InputBindings>
+                                                    <MouseBinding Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  CommandParameter="{Binding}"
+                                                                  MouseAction="LeftClick"/>
+                                                </TextBlock.InputBindings>
+                                            </TextBlock>
 
                                             <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}"
                                                        FontSize="20"

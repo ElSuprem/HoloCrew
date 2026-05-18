@@ -61,7 +61,8 @@ namespace HoloCrew.Infraestructure.Supabase.Models
                 ProductId = ProductId,
                 Quantity = Quantity,
                 UnitPrice = UnitPrice,
-                SelectedVariant = $"{Size ?? ""}/{Color ?? ""}".Trim('/'),
+                Size = Size ?? string.Empty,
+                Color = Color ?? string.Empty,
                 Product = new Product
                 {
                     Id = ProductId,

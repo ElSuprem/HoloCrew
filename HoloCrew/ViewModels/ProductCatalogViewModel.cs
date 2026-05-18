@@ -225,6 +225,15 @@ namespace HoloCrew.ViewModels
         private async Task AddToCartAsync(Product product)
         {
             if (product == null) return;
+
+            // Si el producto tiene varias tallas, llevamos al detalle para que el usuario
+            // elija una antes de añadir al carrito (UX estándar de e-commerce).
+            if (product.AvailableSizes != null && product.AvailableSizes.Count > 0)
+            {
+                _navigationService.NavigateTo<ProductDetailViewModel>(product.Id);
+                return;
+            }
+
             try
             {
                 await _cartService.AddToCartAsync(product, 1);

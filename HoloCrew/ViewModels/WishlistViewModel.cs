@@ -97,18 +97,15 @@ namespace HoloCrew.ViewModels
         }
 
         [RelayCommand]
-        private async Task AddToCartAsync(Product product)
+        private void AddToCart(Product product)
         {
             if (product == null) return;
 
-            try
-            {
-                await _cartService.AddToCartAsync(product, 1);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
-            }
+            // Desde la wishlist siempre llevamos al detalle del producto. No tenemos
+            // forma de saber qué talla/color quiere el usuario, y la wishlist tampoco
+            // guarda esa info (es solo una lista de favoritos). En el detalle el usuario
+            // elige talla, color y cantidad antes de añadir al carrito.
+            _navigationService.NavigateTo<ProductDetailViewModel>(product.Id);
         }
 
         [RelayCommand]

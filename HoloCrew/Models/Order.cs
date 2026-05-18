@@ -48,7 +48,19 @@ namespace HoloCrew.Models
         public Product? Product { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
-        public string SelectedVariant { get; set; } = string.Empty;
+
+        // Talla y color elegidos en el momento de la compra (snapshot).
+        // Se guardan por separado en la BBDD (columnas size y color de order_items)
+        // para poder mostrarlos correctamente en el detalle del pedido.
+        public string Size { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
+
+        // Por compatibilidad con código antiguo que aún use SelectedVariant.
+        // Devuelve "M / Black" si hay ambos, o solo lo que haya.
+        public string SelectedVariant => string.IsNullOrEmpty(Size) && string.IsNullOrEmpty(Color)
+            ? string.Empty
+            : $"{Size} / {Color}".Trim(' ', '/');
+
         public decimal Subtotal => UnitPrice * Quantity;
     }
 

@@ -482,7 +482,7 @@
                                                     Panel.ZIndex="50"
                                                     Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}">
-                                                <TextBlock Text="ADD TO CART"
+                                                <TextBlock Text="VIEW SIZES"
                                                            Foreground="White"
                                                            FontSize="12"
                                                            FontWeight="Bold"
