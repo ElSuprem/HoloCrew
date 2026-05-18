@@ -206,7 +206,7 @@ namespace HoloCrew.ViewModels
         {
             if (string.IsNullOrWhiteSpace(FirstName))
             {
-                ErrorMessage = "El nombre no puede estar vacío.";
+                ErrorMessage = "First name cannot be empty.";
                 return;
             }
 
@@ -225,7 +225,7 @@ namespace HoloCrew.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "No se pudieron guardar los cambios.";
+                    ErrorMessage = "Could not save changes.";
                 }
             }, isRefresh: true);
         }
@@ -268,7 +268,7 @@ namespace HoloCrew.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "No se pudo cambiar la contraseña.";
+                    ErrorMessage = "Could not change password.";
                 }
             }, isRefresh: true);
         }

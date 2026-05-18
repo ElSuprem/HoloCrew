@@ -625,14 +625,14 @@
                         </Grid.ColumnDefinitions>
 
                         <Button Grid.Column="0"
-                                Content="← VOLVER"
+                                Content="← BACK"
                                 Style="{StaticResource OutlineButton}"
                                 Padding="30,15"
                                 Command="{Binding PreviousStepCommand}"
                                 Visibility="{Binding IsStep1, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
 
                         <Button Grid.Column="0"
-                                Content="CANCELAR"
+                                Content="CANCEL"
                                 Style="{StaticResource OutlineButton}"
                                 Padding="30,15"
                                 Command="{Binding CancelCheckoutCommand}"
@@ -646,7 +646,7 @@
                                 Visibility="{Binding IsStep3, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="CONTINUAR"/>
+                                    <TextBlock Text="CONTINUE"/>
                                     <TextBlock Text=" →"/>
                                 </StackPanel>
                             </Button.Content>
@@ -661,7 +661,7 @@
                                 Visibility="{Binding IsStep3, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="🔒 CONFIRMAR PEDIDO"/>
+                                    <TextBlock Text="🔒 CONFIRM ORDER"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
@@ -709,7 +709,7 @@
                           HorizontalScrollBarVisibility="Disabled">
                 <Border Padding="40,50,40,80">
                     <StackPanel>
-                        <TextBlock Text="RESUMEN DEL PEDIDO" 
+                        <TextBlock Text="ORDER SUMMARY" 
                                    Style="{StaticResource HeadingMedium}"
                                    Margin="0,0,0,30"/>
 
@@ -773,7 +773,7 @@
 
                         <Grid Margin="0,0,0,12">
                             <TextBlock Text="Shipping" Style="{StaticResource BodyLarge}"/>
-                            <TextBlock Text="GRATIS" 
+                            <TextBlock Text="FREE" 
                                        Style="{StaticResource BodyLarge}"
                                        Foreground="#10B981"
                                        FontWeight="SemiBold"
@@ -807,7 +807,7 @@
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                                     <TextBlock Text="🔒" FontSize="16" Margin="0,0,10,0"/>
-                                    <TextBlock Text="Payment 100% seguro" FontWeight="SemiBold" FontSize="13"/>
+                                    <TextBlock Text="100% Secure Payment" FontWeight="SemiBold" FontSize="13"/>
                                 </StackPanel>
                                 <TextBlock Text="Your data is protected with 256-bit SSL encryption."
                                            FontSize="12"
@@ -817,7 +817,7 @@
                         </Border>
 
                         <StackPanel Margin="0,20,0,0">
-                            <TextBlock Text="📦 Shipping gratis en pedidos +€50" 
+                            <TextBlock Text="📦 Free shipping on orders over +€50" 
                                        FontSize="12" 
                                        Foreground="{DynamicResource TextSecondary}"
                                        Margin="0,0,0,8"/>
