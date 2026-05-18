@@ -35,6 +35,9 @@ namespace HoloCrew.ViewModels
         private ObservableCollection<Product> _filteredProducts = new();
 
         [ObservableProperty]
+        private bool _hasNoProductsAtAll;
+
+        [ObservableProperty]
         private string _currentCategoryName = "All Products";
 
         [ObservableProperty]
@@ -202,6 +205,12 @@ namespace HoloCrew.ViewModels
             _allProducts = products;
             Products = new ObservableCollection<Product>(products);
             _isInitialized = true;
+
+            // Si la categoría/búsqueda no devolvió NADA de la BBDD, marcamos el flag
+            // para que la UI muestre el mensaje correcto ("not available yet" en lugar
+            // de "no match with filters").
+            HasNoProductsAtAll = products.Count == 0;
+
             ApplyFiltersInternal();
             SetSuccess();
         }

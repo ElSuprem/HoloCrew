@@ -167,7 +167,7 @@
                                                        FontWeight="Bold"
                                                        Margin="0,0,0,15"/>
 
-                                            <Button Content="ADD TO CART" 
+                                            <Button Content="VIEW SIZES" 
                                                     Style="{StaticResource AccentButton}"
                                                     Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}"/>

@@ -373,7 +373,7 @@
                                                                   Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                                                   CommandParameter="{Binding}"/>
                                                 </Border.InputBindings>
-                                                <TextBlock Text="ADD TO CART" 
+                                                <TextBlock Text="VIEW SIZES" 
                                                            Foreground="White" 
                                                            FontSize="12" 
                                                            FontWeight="Bold" 
@@ -439,29 +439,54 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <!-- Empty state -->
+                <!-- Empty state: distinguimos categoría vacía vs filtros sin resultados -->
                 <StackPanel HorizontalAlignment="Center" 
-                            VerticalAlignment="Center" 
-                            Margin="0,100,0,0" 
-                            Visibility="{Binding FilteredProducts.Count, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
+            VerticalAlignment="Center" 
+            Margin="0,100,0,0" 
+            Visibility="{Binding FilteredProducts.Count, Converter={StaticResource EmptyCollectionToVisibilityConverter}}">
                     <Viewbox Width="64" Height="64" Margin="0,0,0,20" Opacity="0.3">
                         <Path Data="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
-                              Stroke="{DynamicResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+              Stroke="{DynamicResource BlackPrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
                     </Viewbox>
-                    <TextBlock Text="No products found" 
-                               FontSize="20" 
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,0,0,8"/>
-                    <TextBlock Text="Try adjusting your filters" 
-                               FontSize="14" 
-                               Foreground="{DynamicResource Gray500Brush}" 
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,25"/>
-                    <Button Content="CLEAR FILTERS" 
-                            Style="{StaticResource OutlineButton}" 
-                            Padding="30,12" 
-                            Command="{Binding ClearFiltersCommand}"/>
+
+                    <!-- CASO 1: La categoría no tiene productos en BBDD -->
+                    <StackPanel HorizontalAlignment="Center"
+                Visibility="{Binding HasNoProductsAtAll, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <TextBlock Text="No products available yet" 
+                   FontSize="20" 
+                   FontWeight="SemiBold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,8"/>
+                        <TextBlock Text="This category is empty for now. Check back soon!" 
+                   FontSize="14" 
+                   Foreground="{DynamicResource Gray500Brush}" 
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,25"/>
+                        <Button Content="EXPLORE ALL PRODUCTS" 
+                Style="{StaticResource OutlineButton}" 
+                Padding="30,12" 
+                Command="{Binding SelectCategoryCommand}"
+                CommandParameter="All"/>
+                    </StackPanel>
+
+                    <!-- CASO 2: Hay productos pero los filtros no devuelven nada -->
+                    <StackPanel HorizontalAlignment="Center"
+                Visibility="{Binding HasNoProductsAtAll, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                        <TextBlock Text="No products match your filters" 
+                   FontSize="20" 
+                   FontWeight="SemiBold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,8"/>
+                        <TextBlock Text="Try adjusting or clearing your filters" 
+                   FontSize="14" 
+                   Foreground="{DynamicResource Gray500Brush}" 
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,25"/>
+                        <Button Content="CLEAR FILTERS" 
+                Style="{StaticResource OutlineButton}" 
+                Padding="30,12" 
+                Command="{Binding ClearFiltersCommand}"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Grid>

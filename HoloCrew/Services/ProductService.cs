@@ -148,13 +148,47 @@ namespace HoloCrew.Services
                 return new List<Product>();
 
             var products = await GetAllProductsAsync();
-            var q = query.ToLower();
+            var normalizedQuery = NormalizeForSearch(query);
 
             return products.Where(p =>
-                p.Name.ToLower().Contains(q) ||
-                (p.Description?.ToLower().Contains(q) ?? false) ||
-                (p.LongDescription?.ToLower().Contains(q) ?? false)
+                NormalizeForSearch(p.Name).Contains(normalizedQuery) ||
+                NormalizeForSearch(p.Description ?? string.Empty).Contains(normalizedQuery) ||
+                NormalizeForSearch(p.LongDescription ?? string.Empty).Contains(normalizedQuery)
             ).ToList();
+        }
+
+        // Normaliza un texto para hacer búsquedas tolerantes:
+        //  - Convierte a minúsculas.
+        //  - Quita acentos (café → cafe).
+        //  - Quita guiones, puntos, espacios extra (T-Shirt → tshirt).
+        //
+        // Esto permite que "tshirt" encuentre "T-Shirt" y "denim" encuentre "Denim-Pants".
+        private static string NormalizeForSearch(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return string.Empty;
+
+            // Pasar a minúsculas
+            text = text.ToLowerInvariant();
+
+            // Quitar acentos descomponiendo el unicode y filtrando los diacríticos
+            var normalized = text.Normalize(System.Text.NormalizationForm.FormD);
+            var sb = new System.Text.StringBuilder();
+            foreach (var c in normalized)
+            {
+                var cat = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c);
+                if (cat != System.Globalization.UnicodeCategory.NonSpacingMark)
+                    sb.Append(c);
+            }
+
+            // Quitar caracteres no alfanuméricos (guiones, puntos, espacios)
+            var result = new System.Text.StringBuilder();
+            foreach (var c in sb.ToString())
+            {
+                if (char.IsLetterOrDigit(c))
+                    result.Append(c);
+            }
+
+            return result.ToString();
         }
 
         public async Task<List<Category>> GetCategoriesAsync()
