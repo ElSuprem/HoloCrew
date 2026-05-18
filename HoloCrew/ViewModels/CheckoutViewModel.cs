@@ -12,9 +12,11 @@ using System.Threading.Tasks;
 
 // ViewModel de la página de checkout (finalizar compra).
 // Tiene 3 pasos: dirección de envío, método de pago, resumen del pedido.
-// Al confirmar, llama a OrderService.CreateOrderFromCartAsync que invoca la RPC
-// create_order_from_cart de Supabase (transaccional). Si hay un cupón aplicado en el
-// carrito, se pasa también al pedido.
+// Al confirmar:
+//   1. Procesa el pago (IPaymentService, actualmente simulado).
+//   2. Si el pago aprueba, llama a OrderService.CreateOrderFromCartAsync que
+//      invoca la RPC create_order_from_cart de Supabase (transaccional).
+//   3. Navega al detalle del pedido recién creado.
 
 namespace HoloCrew.ViewModels
 {
@@ -24,6 +26,7 @@ namespace HoloCrew.ViewModels
         private readonly ICartService _cartService;
         private readonly IAuthenticationService _authenticationService;
         private readonly INavigationService _navigationService;
+        private readonly IPaymentService _paymentService;
 
         [ObservableProperty]
         private int _currentStep = 1;
@@ -44,22 +47,13 @@ namespace HoloCrew.ViewModels
         private ObservableCollection<PaymentMethod> _savedPaymentMethods = new();
 
         [ObservableProperty]
-        private string _cardNumber;
-
-        [ObservableProperty]
-        private string _cardholderName;
-
-        [ObservableProperty]
-        private string _expirationDate;
-
-        [ObservableProperty]
-        private string _cvv;
-
-        [ObservableProperty]
         private Order _orderSummary;
 
         [ObservableProperty]
         private bool _isProcessing;
+
+        [ObservableProperty]
+        private string _processingMessage = string.Empty;
 
         [ObservableProperty]
         private decimal _orderTotal;
@@ -78,12 +72,14 @@ namespace HoloCrew.ViewModels
             IOrderService orderService,
             ICartService cartService,
             IAuthenticationService authenticationService,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IPaymentService paymentService)
         {
             _orderService = orderService;
             _cartService = cartService;
             _authenticationService = authenticationService;
             _navigationService = navigationService;
+            _paymentService = paymentService;
 
             Title = AppConstants.Checkout.Title;
         }
@@ -171,6 +167,11 @@ namespace HoloCrew.ViewModels
             SelectedPaymentMethod = paymentMethod;
         }
 
+
+        // Flujo completo de finalización de compra:
+        //   1. Procesa el pago a través de IPaymentService (actualmente simulado).
+        //   2. Si el pago se aprueba, crea el pedido en BD vía la RPC transaccional.
+        //   3. Navega al detalle del pedido recién creado.
         [RelayCommand]
         private async Task CompleteOrderAsync()
         {
@@ -180,8 +181,22 @@ namespace HoloCrew.ViewModels
             {
                 IsProcessing = true;
                 CanCompleteOrder = false;
+                ErrorMessage = string.Empty;
 
-                // Determinar el método de pago elegido
+                // ----- PASO 1: PROCESAR PAGO -----
+                ProcessingMessage = "Processing payment...";
+                var paymentResult = await _paymentService.ProcessPaymentAsync(OrderTotal);
+
+                if (!paymentResult.Success)
+                {
+                    SetError(paymentResult.Message);
+                    CanCompleteOrder = true;
+                    return;
+                }
+
+                // ----- PASO 2: CREAR PEDIDO EN BD -----
+                ProcessingMessage = "Creating your order...";
+
                 var paymentMethodString = SelectedPaymentMethod?.Type switch
                 {
                     PaymentType.CreditCard => "credit_card",
@@ -190,7 +205,6 @@ namespace HoloCrew.ViewModels
                     _ => "credit_card"
                 };
 
-                // Si hay un cupón aplicado en el carrito, lo pasamos al pedido
                 var couponCode = _cartService.GetAppliedCouponCode();
                 var couponToSend = string.IsNullOrEmpty(couponCode) ? null : couponCode;
 
@@ -201,6 +215,9 @@ namespace HoloCrew.ViewModels
 
                 if (createdOrder != null)
                 {
+                    // ----- PASO 3: NAVEGAR AL DETALLE -----
+                    ProcessingMessage = "Done!";
+                    await Task.Delay(500); // pequeño respiro visual
                     _navigationService.NavigateTo<OrderDetailViewModel>(createdOrder.Id);
                 }
                 else
@@ -218,6 +235,7 @@ namespace HoloCrew.ViewModels
             finally
             {
                 IsProcessing = false;
+                ProcessingMessage = string.Empty;
             }
         }
 
@@ -234,8 +252,7 @@ namespace HoloCrew.ViewModels
                 1 => !string.IsNullOrWhiteSpace(ShippingAddress?.AddressLine1) &&
                      !string.IsNullOrWhiteSpace(ShippingAddress?.City) &&
                      !string.IsNullOrWhiteSpace(ShippingAddress?.PostalCode),
-                2 => SelectedPaymentMethod != null ||
-                     (!string.IsNullOrWhiteSpace(CardNumber) && !string.IsNullOrWhiteSpace(CardholderName)),
+                2 => true,  // En el paso 2 ya no hay validación de tarjeta porque el pago se simula
                 3 => true,
                 _ => false
             };

@@ -1,52 +1,87 @@
 ﻿using HoloCrew.Services.Interfaces;
+using Supabase.Storage;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-// Implementación MOCKUP del servicio de avatar.
-// Copia el archivo seleccionado por el usuario a %AppData%/HoloCrew/avatars/
-// y devuelve la ruta absoluta del archivo copiado.
+// Implementación REAL del servicio de avatar conectada a Supabase Storage.
+// 
+// Sustituye al mockup local que copiaba el archivo a %AppData%/HoloCrew/avatars/.
+// Ahora cada usuario tiene su avatar persistido en el bucket 'avatars' de Supabase,
+// con la estructura: avatars/{user_id}/avatar.{ext}
 //
-// NOTA: cuando se quiera migrar a Supabase Storage, sustituir el método
-// UploadAvatarAsync por la subida real al bucket 'avatars' usando _supabase.Storage.
+// La interfaz IAvatarService NO ha cambiado: el ViewModel sigue llamando a
+// UploadAvatarAsync con la ruta del archivo local, y este servicio se encarga
+// de subirlo al bucket y devolver la URL pública.
+// Este es el caso de uso clásico de inversión de dependencias documentado en P2.
 
 namespace HoloCrew.Services
 {
     public class AvatarService : IAvatarService
     {
-        private readonly string _avatarsFolder;
+        private readonly Supabase.Client _supabase;
+        private const string BUCKET_NAME = "avatars";
 
-        public AvatarService()
+        public AvatarService(Supabase.Client supabase)
         {
-            // Carpeta local donde guardamos los avatares de los usuarios
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            _avatarsFolder = Path.Combine(appData, "HoloCrew", "avatars");
-
-            // Asegurar que existe
-            Directory.CreateDirectory(_avatarsFolder);
+            _supabase = supabase;
         }
 
 
+        // Sube el archivo seleccionado por el usuario al bucket de Supabase Storage.
+        // Devuelve la URL pública del archivo subido, o null si falla.
         public async Task<string?> UploadAvatarAsync(string sourceFilePath)
         {
             try
             {
+                // Validaciones básicas
                 if (string.IsNullOrEmpty(sourceFilePath) || !File.Exists(sourceFilePath))
                     return null;
 
-                // Generar nombre único basado en timestamp + extensión original
-                var extension = Path.GetExtension(sourceFilePath).ToLower();
-                var fileName = $"avatar_{DateTime.Now:yyyyMMddHHmmss}{extension}";
-                var destPath = Path.Combine(_avatarsFolder, fileName);
+                // Necesitamos saber el ID del usuario logueado, porque las políticas
+                // RLS exigen que cada usuario solo escriba en su propia carpeta.
+                var currentUser = _supabase.Auth.CurrentUser;
+                if (currentUser == null || string.IsNullOrEmpty(currentUser.Id))
+                {
+                    System.Diagnostics.Debug.WriteLine("[Avatar] No hay usuario logueado");
+                    return null;
+                }
 
-                // Copiar el archivo
-                await Task.Run(() => File.Copy(sourceFilePath, destPath, overwrite: true));
+                var userId = currentUser.Id;
+                var extension = Path.GetExtension(sourceFilePath).ToLowerInvariant();
+                if (string.IsNullOrEmpty(extension))
+                    extension = ".jpg";
 
-                System.Diagnostics.Debug.WriteLine($"[Avatar] Saved to: {destPath}");
+                // Estructura: avatars/{user_id}/avatar.{ext}
+                // Las políticas RLS verifican que el primer "folder" sea el user_id.
+                var remotePath = $"{userId}/avatar{extension}";
 
-                // Devolvemos la ruta absoluta. WPF puede mostrar imágenes desde rutas locales
-                // directamente con su URL "file:///C:/Users/..."
-                return destPath;
+                // Leer el archivo en bytes (async, sin bloquear el hilo de UI).
+                var bytes = await File.ReadAllBytesAsync(sourceFilePath);
+
+                // Subir al bucket. Usamos upsert=true para que si ya había un avatar
+                // anterior, simplemente lo sobrescriba (un usuario = un avatar).
+                var bucket = _supabase.Storage.From(BUCKET_NAME);
+                var fileOptions = new Supabase.Storage.FileOptions
+                {
+                    CacheControl = "3600",
+                    Upsert = true,
+                    ContentType = GetMimeType(extension)
+                };
+
+                await bucket.Upload(bytes, remotePath, fileOptions);
+
+                // Construir la URL pública del archivo subido.
+                var publicUrl = bucket.GetPublicUrl(remotePath);
+
+                // Añadir un parámetro de cache-busting para que la imagen nueva se
+                // muestre inmediatamente en la UI (sin esperar a que expire la caché
+                // del AsyncImage o del navegador).
+                var bustedUrl = $"{publicUrl}?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+
+                System.Diagnostics.Debug.WriteLine($"[Avatar] Uploaded to: {bustedUrl}");
+
+                return bustedUrl;
             }
             catch (Exception ex)
             {
@@ -56,22 +91,58 @@ namespace HoloCrew.Services
         }
 
 
-        public Task<bool> DeleteAvatarAsync(string avatarPath)
+        // Borra el avatar del usuario en Storage.
+        // (El parámetro avatarPath se ignora: usamos el user_id de la sesión actual,
+        // que es más seguro que confiar en lo que venga por argumento.)
+        public async Task<bool> DeleteAvatarAsync(string avatarPath)
         {
             try
             {
-                if (!string.IsNullOrEmpty(avatarPath) && File.Exists(avatarPath))
+                var currentUser = _supabase.Auth.CurrentUser;
+                if (currentUser == null || string.IsNullOrEmpty(currentUser.Id))
+                    return false;
+
+                var userId = currentUser.Id;
+                var bucket = _supabase.Storage.From(BUCKET_NAME);
+
+                // Como no sabemos la extensión exacta, intentamos borrar las extensiones
+                // típicas. Es defensivo: si no existe, la llamada simplemente no hace nada.
+                var extensions = new[] { ".jpg", ".jpeg", ".png", ".bmp", ".webp" };
+                foreach (var ext in extensions)
                 {
-                    File.Delete(avatarPath);
-                    return Task.FromResult(true);
+                    try
+                    {
+                        await bucket.Remove(new System.Collections.Generic.List<string> { $"{userId}/avatar{ext}" });
+                    }
+                    catch
+                    {
+                        // Si la extensión no existe, Supabase devuelve error.
+                        // Lo ignoramos y seguimos con la siguiente.
+                    }
                 }
-                return Task.FromResult(false);
+
+                return true;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"[Avatar] Delete error: {ex.Message}");
-                return Task.FromResult(false);
+                return false;
             }
+        }
+
+
+        // Mapea una extensión de archivo a su MIME type para que Supabase guarde
+        // el archivo con el Content-Type correcto y el navegador lo sirva bien.
+        private static string GetMimeType(string extension)
+        {
+            return extension.ToLowerInvariant() switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".bmp" => "image/bmp",
+                ".webp" => "image/webp",
+                _ => "application/octet-stream"
+            };
         }
     }
 }

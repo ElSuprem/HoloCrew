@@ -87,6 +87,7 @@ namespace HoloCrew
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<IThemeService, ThemeService>();
             services.AddSingleton<IMembershipService, MembershipService>();
+            services.AddSingleton<IPaymentService, SimulatedPaymentService>();
 
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IOrderService, OrderService>();

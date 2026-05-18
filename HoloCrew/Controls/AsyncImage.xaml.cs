@@ -20,6 +20,9 @@ namespace HoloCrew.Controls
     ///   2. Caché en disco (%AppData%/HoloCrew/image-cache/).
     ///   3. Red (descarga del CDN; la respuesta se guarda en disco y memoria).
     ///
+    /// Si la imagen no se puede cargar (404, sin conexión, URL inválida, etc.),
+    /// se muestra un placeholder visual "No image available" en su lugar.
+    ///
     /// Toda la I/O usa async/await real, sin bloquear ningún hilo del ThreadPool.
     /// La decodificación a BitmapImage se hace en hilo de fondo con Task.Run
     /// y el bitmap se congela (Freeze) para poder mostrarlo desde el hilo de UI.
@@ -29,6 +32,10 @@ namespace HoloCrew.Controls
         // Caché en memoria compartida entre todas las instancias del control.
         // ConcurrentDictionary es thread-safe; los BitmapImage van congelados.
         private static readonly ConcurrentDictionary<string, BitmapImage> _memoryCache = new();
+
+        // Set de URLs que ya sabemos que fallan (para no reintentarlas en cada binding).
+        // También thread-safe.
+        private static readonly ConcurrentDictionary<string, byte> _failedUrls = new();
 
         // HttpClient único compartido (mucho más eficiente que crear uno por imagen).
         private static readonly HttpClient _httpClient = new()
@@ -102,14 +109,24 @@ namespace HoloCrew.Controls
 
         private async Task LoadAsync(string? url)
         {
-            // Limpiar la imagen actual: queda visible el fondo gris del Border padre
-            // como placeholder mientras la nueva imagen llega.
+            // Reset visual: ocultar la imagen anterior y el placeholder.
             ImageElement.Source = null;
+            FallbackPanel.Visibility = Visibility.Collapsed;
 
             if (string.IsNullOrWhiteSpace(url))
+            {
+                ShowFallback();
                 return;
+            }
 
             _currentLoadingUrl = url;
+
+            // Si esta URL ya falló antes en esta sesión, mostrar el placeholder directamente.
+            if (_failedUrls.ContainsKey(url))
+            {
+                ShowFallback();
+                return;
+            }
 
             // Nivel 1: caché en memoria (instantáneo).
             if (_memoryCache.TryGetValue(url, out var cached))
@@ -161,9 +178,26 @@ namespace HoloCrew.Controls
             }
             catch (Exception ex)
             {
+                // Algo falló (404, sin conexión, URL inválida, formato no soportado, etc.).
+                // Marcamos la URL como fallida para no reintentarla, y mostramos el placeholder.
                 System.Diagnostics.Debug.WriteLine(
                     $"[AsyncImage] Failed to load {url}: {ex.Message}");
+
+                _failedUrls[url] = 0;
+
+                // Si esta sigue siendo la URL actual, mostrar el placeholder.
+                if (_currentLoadingUrl == url)
+                {
+                    ShowFallback();
+                }
             }
+        }
+
+        // Muestra el placeholder de "imagen no disponible" en lugar de la imagen real.
+        private void ShowFallback()
+        {
+            ImageElement.Source = null;
+            FallbackPanel.Visibility = Visibility.Visible;
         }
 
         // Decodifica los bytes a BitmapImage usando DecodePixelWidth para no gastar
