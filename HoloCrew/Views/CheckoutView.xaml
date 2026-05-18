@@ -4,14 +4,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:HoloCrew.Controls"
              mc:Ignorable="d"
              d:DesignHeight="1000" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
-
-    <!-- Vista del proceso de pago (checkout).
-         Tiene 3 pasos: dirección de envío, método de pago (formulario con validación
-         visual pero procesamiento simulado), confirmación del pedido.
-         Se conecta con CheckoutViewModel. -->
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -19,14 +15,12 @@
             <ColumnDefinition Width="450"/>
         </Grid.ColumnDefinitions>
 
-        <!-- formulario de checkout (con scroll) -->
         <ScrollViewer Grid.Column="0"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
             <Border Padding="80,50,40,80">
                 <StackPanel>
 
-                    <!-- cabecera con indicador de paso -->
                     <Grid Margin="0,0,0,40">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -37,13 +31,11 @@
                                    Text="CHECKOUT" 
                                    Style="{StaticResource HeadingLarge}"/>
 
-                        <!-- indicador de paso -->
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center">
 
-                            <!-- Paso 1 -->
                             <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -68,7 +60,6 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <!-- línea conectora -->
                             <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -82,7 +73,6 @@
                                 </Border.Style>
                             </Border>
 
-                            <!-- Paso 2 -->
                             <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -112,7 +102,6 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <!-- línea conectora -->
                             <Border Width="30" Height="2" VerticalAlignment="Center" Margin="0,0,20,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -126,7 +115,6 @@
                                 </Border.Style>
                             </Border>
 
-                            <!-- Paso 3 -->
                             <Border Width="32" Height="32" CornerRadius="16" Margin="0,0,10,0">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -173,7 +161,6 @@
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- direcciones guardadas -->
                             <StackPanel Visibility="{Binding SavedAddresses.Count, Converter={StaticResource CountToVisibilityConverter}}"
                                         Margin="0,0,0,25">
                                 <TextBlock Text="Saved addresses" 
@@ -221,7 +208,6 @@
                                         Margin="0,5,0,0"/>
                             </StackPanel>
 
-                            <!-- formulario de dirección -->
                             <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -359,7 +345,7 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- PASO 2: MÉTODO DE PAGO (formulario con validación, procesamiento simulado) -->
+                    <!-- PASO 2: MÉTODO DE PAGO -->
                     <Border Background="{DynamicResource WhitePrimaryBrush}"
                             BorderBrush="{DynamicResource BorderDefault}"
                             BorderThickness="1"
@@ -374,7 +360,6 @@
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,15"/>
 
-                            <!-- Aviso de modo demo + tarjeta de prueba -->
                             <Border Background="#FEF3C7"
                                     BorderBrush="#FCD34D"
                                     BorderThickness="1"
@@ -402,7 +387,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Cardholder Name -->
                             <StackPanel Margin="0,0,0,20">
                                 <TextBlock Text="Cardholder Name *" 
                                            Style="{StaticResource BodyMedium}"
@@ -417,7 +401,6 @@
                                          MaxLength="60"/>
                             </StackPanel>
 
-                            <!-- Card Number (con auto-formato 1234 5678 9012 3456 desde el VM) -->
                             <StackPanel Margin="0,0,0,20">
                                 <TextBlock Text="Card Number *" 
                                            Style="{StaticResource BodyMedium}"
@@ -450,7 +433,6 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Expiration Date (MM/YY) -->
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="Expiration Date * (MM/YY)" 
                                                Style="{StaticResource BodyMedium}"
@@ -476,7 +458,6 @@
                                     </Border>
                                 </StackPanel>
 
-                                <!-- CVV -->
                                 <StackPanel Grid.Column="2">
                                     <TextBlock Text="CVV *" 
                                                Style="{StaticResource BodyMedium}"
@@ -503,7 +484,6 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Brands aceptados -->
                             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                                 <TextBlock Text="We accept:" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <Border Background="{DynamicResource Gray100Brush}" Padding="8,4" Margin="0,0,5,0">
@@ -534,7 +514,6 @@
                                        Style="{StaticResource HeadingMedium}"
                                        Margin="0,0,0,25"/>
 
-                            <!-- Dirección de envío -->
                             <Border Background="{DynamicResource Gray50Brush}"
                                     Padding="20"
                                     Margin="0,0,0,20">
@@ -565,7 +544,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Método de pago (resumen con tarjeta enmascarada) -->
                             <Border Background="{DynamicResource Gray50Brush}"
                                     Padding="20"
                                     Margin="0,0,0,20">
@@ -601,7 +579,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Productos -->
                             <TextBlock Text="PRODUCTS" FontWeight="Bold" FontSize="12" Margin="0,0,0,15"/>
                             <ItemsControl ItemsSource="{Binding OrderItems}" Margin="0,0,0,20">
                                 <ItemsControl.ItemTemplate>
@@ -613,7 +590,9 @@
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Border Grid.Column="0" Background="{DynamicResource Gray200Brush}" Width="60" Height="60"/>
+                                            <Border Grid.Column="0" Background="{DynamicResource Gray200Brush}" Width="60" Height="60" ClipToBounds="True">
+                                                <controls:AsyncImage Source="{Binding ImageUrl}" Stretch="UniformToFill"/>
+                                            </Border>
 
                                             <StackPanel Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding ProductName}" FontWeight="SemiBold" FontSize="14"/>
@@ -638,7 +617,6 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- botones de navegación -->
                     <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -689,7 +667,6 @@
                         </Button>
                     </Grid>
 
-                    <!-- indicador de procesamiento dinámico -->
                     <Border Background="{DynamicResource BlackPrimaryBrush}"
                             Padding="20"
                             Margin="0,20,0,0"
@@ -700,7 +677,6 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- mensaje de error -->
                     <Border Background="#FEE2E2"
                             BorderBrush="#F87171"
                             BorderThickness="1"
@@ -747,7 +723,9 @@
                                         </Grid.ColumnDefinitions>
 
                                         <Grid Grid.Column="0">
-                                            <Border Background="{DynamicResource Gray200Brush}" Width="70" Height="70"/>
+                                            <Border Background="{DynamicResource Gray200Brush}" Width="70" Height="70" ClipToBounds="True">
+                                                <controls:AsyncImage Source="{Binding ImageUrl}" Stretch="UniformToFill"/>
+                                            </Border>
                                             <Border Background="{DynamicResource BlackPrimaryBrush}"
                                                     CornerRadius="10"
                                                     Width="20" Height="20"

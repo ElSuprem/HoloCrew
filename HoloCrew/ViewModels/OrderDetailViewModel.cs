@@ -119,7 +119,8 @@ namespace HoloCrew.ViewModels
                 Color = "Black",
                 Quantity = i.Quantity,
                 UnitPrice = i.UnitPrice,
-                TotalPrice = i.Subtotal
+                TotalPrice = i.Subtotal,
+                ImageUrl = i.Product?.MainImageUrl ?? string.Empty
             }).ToList() ?? new List<OrderItemDisplay>();
 
             OrderItems = new ObservableCollection<OrderItemDisplay>(displayItems);
@@ -292,6 +293,7 @@ namespace HoloCrew.ViewModels
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
     }
 
     // evento de seguimiento del pedido

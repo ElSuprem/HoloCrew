@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:HoloCrew.Controls"
              mc:Ignorable="d"
              d:DesignHeight="1000" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
 
     <Border Padding="60,40,60,80">
         <StackPanel>
-            <!-- Header -->
             <Grid Margin="0,0,0,40">
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Style="{StaticResource HeadingLarge}">
@@ -31,7 +31,6 @@
                         VerticalAlignment="Center"/>
             </Grid>
 
-            <!-- Main Content -->
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -39,7 +38,6 @@
                     <ColumnDefinition Width="400"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- LEFT SIDE: ORDER ITEMS -->
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="ORDER ITEMS" Style="{StaticResource HeadingMedium}" Margin="0,0,0,25"/>
 
@@ -58,8 +56,8 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Border Grid.Column="0" Background="{DynamicResource Gray100Brush}" Width="80" Height="80" Margin="0,0,20,0">
-                                            <TextBlock Text="" FontSize="24" Opacity="0.3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Border Grid.Column="0" Background="{DynamicResource Gray100Brush}" Width="80" Height="80" Margin="0,0,20,0" ClipToBounds="True">
+                                            <controls:AsyncImage Source="{Binding ImageUrl}" Stretch="UniformToFill"/>
                                         </Border>
 
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -81,7 +79,6 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
-                    <!-- Delivery & Payment -->
                     <TextBlock Text="DELIVERY &amp; PAYMENT" Style="{StaticResource HeadingMedium}" Margin="0,40,0,25"/>
 
                     <Border Background="{DynamicResource WhitePrimaryBrush}" BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="1" Padding="30">
@@ -104,10 +101,8 @@
                     </Border>
                 </StackPanel>
 
-                <!-- RIGHT SIDE: ORDER SUMMARY & TRACKING -->
                 <StackPanel Grid.Column="2">
 
-                    <!-- Order Status Card -->
                     <Border Background="{DynamicResource BlackPrimaryBrush}" Padding="30,25" Margin="0,0,0,30">
                         <StackPanel>
                             <TextBlock Text="ORDER STATUS" FontWeight="SemiBold" FontSize="14" Foreground="White" Margin="0,0,0,15"/>
@@ -118,7 +113,6 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Tracking Timeline -->
                     <Border Background="{DynamicResource WhitePrimaryBrush}" BorderBrush="{DynamicResource Gray200Brush}" BorderThickness="1" Padding="30" Margin="0,0,0,30">
                         <StackPanel>
                             <TextBlock Text="TRACKING" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,20"/>
@@ -178,7 +172,6 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Order Summary -->
                     <Border Background="{DynamicResource Gray100Brush}" Padding="30">
                         <StackPanel>
                             <TextBlock Text="ORDER SUMMARY" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,20"/>
@@ -220,24 +213,21 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Action Buttons -->
                     <StackPanel Margin="0,30,0,0">
                         <Button Content="TRACK PACKAGE" Style="{StaticResource PrimaryButton}" Command="{Binding TrackPackageCommand}" Margin="0,0,0,15"/>
                         <Button Content="CONTACT SUPPORT" Style="{StaticResource OutlineButton}" Command="{Binding ContactSupportCommand}" Margin="0,0,0,15"/>
 
-                        <!-- Botón de cancelar pedido. Solo visible si el pedido todavía se puede cancelar
-         (estados Pending o Confirmed). Una vez enviado o entregado, no aparece. -->
                         <Button Content="CANCEL ORDER"
-            Command="{Binding CancelOrderCommand}"
-            Visibility="{Binding CanBeCancelled, Converter={StaticResource BoolToVisibilityConverter}}"
-            Background="Transparent"
-            BorderBrush="#F44336"
-            BorderThickness="2"
-            Foreground="#F44336"
-            FontWeight="Bold"
-            FontSize="13"
-            Padding="20,14"
-            Cursor="Hand"/>
+                                Command="{Binding CancelOrderCommand}"
+                                Visibility="{Binding CanBeCancelled, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Background="Transparent"
+                                BorderBrush="#F44336"
+                                BorderThickness="2"
+                                Foreground="#F44336"
+                                FontWeight="Bold"
+                                FontSize="13"
+                                Padding="20,14"
+                                Cursor="Hand"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
