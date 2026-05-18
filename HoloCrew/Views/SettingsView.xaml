@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:HoloCrew.Controls"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
@@ -37,10 +38,30 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Border Width="36" Height="36" Background="#2A2A2A" CornerRadius="18">
-                                <Viewbox Width="16" Height="16">
-                                    <Path Data="M20 21V19C20 16.79 18.21 15 16 15H8C5.79 15 4 16.79 4 19V21M16 7C16 9.21 14.21 11 12 11C9.79 11 8 9.21 8 7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7Z" 
-                                          Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
-                                </Viewbox>
+                                <Grid>
+                                    <!-- Icono genérico de usuario (visible si NO hay avatar) -->
+                                    <Viewbox Width="16" Height="16"
+                 Visibility="{Binding HasCurrentUserAvatar, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                        <Path Data="M20 21V19C20 16.79 18.21 15 16 15H8C5.79 15 4 16.79 4 19V21M16 7C16 9.21 14.21 11 12 11C9.79 11 8 9.21 8 7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7Z" 
+                  Stroke="{DynamicResource Gray400Brush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                    </Viewbox>
+
+                                    <!-- Avatar real recortado en círculo mediante OpacityMask -->
+                                    <Grid Width="36" Height="36"
+              Visibility="{Binding HasCurrentUserAvatar, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Grid.OpacityMask>
+                                            <VisualBrush>
+                                                <VisualBrush.Visual>
+                                                    <Ellipse Width="36" Height="36" Fill="Black"/>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Grid.OpacityMask>
+                                        <controls:AsyncImage Source="{Binding CurrentUserAvatarUrl}"
+                                 Stretch="UniformToFill"
+                                 Width="36"
+                                 Height="36"/>
+                                    </Grid>
+                                </Grid>
                             </Border>
                             <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding CurrentUserName}" FontSize="14" FontWeight="SemiBold" Foreground="White"/>

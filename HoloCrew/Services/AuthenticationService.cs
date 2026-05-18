@@ -234,6 +234,10 @@ namespace HoloCrew.Services
                 if (profile != null)
                     _currentUserCache = profile.ToUser();
 
+                // Notificar a toda la app que el usuario cambió (avatar incluido).
+                // Cualquier ViewModel suscrito a AuthStateChanged se enterará y podrá refrescar.
+                AuthStateChanged?.Invoke(this, EventArgs.Empty);
+
                 return true;
             }
             catch (Exception ex)

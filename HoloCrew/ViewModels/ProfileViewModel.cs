@@ -177,6 +177,12 @@ namespace HoloCrew.ViewModels
 
                 if (ok)
                 {
+                    // Limpiamos primero para forzar a WPF a soltar el binding antiguo,
+                    // y luego asignamos la URL nueva. Sin esto, si la URL nueva fuera idéntica
+                    // a la anterior (mismo path + cache-busting), WPF podría no refrescar.
+                    AvatarUrl = string.Empty;
+                    HasAvatar = false;
+
                     AvatarUrl = newAvatarUrl;
                     HasAvatar = true;
                     SuccessMessage = "Avatar updated successfully";

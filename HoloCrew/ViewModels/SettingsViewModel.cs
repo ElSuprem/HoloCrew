@@ -30,6 +30,12 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private string _currentUserEmail = "Not signed in";
 
+        [ObservableProperty]
+        private string _currentUserAvatarUrl = string.Empty;
+
+        [ObservableProperty]
+        private bool _hasCurrentUserAvatar;
+
         // apariencia
         [ObservableProperty]
         private bool _isDarkMode;
@@ -94,6 +100,10 @@ namespace HoloCrew.ViewModels
             _settingsService = settingsService;
 
             Title = "Settings";
+
+            // Suscribirse a cambios de autenticación (incluye actualización de avatar).
+            // Cuando el usuario cambie su foto en Profile, se refrescará automáticamente aquí.
+            _authenticationService.AuthStateChanged += (s, e) => UpdateAuthenticationState();
 
             LoadSettings();
             UpdateAuthenticationState();
@@ -226,11 +236,24 @@ namespace HoloCrew.ViewModels
                 var user = _authenticationService.GetCurrentUser();
                 CurrentUserName = user?.FullName ?? "User";
                 CurrentUserEmail = user?.Email ?? "";
+
+                // Limpiar primero para forzar refresco visual del binding aunque la URL
+                // sea idéntica (las URLs nuevas llevan cache-busting al final).
+                CurrentUserAvatarUrl = string.Empty;
+                HasCurrentUserAvatar = false;
+
+                if (!string.IsNullOrEmpty(user?.ProfileImageUrl))
+                {
+                    CurrentUserAvatarUrl = user.ProfileImageUrl;
+                    HasCurrentUserAvatar = true;
+                }
             }
             else
             {
                 CurrentUserName = "Guest";
                 CurrentUserEmail = "Not signed in";
+                CurrentUserAvatarUrl = string.Empty;
+                HasCurrentUserAvatar = false;
             }
         }
 

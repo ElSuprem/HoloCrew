@@ -45,6 +45,12 @@ namespace HoloCrew.ViewModels
         private string _currentUserName;
 
         [ObservableProperty]
+        private string _currentUserAvatarUrl = string.Empty;
+
+        [ObservableProperty]
+        private bool _hasCurrentUserAvatar;
+
+        [ObservableProperty]
         private int _unreadNotificationCount;
 
         [ObservableProperty]
@@ -324,10 +330,23 @@ namespace HoloCrew.ViewModels
             {
                 var user = _authenticationService.GetCurrentUser();
                 CurrentUserName = user?.FullName ?? "User";
+
+                // Limpiar primero para forzar refresco visual aunque la URL sea similar
+                // (los cambios de avatar usan cache-busting al final de la URL).
+                CurrentUserAvatarUrl = string.Empty;
+                HasCurrentUserAvatar = false;
+
+                if (!string.IsNullOrEmpty(user?.ProfileImageUrl))
+                {
+                    CurrentUserAvatarUrl = user.ProfileImageUrl;
+                    HasCurrentUserAvatar = true;
+                }
             }
             else
             {
                 CurrentUserName = null;
+                CurrentUserAvatarUrl = string.Empty;
+                HasCurrentUserAvatar = false;
             }
         }
 
