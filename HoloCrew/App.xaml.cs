@@ -76,6 +76,7 @@ namespace HoloCrew
             services.AddSingleton<IWishlistRepository, WishlistRepository>();
             services.AddSingleton<ICartRepository, CartRepository>();
             services.AddSingleton<INotificationRepository, NotificationRepository>();
+            services.AddSingleton<IMembershipRepository, MembershipRepository>();
 
             // ========== SERVICIOS ==========
             services.AddSingleton<INavigationService, NavigationService>();
@@ -85,6 +86,7 @@ namespace HoloCrew
             services.AddSingleton<IAvatarService, AvatarService>();
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<IThemeService, ThemeService>();
+            services.AddSingleton<IMembershipService, MembershipService>();
 
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IOrderService, OrderService>();

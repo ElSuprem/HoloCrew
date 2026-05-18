@@ -483,4 +483,10 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-appsettings.json
+# Archivos de configuracion con claves (NO subir)
+**/appsettings.json
+
+# Archivos basura accidentales en raiz
+/a Supabase*
+*intercambio* 
+ 

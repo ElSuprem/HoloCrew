@@ -35,6 +35,12 @@ namespace HoloCrew.Infraestructure.Supabase.Models
         [Column("credits")]
         public int Credits { get; set; }
 
+        [Column("lifetime_points")]
+        public int LifetimePoints { get; set; }
+
+        [Column("member_since")]
+        public DateTime? MemberSince { get; set; }
+
         [Column("is_active")]
         public bool IsActive { get; set; } = true;
 
@@ -59,7 +65,11 @@ namespace HoloCrew.Infraestructure.Supabase.Models
                 PhoneNumber = Phone ?? string.Empty,
                 ProfileImageUrl = AvatarUrl ?? string.Empty,
                 CreatedAt = CreatedAt,
-                LastLoginAt = LastLoginAt
+                LastLoginAt = LastLoginAt,
+                MembershipTier = MembershipTier,
+                Credits = Credits,
+                LifetimePoints = LifetimePoints,
+                MemberSince = MemberSince ?? CreatedAt
             };
         }
     }

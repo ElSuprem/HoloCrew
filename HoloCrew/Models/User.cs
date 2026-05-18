@@ -21,6 +21,12 @@ namespace HoloCrew.Models
         public List<Address> Addresses { get; set; }
         public List<PaymentMethod> PaymentMethods { get; set; }
         public NotificationSettings NotificationPreferences { get; set; }
+
+        // Datos de membresía (vienen de la tabla profiles).
+        public string MembershipTier { get; set; } = "bronze";
+        public int Credits { get; set; }
+        public int LifetimePoints { get; set; }
+        public DateTime MemberSince { get; set; }
     }
 
     // Configuración de la app: modo oscuro, idioma, notificaciones, privacidad, etc.
@@ -38,4 +44,6 @@ namespace HoloCrew.Models
         public bool ShareDataWithPartners { get; set; } = false;
         public DateTime LastUpdated { get; set; } = DateTime.Now;
     }
+
+
 }
