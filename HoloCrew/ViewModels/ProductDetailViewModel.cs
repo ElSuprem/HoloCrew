@@ -187,24 +187,38 @@ namespace HoloCrew.ViewModels
             }
         }
 
+        // Decide qué tallas mostrar y cuáles están disponibles según el stock real
+        // de la tabla product_sizes. Una talla puede estar en 3 estados:
+        //  - Disponible: el producto la vende y tiene stock > 0.
+        //  - Sold Out: el producto la vende pero el stock está a 0.
+        //  - No la vende: el producto ni siquiera tiene esa talla.
         private void SetupAvailableSizes()
         {
-            var productSizes = Product.AvailableSizes ?? new List<string> { "XS", "S", "M", "L", "XL" };
+            // Tallas que el producto vende (vienen de la tabla product_sizes).
+            var productSizes = Product.AvailableSizes ?? new List<string>();
+
+            // Mostramos siempre las 6 tallas estándar; las que no vende el producto
+            // o están agotadas se marcan en consecuencia.
             var allSizes = new[] { "XS", "S", "M", "L", "XL", "XXL" };
 
             AvailableSizes.Clear();
             foreach (var size in allSizes)
             {
-                bool isAvailable = productSizes.Contains(size);
+                bool sells = productSizes.Contains(size);
+                bool hasStock = Product.HasStockForSize(size);
+                bool isAvailable = sells && hasStock;
 
                 AvailableSizes.Add(new SizeOption
                 {
                     Size = size,
                     IsAvailable = isAvailable,
+                    IsSoldOut = sells && !hasStock,  // se vende pero está agotada
                     IsSelected = size == SelectedSize && isAvailable
                 });
             }
 
+            // Si la talla actualmente seleccionada no está disponible (porque se ha
+            // agotado o el producto no la vende), seleccionamos la primera disponible.
             var currentSelection = AvailableSizes.FirstOrDefault(s => s.Size == SelectedSize);
             if (currentSelection == null || !currentSelection.IsAvailable)
             {
@@ -213,6 +227,11 @@ namespace HoloCrew.ViewModels
                 {
                     SelectedSize = firstAvailable.Size;
                     firstAvailable.IsSelected = true;
+                }
+                else
+                {
+                    // Producto totalmente agotado: ninguna talla disponible.
+                    SelectedSize = string.Empty;
                 }
             }
         }
@@ -238,9 +257,21 @@ namespace HoloCrew.ViewModels
         {
             if (Product == null || Quantity < 1) return;
 
+            // Validamos que la talla seleccionada tenga stock antes de añadir.
+            // Aunque el botón de la talla agotada está deshabilitado en la UI, esto
+            // es una capa extra de seguridad por si algo se cuela (cambio de stock
+            // mientras la pantalla está abierta, edge case, etc.).
+            if (string.IsNullOrEmpty(SelectedSize) || !Product.HasStockForSize(SelectedSize))
+            {
+                SetError("This size is sold out. Please select another size.");
+                return;
+            }
+
             try
             {
-                await _cartService.AddToCartAsync(Product, Quantity);
+                // Pasamos también la talla elegida para que se guarde como variante
+                // en el carrito (antes se perdía esta información).
+                await _cartService.AddToCartAsync(Product, Quantity, SelectedSize);
             }
             catch (Exception ex)
             {
@@ -512,7 +543,10 @@ namespace HoloCrew.ViewModels
         private bool _isSelected;
     }
 
-    // opción de talla para la interfaz (talla, disponible, si está seleccionada)
+    // opción de talla para la interfaz. Distingue 3 estados:
+    //  - IsAvailable=true → talla disponible (el producto la vende y hay stock).
+    //  - IsAvailable=false + IsSoldOut=false → el producto ni siquiera vende esa talla.
+    //  - IsAvailable=false + IsSoldOut=true → la vende pero está agotada (XX en rojo).
     public partial class SizeOption : ObservableObject
     {
         [ObservableProperty]
@@ -523,6 +557,10 @@ namespace HoloCrew.ViewModels
 
         [ObservableProperty]
         private bool _isSelected;
+
+        // True si esta talla la vende el producto pero está agotada (stock = 0).
+        [ObservableProperty]
+        private bool _isSoldOut;
     }
 
     #endregion

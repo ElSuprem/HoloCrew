@@ -291,6 +291,22 @@
                                             <!-- Imagen del producto -->
                                             <controls:AsyncImage Source="{Binding MainImageUrl}"/>
 
+                                            <!-- Overlay SOLD OUT cuando todas las tallas están agotadas -->
+                                            <Border Background="#CCFFFFFF"
+                                                    Visibility="{Binding IsCompletelyOutOfStock, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    IsHitTestVisible="False"
+                                                    Panel.ZIndex="200">
+                                                <Border Background="#0A0A0A"
+                                                        Padding="20,8"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+                                                    <TextBlock Text="SOLD OUT"
+                                                               Foreground="White"
+                                                               FontSize="14"
+                                                               FontWeight="Bold"/>
+                                                </Border>
+                                            </Border>
+
                                             <!-- Badges -->
                                             <StackPanel Orientation="Horizontal" 
                                                         HorizontalAlignment="Left" 

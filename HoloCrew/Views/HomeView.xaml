@@ -398,6 +398,22 @@
                                             <!-- Imagen del producto -->
                                             <controls:AsyncImage Source="{Binding MainImageUrl}"/>
 
+                                            <!-- Overlay SOLD OUT cuando todas las tallas están agotadas -->
+                                            <Border Background="#CCFFFFFF"
+                                                    Visibility="{Binding IsCompletelyOutOfStock, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    IsHitTestVisible="False"
+                                                    Panel.ZIndex="200">
+                                                <Border Background="#0A0A0A"
+                                                        Padding="20,8"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+                                                    <TextBlock Text="SOLD OUT"
+                                                               Foreground="White"
+                                                               FontSize="14"
+                                                               FontWeight="Bold"/>
+                                                </Border>
+                                            </Border>
+
                                             <!-- Badges (no atrapan clicks) -->
                                             <StackPanel Orientation="Horizontal"
                                                         HorizontalAlignment="Left"
@@ -769,7 +785,23 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" ClipToBounds="True">
-                                        <controls:AsyncImage Source="{Binding MainImageUrl}"/>
+                                        <Grid>
+                                            <controls:AsyncImage Source="{Binding MainImageUrl}"/>
+                                            <!-- Overlay SOLD OUT -->
+                                            <Border Background="#CCFFFFFF"
+                                                    Visibility="{Binding IsCompletelyOutOfStock, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    IsHitTestVisible="False">
+                                                <Border Background="#0A0A0A"
+                                                        Padding="20,8"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+                                                    <TextBlock Text="SOLD OUT"
+                                                               Foreground="White"
+                                                               FontSize="14"
+                                                               FontWeight="Bold"/>
+                                                </Border>
+                                            </Border>
+                                        </Grid>
                                     </Border>
                                     <StackPanel Grid.Row="1" Margin="0,15,0,0">
                                         <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>

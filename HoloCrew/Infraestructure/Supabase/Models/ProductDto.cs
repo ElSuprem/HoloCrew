@@ -83,7 +83,7 @@ namespace HoloCrew.Infraestructure.Supabase.Models
 
 
         // Convierte este DTO al modelo Product que usan los ViewModels.
-        // Recibe las imágenes, tallas y colores que ya hayan sido cargadas
+        // Recibe las imágenes, tallas (con stock) y colores que ya hayan sido cargadas
         // desde sus respectivas tablas, para juntarlas en un solo objeto.
         public Product ToProduct(
             IEnumerable<ProductImageDto>? images = null,
@@ -99,6 +99,18 @@ namespace HoloCrew.Infraestructure.Supabase.Models
             var mainImage = imageList.FirstOrDefault(i => i.IsPrimary)?.ImageUrl
                 ?? imageList.FirstOrDefault()?.ImageUrl
                 ?? string.Empty;
+
+            // Tallas y stock por talla del producto.
+            var productSizes = sizes?
+                .Where(s => s.ProductId == Id)
+                .ToList()
+                ?? new List<ProductSizeDto>();
+
+            // Construye el diccionario talla → stock. Permite saber si una talla concreta
+            // está agotada sin tener que recargar la BBDD.
+            var stockBySize = productSizes
+                .GroupBy(s => s.Size)
+                .ToDictionary(g => g.Key, g => g.First().Stock);
 
             return new Product
             {
@@ -122,16 +134,15 @@ namespace HoloCrew.Infraestructure.Supabase.Models
                 Gender = string.IsNullOrEmpty(Gender)
                     ? "Unisex"
                     : char.ToUpper(Gender[0]) + Gender.Substring(1),
-                AvailableSizes = sizes?
-                    .Where(s => s.ProductId == Id)
+                AvailableSizes = productSizes
                     .Select(s => s.Size)
-                    .ToList()
-                    ?? new List<string>(),
+                    .ToList(),
                 AvailableColors = colors?
                     .Where(c => c.ProductId == Id)
                     .Select(c => c.ColorName)
                     .ToList()
                     ?? new List<string>(),
+                StockBySize = stockBySize,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt
             };

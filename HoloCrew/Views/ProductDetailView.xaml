@@ -92,6 +92,21 @@
                                             </ControlTemplate>
                                         </Button.Template>
                                     </Button>
+
+                                    <!-- Overlay SOLD OUT cuando todas las tallas están agotadas -->
+                                    <Border Background="#CCFFFFFF"
+                                            Visibility="{Binding Product.IsCompletelyOutOfStock, Converter={StaticResource BoolToVisibilityConverter}}"
+                                            IsHitTestVisible="False">
+                                        <Border Background="#0A0A0A"
+                                                Padding="30,12"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="SOLD OUT"
+                                                       Foreground="White"
+                                                       FontSize="20"
+                                                       FontWeight="Bold"/>
+                                        </Border>
+                                    </Border>
                                 </Grid>
                             </Border>
 
@@ -241,14 +256,22 @@
                                                                     <Setter Property="Background" Value="Transparent"/>
                                                                     <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
                                                                     <Style.Triggers>
+                                                                        <!-- Talla seleccionada: fondo negro -->
                                                                         <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                                                             <Setter Property="Background" Value="{DynamicResource BlackPrimaryBrush}"/>
                                                                             <Setter Property="BorderBrush" Value="{DynamicResource BlackPrimaryBrush}"/>
                                                                         </DataTrigger>
+                                                                        <!-- Talla que el producto no vende: gris tenue -->
                                                                         <DataTrigger Binding="{Binding IsAvailable}" Value="False">
                                                                             <Setter Property="Background" Value="{DynamicResource Gray100Brush}"/>
                                                                             <Setter Property="BorderBrush" Value="{DynamicResource Gray200Brush}"/>
                                                                             <Setter Property="Opacity" Value="0.5"/>
+                                                                        </DataTrigger>
+                                                                        <!-- Talla agotada (la vende pero stock=0): rojo claro -->
+                                                                        <DataTrigger Binding="{Binding IsSoldOut}" Value="True">
+                                                                            <Setter Property="Background" Value="#FEF2F2"/>
+                                                                            <Setter Property="BorderBrush" Value="#FECACA"/>
+                                                                            <Setter Property="Opacity" Value="0.9"/>
                                                                         </DataTrigger>
                                                                     </Style.Triggers>
                                                                 </Style>
@@ -264,6 +287,11 @@
                                                                             </DataTrigger>
                                                                             <DataTrigger Binding="{Binding IsAvailable}" Value="False">
                                                                                 <Setter Property="Foreground" Value="{DynamicResource Gray400Brush}"/>
+                                                                            </DataTrigger>
+                                                                            <!-- Talla agotada: texto rojo y tachado -->
+                                                                            <DataTrigger Binding="{Binding IsSoldOut}" Value="True">
+                                                                                <Setter Property="Foreground" Value="#DC2626"/>
+                                                                                <Setter Property="TextDecorations" Value="Strikethrough"/>
                                                                             </DataTrigger>
                                                                         </Style.Triggers>
                                                                     </Style>
@@ -402,7 +430,23 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" ClipToBounds="True">
-                                            <controls:AsyncImage Source="{Binding MainImageUrl}"/>
+                                            <Grid>
+                                                <controls:AsyncImage Source="{Binding MainImageUrl}"/>
+                                                <!-- Overlay SOLD OUT en productos relacionados también -->
+                                                <Border Background="#CCFFFFFF"
+                                                        Visibility="{Binding IsCompletelyOutOfStock, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                        IsHitTestVisible="False">
+                                                    <Border Background="#0A0A0A"
+                                                            Padding="20,8"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="SOLD OUT"
+                                                                   Foreground="White"
+                                                                   FontSize="14"
+                                                                   FontWeight="Bold"/>
+                                                    </Border>
+                                                </Border>
+                                            </Grid>
                                         </Border>
                                         <StackPanel Grid.Row="1" Margin="15">
                                             <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
