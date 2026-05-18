@@ -8,12 +8,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 // ViewModel de la página de checkout (finalizar compra).
 // Tiene 3 pasos: dirección de envío, método de pago, resumen del pedido.
+// El paso 2 (pago) tiene validación visual real del formulario pero el procesamiento
+// es simulado a través de IPaymentService. La arquitectura está preparada para
+// integrar Stripe sin tocar el ViewModel.
 // Al confirmar:
-//   1. Procesa el pago (IPaymentService, actualmente simulado).
+//   1. Procesa el pago (IPaymentService, actualmente SimulatedPaymentService).
 //   2. Si el pago aprueba, llama a OrderService.CreateOrderFromCartAsync que
 //      invoca la RPC create_order_from_cart de Supabase (transaccional).
 //   3. Navega al detalle del pedido recién creado.
@@ -46,6 +50,31 @@ namespace HoloCrew.ViewModels
         [ObservableProperty]
         private ObservableCollection<PaymentMethod> _savedPaymentMethods = new();
 
+        // ========== CAMPOS DEL FORMULARIO DE PAGO ==========
+        // Estos campos tienen validación visual pero NO se envían a ninguna pasarela.
+        // El SimulatedPaymentService los ignora; solo aprueba el importe.
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsPaymentFormValid))]
+        private string _cardholderName = string.Empty;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsPaymentFormValid))]
+        [NotifyPropertyChangedFor(nameof(IsCardNumberValid))]
+        private string _cardNumber = string.Empty;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsPaymentFormValid))]
+        [NotifyPropertyChangedFor(nameof(IsExpirationDateValid))]
+        private string _expirationDate = string.Empty;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsPaymentFormValid))]
+        [NotifyPropertyChangedFor(nameof(IsCvvValid))]
+        private string _cvv = string.Empty;
+
+        // ========== RESTO DE ESTADO ==========
+
         [ObservableProperty]
         private Order _orderSummary;
 
@@ -67,6 +96,104 @@ namespace HoloCrew.ViewModels
         public bool IsStep1 => CurrentStep == 1;
         public bool IsStep2 => CurrentStep == 2;
         public bool IsStep3 => CurrentStep == 3;
+
+        // ========== VALIDACIONES DEL FORMULARIO DE PAGO ==========
+
+        // Número de tarjeta válido: 16 dígitos (ignorando espacios).
+        public bool IsCardNumberValid
+        {
+            get
+            {
+                var digits = (CardNumber ?? string.Empty).Replace(" ", string.Empty);
+                return digits.Length == 16 && digits.All(char.IsDigit);
+            }
+        }
+
+        // Fecha de caducidad válida: formato MM/YY, mes entre 01-12, no caducada.
+        public bool IsExpirationDateValid
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(ExpirationDate)) return false;
+                if (!Regex.IsMatch(ExpirationDate, @"^(0[1-9]|1[0-2])/\d{2}$")) return false;
+
+                var parts = ExpirationDate.Split('/');
+                var month = int.Parse(parts[0]);
+                var year = 2000 + int.Parse(parts[1]);
+
+                // Último día del mes de caducidad
+                var lastDayOfMonth = new DateTime(year, month, 1).AddMonths(1).AddDays(-1);
+                return lastDayOfMonth >= DateTime.Today;
+            }
+        }
+
+        // CVV válido: 3 o 4 dígitos.
+        public bool IsCvvValid
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(Cvv)
+                    && (Cvv.Length == 3 || Cvv.Length == 4)
+                    && Cvv.All(char.IsDigit);
+            }
+        }
+
+        // El formulario es válido si los 4 campos lo son.
+        public bool IsPaymentFormValid =>
+            !string.IsNullOrWhiteSpace(CardholderName)
+            && CardholderName.Trim().Length >= 2
+            && IsCardNumberValid
+            && IsExpirationDateValid
+            && IsCvvValid;
+
+        // ========== HOOKS DE NOTIFICACIÓN PARA REVALIDAR CanCompleteOrder ==========
+
+        partial void OnCardNumberChanged(string value)
+        {
+            // Auto-formato: añadir espacios cada 4 dígitos. Quitamos primero los espacios
+            // que pudiera haber para no entrar en bucle infinito.
+            var digits = (value ?? string.Empty).Replace(" ", string.Empty);
+            if (digits.Length > 16) digits = digits.Substring(0, 16);
+            if (!digits.All(char.IsDigit) && digits.Length > 0) return;
+
+            var formatted = Regex.Replace(digits, ".{4}", "$0 ").TrimEnd();
+            if (formatted != value)
+            {
+                CardNumber = formatted;
+            }
+        }
+
+        partial void OnExpirationDateChanged(string value)
+        {
+            // Auto-formato: insertar la "/" automáticamente al teclear el tercer dígito.
+            var digits = (value ?? string.Empty).Replace("/", string.Empty);
+            if (digits.Length > 4) digits = digits.Substring(0, 4);
+            if (!digits.All(char.IsDigit) && digits.Length > 0) return;
+
+            string formatted = digits.Length >= 3
+                ? $"{digits.Substring(0, 2)}/{digits.Substring(2)}"
+                : digits;
+
+            if (formatted != value)
+            {
+                ExpirationDate = formatted;
+            }
+        }
+
+        partial void OnCvvChanged(string value)
+        {
+            // Limitar a 4 dígitos numéricos.
+            var digits = (value ?? string.Empty).Where(char.IsDigit).ToArray();
+            if (digits.Length > 4) digits = digits.Take(4).ToArray();
+            var formatted = new string(digits);
+
+            if (formatted != value)
+            {
+                Cvv = formatted;
+            }
+        }
+
+        // ========== CONSTRUCTOR ==========
 
         public CheckoutViewModel(
             IOrderService orderService,
@@ -252,7 +379,7 @@ namespace HoloCrew.ViewModels
                 1 => !string.IsNullOrWhiteSpace(ShippingAddress?.AddressLine1) &&
                      !string.IsNullOrWhiteSpace(ShippingAddress?.City) &&
                      !string.IsNullOrWhiteSpace(ShippingAddress?.PostalCode),
-                2 => true,  // En el paso 2 ya no hay validación de tarjeta porque el pago se simula
+                2 => IsPaymentFormValid,
                 3 => true,
                 _ => false
             };
@@ -272,6 +399,18 @@ namespace HoloCrew.ViewModels
                 PaymentMethod = SelectedPaymentMethod,
                 Total = OrderTotal
             };
+        }
+
+        // Helper para mostrar el número enmascarado en el paso 3 (xxxx xxxx xxxx 4242).
+        public string CardNumberMasked
+        {
+            get
+            {
+                var digits = (CardNumber ?? string.Empty).Replace(" ", string.Empty);
+                if (digits.Length < 4) return "•••• •••• •••• ••••";
+                var last4 = digits.Substring(digits.Length - 4);
+                return $"•••• •••• •••• {last4}";
+            }
         }
     }
 }
