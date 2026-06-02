@@ -10,253 +10,260 @@
 
     <!-- Vista de la página de venta flash (ofertas rápidas).
          Muestra banner con cuenta regresiva, barra de urgencia, filtros por categoría,
-         y productos con descuento. Se conecta con FlashSaleViewModel. -->
+         y productos con descuento. Mientras no llega la fecha de inicio se muestra el
+         panel "Próximamente". Se conecta con FlashSaleViewModel. -->
 
     <Grid>
-        <!-- estado de carga -->
-        <Border Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+
+        <!-- Contenido normal de Flash Sale. Solo cuenta para el layout cuando la oferta
+             está disponible; mientras no, se colapsa para que el panel "Próximamente"
+             quede centrado y visible sin tener que hacer scroll. -->
+        <Grid Visibility="{Binding IsAvailable, Converter={StaticResource BoolToVisibilityConverter}}">
+
+            <!-- estado de carga -->
+            <Border Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
                 Background="{DynamicResource BackgroundPrimary}">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,20"/>
-                <TextBlock Text="{Binding LoadingMessage}" 
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Text="{Binding LoadingMessage}" 
                            FontSize="16"
                            Foreground="{DynamicResource Gray500Brush}"/>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
 
-        <!-- estado vacío -->
-        <Border Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
+            <!-- estado vacío -->
+            <Border Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
                 Background="{DynamicResource BackgroundPrimary}">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="400">
-                <TextBlock Text="" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,20"/>
-                <TextBlock Text="{Binding EmptyTitle}" 
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="400">
+                    <TextBlock Text="" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Text="{Binding EmptyTitle}" 
                            FontSize="24"
                            FontWeight="Bold"
                            TextAlignment="Center"
                            Margin="0,0,0,10"/>
-                <TextBlock Text="{Binding EmptySubtitle}" 
+                    <TextBlock Text="{Binding EmptySubtitle}" 
                            FontSize="16"
                            Foreground="{DynamicResource Gray500Brush}"
                            TextAlignment="Center"
                            TextWrapping="Wrap"
                            Margin="0,0,0,30"/>
-                <Button Content="{Binding EmptyActionText}"
+                    <Button Content="{Binding EmptyActionText}"
                         Style="{StaticResource PrimaryButton}"
                         Command="{Binding EmptyActionCommand}"
                         Padding="40,15"
                         HorizontalAlignment="Center"/>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
 
-        <!-- contenido principal -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto"
+            <!-- contenido principal -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled"
                       Visibility="{Binding IsSuccess, Converter={StaticResource BoolToVisibilityConverter}}">
-            <StackPanel>
+                <StackPanel>
 
-                <!-- banner principal con cuenta regresiva -->
-                <Border Background="#0A0A0A" Padding="80,60">
-                    <Grid>
-                        <!-- fondo con patrón -->
-                        <Border Opacity="0.1">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#FF0000" Offset="0"/>
-                                    <GradientStop Color="#FF6B00" Offset="0.5"/>
-                                    <GradientStop Color="#FFD700" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                        </Border>
-
+                    <!-- banner principal con cuenta regresiva -->
+                    <Border Background="#0A0A0A" Padding="80,60">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                            <!-- fondo con patrón -->
+                            <Border Opacity="0.1">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#FF0000" Offset="0"/>
+                                        <GradientStop Color="#FF6B00" Offset="0.5"/>
+                                        <GradientStop Color="#FFD700" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
 
-                            <!-- título y subtítulo -->
-                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                                    <Border Background="{DynamicResource RedAccentBrush}" Padding="12,6">
-                                        <TextBlock Text="LIMITED TIME" 
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- título y subtítulo -->
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="{DynamicResource RedAccentBrush}" Padding="12,6">
+                                            <TextBlock Text="LIMITED TIME" 
                                                    Foreground="White" 
                                                    FontSize="12" 
                                                    FontWeight="Bold"/>
-                                    </Border>
-                                    <Border Background="#FF6B00" Padding="12,6" Margin="10,0,0,0">
-                                        <TextBlock Text="UP TO 70% OFF" 
+                                        </Border>
+                                        <Border Background="#FF6B00" Padding="12,6" Margin="10,0,0,0">
+                                            <TextBlock Text="UP TO 70% OFF" 
                                                    Foreground="White" 
                                                    FontSize="12" 
                                                    FontWeight="Bold"/>
-                                    </Border>
-                                </StackPanel>
+                                        </Border>
+                                    </StackPanel>
 
-                                <TextBlock Text="FLASH" 
+                                    <TextBlock Text="FLASH" 
                                            FontSize="72"
                                            FontWeight="Black"
                                            Foreground="White"
                                            Margin="0,0,0,-10"/>
-                                <TextBlock Text="SALE" 
+                                    <TextBlock Text="SALE" 
                                            FontSize="72"
                                            FontWeight="Black"
                                            Margin="0,0,0,20">
-                                    <TextBlock.Foreground>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#FF6B00" Offset="0"/>
-                                            <GradientStop Color="#FFD700" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </TextBlock.Foreground>
-                                </TextBlock>
+                                        <TextBlock.Foreground>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Color="#FF6B00" Offset="0"/>
+                                                <GradientStop Color="#FFD700" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
 
-                                <TextBlock Text="{Binding SaleSubtitle}"
+                                    <TextBlock Text="{Binding SaleSubtitle}"
                                            FontSize="16"
                                            Foreground="{DynamicResource Gray400Brush}"
                                            Margin="0,0,0,25"/>
 
-                                <TextBlock FontSize="14" Foreground="{DynamicResource Gray500Brush}">
+                                    <TextBlock FontSize="14" Foreground="{DynamicResource Gray500Brush}">
                                     <Run Text="{Binding TotalProductCount, Mode=OneWay}"/>
                                     <Run Text=" products on sale"/>
-                                </TextBlock>
-                            </StackPanel>
+                                    </TextBlock>
+                                </StackPanel>
 
-                            <!-- cuenta regresiva -->
-                            <Border Grid.Column="1" 
+                                <!-- cuenta regresiva -->
+                                <Border Grid.Column="1" 
                                     Background="#1A1A1A"
                                     Padding="40,30"
                                     VerticalAlignment="Center">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="ENDS IN"
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="ENDS IN"
                                                FontSize="12"
                                                FontWeight="Bold"
                                                Foreground="{DynamicResource Gray500Brush}"
                                                HorizontalAlignment="Center"
                                                Margin="0,0,0,15"/>
 
-                                    <StackPanel Orientation="Horizontal">
-                                        <!-- horas -->
-                                        <StackPanel>
-                                            <Border Background="{DynamicResource RedAccentBrush}" 
+                                        <StackPanel Orientation="Horizontal">
+                                            <!-- horas -->
+                                            <StackPanel>
+                                                <Border Background="{DynamicResource RedAccentBrush}" 
                                                     Padding="20,15"
                                                     MinWidth="70">
-                                                <TextBlock Text="{Binding HoursRemaining, StringFormat={}{0:D2}}"
+                                                    <TextBlock Text="{Binding HoursRemaining, StringFormat={}{0:D2}}"
                                                            FontSize="36"
                                                            FontWeight="Black"
                                                            Foreground="White"
                                                            HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <TextBlock Text="HOURS"
+                                                </Border>
+                                                <TextBlock Text="HOURS"
                                                        FontSize="10"
                                                        Foreground="{DynamicResource Gray500Brush}"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
-                                        </StackPanel>
+                                            </StackPanel>
 
-                                        <TextBlock Text=":"
+                                            <TextBlock Text=":"
                                                    FontSize="36"
                                                    FontWeight="Black"
                                                    Foreground="White"
                                                    VerticalAlignment="Top"
                                                    Margin="8,15,8,0"/>
 
-                                        <!-- minutos -->
-                                        <StackPanel>
-                                            <Border Background="{DynamicResource RedAccentBrush}" 
+                                            <!-- minutos -->
+                                            <StackPanel>
+                                                <Border Background="{DynamicResource RedAccentBrush}" 
                                                     Padding="20,15"
                                                     MinWidth="70">
-                                                <TextBlock Text="{Binding MinutesRemaining, StringFormat={}{0:D2}}"
+                                                    <TextBlock Text="{Binding MinutesRemaining, StringFormat={}{0:D2}}"
                                                            FontSize="36"
                                                            FontWeight="Black"
                                                            Foreground="White"
                                                            HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <TextBlock Text="MINS"
+                                                </Border>
+                                                <TextBlock Text="MINS"
                                                        FontSize="10"
                                                        Foreground="{DynamicResource Gray500Brush}"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
-                                        </StackPanel>
+                                            </StackPanel>
 
-                                        <TextBlock Text=":"
+                                            <TextBlock Text=":"
                                                    FontSize="36"
                                                    FontWeight="Black"
                                                    Foreground="White"
                                                    VerticalAlignment="Top"
                                                    Margin="8,15,8,0"/>
 
-                                        <!-- segundos -->
-                                        <StackPanel>
-                                            <Border Background="{DynamicResource RedAccentBrush}" 
+                                            <!-- segundos -->
+                                            <StackPanel>
+                                                <Border Background="{DynamicResource RedAccentBrush}" 
                                                     Padding="20,15"
                                                     MinWidth="70">
-                                                <TextBlock Text="{Binding SecondsRemaining, StringFormat={}{0:D2}}"
+                                                    <TextBlock Text="{Binding SecondsRemaining, StringFormat={}{0:D2}}"
                                                            FontSize="36"
                                                            FontWeight="Black"
                                                            Foreground="White"
                                                            HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <TextBlock Text="SECS"
+                                                </Border>
+                                                <TextBlock Text="SECS"
                                                        FontSize="10"
                                                        Foreground="{DynamicResource Gray500Brush}"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
 
-                                    <!-- mensaje de urgencia -->
-                                    <TextBlock Text="HURRY UP!"
+                                        <!-- mensaje de urgencia -->
+                                        <TextBlock Text="HURRY UP!"
                                                FontSize="12"
                                                FontWeight="SemiBold"
                                                Foreground="#FF6B00"
                                                HorizontalAlignment="Center"
                                                Margin="0,15,0,0"
                                                Visibility="{Binding IsSaleActive, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                                </StackPanel>
-                            </Border>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Border>
+                    </Border>
 
-                <!-- barra de urgencia (stock limitado) -->
-                <Border Background="#FF6B00" Padding="15,12">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="⚡" FontSize="14" Margin="0,0,10,0"/>
-                        <TextBlock Text="LIMITED STOCK - ONCE IT'S GONE, IT'S GONE!"
+                    <!-- barra de urgencia (stock limitado) -->
+                    <Border Background="#FF6B00" Padding="15,12">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="⚡" FontSize="14" Margin="0,0,10,0"/>
+                            <TextBlock Text="LIMITED STOCK - ONCE IT'S GONE, IT'S GONE!"
                                    FontSize="13"
                                    FontWeight="Bold"
                                    Foreground="White"/>
-                        <TextBlock Text="⚡" FontSize="14" Margin="10,0,0,0"/>
-                    </StackPanel>
-                </Border>
+                            <TextBlock Text="⚡" FontSize="14" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </Border>
 
-                <!-- barra de filtros -->
-                <Border Background="{DynamicResource WhitePrimaryBrush}"
+                    <!-- barra de filtros -->
+                    <Border Background="{DynamicResource WhitePrimaryBrush}"
                         BorderBrush="{DynamicResource Gray200Brush}"
                         BorderThickness="0,0,0,1"
                         Padding="80,20">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- filtros de categoría -->
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <TextBlock Text="Filter:"
+                            <!-- filtros de categoría -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <TextBlock Text="Filter:"
                                        FontSize="13"
                                        FontWeight="SemiBold"
                                        VerticalAlignment="Center"
                                        Margin="0,0,15,0"/>
 
-                            <ItemsControl ItemsSource="{Binding Categories}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Button Content="{Binding}"
+                                <ItemsControl ItemsSource="{Binding Categories}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Content="{Binding}"
                                                 Command="{Binding DataContext.SelectCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
                                                 Margin="0,0,8,0"
@@ -264,44 +271,44 @@
                                                 FontSize="12"
                                                 FontWeight="SemiBold"
                                                 Cursor="Hand">
-                                            <Button.Style>
-                                                <Style TargetType="Button">
-                                                    <Setter Property="Background" Value="Transparent"/>
-                                                    <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
-                                                    <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
-                                                    <Setter Property="BorderThickness" Value="1"/>
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="Button">
-                                                                <Border Background="{TemplateBinding Background}"
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource BlackPrimaryBrush}"/>
+                                                        <Setter Property="BorderBrush" Value="{DynamicResource Gray300Brush}"/>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border Background="{TemplateBinding Background}"
                                                                         BorderBrush="{TemplateBinding BorderBrush}"
                                                                         BorderThickness="{TemplateBinding BorderThickness}"
                                                                         Padding="{TemplateBinding Padding}">
-                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                                </Border>
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="{DynamicResource Gray100Brush}"/>
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Button.Style>
-                                        </Button>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
+                                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="{DynamicResource Gray100Brush}"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
 
-                        <!-- ordenación -->
-                        <StackPanel Grid.Column="2" Orientation="Horizontal">
-                            <TextBlock Text="Sort by:"
+                            <!-- ordenación -->
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <TextBlock Text="Sort by:"
                                        FontSize="13"
                                        VerticalAlignment="Center"
                                        Margin="0,0,10,0"/>
-                            <ComboBox ItemsSource="{Binding SortOptions}"
+                                <ComboBox ItemsSource="{Binding SortOptions}"
                                       SelectedItem="{Binding SortBy}"
                                       Width="180"
                                       Height="36"
@@ -309,70 +316,70 @@
                                       FontSize="13"
                                       Style="{StaticResource ThemedComboBox}"
                                       ItemContainerStyle="{StaticResource ThemedComboBoxItem}"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-                <!-- lista de productos -->
-                <Border Padding="80,50" Background="{DynamicResource Gray50Brush}">
-                    <ItemsControl ItemsSource="{Binding FlashSaleProducts}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="4"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+                    <!-- lista de productos -->
+                    <Border Padding="80,50" Background="{DynamicResource Gray50Brush}">
+                        <ItemsControl ItemsSource="{Binding FlashSaleProducts}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="4"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="{DynamicResource WhitePrimaryBrush}"
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{DynamicResource WhitePrimaryBrush}"
                                         Margin="10"
                                         Cursor="Hand">
-                                    <Border.Effect>
-                                        <DropShadowEffect Color="Black" Opacity="0.08" BlurRadius="10" ShadowDepth="2"/>
-                                    </Border.Effect>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="300"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="Black" Opacity="0.08" BlurRadius="10" ShadowDepth="2"/>
+                                        </Border.Effect>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="300"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
 
-                                        <!-- imagen -->
-                                        <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}">
-                                            <Border.InputBindings>
-                                                <MouseBinding MouseAction="LeftClick" 
+                                            <!-- imagen -->
+                                            <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}">
+                                                <Border.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick" 
                                                               Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                               CommandParameter="{Binding}"/>
-                                            </Border.InputBindings>
-                                            <Grid>
-                                                <!-- insignia de descuento -->
-                                                <Border Background="{DynamicResource RedAccentBrush}"
+                                                </Border.InputBindings>
+                                                <Grid>
+                                                    <!-- insignia de descuento -->
+                                                    <Border Background="{DynamicResource RedAccentBrush}"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Top"
                                                         Padding="12,6"
                                                         Margin="0">
-                                                    <TextBlock Foreground="White" FontSize="12" FontWeight="Bold">
+                                                        <TextBlock Foreground="White" FontSize="12" FontWeight="Bold">
                                                         <Run Text="-"/>
                                                         <Run Text="{Binding DiscountPercentage, Mode=OneWay}"/>
                                                         <Run Text="%"/>
-                                                    </TextBlock>
-                                                </Border>
+                                                        </TextBlock>
+                                                    </Border>
 
-                                                <!-- aviso de stock bajo -->
-                                                <Border Background="#FEF3C7"
+                                                    <!-- aviso de stock bajo -->
+                                                    <Border Background="#FEF3C7"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Top"
                                                         Padding="10,5"
                                                         Margin="0,40,0,0"
                                                         Visibility="{Binding IsLowStock, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                    <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#92400E">
+                                                        <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#92400E">
                                                         <Run Text="Only "/>
                                                         <Run Text="{Binding Stock, Mode=OneWay}"/>
                                                         <Run Text=" left!"/>
-                                                    </TextBlock>
-                                                </Border>
+                                                        </TextBlock>
+                                                    </Border>
 
-                                                <!-- botón de wishlist -->
-                                                <Button Width="40" Height="40"
+                                                    <!-- botón de wishlist -->
+                                                    <Button Width="40" Height="40"
                                                         HorizontalAlignment="Right"
                                                         VerticalAlignment="Top"
                                                         Margin="0,12,12,0"
@@ -380,33 +387,33 @@
                                                         Panel.ZIndex="100"
                                                         Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                         CommandParameter="{Binding}">
-                                                    <Button.Template>
-                                                        <ControlTemplate TargetType="Button">
-                                                            <Border Width="40" Height="40"
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Width="40" Height="40"
                                                                     Background="White"
                                                                     CornerRadius="20">
-                                                                <Border.Effect>
-                                                                    <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="2"/>
-                                                                </Border.Effect>
-                                                                <Grid>
-                                                                    <Viewbox Width="24" Height="24" Margin="0,1,0,0"
+                                                                    <Border.Effect>
+                                                                        <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="8" ShadowDepth="2"/>
+                                                                    </Border.Effect>
+                                                                    <Grid>
+                                                                        <Viewbox Width="24" Height="24" Margin="0,1,0,0"
                                                                              Visibility="{Binding IsInWishlist, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                                                                        <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                                            <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                                                               Fill="Transparent" Stroke="#1F2937" StrokeThickness="1.5"/>
-                                                                    </Viewbox>
-                                                                    <Viewbox Width="24" Height="24" Margin="0,1,0,0"
+                                                                        </Viewbox>
+                                                                        <Viewbox Width="24" Height="24" Margin="0,1,0,0"
                                                                              Visibility="{Binding IsInWishlist, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                                        <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                                            <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                                                               Fill="#EF4444" Stroke="#EF4444" StrokeThickness="1.5"/>
-                                                                    </Viewbox>
-                                                                </Grid>
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Button.Template>
-                                                </Button>
+                                                                        </Viewbox>
+                                                                    </Grid>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                    </Button>
 
-                                                <!-- botón de añadir rápido -->
-                                                <Button Background="#0A0A0A"
+                                                    <!-- botón de añadir rápido -->
+                                                    <Button Background="#0A0A0A"
                                                         BorderThickness="0"
                                                         Height="45"
                                                         VerticalAlignment="Bottom"
@@ -415,95 +422,227 @@
                                                         Cursor="Hand"
                                                         Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                         CommandParameter="{Binding}">
-                                                    <TextBlock Text="ADD TO CART"
+                                                        <TextBlock Text="ADD TO CART"
                                                                Foreground="White"
                                                                FontSize="12"
                                                                FontWeight="Bold"
                                                                HorizontalAlignment="Center"
                                                                VerticalAlignment="Center"/>
-                                                </Button>
-                                            </Grid>
-                                        </Border>
+                                                    </Button>
+                                                </Grid>
+                                            </Border>
 
-                                        <!-- información -->
-                                        <StackPanel Grid.Row="1" Margin="15">
-                                            <StackPanel.InputBindings>
-                                                <MouseBinding MouseAction="LeftClick" 
+                                            <!-- información -->
+                                            <StackPanel Grid.Row="1" Margin="15">
+                                                <StackPanel.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick" 
                                                               Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                               CommandParameter="{Binding}"/>
-                                            </StackPanel.InputBindings>
-                                            <TextBlock Text="{Binding Name}" 
+                                                </StackPanel.InputBindings>
+                                                <TextBlock Text="{Binding Name}" 
                                                        FontSize="14"
                                                        FontWeight="SemiBold"
                                                        TextTrimming="CharacterEllipsis"
                                                        Margin="0,0,0,10"/>
 
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
                                                            FontSize="18"
                                                            FontWeight="Bold"
                                                            Foreground="{DynamicResource RedAccentBrush}"/>
-                                                <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
+                                                    <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
                                                            FontSize="14"
                                                            Foreground="{DynamicResource Gray400Brush}"
                                                            TextDecorations="Strikethrough"
                                                            Margin="12,2,0,0"/>
-                                            </StackPanel>
+                                                </StackPanel>
 
-                                            <!-- ahorro -->
-                                            <TextBlock Foreground="#10B981" FontSize="12" FontWeight="SemiBold" Margin="0,8,0,0">
+                                                <!-- ahorro -->
+                                                <TextBlock Foreground="#10B981" FontSize="12" FontWeight="SemiBold" Margin="0,8,0,0">
                                                 <Run Text="You save €"/>
                                                 <Run Text="{Binding Savings, Mode=OneWay, StringFormat={}{0:N2}}"/>
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </Grid>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
 
-                                    <!-- efecto hover -->
-                                    <Border.Triggers>
-                                        <EventTrigger RoutedEvent="MouseEnter">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetName="QuickAdd"
+                                        <!-- efecto hover -->
+                                        <Border.Triggers>
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="QuickAdd"
                                                                      Storyboard.TargetProperty="Opacity"
                                                                      To="1" Duration="0:0:0.15"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                        <EventTrigger RoutedEvent="MouseLeave">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetName="QuickAdd"
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <EventTrigger RoutedEvent="MouseLeave">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="QuickAdd"
                                                                      Storyboard.TargetProperty="Opacity"
                                                                      To="0" Duration="0:0:0.15"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                    </Border.Triggers>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Border>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Border.Triggers>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
 
-                <!-- llamada a la acción al final -->
-                <Border Background="#0A0A0A" Padding="80,50">
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="Don't see what you're looking for?"
+                    <!-- llamada a la acción al final -->
+                    <Border Background="#0A0A0A" Padding="80,50">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="Don't see what you're looking for?"
                                    FontSize="18"
                                    Foreground="White"
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,15"/>
-                        <Button Content="BROWSE ALL PRODUCTS"
+                            <Button Content="BROWSE ALL PRODUCTS"
                                 Style="{StaticResource OutlineButton}"
                                 BorderBrush="White"
                                 Foreground="White"
                                 Padding="40,15"
                                 FontSize="14"
                                 Command="{Binding BrowseAllProductsCommand}"/>
-                    </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ===== PANEL "PRÓXIMAMENTE" (estilo propio, acento naranja) =====
+             Último hijo del Grid raíz: cuando IsAvailable es false, este panel opaco
+             tapa todo el contenido; cuando llega la fecha de inicio, se oculta. -->
+        <Border Visibility="{Binding IsAvailable, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+            <Border.Background>
+                <RadialGradientBrush GradientOrigin="0.5,0.32" Center="0.5,0.32" RadiusX="0.85" RadiusY="0.85">
+                    <GradientStop Color="#1E1206" Offset="0"/>
+                    <GradientStop Color="#0A0A0A" Offset="0.72"/>
+                </RadialGradientBrush>
+            </Border.Background>
+
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                            <DoubleAnimation Storyboard.TargetName="FlashPulseDot"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="1" To="0.2" Duration="0:0:0.9"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="820">
+
+                <!-- eyebrow con punto que late -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,30">
+                    <Ellipse x:Name="FlashPulseDot" Width="8" Height="8" Fill="#FF6B00" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Text="P R Ó X I M A M E N T E"
+                               FontSize="12" FontWeight="SemiBold" Foreground="#FF6B00" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- título + filete naranja->dorado -->
+                <TextBlock Text="FLASH SALE"
+                           FontSize="62" FontWeight="Black" Foreground="White"
+                           HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                <Border Width="64" Height="3" HorizontalAlignment="Center" Margin="0,0,0,20">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="#FF6B00" Offset="0"/>
+                            <GradientStop Color="#FFD700" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
                 </Border>
 
+                <TextBlock Text="Las ofertas relámpago están a punto de empezar."
+                           FontSize="16" Foreground="#9A9A9A"
+                           HorizontalAlignment="Center" Margin="0,0,0,55"/>
+
+                <!-- contador: números grandes finos sin cajas, con líneas finas entre medias -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                    <StackPanel Width="120">
+                        <TextBlock Text="{Binding DaysRemaining}" FontSize="66" FontWeight="Light"
+                                   Foreground="White" HorizontalAlignment="Center"/>
+                        <TextBlock Text="DÍAS" FontSize="11" FontWeight="SemiBold" Foreground="#777777"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <Border Width="1" Height="64" Background="#2A2A2A" VerticalAlignment="Center"/>
+
+                    <StackPanel Width="120">
+                        <TextBlock Text="{Binding HoursRemaining, StringFormat={}{0:D2}}" FontSize="66" FontWeight="Light"
+                                   Foreground="White" HorizontalAlignment="Center"/>
+                        <TextBlock Text="HORAS" FontSize="11" FontWeight="SemiBold" Foreground="#777777"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <Border Width="1" Height="64" Background="#2A2A2A" VerticalAlignment="Center"/>
+
+                    <StackPanel Width="120">
+                        <TextBlock Text="{Binding MinutesRemaining, StringFormat={}{0:D2}}" FontSize="66" FontWeight="Light"
+                                   Foreground="White" HorizontalAlignment="Center"/>
+                        <TextBlock Text="MINUTOS" FontSize="11" FontWeight="SemiBold" Foreground="#777777"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <Border Width="1" Height="64" Background="#2A2A2A" VerticalAlignment="Center"/>
+
+                    <StackPanel Width="120">
+                        <TextBlock Text="{Binding SecondsRemaining, StringFormat={}{0:D2}}" FontSize="66" FontWeight="Light"
+                                   HorizontalAlignment="Center">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#FF6B00" Offset="0"/>
+                                    <GradientStop Color="#FFD700" Offset="1"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Text="SEGUNDOS" FontSize="11" FontWeight="SemiBold" Foreground="#777777"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <!-- fecha de inicio -->
+                <TextBlock Margin="0,55,0,0" HorizontalAlignment="Center" FontSize="13" Foreground="#888888">
+                    <Run Text="Empieza el "/>
+                    <Run Text="{Binding OpenDate, StringFormat='{}{0:dd MMMM yyyy, HH:mm}', Mode=OneWay}"
+                         Foreground="#FF6B00" FontWeight="SemiBold"/>
+                </TextBlock>
+
+                <!-- botón discreto -->
+                <Button Command="{Binding BrowseAllProductsCommand}"
+                        Margin="0,40,0,0" HorizontalAlignment="Center" Cursor="Hand"
+                        Background="Transparent" BorderBrush="#3A3A3A" BorderThickness="1"
+                        Foreground="#CCCCCC">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="34,15">
+                                <TextBlock Text="MIENTRAS TANTO, EXPLORA EL CATÁLOGO"
+                                           FontSize="12" FontWeight="Bold"
+                                           Foreground="{TemplateBinding Foreground}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="bd" Property="BorderBrush" Value="#FF6B00"/>
+                                    <Setter TargetName="bd" Property="Background" Value="#1A1206"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </StackPanel>
-        </ScrollViewer>
+        </Border>
+
     </Grid>
 </UserControl>

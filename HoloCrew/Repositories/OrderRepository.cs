@@ -78,6 +78,23 @@ namespace HoloCrew.Repositories
                     return null;
                 }
 
+                // ===== NUEVO: acreditar puntos de fidelidad por la compra =====
+                // Llama a la RPC award_points_for_order (idempotente y segura).
+                // Si fallara, NO rompemos la compra: el pedido ya está creado.
+                try
+                {
+                    var pointsParams = new Dictionary<string, object>
+                    {
+                        { "p_order_id", createdOrderDto.Id }
+                    };
+                    await _supabase.Rpc("award_points_for_order", pointsParams);
+                }
+                catch (Exception exPoints)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Order] AwardPoints (no crítico): {exPoints.Message}");
+                }
+                // ===============================================================
+
                 // Cargar los items del pedido recién creado para tener todos los datos
                 var itemsResponse = await _supabase
                     .From<OrderItemDto>()

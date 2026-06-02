@@ -63,6 +63,12 @@ namespace HoloCrew.ViewModels
 
             Title = "Members Club";
 
+            // Estado de sesión inicial SÍNCRONO: así la vista pinta el modo correcto
+            // (público vs. personal) desde el primer frame y no parpadea mostrando
+            // "no logueado" mientras se cargan los datos asíncronos.
+            CurrentUser = _authService.GetCurrentUser();
+            IsLoggedIn = CurrentUser != null;
+
             // Reaccionar a login/logout para refrescar la vista automáticamente.
             _authService.AuthStateChanged += OnAuthStateChanged;
         }
@@ -82,27 +88,25 @@ namespace HoloCrew.ViewModels
             {
                 LoadingMessage = "Loading membership info...";
 
-                // Los tiers se cargan siempre (visibles para todos los usuarios).
+                // 1) Comprobar la sesión PRIMERO (es instantáneo, no va por red),
+                //    para no mostrar el estado "no logueado" durante la carga de tiers.
+                IsLoggedIn = await _authService.IsAuthenticatedAsync();
+                CurrentUser = IsLoggedIn ? _authService.GetCurrentUser() : null;
+
+                // 2) Los tiers se cargan siempre (visibles para todos los usuarios).
                 var tiers = await _membershipService.GetAllTiersAsync();
                 AllTiers = new ObservableCollection<MembershipTierConfig>(tiers);
 
-                IsLoggedIn = await _authService.IsAuthenticatedAsync();
-
-                if (IsLoggedIn)
+                // 3) Si hay sesión, calcular tier actual y progreso.
+                if (IsLoggedIn && CurrentUser != null)
                 {
-                    CurrentUser = _authService.GetCurrentUser();
-
-                    if (CurrentUser != null)
-                    {
-                        CurrentTier = _membershipService.GetCurrentTier(CurrentUser.LifetimePoints, tiers);
-                        NextTier = _membershipService.GetNextTier(CurrentUser.LifetimePoints, tiers);
-                        ProgressPercentage = _membershipService.GetProgressPercentage(CurrentUser.LifetimePoints, tiers);
-                        PointsToNextTier = _membershipService.GetPointsToNextTier(CurrentUser.LifetimePoints, tiers);
-                    }
+                    CurrentTier = _membershipService.GetCurrentTier(CurrentUser.LifetimePoints, tiers);
+                    NextTier = _membershipService.GetNextTier(CurrentUser.LifetimePoints, tiers);
+                    ProgressPercentage = _membershipService.GetProgressPercentage(CurrentUser.LifetimePoints, tiers);
+                    PointsToNextTier = _membershipService.GetPointsToNextTier(CurrentUser.LifetimePoints, tiers);
                 }
                 else
                 {
-                    CurrentUser = null;
                     CurrentTier = null;
                     NextTier = null;
                     ProgressPercentage = 0;

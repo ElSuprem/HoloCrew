@@ -12,12 +12,12 @@ namespace HoloCrew.Services.Interfaces
     public interface IAuthenticationService
     {
         event EventHandler? AuthStateChanged;  // se dispara al cambiar el estado de auth
-
         Task<User?> LoginAsync(string email, string password);
         Task<User?> RegisterAsync(User user, string password);
         Task LogoutAsync();
         Task<bool> IsAuthenticatedAsync();
         User? GetCurrentUser();
+        Task RefreshCurrentUserAsync();   // recarga el perfil desde Supabase y actualiza la caché
         Task<bool> ValidateTokenAsync();
         Task<bool> ChangePasswordAsync(string currentPassword, string newPassword);
         Task<bool> RequestPasswordResetAsync(string email);

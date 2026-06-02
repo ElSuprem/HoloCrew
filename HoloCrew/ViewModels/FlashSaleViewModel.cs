@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 
 // ViewModel de la página de venta flash (ofertas rápidas con cuenta regresiva).
-// Muestra productos con descuentos temporales, cuenta regresiva, filtros por categoría y ordenación.
+// Mientras no llega la fecha de inicio (OpenDate) se muestra el panel "Próximamente"
+// con una cuenta atrás; al llegar la fecha, IsAvailable pasa a true y se ve el contenido.
 // Se conecta con ProductService, CartService, WishlistService y NavigationService.
 
 namespace HoloCrew.ViewModels
@@ -39,6 +40,9 @@ namespace HoloCrew.ViewModels
 
         // tiempo restante
         [ObservableProperty]
+        private int _daysRemaining;
+
+        [ObservableProperty]
         private int _hoursRemaining;
 
         [ObservableProperty]
@@ -55,6 +59,15 @@ namespace HoloCrew.ViewModels
 
         [ObservableProperty]
         private bool _isSaleActive = true;
+
+        // Fecha en la que EMPIEZA la Flash Sale (la cuenta atrás va hasta aquí).
+        [ObservableProperty]
+        private DateTime _openDate;
+
+        // True cuando ya ha llegado la fecha de inicio. Si es false, se muestra
+        // el panel "Próximamente"; si es true, el contenido normal.
+        [ObservableProperty]
+        private bool _isAvailable;
 
         [ObservableProperty]
         private int _totalProductCount;
@@ -105,8 +118,12 @@ namespace HoloCrew.ViewModels
             EmptySubtitle = "Check back soon for amazing deals!";
             EmptyActionText = "Browse All Products";
 
-            // la venta termina dentro de 24 horas
-            SaleEndTime = DateTime.Now.Date.AddDays(1).AddHours(23).AddMinutes(59).AddSeconds(59);
+            // Fecha de inicio de la Flash Sale (oferta relámpago de verano).
+            OpenDate = new DateTime(2026, 7, 11, 10, 0, 0);
+            // Dura 24 horas desde que abre.
+            SaleEndTime = OpenDate.AddHours(24);
+            // Estado inicial síncrono para que no parpadee al entrar.
+            IsAvailable = DateTime.Now >= OpenDate;
         }
 
         public override async void OnNavigatedTo(object? parameter)
@@ -246,11 +263,19 @@ namespace HoloCrew.ViewModels
 
         private void UpdateCountdown()
         {
-            var timeRemaining = SaleEndTime - DateTime.Now;
+            var now = DateTime.Now;
+            IsAvailable = now >= OpenDate;
+
+            // Si aún no ha empezado, contamos hasta el INICIO.
+            // Si ya está activa, contamos hasta que TERMINA.
+            var target = IsAvailable ? SaleEndTime : OpenDate;
+            var timeRemaining = target - now;
 
             if (timeRemaining.TotalSeconds <= 0)
             {
+                // Solo llega aquí si la oferta ya estaba activa y se acabó el tiempo.
                 IsSaleActive = false;
+                DaysRemaining = 0;
                 HoursRemaining = 0;
                 MinutesRemaining = 0;
                 SecondsRemaining = 0;
@@ -259,10 +284,11 @@ namespace HoloCrew.ViewModels
                 return;
             }
 
-            HoursRemaining = (int)timeRemaining.TotalHours;
+            DaysRemaining = timeRemaining.Days;
+            HoursRemaining = timeRemaining.Hours;
             MinutesRemaining = timeRemaining.Minutes;
             SecondsRemaining = timeRemaining.Seconds;
-            CountdownText = $"{HoursRemaining:D2}:{MinutesRemaining:D2}:{SecondsRemaining:D2}";
+            CountdownText = $"{DaysRemaining}d {HoursRemaining:D2}:{MinutesRemaining:D2}:{SecondsRemaining:D2}";
         }
 
         #endregion

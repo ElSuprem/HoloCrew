@@ -81,8 +81,16 @@ namespace HoloCrew.ViewModels
         public string ErrorMessage
         {
             get => _errorMessage;
-            set => SetProperty(ref _errorMessage, value);
+            set
+            {
+                SetProperty(ref _errorMessage, value);
+                OnPropertyChanged(nameof(HasError));   // recalcula la visibilidad del recuadro rojo
+            }
         }
+
+        // True solo cuando hay un mensaje de error real (no vacío).
+        // El recuadro rojo se ata a esto, así no parpadea al poner ErrorMessage = "".
+        public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
 
         private bool _isLoading;
         public bool IsLoading

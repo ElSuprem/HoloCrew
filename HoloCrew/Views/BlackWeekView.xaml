@@ -11,6 +11,7 @@
     <!-- Vista de la página de Black Week (ofertas).
          Muestra banner con cuenta regresiva, top deals, filtros por categoría,
          y lista de productos con descuento.
+         Mientras no llega la fecha de apertura se muestra el panel "Próximamente".
          Se conecta con BlackWeekViewModel. -->
 
     <UserControl.Resources>
@@ -118,35 +119,41 @@
     </UserControl.Resources>
 
     <Grid>
-        <!-- estado de carga -->
-        <Border Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+
+        <!-- Contenido normal de Black Week. Solo cuenta para el layout cuando la oferta
+             está disponible; mientras no, se colapsa para que el panel "Próximamente"
+             quede centrado y visible sin tener que hacer scroll. -->
+        <Grid Visibility="{Binding IsAvailable, Converter={StaticResource BoolToVisibilityConverter}}">
+
+            <!-- estado de carga -->
+            <Border Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
                 Background="#0A0A0A">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,20"/>
-                <TextBlock Text="{Binding LoadingMessage}" 
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Text="{Binding LoadingMessage}" 
                            FontSize="16"
                            Foreground="#888888"/>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
 
-        <!-- estado vacío -->
-        <Border Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
+            <!-- estado vacío -->
+            <Border Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
                 Background="#0A0A0A">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="400">
-                <TextBlock Text="🖤" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,20"/>
-                <TextBlock Text="{Binding EmptyTitle}" 
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="400">
+                    <TextBlock Text="🖤" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Text="{Binding EmptyTitle}" 
                            FontSize="24"
                            FontWeight="Bold"
                            Foreground="White"
                            TextAlignment="Center"
                            Margin="0,0,0,10"/>
-                <TextBlock Text="{Binding EmptySubtitle}" 
+                    <TextBlock Text="{Binding EmptySubtitle}" 
                            FontSize="16"
                            Foreground="#888888"
                            TextAlignment="Center"
                            TextWrapping="Wrap"
                            Margin="0,0,0,30"/>
-                <Button Content="{Binding EmptyActionText}"
+                    <Button Content="{Binding EmptyActionText}"
                         Command="{Binding EmptyActionCommand}"
                         Padding="40,15"
                         FontSize="14"
@@ -156,295 +163,295 @@
                         BorderThickness="0"
                         Cursor="Hand"
                         HorizontalAlignment="Center"/>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
 
-        <!-- contenido principal -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto"
+            <!-- contenido principal -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled"
                       Visibility="{Binding IsSuccess, Converter={StaticResource BoolToVisibilityConverter}}">
-            <StackPanel>
+                <StackPanel>
 
-                <!-- banner principal -->
-                <Border Background="#0A0A0A" Padding="80,80">
-                    <Grid>
-                        <!-- elementos decorativos -->
-                        <Border Opacity="0.05" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-20,-20,0">
-                            <TextBlock Text="%" FontSize="300" FontWeight="Black" Foreground="White"/>
-                        </Border>
-
+                    <!-- banner principal -->
+                    <Border Background="#0A0A0A" Padding="80,80">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                            <!-- elementos decorativos -->
+                            <Border Opacity="0.05" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-20,-20,0">
+                                <TextBlock Text="%" FontSize="300" FontWeight="Black" Foreground="White"/>
+                            </Border>
 
-                            <!-- izquierda: título e info -->
-                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                <!-- insignia -->
-                                <Border Background="{StaticResource GoldGradientVertical}" 
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- izquierda: título e info -->
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <!-- insignia -->
+                                    <Border Background="{StaticResource GoldGradientVertical}" 
                                         Padding="15,8"
                                         HorizontalAlignment="Left"
                                         Margin="0,0,0,25">
-                                    <TextBlock Text="⭐  T H E   B I G G E S T   S A L E   O F   T H E   Y E A R" 
+                                        <TextBlock Text="⭐  T H E   B I G G E S T   S A L E   O F   T H E   Y E A R" 
                                                FontSize="10" 
                                                FontWeight="Bold"
                                                Foreground="#0A0A0A"/>
-                                </Border>
+                                    </Border>
 
-                                <!-- título principal -->
-                                <TextBlock Text="BLACK" 
+                                    <!-- título principal -->
+                                    <TextBlock Text="BLACK" 
                                            FontSize="90"
                                            FontWeight="Black"
                                            Foreground="White"
                                            Margin="0,0,0,-15"/>
-                                <TextBlock Text="WEEK" 
+                                    <TextBlock Text="WEEK" 
                                            FontSize="90"
                                            FontWeight="Black"
                                            Foreground="{StaticResource GoldGradient}"
                                            Margin="0,0,0,25"/>
 
-                                <TextBlock Text="{Binding SaleSubtitle}"
+                                    <TextBlock Text="{Binding SaleSubtitle}"
                                            FontSize="18"
                                            Foreground="#AAAAAA"
                                            Margin="0,0,0,30"/>
 
-                                <!-- estadísticas -->
-                                <StackPanel Orientation="Horizontal">
-                                    <Border BorderBrush="#333333" BorderThickness="0,0,1,0" Padding="0,0,30,0">
-                                        <StackPanel>
-                                            <TextBlock FontSize="32" FontWeight="Bold" Foreground="{StaticResource GoldGradient}">
+                                    <!-- estadísticas -->
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border BorderBrush="#333333" BorderThickness="0,0,1,0" Padding="0,0,30,0">
+                                            <StackPanel>
+                                                <TextBlock FontSize="32" FontWeight="Bold" Foreground="{StaticResource GoldGradient}">
                                                 <Run Text="UP TO "/>
                                                 <Run Text="{Binding MaxDiscountPercent, StringFormat={}{0:0}}"/>
                                                 <Run Text="%"/>
-                                            </TextBlock>
-                                            <TextBlock Text="DISCOUNT" FontSize="10" Foreground="#666666"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Padding="30,0">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding TotalProductCount}" 
+                                                </TextBlock>
+                                                <TextBlock Text="DISCOUNT" FontSize="10" Foreground="#666666"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Padding="30,0">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding TotalProductCount}" 
                                                        FontSize="32" 
                                                        FontWeight="Bold" 
                                                        Foreground="White"/>
-                                            <TextBlock Text="PRODUCTS" FontSize="10" Foreground="#666666"/>
-                                        </StackPanel>
-                                    </Border>
+                                                <TextBlock Text="PRODUCTS" FontSize="10" Foreground="#666666"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
 
-                            <!-- derecha: cuenta regresiva -->
-                            <Border Grid.Column="1" 
+                                <!-- derecha: cuenta regresiva -->
+                                <Border Grid.Column="1" 
                                     Background="#111111"
                                     BorderBrush="#222222"
                                     BorderThickness="1"
                                     Padding="50,40"
                                     VerticalAlignment="Center">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="SALE ENDS IN"
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="SALE ENDS IN"
                                                FontSize="10"
                                                FontWeight="Bold"
                                                Foreground="#666666"
                                                HorizontalAlignment="Center"
                                                Margin="0,0,0,25"/>
 
-                                    <StackPanel Orientation="Horizontal">
-                                        <!-- días -->
-                                        <StackPanel Margin="0,0,15,0">
-                                            <Border Background="#1A1A1A" 
+                                        <StackPanel Orientation="Horizontal">
+                                            <!-- días -->
+                                            <StackPanel Margin="0,0,15,0">
+                                                <Border Background="#1A1A1A" 
                                                     BorderBrush="#333333"
                                                     BorderThickness="1"
                                                     Padding="18,12"
                                                     MinWidth="65">
-                                                <TextBlock Text="{Binding DaysRemaining, StringFormat={}{0:D2}}"
+                                                    <TextBlock Text="{Binding DaysRemaining, StringFormat={}{0:D2}}"
                                                            FontSize="32"
                                                            FontWeight="Black"
                                                            Foreground="White"
                                                            HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <TextBlock Text="DAYS"
+                                                </Border>
+                                                <TextBlock Text="DAYS"
                                                        FontSize="9"
                                                        Foreground="#555555"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
-                                        </StackPanel>
+                                            </StackPanel>
 
-                                        <TextBlock Text=":"
+                                            <TextBlock Text=":"
                                                    FontSize="28"
                                                    FontWeight="Bold"
                                                    Foreground="#333333"
                                                    VerticalAlignment="Top"
                                                    Margin="0,12,0,0"/>
 
-                                        <!-- horas -->
-                                        <StackPanel Margin="15,0">
-                                            <Border Background="#1A1A1A" 
+                                            <!-- horas -->
+                                            <StackPanel Margin="15,0">
+                                                <Border Background="#1A1A1A" 
                                                     BorderBrush="#333333"
                                                     BorderThickness="1"
                                                     Padding="18,12"
                                                     MinWidth="65">
-                                                <TextBlock Text="{Binding HoursRemaining, StringFormat={}{0:D2}}"
+                                                    <TextBlock Text="{Binding HoursRemaining, StringFormat={}{0:D2}}"
                                                            FontSize="32"
                                                            FontWeight="Black"
                                                            Foreground="White"
                                                            HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <TextBlock Text="HRS"
+                                                </Border>
+                                                <TextBlock Text="HRS"
                                                        FontSize="9"
                                                        Foreground="#555555"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
-                                        </StackPanel>
+                                            </StackPanel>
 
-                                        <TextBlock Text=":"
+                                            <TextBlock Text=":"
                                                    FontSize="28"
                                                    FontWeight="Bold"
                                                    Foreground="#333333"
                                                    VerticalAlignment="Top"
                                                    Margin="0,12,0,0"/>
 
-                                        <!-- minutos -->
-                                        <StackPanel Margin="15,0">
-                                            <Border Background="#1A1A1A" 
+                                            <!-- minutos -->
+                                            <StackPanel Margin="15,0">
+                                                <Border Background="#1A1A1A" 
                                                     BorderBrush="#333333"
                                                     BorderThickness="1"
                                                     Padding="18,12"
                                                     MinWidth="65">
-                                                <TextBlock Text="{Binding MinutesRemaining, StringFormat={}{0:D2}}"
+                                                    <TextBlock Text="{Binding MinutesRemaining, StringFormat={}{0:D2}}"
                                                            FontSize="32"
                                                            FontWeight="Black"
                                                            Foreground="White"
                                                            HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <TextBlock Text="MIN"
+                                                </Border>
+                                                <TextBlock Text="MIN"
                                                        FontSize="9"
                                                        Foreground="#555555"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
-                                        </StackPanel>
+                                            </StackPanel>
 
-                                        <TextBlock Text=":"
+                                            <TextBlock Text=":"
                                                    FontSize="28"
                                                    FontWeight="Bold"
                                                    Foreground="#333333"
                                                    VerticalAlignment="Top"
                                                    Margin="0,12,0,0"/>
 
-                                        <!-- segundos -->
-                                        <StackPanel Margin="15,0,0,0">
-                                            <Border Background="#1A1A1A" 
+                                            <!-- segundos -->
+                                            <StackPanel Margin="15,0,0,0">
+                                                <Border Background="#1A1A1A" 
                                                     BorderBrush="#D4AF37"
                                                     BorderThickness="1"
                                                     Padding="18,12"
                                                     MinWidth="65">
-                                                <TextBlock Text="{Binding SecondsRemaining, StringFormat={}{0:D2}}"
+                                                    <TextBlock Text="{Binding SecondsRemaining, StringFormat={}{0:D2}}"
                                                            FontSize="32"
                                                            FontWeight="Black"
                                                            Foreground="{StaticResource GoldGradient}"
                                                            HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <TextBlock Text="SEC"
+                                                </Border>
+                                                <TextBlock Text="SEC"
                                                        FontSize="9"
                                                        Foreground="#555555"
                                                        HorizontalAlignment="Center"
                                                        Margin="0,8,0,0"/>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
 
-                                    <!-- mensaje de urgencia -->
-                                    <Border Background="#1A1A1A" 
+                                        <!-- mensaje de urgencia -->
+                                        <Border Background="#1A1A1A" 
                                             Padding="20,10" 
                                             Margin="0,25,0,0"
                                             HorizontalAlignment="Center">
-                                        <TextBlock Text="⏰ Don't miss out!"
+                                            <TextBlock Text="⏰ Don't miss out!"
                                                    FontSize="12"
                                                    Foreground="#D4AF37"
                                                    FontWeight="SemiBold"/>
-                                    </Border>
-                                </StackPanel>
-                            </Border>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Border>
+                    </Border>
 
-                <!-- sección top deals -->
-                <Border Background="#111111" Padding="80,60">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,35">
-                            <TextBlock Text="" FontSize="24" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                            <TextBlock Text="TOP DEALS" 
+                    <!-- sección top deals -->
+                    <Border Background="#111111" Padding="80,60">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,35">
+                                <TextBlock Text="" FontSize="24" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="TOP DEALS" 
                                        FontSize="24" 
                                        FontWeight="Bold" 
                                        Foreground="White"
                                        VerticalAlignment="Center"/>
-                            <Border Background="{StaticResource GoldGradientVertical}" 
+                                <Border Background="{StaticResource GoldGradientVertical}" 
                                     Padding="12,5" 
                                     Margin="15,0,0,0"
                                     VerticalAlignment="Center">
-                                <TextBlock Text="BEST DISCOUNTS" 
+                                    <TextBlock Text="BEST DISCOUNTS" 
                                            FontSize="10" 
                                            FontWeight="Bold"
                                            Foreground="#0A0A0A"/>
-                            </Border>
-                        </StackPanel>
+                                </Border>
+                            </StackPanel>
 
-                        <!-- grid de top deals (4 productos) -->
-                        <ItemsControl ItemsSource="{Binding TopDeals}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Columns="4"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Background="#1A1A1A"
+                            <!-- grid de top deals (4 productos) -->
+                            <ItemsControl ItemsSource="{Binding TopDeals}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="4"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#1A1A1A"
                                             BorderBrush="#D4AF37"
                                             BorderThickness="2"
                                             Margin="8"
                                             Cursor="Hand">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="280"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="280"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
 
-                                            <!-- imagen con overlay -->
-                                            <Border Grid.Row="0" Background="#252525">
-                                                <Border.InputBindings>
-                                                    <MouseBinding MouseAction="LeftClick" 
+                                                <!-- imagen con overlay -->
+                                                <Border Grid.Row="0" Background="#252525">
+                                                    <Border.InputBindings>
+                                                        <MouseBinding MouseAction="LeftClick" 
                                                                   Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                   CommandParameter="{Binding}"/>
-                                                </Border.InputBindings>
-                                                <Grid>
-                                                    <Image Source="{Binding MainImageUrl}" Stretch="UniformToFill"/>
+                                                    </Border.InputBindings>
+                                                    <Grid>
+                                                        <Image Source="{Binding MainImageUrl}" Stretch="UniformToFill"/>
 
-                                                    <!-- insignia de descuento grande -->
-                                                    <Border Background="{StaticResource GoldGradientVertical}"
+                                                        <!-- insignia de descuento grande -->
+                                                        <Border Background="{StaticResource GoldGradientVertical}"
                                                             Padding="15,8"
                                                             HorizontalAlignment="Left"
                                                             VerticalAlignment="Top"
                                                             Margin="0">
-                                                        <TextBlock Foreground="#0A0A0A" FontSize="14" FontWeight="Black">
+                                                            <TextBlock Foreground="#0A0A0A" FontSize="14" FontWeight="Black">
                                                             <Run Text="-"/>
                                                             <Run Text="{Binding DiscountPercentage, Mode=OneWay, StringFormat={}{0:0}}"/>
                                                             <Run Text="%"/>
-                                                        </TextBlock>
-                                                    </Border>
+                                                            </TextBlock>
+                                                        </Border>
 
-                                                    <!-- insignia top deal -->
-                                                    <Border Background="#DC2626"
+                                                        <!-- insignia top deal -->
+                                                        <Border Background="#DC2626"
                                                             Padding="10,5"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Top"
                                                             Margin="0">
-                                                        <TextBlock Text=" TOP DEAL" 
+                                                            <TextBlock Text=" TOP DEAL" 
                                                                    Foreground="White" 
                                                                    FontSize="10" 
                                                                    FontWeight="Bold"/>
-                                                    </Border>
+                                                        </Border>
 
-                                                    <!-- botón de añadir rápido -->
-                                                    <Button Background="{StaticResource GoldGradientVertical}"
+                                                        <!-- botón de añadir rápido -->
+                                                        <Button Background="{StaticResource GoldGradientVertical}"
                                                             Height="45"
                                                             VerticalAlignment="Bottom"
                                                             Opacity="0"
@@ -453,105 +460,105 @@
                                                             BorderThickness="0"
                                                             Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                             CommandParameter="{Binding}">
-                                                        <Button.Template>
-                                                            <ControlTemplate TargetType="Button">
-                                                                <Border Background="{TemplateBinding Background}" Height="45">
-                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                                </Border>
-                                                            </ControlTemplate>
-                                                        </Button.Template>
-                                                        <TextBlock Text="ADD TO CART"
+                                                            <Button.Template>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border Background="{TemplateBinding Background}" Height="45">
+                                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Button.Template>
+                                                            <TextBlock Text="ADD TO CART"
                                                                    Foreground="#0A0A0A"
                                                                    FontSize="12"
                                                                    FontWeight="Bold"/>
-                                                    </Button>
-                                                </Grid>
-                                            </Border>
+                                                        </Button>
+                                                    </Grid>
+                                                </Border>
 
-                                            <!-- información -->
-                                            <StackPanel Grid.Row="1" Margin="18">
-                                                <TextBlock Text="{Binding Name}" 
+                                                <!-- información -->
+                                                <StackPanel Grid.Row="1" Margin="18">
+                                                    <TextBlock Text="{Binding Name}" 
                                                            FontSize="14"
                                                            FontWeight="SemiBold"
                                                            Foreground="White"
                                                            TextTrimming="CharacterEllipsis"
                                                            Margin="0,0,0,10"/>
 
-                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                                    <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
+                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                                        <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
                                                                FontSize="20"
                                                                FontWeight="Bold"
                                                                Foreground="{StaticResource GoldGradient}"/>
-                                                    <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
+                                                        <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
                                                                FontSize="14"
                                                                Foreground="#555555"
                                                                TextDecorations="Strikethrough"
                                                                Margin="12,4,0,0"/>
-                                                </StackPanel>
+                                                    </StackPanel>
 
-                                                <TextBlock Foreground="#4ADE80" FontSize="12" FontWeight="SemiBold">
+                                                    <TextBlock Foreground="#4ADE80" FontSize="12" FontWeight="SemiBold">
                                                     <Run Text="Save €"/>
                                                     <Run Text="{Binding Savings, Mode=OneWay, StringFormat={}{0:N2}}"/>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </Grid>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Grid>
 
-                                        <Border.Triggers>
-                                            <EventTrigger RoutedEvent="MouseEnter">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetName="QuickAddTop"
+                                            <Border.Triggers>
+                                                <EventTrigger RoutedEvent="MouseEnter">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="QuickAddTop"
                                                                          Storyboard.TargetProperty="Opacity"
                                                                          To="1" Duration="0:0:0.15"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger>
-                                            <EventTrigger RoutedEvent="MouseLeave">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetName="QuickAddTop"
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                                <EventTrigger RoutedEvent="MouseLeave">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="QuickAddTop"
                                                                          Storyboard.TargetProperty="Opacity"
                                                                          To="0" Duration="0:0:0.15"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger>
-                                        </Border.Triggers>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Border>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                            </Border.Triggers>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
 
-                <!-- barra de filtros -->
-                <Border Background="#0A0A0A"
+                    <!-- barra de filtros -->
+                    <Border Background="#0A0A0A"
                         BorderBrush="#222222"
                         BorderThickness="0,1"
                         Padding="80,20">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- filtros de categoría -->
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <TextBlock Text="Category:"
+                            <!-- filtros de categoría -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <TextBlock Text="Category:"
                                        FontSize="13"
                                        FontWeight="SemiBold"
                                        Foreground="#888888"
                                        VerticalAlignment="Center"
                                        Margin="0,0,15,0"/>
-                            <ItemsControl ItemsSource="{Binding Categories}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Button Content="{Binding}"
+                                <ItemsControl ItemsSource="{Binding Categories}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Content="{Binding}"
                                                 Command="{Binding DataContext.SelectCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
                                                 Margin="0,0,8,0"
@@ -559,122 +566,122 @@
                                                 FontSize="12"
                                                 FontWeight="SemiBold"
                                                 Cursor="Hand">
-                                            <Button.Tag>
-                                                <MultiBinding Converter="{StaticResource EqualityConverter}">
-                                                    <Binding Path="."/>
-                                                    <Binding Path="DataContext.SelectedCategory" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
-                                                </MultiBinding>
-                                            </Button.Tag>
-                                            <Button.Style>
-                                                <Style TargetType="Button">
-                                                    <Setter Property="Background" Value="Transparent"/>
-                                                    <Setter Property="Foreground" Value="#AAAAAA"/>
-                                                    <Setter Property="BorderBrush" Value="#333333"/>
-                                                    <Setter Property="BorderThickness" Value="1"/>
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="Button">
-                                                                <Border x:Name="border"
+                                                <Button.Tag>
+                                                    <MultiBinding Converter="{StaticResource EqualityConverter}">
+                                                        <Binding Path="."/>
+                                                        <Binding Path="DataContext.SelectedCategory" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                                    </MultiBinding>
+                                                </Button.Tag>
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="Foreground" Value="#AAAAAA"/>
+                                                        <Setter Property="BorderBrush" Value="#333333"/>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border x:Name="border"
                                                                         Background="{TemplateBinding Background}"
                                                                         BorderBrush="{TemplateBinding BorderBrush}"
                                                                         BorderThickness="{TemplateBinding BorderThickness}"
                                                                         Padding="{TemplateBinding Padding}">
-                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                                </Border>
-                                                                <ControlTemplate.Triggers>
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter TargetName="border" Property="Background" Value="#1A1A1A"/>
-                                                                        <Setter TargetName="border" Property="BorderBrush" Value="#D4AF37"/>
-                                                                        <Setter Property="Foreground" Value="White"/>
-                                                                    </Trigger>
-                                                                </ControlTemplate.Triggers>
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="True">
-                                                            <Setter Property="Background" Value="#D4AF37"/>
-                                                            <Setter Property="Foreground" Value="#0A0A0A"/>
-                                                            <Setter Property="BorderBrush" Value="#D4AF37"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Button.Style>
-                                        </Button>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
+                                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter TargetName="border" Property="Background" Value="#1A1A1A"/>
+                                                                            <Setter TargetName="border" Property="BorderBrush" Value="#D4AF37"/>
+                                                                            <Setter Property="Foreground" Value="White"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="True">
+                                                                <Setter Property="Background" Value="#D4AF37"/>
+                                                                <Setter Property="Foreground" Value="#0A0A0A"/>
+                                                                <Setter Property="BorderBrush" Value="#D4AF37"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
 
-                        <!-- ordenación -->
-                        <StackPanel Grid.Column="2" Orientation="Horizontal">
-                            <TextBlock Text="Sort by:"
+                            <!-- ordenación -->
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <TextBlock Text="Sort by:"
                                        FontSize="13"
                                        Foreground="#888888"
                                        VerticalAlignment="Center"
                                        Margin="0,0,10,0"/>
-                            <ComboBox ItemsSource="{Binding SortOptions}"
+                                <ComboBox ItemsSource="{Binding SortOptions}"
                                       SelectedItem="{Binding SortBy}"
                                       Width="180"
                                       Style="{StaticResource DarkComboBox}"
                                       ItemContainerStyle="{StaticResource DarkComboBoxItem}"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-                <!-- grid de todos los productos Black Week -->
-                <Border Padding="80,50" Background="#0A0A0A">
-                    <StackPanel>
-                        <TextBlock Text="ALL BLACK WEEK DEALS" 
+                    <!-- grid de todos los productos Black Week -->
+                    <Border Padding="80,50" Background="#0A0A0A">
+                        <StackPanel>
+                            <TextBlock Text="ALL BLACK WEEK DEALS" 
                                    FontSize="20" 
                                    FontWeight="Bold" 
                                    Foreground="White"
                                    Margin="0,0,0,30"/>
 
-                        <ItemsControl ItemsSource="{Binding BlackWeekProducts}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Columns="4"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Background="#151515"
+                            <ItemsControl ItemsSource="{Binding BlackWeekProducts}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="4"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#151515"
                                             BorderBrush="#252525"
                                             BorderThickness="1"
                                             Margin="8"
                                             Cursor="Hand">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="260"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="260"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
 
-                                            <!-- imagen -->
-                                            <Border Grid.Row="0" Background="#1A1A1A">
-                                                <Border.InputBindings>
-                                                    <MouseBinding MouseAction="LeftClick" 
+                                                <!-- imagen -->
+                                                <Border Grid.Row="0" Background="#1A1A1A">
+                                                    <Border.InputBindings>
+                                                        <MouseBinding MouseAction="LeftClick" 
                                                                   Command="{Binding DataContext.ViewProductDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                   CommandParameter="{Binding}"/>
-                                                </Border.InputBindings>
-                                                <Grid>
-                                                    <Image Source="{Binding MainImageUrl}" Stretch="UniformToFill"/>
+                                                    </Border.InputBindings>
+                                                    <Grid>
+                                                        <Image Source="{Binding MainImageUrl}" Stretch="UniformToFill"/>
 
-                                                    <!-- insignia de descuento -->
-                                                    <Border Background="#DC2626"
+                                                        <!-- insignia de descuento -->
+                                                        <Border Background="#DC2626"
                                                             Padding="10,5"
                                                             HorizontalAlignment="Left"
                                                             VerticalAlignment="Top"
                                                             Margin="10,10,0,0">
-                                                        <TextBlock Foreground="White" FontSize="12" FontWeight="Bold">
+                                                            <TextBlock Foreground="White" FontSize="12" FontWeight="Bold">
                                                             <Run Text="-"/>
                                                             <Run Text="{Binding DiscountPercentage, Mode=OneWay, StringFormat={}{0:0}}"/>
                                                             <Run Text="%"/>
-                                                        </TextBlock>
-                                                    </Border>
+                                                            </TextBlock>
+                                                        </Border>
 
-                                                    <!-- botón de wishlist -->
-                                                    <Button Width="36" Height="36"
+                                                        <!-- botón de wishlist -->
+                                                        <Button Width="36" Height="36"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Top"
                                                             Margin="0,10,10,0"
@@ -682,30 +689,30 @@
                                                             Panel.ZIndex="100"
                                                             Command="{Binding DataContext.ToggleWishlistCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                             CommandParameter="{Binding}">
-                                                        <Button.Template>
-                                                            <ControlTemplate TargetType="Button">
-                                                                <Border Width="36" Height="36"
+                                                            <Button.Template>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border Width="36" Height="36"
                                                                         Background="#2A2A2A"
                                                                         CornerRadius="18">
-                                                                    <Grid>
-                                                                        <Viewbox Width="20" Height="20" Margin="0,1,0,0"
+                                                                        <Grid>
+                                                                            <Viewbox Width="20" Height="20" Margin="0,1,0,0"
                                                                                  Visibility="{Binding IsInWishlist, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                                                                            <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                                                <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                                                                   Fill="Transparent" Stroke="#FFFFFF" StrokeThickness="1.5"/>
-                                                                        </Viewbox>
-                                                                        <Viewbox Width="20" Height="20" Margin="0,1,0,0"
+                                                                            </Viewbox>
+                                                                            <Viewbox Width="20" Height="20" Margin="0,1,0,0"
                                                                                  Visibility="{Binding IsInWishlist, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                                            <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                                                <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                                                                   Fill="#EF4444" Stroke="#EF4444" StrokeThickness="1.5"/>
-                                                                        </Viewbox>
-                                                                    </Grid>
-                                                                </Border>
-                                                            </ControlTemplate>
-                                                        </Button.Template>
-                                                    </Button>
+                                                                            </Viewbox>
+                                                                        </Grid>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Button.Template>
+                                                        </Button>
 
-                                                    <!-- botón de añadir rápido -->
-                                                    <Button Background="White"
+                                                        <!-- botón de añadir rápido -->
+                                                        <Button Background="White"
                                                             Height="42"
                                                             VerticalAlignment="Bottom"
                                                             Opacity="0"
@@ -714,91 +721,91 @@
                                                             BorderThickness="0"
                                                             Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                             CommandParameter="{Binding}">
-                                                        <Button.Template>
-                                                            <ControlTemplate TargetType="Button">
-                                                                <Border Background="{TemplateBinding Background}" Height="42">
-                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                                </Border>
-                                                            </ControlTemplate>
-                                                        </Button.Template>
-                                                        <TextBlock Text="ADD TO CART"
+                                                            <Button.Template>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border Background="{TemplateBinding Background}" Height="42">
+                                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Button.Template>
+                                                            <TextBlock Text="ADD TO CART"
                                                                    Foreground="#0A0A0A"
                                                                    FontSize="11"
                                                                    FontWeight="Bold"/>
-                                                    </Button>
-                                                </Grid>
-                                            </Border>
+                                                        </Button>
+                                                    </Grid>
+                                                </Border>
 
-                                            <!-- información -->
-                                            <StackPanel Grid.Row="1" Margin="14">
-                                                <TextBlock Text="{Binding Name}" 
+                                                <!-- información -->
+                                                <StackPanel Grid.Row="1" Margin="14">
+                                                    <TextBlock Text="{Binding Name}" 
                                                            FontSize="13"
                                                            FontWeight="SemiBold"
                                                            Foreground="White"
                                                            TextTrimming="CharacterEllipsis"
                                                            Margin="0,0,0,8"/>
 
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Price, StringFormat='{}{0:N2}€'}" 
                                                                FontSize="16"
                                                                FontWeight="Bold"
                                                                Foreground="#DC2626"/>
-                                                    <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
+                                                        <TextBlock Text="{Binding OriginalPrice, StringFormat='{}{0:N2}€'}"
                                                                FontSize="12"
                                                                Foreground="#555555"
                                                                TextDecorations="Strikethrough"
                                                                Margin="10,3,0,0"/>
+                                                    </StackPanel>
                                                 </StackPanel>
-                                            </StackPanel>
-                                        </Grid>
+                                            </Grid>
 
-                                        <Border.Triggers>
-                                            <EventTrigger RoutedEvent="MouseEnter">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetName="QuickAdd"
+                                            <Border.Triggers>
+                                                <EventTrigger RoutedEvent="MouseEnter">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="QuickAdd"
                                                                          Storyboard.TargetProperty="Opacity"
                                                                          To="1" Duration="0:0:0.15"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger>
-                                            <EventTrigger RoutedEvent="MouseLeave">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetName="QuickAdd"
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                                <EventTrigger RoutedEvent="MouseLeave">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="QuickAdd"
                                                                          Storyboard.TargetProperty="Opacity"
                                                                          To="0" Duration="0:0:0.15"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger>
-                                        </Border.Triggers>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Border>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                            </Border.Triggers>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
 
-                <!-- llamada a la acción al final -->
-                <Border Background="#111111" Padding="80,60">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <!-- llamada a la acción al final -->
+                    <Border Background="#111111" Padding="80,60">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                            <TextBlock Text="Can't find what you're looking for?"
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Can't find what you're looking for?"
                                        FontSize="22"
                                        FontWeight="Bold"
                                        Foreground="White"
                                        Margin="0,0,0,8"/>
-                            <TextBlock Text="Explore our full catalog with thousands of products"
+                                <TextBlock Text="Explore our full catalog with thousands of products"
                                        FontSize="14"
                                        Foreground="#888888"/>
-                        </StackPanel>
+                            </StackPanel>
 
-                        <Button Grid.Column="1"
+                            <Button Grid.Column="1"
                                 Content="BROWSE ALL PRODUCTS →"
                                 Command="{Binding BrowseAllProductsCommand}"
                                 Padding="35,15"
@@ -810,10 +817,129 @@
                                 BorderThickness="2"
                                 Cursor="Hand"
                                 VerticalAlignment="Center"/>
-                    </Grid>
-                </Border>
+                        </Grid>
+                    </Border>
 
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ===== PANEL "PRÓXIMAMENTE" (estilo propio) =====
+             Último hijo del Grid raíz: cuando IsAvailable es false, este panel opaco
+             tapa todo el contenido; cuando llega la fecha de apertura, se oculta. -->
+        <Border Visibility="{Binding IsAvailable, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+            <Border.Background>
+                <RadialGradientBrush GradientOrigin="0.5,0.32" Center="0.5,0.32" RadiusX="0.85" RadiusY="0.85">
+                    <GradientStop Color="#1C1408" Offset="0"/>
+                    <GradientStop Color="#0A0A0A" Offset="0.72"/>
+                </RadialGradientBrush>
+            </Border.Background>
+
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                            <DoubleAnimation Storyboard.TargetName="PulseDot"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="1" To="0.2" Duration="0:0:1.1"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="820">
+
+                <!-- eyebrow con punto que late -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,30">
+                    <Ellipse x:Name="PulseDot" Width="8" Height="8" Fill="#D4AF37" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Text="P R Ó X I M A M E N T E"
+                               FontSize="12" FontWeight="SemiBold" Foreground="#D4AF37" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- título + filete dorado -->
+                <TextBlock Text="BLACK WEEK"
+                           FontSize="62" FontWeight="Black" Foreground="White"
+                           HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                <Border Width="64" Height="3" Background="{StaticResource GoldGradient}"
+                        HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                <TextBlock Text="La mayor oferta del año está a punto de llegar."
+                           FontSize="16" Foreground="#9A9A9A"
+                           HorizontalAlignment="Center" Margin="0,0,0,55"/>
+
+                <!-- contador: números grandes finos sin cajas, con líneas finas entre medias -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                    <StackPanel Width="120">
+                        <TextBlock Text="{Binding DaysRemaining}" FontSize="66" FontWeight="Light"
+                                   Foreground="White" HorizontalAlignment="Center"/>
+                        <TextBlock Text="DÍAS" FontSize="11" FontWeight="SemiBold" Foreground="#777777"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <Border Width="1" Height="64" Background="#2A2A2A" VerticalAlignment="Center"/>
+
+                    <StackPanel Width="120">
+                        <TextBlock Text="{Binding HoursRemaining, StringFormat={}{0:D2}}" FontSize="66" FontWeight="Light"
+                                   Foreground="White" HorizontalAlignment="Center"/>
+                        <TextBlock Text="HORAS" FontSize="11" FontWeight="SemiBold" Foreground="#777777"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <Border Width="1" Height="64" Background="#2A2A2A" VerticalAlignment="Center"/>
+
+                    <StackPanel Width="120">
+                        <TextBlock Text="{Binding MinutesRemaining, StringFormat={}{0:D2}}" FontSize="66" FontWeight="Light"
+                                   Foreground="White" HorizontalAlignment="Center"/>
+                        <TextBlock Text="MINUTOS" FontSize="11" FontWeight="SemiBold" Foreground="#777777"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <Border Width="1" Height="64" Background="#2A2A2A" VerticalAlignment="Center"/>
+
+                    <StackPanel Width="120">
+                        <TextBlock Text="{Binding SecondsRemaining, StringFormat={}{0:D2}}" FontSize="66" FontWeight="Light"
+                                   Foreground="{StaticResource GoldGradient}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="SEGUNDOS" FontSize="11" FontWeight="SemiBold" Foreground="#777777"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <!-- fecha de apertura -->
+                <TextBlock Margin="0,55,0,0" HorizontalAlignment="Center" FontSize="13" Foreground="#888888">
+                    <Run Text="Vuelve el "/>
+                    <Run Text="{Binding OpenDate, StringFormat='{}{0:dd MMMM yyyy, HH:mm}', Mode=OneWay}"
+                         Foreground="#D4AF37" FontWeight="SemiBold"/>
+                </TextBlock>
+
+                <!-- botón discreto -->
+                <Button Command="{Binding BrowseAllProductsCommand}"
+                        Margin="0,40,0,0" HorizontalAlignment="Center" Cursor="Hand"
+                        Background="Transparent" BorderBrush="#3A3A3A" BorderThickness="1"
+                        Foreground="#CCCCCC">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="34,15">
+                                <TextBlock Text="MIENTRAS TANTO, EXPLORA EL CATÁLOGO"
+                                           FontSize="12" FontWeight="Bold"
+                                           Foreground="{TemplateBinding Foreground}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="bd" Property="BorderBrush" Value="#D4AF37"/>
+                                    <Setter TargetName="bd" Property="Background" Value="#15110A"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </StackPanel>
-        </ScrollViewer>
+        </Border>
+
     </Grid>
 </UserControl>

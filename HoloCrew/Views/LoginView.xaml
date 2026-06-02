@@ -42,13 +42,39 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,35"/>
 
-                    <!-- mensaje de error -->
+                    <!-- mensaje de proceso (iniciando sesión) - estilo neutro, NO error -->
+                    <Border Background="#F3F4F6"
+                            BorderBrush="#E5E7EB"
+                            BorderThickness="1"
+                            Padding="15"
+                            Margin="0,0,0,20"
+                            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <Viewbox Width="16" Height="16" Margin="0,0,10,0" VerticalAlignment="Center">
+                                    <Path Data="M12 6v6l4 2 M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                          Stroke="#4B5563" StrokeThickness="2" Fill="Transparent"/>
+                                </Viewbox>
+                                <TextBlock Text="Signing you in…"
+                                           Foreground="#4B5563"
+                                           FontSize="13"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <ProgressBar IsIndeterminate="True"
+                                         Height="3"
+                                         Background="Transparent"
+                                         Foreground="#4B5563"
+                                         BorderThickness="0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- mensaje de error (solo cuando hay un error real) -->
                     <Border Background="#FEF2F2"
                             BorderBrush="#FECACA"
                             BorderThickness="1"
                             Padding="15"
                             Margin="0,0,0,20"
-                            Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Invert}">
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" Margin="0,0,10,0" VerticalAlignment="Top">
                                 <Path Data="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
@@ -160,6 +186,13 @@
                                          VerticalAlignment="Center"
                                          VerticalContentAlignment="Center"
                                          FontSize="14"/>
+                            <TextBlock x:Name="PasswordPlaceholder"
+                                       Text="••••••••"
+                                       Foreground="{DynamicResource Gray400Brush}"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"
+                                       Margin="42,0,0,0"
+                                       IsHitTestVisible="False"/>
                         </Grid>
                     </Border>
                     <!-- error de contraseña -->

@@ -46,6 +46,10 @@ namespace HoloCrew.Services
             {
                 // Tras crear el pedido, recargamos el carrito (que la BD ya vació)
                 await _cartService.LoadCartAsync();
+
+                // Refrescar el perfil para reflejar al instante los nuevos puntos/nivel
+                // (la compra ya ha acreditado puntos vía award_points_for_order).
+                await _authService.RefreshCurrentUserAsync();
             }
 
             return order;

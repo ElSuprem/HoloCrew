@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 // Repositorio de productos conectado a Supabase.
 // Lee de las tablas: products, product_images, product_sizes, product_colors.
 // Convierte los DTOs a modelos Product que consumen los ViewModels.
+// NOTA: el catálogo de escritorio excluye los productos con is_app_exclusive = true
+// (reservados a la app Android). Web y Android deciden por su cuenta.
 
 namespace HoloCrew.Repositories
 {
@@ -25,10 +27,11 @@ namespace HoloCrew.Repositories
 
         public async Task<List<Product>> GetAllAsync()
         {
-            // Solo productos activos
+            // Solo productos activos y no exclusivos de app
             var productsResponse = await _supabase
                 .From<ProductDto>()
                 .Where(p => p.IsActive == true)
+                .Where(p => p.IsAppExclusive == false)
                 .Order("created_at", PgConstants.Ordering.Descending)
                 .Get();
 
@@ -118,6 +121,7 @@ namespace HoloCrew.Repositories
             var productsResponse = await _supabase
                 .From<ProductDto>()
                 .Where(p => p.IsActive == true)
+                .Where(p => p.IsAppExclusive == false)
                 .Filter("category_id", PgConstants.Operator.In, categoryIds)
                 .Get();
 
@@ -149,6 +153,7 @@ namespace HoloCrew.Repositories
             var productsResponse = await _supabase
                 .From<ProductDto>()
                 .Where(p => p.IsActive == true)
+                .Where(p => p.IsAppExclusive == false)
                 .Filter("name", PgConstants.Operator.ILike, $"%{query}%")
                 .Get();
 
@@ -162,6 +167,7 @@ namespace HoloCrew.Repositories
                 .From<ProductDto>()
                 .Where(p => p.IsActive == true)
                 .Where(p => p.IsFeatured == true)
+                .Where(p => p.IsAppExclusive == false)
                 .Get();
 
             return await EnrichProductsAsync(productsResponse.Models);
@@ -174,6 +180,7 @@ namespace HoloCrew.Repositories
                 .From<ProductDto>()
                 .Where(p => p.IsActive == true)
                 .Where(p => p.IsNew == true)
+                .Where(p => p.IsAppExclusive == false)
                 .Order("created_at", PgConstants.Ordering.Descending)
                 .Get();
 

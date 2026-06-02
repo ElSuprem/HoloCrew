@@ -165,6 +165,30 @@ namespace HoloCrew.Services
             return null;
         }
 
+        // Recarga el perfil del usuario actual desde Supabase y actualiza la caché.
+        // Se llama tras una compra para que la UI (Members Club, Perfil) refleje
+        // al instante los nuevos puntos, créditos y nivel sin reiniciar sesión.
+        public async Task RefreshCurrentUserAsync()
+        {
+            try
+            {
+                var supabaseUser = _supabase.Auth.CurrentUser;
+                if (supabaseUser == null || string.IsNullOrEmpty(supabaseUser.Id))
+                    return;
+
+                var profile = await GetProfileByIdAsync(supabaseUser.Id);
+                if (profile != null)
+                {
+                    _currentUserCache = profile.ToUser();
+                    AuthStateChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Auth] RefreshCurrentUser error: {ex.Message}");
+            }
+        }
+
         public Task<bool> ValidateTokenAsync()
         {
             var session = _supabase.Auth.CurrentSession;

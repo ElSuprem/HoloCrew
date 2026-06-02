@@ -11,6 +11,8 @@ using System.Windows.Threading;
 
 // ViewModel de la página Black Week (ofertas).
 // Muestra productos con descuento, cuenta regresiva, filtros por categoría y ordenación.
+// Mientras no llega la fecha de apertura (OpenDate) se muestra el panel "Próximamente"
+// con una cuenta atrás; al llegar la fecha, IsAvailable pasa a true y se ve el contenido.
 // Se conecta con ProductService, CartService, WishlistService y NavigationService.
 
 namespace HoloCrew.ViewModels
@@ -60,6 +62,15 @@ namespace HoloCrew.ViewModels
 
         [ObservableProperty]
         private bool _isSaleActive = true;
+
+        // Fecha en la que ABRE la Black Week (la cuenta atrás va hasta aquí).
+        [ObservableProperty]
+        private DateTime _openDate;
+
+        // True cuando ya ha llegado la fecha de apertura. Si es false, se muestra
+        // el panel "Próximamente"; si es true, el contenido normal.
+        [ObservableProperty]
+        private bool _isAvailable;
 
         [ObservableProperty]
         private int _totalProductCount;
@@ -121,8 +132,12 @@ namespace HoloCrew.ViewModels
             EmptySubtitle = "Stay tuned for our biggest sale of the year!";
             EmptyActionText = "Browse All Products";
 
-            // la oferta dura 7 días
-            SaleEndTime = DateTime.Now.Date.AddDays(7).AddHours(23).AddMinutes(59).AddSeconds(59);
+            // Fecha de apertura de la Black Week (lunes de la Black Week 2026; el Black Friday cae el 27).
+            OpenDate = new DateTime(2026, 11, 23, 0, 0, 0);
+            // La oferta dura una semana (hasta el Cyber Monday).
+            SaleEndTime = OpenDate.AddDays(7);
+            // Estado inicial síncrono para que no parpadee al entrar.
+            IsAvailable = DateTime.Now >= OpenDate;
         }
 
         public override async void OnNavigatedTo(object? parameter)
@@ -277,10 +292,17 @@ namespace HoloCrew.ViewModels
 
         private void UpdateCountdown()
         {
-            var timeRemaining = SaleEndTime - DateTime.Now;
+            var now = DateTime.Now;
+            IsAvailable = now >= OpenDate;
+
+            // Si aún no ha abierto, contamos hasta la APERTURA.
+            // Si ya está abierta, contamos hasta que TERMINA la oferta.
+            var target = IsAvailable ? SaleEndTime : OpenDate;
+            var timeRemaining = target - now;
 
             if (timeRemaining.TotalSeconds <= 0)
             {
+                // Solo llega aquí si la oferta ya estaba abierta y se acabó el tiempo.
                 IsSaleActive = false;
                 DaysRemaining = 0;
                 HoursRemaining = 0;

@@ -66,6 +66,9 @@ namespace HoloCrew.Infraestructure.Supabase.Models
         [Column("is_flash_sale")]
         public bool IsFlashSale { get; set; }
 
+        [Column("is_app_exclusive")]
+        public bool IsAppExclusive { get; set; }
+
         [Column("collection")]
         public string? Collection { get; set; }
 
