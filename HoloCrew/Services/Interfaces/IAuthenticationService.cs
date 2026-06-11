@@ -23,5 +23,6 @@ namespace HoloCrew.Services.Interfaces
         Task<bool> RequestPasswordResetAsync(string email);
         Task<bool> UpdateProfileAsync(string firstName, string lastName, string phone);
         Task<bool> UpdateAvatarUrlAsync(string avatarUrl);
+        Task<User?> LoginWithGoogleAsync();
     }
 }

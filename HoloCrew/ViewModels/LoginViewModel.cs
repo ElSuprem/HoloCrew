@@ -101,6 +101,7 @@ namespace HoloCrew.ViewModels
 
         // Commands
         public ICommand LoginCommand { get; }
+        public ICommand GoogleLoginCommand { get; }
         public ICommand ForgotPasswordCommand { get; }
         public ICommand NavigateToRegisterCommand { get; }
 
@@ -112,6 +113,7 @@ namespace HoloCrew.ViewModels
             _navigationService = navigationService;
 
             LoginCommand = new RelayCommand(ExecuteLogin, CanExecuteLogin);
+            GoogleLoginCommand = new RelayCommand(ExecuteGoogleLogin);
             ForgotPasswordCommand = new RelayCommand(ExecuteForgotPassword);
             NavigateToRegisterCommand = new RelayCommand(ExecuteNavigateToRegister);
         }
@@ -199,6 +201,39 @@ namespace HoloCrew.ViewModels
             {
                 ErrorMessage = "An unexpected error occurred. Please try again.";
                 System.Diagnostics.Debug.WriteLine($"Login error: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        // Login con Google: abre el navegador (vía AuthenticationService), espera la
+        // vuelta del OAuth y, si va bien, trae la ventana al frente y navega al Home.
+        private async void ExecuteGoogleLogin()
+        {
+            try
+            {
+                IsLoading = true;
+                ErrorMessage = string.Empty;
+
+                var user = await _authService.LoginWithGoogleAsync();
+
+                if (user != null)
+                {
+                    // el navegador robó el foco: traemos la ventana al frente
+                    System.Windows.Application.Current?.MainWindow?.Activate();
+                    _navigationService.NavigateTo<HomeViewModel>();
+                }
+                else
+                {
+                    ErrorMessage = "Google sign-in was cancelled or failed.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Could not sign in with Google. Please try again.";
+                System.Diagnostics.Debug.WriteLine($"Google login error: {ex.Message}");
             }
             finally
             {

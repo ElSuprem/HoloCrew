@@ -3,8 +3,11 @@ using HoloCrew.Services.Interfaces;
 using Supabase.Gotrue;
 using System;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Net;
 using ModelsUser = HoloCrew.Models.User;
 using SupaUserAttrs = Supabase.Gotrue.UserAttributes;
+using GotrueConstants = Supabase.Gotrue.Constants;
 
 // Implementación del servicio de autenticación usando Supabase Auth.
 // Gestiona login, registro, sesión, cambio de contraseña y reset.
@@ -46,6 +49,92 @@ namespace HoloCrew.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"[Auth] Login error: {ex.Message}");
+                return null;
+            }
+        }
+
+        // ==================== LOGIN CON GOOGLE (OAuth) ====================
+
+        // Login con Google vía OAuth (flujo PKCE). Al ser app de escritorio, el login
+        // se hace en el NAVEGADOR del sistema:
+        //  1) pedimos a Supabase la URL de Google y abrimos el navegador,
+        //  2) levantamos un mini servidor en localhost que capta el redirect con el código,
+        //  3) canjeamos ese código por la sesión.
+        public async Task<ModelsUser?> LoginWithGoogleAsync()
+        {
+            // Debe coincidir EXACTAMENTE con una Redirect URL permitida en Supabase.
+            const string redirectUrl = "http://localhost:53682/";
+
+            try
+            {
+                // 1. URL de OAuth de Google + verifier PKCE.
+                //    Usamos GotrueConstants (alias) para evitar colisión con HoloCrew.Constants.
+                var authState = await _supabase.Auth.SignIn(
+                    GotrueConstants.Provider.Google,
+                    new SignInOptions
+                    {
+                        FlowType = GotrueConstants.OAuthFlowType.PKCE,
+                        RedirectTo = redirectUrl
+                    });
+
+                // 2. Listener local para capturar el redirect del navegador.
+                using var listener = new HttpListener();
+                listener.Prefixes.Add(redirectUrl);
+                listener.Start();
+
+                // 3. Abrir el navegador del sistema en la pantalla de Google.
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = authState.Uri.ToString(),
+                    UseShellExecute = true
+                });
+
+                // 4. Esperar el redirect (máximo 2 minutos).
+                var contextTask = listener.GetContextAsync();
+                var finished = await Task.WhenAny(contextTask, Task.Delay(TimeSpan.FromMinutes(2)));
+                if (finished != contextTask)
+                {
+                    listener.Stop();
+                    return null; // el usuario no completó el login a tiempo
+                }
+
+                var context = await contextTask;
+                var code = context.Request.QueryString["code"];
+
+                // Responder al navegador para que el usuario sepa que puede volver.
+                var html = "<html><head><meta charset='utf-8'></head>" +
+                           "<body style='font-family:sans-serif;text-align:center;padding-top:80px;background:#0A0A0A;color:#fff'>" +
+                           "<h2>HOLOCREW</h2><p>Sesion iniciada. Ya puedes volver a la aplicacion.</p></body></html>";
+                var buffer = System.Text.Encoding.UTF8.GetBytes(html);
+                context.Response.ContentType = "text/html; charset=utf-8";
+                context.Response.ContentLength64 = buffer.Length;
+                await context.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
+                context.Response.OutputStream.Close();
+                listener.Stop();
+
+                if (string.IsNullOrEmpty(code))
+                    return null;
+
+                // 5. Canjear el código por la sesión.
+                var session = await _supabase.Auth.ExchangeCodeForSession(authState.PKCEVerifier, code);
+                if (session?.User == null)
+                    return null;
+
+                // 6. Cargar perfil y actualizar cache (igual que en LoginAsync).
+                var profile = await GetProfileByIdAsync(session.User.Id);
+                _currentUserCache = profile?.ToUser() ?? new ModelsUser
+                {
+                    Id = session.User.Id ?? string.Empty,
+                    Email = session.User.Email ?? string.Empty,
+                    FullName = session.User.Email ?? "User"
+                };
+
+                AuthStateChanged?.Invoke(this, EventArgs.Empty);
+                return _currentUserCache;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Auth] Google login error: {ex.Message}");
                 return null;
             }
         }

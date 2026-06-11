@@ -301,6 +301,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Button Grid.Column="0" Height="48" Cursor="Hand"
+                                    Command="{Binding GoogleLoginCommand}"
                                     Background="{DynamicResource WhitePrimaryBrush}" BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <TextBlock Text="G" FontSize="18" FontWeight="Bold" Foreground="#DB4437" Margin="0,0,10,0" VerticalAlignment="Center"/>
