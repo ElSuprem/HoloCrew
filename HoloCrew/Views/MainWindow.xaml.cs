@@ -5,6 +5,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace HoloCrew.Views
 {
@@ -22,6 +24,21 @@ namespace HoloCrew.Views
             InitializeComponent();
 
             DataContextChanged += MainWindow_DataContextChanged;
+        }
+
+        // === Barra de título oscura (DWM) para que pegue con la barra negra superior ===
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int value, int size);
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+            var hwnd = new WindowInteropHelper(this).Handle;
+            int useDark = 1;
+            // 20 = DWMWA_USE_IMMERSIVE_DARK_MODE (Win10 2004+ / Win11); 19 = fallback Win10 antiguo
+            if (DwmSetWindowAttribute(hwnd, 20, ref useDark, sizeof(int)) != 0)
+                DwmSetWindowAttribute(hwnd, 19, ref useDark, sizeof(int));
         }
 
         // cuando cambia el DataContext, suscribirse a los cambios del ViewModel
