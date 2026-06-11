@@ -47,10 +47,10 @@
                             </Grid.RowDefinitions>
 
                             <!-- Main Image -->
-                            <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" Height="600" ClipToBounds="True">
+                            <Border Grid.Row="0" Background="{DynamicResource WhitePrimaryBrush}" Height="600" ClipToBounds="True">
                                 <Grid>
                                     <!-- Imagen principal: bindeada a SelectedImage del VM -->
-                                    <controls:AsyncImage Source="{Binding SelectedImage}"/>
+                                    <controls:AsyncImage Source="{Binding SelectedImage}" Stretch="Uniform"/>
 
                                     <!-- Badges -->
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20"
@@ -142,7 +142,7 @@
                                                                 </Style.Triggers>
                                                             </Style>
                                                         </Border.Style>
-                                                        <controls:AsyncImage Source="{Binding Url}"/>
+                                                        <controls:AsyncImage Source="{Binding Url}" Stretch="Uniform"/>
                                                     </Border>
                                                 </ControlTemplate>
                                             </Button.Template>
@@ -429,9 +429,9 @@
                                             <RowDefinition Height="280"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        <Border Grid.Row="0" Background="{DynamicResource Gray100Brush}" ClipToBounds="True">
+                                        <Border Grid.Row="0" Background="{DynamicResource WhitePrimaryBrush}" ClipToBounds="True">
                                             <Grid>
-                                                <controls:AsyncImage Source="{Binding MainImageUrl}"/>
+                                                <controls:AsyncImage Source="{Binding MainImageUrl}" Stretch="Uniform"/>
                                                 <!-- Overlay SOLD OUT en productos relacionados también -->
                                                 <Border Background="#CCFFFFFF"
                                                         Visibility="{Binding IsCompletelyOutOfStock, Converter={StaticResource BoolToVisibilityConverter}}"

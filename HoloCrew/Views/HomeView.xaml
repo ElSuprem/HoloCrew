@@ -3,10 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:HoloCrew.Converters"
              xmlns:controls="clr-namespace:HoloCrew.Controls"
              mc:Ignorable="d"
              d:DesignHeight="3500" d:DesignWidth="1400"
              Background="{DynamicResource BackgroundPrimary}">
+
+    <UserControl.Resources>
+        <converters:AspectRatioConverter x:Key="AspectRatioConverter"/>
+    </UserControl.Resources>
 
     <StackPanel>
 
@@ -17,8 +22,8 @@
         <Border Height="650" Background="#0A0A0A" ClipToBounds="True">
             <Grid>
                 <!-- Imagen real del banner hero (debajo del overlay) -->
-                <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/bannerlanding.png"
-                     Stretch="Fill"/>
+                <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/bannerGoat.png"
+                     Stretch="UniformToFill"/>
 
                 <!-- Overlay sutil para legibilidad del texto (no oscurece tanto como antes) -->
                 <Border>
@@ -132,7 +137,7 @@
         <Border Background="{DynamicResource WhitePrimaryBrush}">
             <UniformGrid Columns="3" Rows="1">
                 <!-- TOPS -->
-                <Border Height="550" Cursor="Hand" Margin="0,0,1,0">
+                <Border Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}, Converter={StaticResource AspectRatioConverter}, ConverterParameter=1.2}">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
                       Command="{Binding NavigateToCategoryCommand}"
@@ -141,7 +146,7 @@
                     <Grid>
                         <Border Background="#1A1A1A"/>
                         <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/tops.png"
-                             Stretch="Fill"/>
+                             Stretch="UniformToFill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -184,7 +189,7 @@
                 </Border>
 
                 <!-- BOTTOMS -->
-                <Border Height="550" Cursor="Hand" Margin="0,0,1,0">
+                <Border Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}, Converter={StaticResource AspectRatioConverter}, ConverterParameter=1.2}">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
                       Command="{Binding NavigateToCategoryCommand}"
@@ -193,7 +198,7 @@
                     <Grid>
                         <Border Background="#2A2A2A"/>
                         <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/bottons.png"
-                             Stretch="Fill"/>
+                             Stretch="UniformToFill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -234,7 +239,7 @@
                 </Border>
 
                 <!-- ACCESSORIES -->
-                <Border Height="550" Cursor="Hand">
+                <Border Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}, Converter={StaticResource AspectRatioConverter}, ConverterParameter=1.2}">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
                       Command="{Binding NavigateToCategoryCommand}"
@@ -243,7 +248,7 @@
                     <Grid>
                         <Border Background="#151515"/>
                         <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/accessories.png"
-                             Stretch="Fill"/>
+                             Stretch="UniformToFill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -556,7 +561,7 @@
 
                 <!-- Imagen de fondo (cubre todo el Grid) -->
                 <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/blackweek-banner.jpg"
-                     Stretch="Fill"
+                     Stretch="UniformToFill"
                      Grid.ColumnSpan="2"/>
 
                 <!-- Overlay para legibilidad -->
@@ -601,7 +606,7 @@
         <Border Background="{DynamicResource WhitePrimaryBrush}">
             <UniformGrid Columns="2">
                 <!-- NEW ARRIVALS -->
-                <Border Height="500" Cursor="Hand" Margin="0,0,1,0">
+                <Border Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}, Converter={StaticResource AspectRatioConverter}, ConverterParameter=0.72}">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
                                       Command="{Binding NavigateToCategoryCommand}"
@@ -610,7 +615,7 @@
                     <Grid>
                         <Border Background="#1A1A1A"/>
                         <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/newarrivals.png"
-                             Stretch="Fill"/>
+                             Stretch="UniformToFill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -634,7 +639,7 @@
                 </Border>
 
                 <!-- NEW DENIMS -->
-                <Border Height="500" Cursor="Hand">
+                <Border Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}, Converter={StaticResource AspectRatioConverter}, ConverterParameter=0.72}">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
                                       Command="{Binding NavigateToCategoryCommand}"
@@ -643,7 +648,7 @@
                     <Grid>
                         <Border Background="#2A2A2A"/>
                         <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/newdenims.png"
-                             Stretch="Fill"/>
+                             Stretch="UniformToFill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -674,7 +679,7 @@
         <Border Background="{DynamicResource WhitePrimaryBrush}" Margin="0,1,0,0">
             <UniformGrid Columns="2">
                 <!-- OUTERWEAR -->
-                <Border Height="500" Cursor="Hand" Margin="0,0,1,0">
+                <Border Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}, Converter={StaticResource AspectRatioConverter}, ConverterParameter=0.72}">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
                       Command="{Binding NavigateToCategoryCommand}"
@@ -683,7 +688,7 @@
                     <Grid>
                         <Border Background="#111111"/>
                         <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/outerwear.png"
-                             Stretch="Fill"/>
+                             Stretch="UniformToFill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -707,7 +712,7 @@
                 </Border>
 
                 <!-- FOOTWEAR -->
-                <Border Height="500" Cursor="Hand">
+                <Border Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}, Converter={StaticResource AspectRatioConverter}, ConverterParameter=0.72}">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftClick"
                                       Command="{Binding NavigateToCategoryCommand}"
@@ -716,7 +721,7 @@
                     <Grid>
                         <Border Background="#0D0D0D"/>
                         <controls:AsyncImage Source="https://unaptwklykdhbonuzhwm.supabase.co/storage/v1/object/public/product-images/footwear.png"
-                             Stretch="Fill"/>
+                             Stretch="UniformToFill"/>
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">

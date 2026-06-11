@@ -209,7 +209,7 @@ namespace HoloCrew.Controls
             var bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.DecodePixelWidth = 800; // suficiente para cards (~300 px) y detalle (~700 px)
+            bitmap.DecodePixelWidth = 1400; // suficiente para cards (~300 px) y detalle (~700 px)
             bitmap.StreamSource = stream;
             bitmap.EndInit();
             if (bitmap.CanFreeze)

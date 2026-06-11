@@ -123,6 +123,7 @@
                 <!-- 6. estilos del mega menú -->
                 <ResourceDictionary Source="Resources/Styles/MegaMenuStyles.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/LoadingStates.xaml"/>
+                <ResourceDictionary Source="Resources/Templates/ProductCard.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
