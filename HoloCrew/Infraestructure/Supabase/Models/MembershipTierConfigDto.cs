@@ -45,6 +45,7 @@ namespace HoloCrew.Infraestructure.Supabase.Models
         public string? ImageUrl { get; set; }
 
 
+
         // Convierte este DTO al modelo MembershipTierConfig.
         public MembershipTierConfig ToModel()
         {

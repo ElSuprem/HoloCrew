@@ -64,6 +64,13 @@ namespace HoloCrew.Models
         public bool IsInStock => Stock > 0;
         public bool IsLowStock => Stock > 0 && Stock <= 10;
 
+        // True si el producto maneja tallas (ropa); false para accesorios sin talla.
+        public bool HasSizes => AvailableSizes != null && AvailableSizes.Count > 0;
+
+        // True si el producto tiene varias tallas entre las que elegir (ropa, zapatillas).
+        // Talla única (gorras) o sin talla (bolsos) -> false -> tarjeta "VIEW PRODUCT".
+        public bool HasMultipleSizes => AvailableSizes != null && AvailableSizes.Count > 1;
+
         // True si todas las tallas tienen stock 0 (producto completamente agotado).
         // Se usa para mostrar el badge SOLD OUT en el catálogo / home.
         // Si no hay info de stock por talla, cae al check de Stock global.

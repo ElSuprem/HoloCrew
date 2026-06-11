@@ -28,11 +28,20 @@ namespace HoloCrew.Services
             // Convertir rutas relativas de las imágenes a URLs completas del bucket de Supabase.
             // En la BBDD las URLs están como "/images/Bronze3D.png" pero el bucket sirve desde
             // https://<proyecto>.supabase.co/storage/v1/object/public/product-images/<archivo>.png
+            // El tier con más puntos mínimos es el tope: se muestra abierto ("X+"),
+            // porque su max_points es un valor enorme/arbitrario que no aporta nada.
+            var topTier = tiers.OrderByDescending(t => t.MinPoints).FirstOrDefault();
+
             foreach (var tier in tiers)
             {
                 tier.ImageUrl = NormalizeImageUrl(tier.ImageUrl);
                 // Pasar el nombre del tier a mayúsculas para mostrarlo bien.
                 tier.Name = tier.Name?.ToUpper() ?? string.Empty;
+
+                // Rango para mostrar: el tope abierto ("X+"), el resto "X – Y".
+                tier.RangeDisplay = tier == topTier
+                    ? $"{tier.MinPoints:N0}+"
+                    : $"{tier.MinPoints:N0} – {tier.MaxPoints:N0}";
             }
 
             return tiers;

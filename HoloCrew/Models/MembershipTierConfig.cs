@@ -17,5 +17,8 @@ namespace HoloCrew.Models
         public int BirthdayBonusCredits { get; set; }
         public List<string> Benefits { get; set; } = new();
         public string ImageUrl { get; set; } = string.Empty;
+
+        // Texto del rango para mostrar: "5.000 – 10.000", o "5.000+" en el tier tope.
+        public string RangeDisplay { get; set; } = string.Empty;
     }
 }

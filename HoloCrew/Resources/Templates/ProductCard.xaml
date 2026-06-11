@@ -129,12 +129,25 @@
                                               Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                               CommandParameter="{Binding}"/>
                             </Border.InputBindings>
-                            <TextBlock Text="VIEW SIZES"
-                                       Foreground="White"
+                            <TextBlock Foreground="White"
                                        FontSize="12"
                                        FontWeight="Bold"
                                        HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <!-- Por defecto, productos con tallas -->
+                                        <Setter Property="Text" Value="VIEW SIZES"/>
+                                        <Style.Triggers>
+                                            <!-- Solo "VIEW SIZES" si hay varias tallas que elegir;
+                                                 talla única (gorras) o sin talla (bolsos) -> "VIEW PRODUCT" -->
+                                            <DataTrigger Binding="{Binding HasMultipleSizes}" Value="False">
+                                                <Setter Property="Text" Value="VIEW PRODUCT"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Border>
                     </Grid>
                 </Border>
